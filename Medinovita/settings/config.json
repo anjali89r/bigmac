@@ -1,0 +1,41 @@
+﻿{
+
+  "SANDBOX": { "Env": "DEV" },
+
+  "MONGODB_DEV": {
+    "DB_NAME": "medinovita",
+    "DB_USER": "govind",
+    "DB_PASSWORD": "test1234",
+    "DB_HOST": "localhost",
+    "DB_PORT": "27017",
+    "PSWD_ENCRYPTED": "N"
+  },
+
+  "MONGODB_PROD": {
+    "DB_NAME": "medinovita",
+    "DB_USER": "libin",
+    "DB_PASSWORD": "libin",
+    "DB_HOST": "localhost",
+    "DB_PORT": "27017",
+    "PSWD_ENCRYPTED": "N"
+  },
+  "ENCRYPTION": {
+    "ALGORITHAM": "AES-256-CBC",
+    "HMAC_ALGORITHM": "SHA256",
+    "N_KEY": "97aa341e2$2fce919bbf7cdc5443e491",
+    "N_HMAC_KEY": "hslsohddduucdefghijklmmlkkkrstuv"
+
+  },
+  "LOG": {
+    "LOGDIR": ".//..//..//log",
+    "CONSOLE_LOG_LEVEL": "info",
+    "FILE_LOG_LEVEL": "error"
+  },
+  "JWT": {
+    "API_GETUSER_PAYLOAD": "libin",
+    "API_GETUSER_SECRETKEY": "secret_key_goes_here",
+    "API_GETUSER_BAICAUTH_USERNAME": "libin",
+    "API_GETUSER_BAICAUTH_PASSWORD": "libin"
+
+  }
+}

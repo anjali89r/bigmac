@@ -1,0 +1,76 @@
+
+/*Google Translate Dropdown*/
+
+.goog-te-gadget {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+  text-transform: uppercase;
+}
+
+.goog-te-gadget-simple {
+  background-color: #0069b0 !important;
+  border: 1px solid rgba(255, 255, 255, 0) !important;
+  padding: 6.5px !important;
+ 
+  font-size: 1rem !important;
+  line-height: 2rem !important;
+  display: inline-block;
+  cursor: pointer;
+  zoom: 1;
+}
+
+.goog-te-menu2 {
+  max-width: 100%;
+}
+
+.goog-te-menu-value {
+  color: #fff !important;
+}
+
+
+.goog-te-menu-value span:nth-child(5) {
+  display: none;
+}
+
+.goog-te-menu-value span:nth-child(3) {
+  border: none !important;
+  font-family: 'Material Icons';
+}
+
+
+.goog-te-gadget-icon {
+  background-image: url(https://placehold.it/32) !important;
+  background-position: 0px 0px;
+  height: 32px !important;
+  width: 32px !important;
+  margin-right: 8px !important;
+  display: none;
+}
+
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+/* ================================== *\
+    Mediaqueries
+\* ================================== */
+@media (max-width: 667px) {
+  #google_translate_element {
+    bottom: calc(100% - 50% - 53px);
+    left: 16px !important;
+    width: 30% !important;
+  }
+  #google_translate_element goog-te-gadget {
+    width: 100% !important;
+  }
+  #google_translate_element .skiptranslate {
+    width: 100% !important;
+  }
+  #google_translate_element .goog-te-gadget-simple {
+    width: calc(100% - 32px) !important;
+    text-align: center;
+  }
+}
