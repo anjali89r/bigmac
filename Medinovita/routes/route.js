@@ -28,8 +28,8 @@ module.exports = function (app) {
     app.get('/api/v1/getnonsecuredecryptedText/:txt', security.nonsecuredecryptedText);
 
     //web token example
-    app.get('/api/v1/protected/token/:apiname', security.generateJWTToken);//api to generate jwt toke
-    //api call with header and web tokenn jjjkj
+    //app.get('/api/v1/protected/token/:apiname', security.generateJWTToken);//api to generate jwt toke
+    //api call with header and web token
     //app.get('/api/v1/protected/getUserinfo/:apiname', security.verifyBasicAuth,security.verifyJWTToken, userInfo.getAllUserDetails);//http://localhost:1337/api/v1/protected/getUserinfo/getuser & in header x-access-token = 'webtaoken gnerated using previous api call & basic authentication credentials from config.json
    
 }
