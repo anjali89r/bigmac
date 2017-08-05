@@ -159,10 +159,6 @@ var tripMasterSchema = new Schema({
     order: [orderSchema]
 });
 
-
-
-
-
 //increase the value of files using autoIncrement plugin
 tripMasterSchema.plugin(autoIncrement.plugin, { model: collection, field: 'tripId',startAt: 10000,incrementBy: 1});
 
