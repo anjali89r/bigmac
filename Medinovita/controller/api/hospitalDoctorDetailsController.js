@@ -53,7 +53,7 @@ module.exports.insertTreatmentDetails = function (req, res) {
              })
          })
         .catch(function (err) {
-            return res.json({ "Message": err});
+            return res.json({ "Message": err.message});
         })
 
         //function to set data in db
