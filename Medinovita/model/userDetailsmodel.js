@@ -88,7 +88,7 @@ var userDetailsSchema = new Schema({
     userType: {type: String, required: true, enum: ['Patient', 'Agent', 'Hospital', 'CaseManager', 'Admin'], default: 'Phone'}, 
     agentType: { type: String, required: false, enum: ['Individual', 'Organization', 'None'], default: 'None' },
 
-    contactAddress: {
+    contactAddress: [{
         addressType: { type: String, required: true, enum: ['Communication', 'Permanent'], default: 'Communication' },
         addressLine1: { type: String, required: true },
         addressLine2: { type: String, required: false },
@@ -96,15 +96,15 @@ var userDetailsSchema = new Schema({
         postalCode: { type: Number, required: true },
         residingcountry: { type: String, required: true },
         landmark: { type: String, required: false }
-    },
+    }],
 
-    favourites: {
+    favourites: [{
         eventid: { type: String, required: true, default: genericUtil.getUUId },
         hospitalid: { type: Number, required: true},
         doctorid: { type: Number, required: true },
         treatmentId: { type: Number, required: true },
 
-    },
+    }],
 
     updated_at: { type: Date, required: true, default: Date.now }
 });
@@ -118,7 +118,7 @@ userDetailsSchema.plugin(autoIncrement.plugin, {
 });
 
 //create collection.
-module.exports.User = mongoose.model(collection, userDetailsSchema);
+module.exports.userModel = mongoose.model(collection, userDetailsSchema);
 
 
 

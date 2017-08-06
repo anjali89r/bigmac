@@ -68,7 +68,7 @@ module.exports.nonsecuredecryptedText = function (req, res) {
 module.exports.generateJWTToken = function (req, res) {
 
     //write the code to authnticate user using user id here and over ride the below field for user specific token.const user = { id: 3 };
-    var api = req.params.apiname;
+    var api = req.params.apiTokenName;
     var payload = { api: config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_PAYLOAD', false) }; //jwt.sign(payload, secretOrPrivateKey, [options, callback])
     var secretkey = config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_SECRETKEY', false);
 
@@ -81,7 +81,7 @@ module.exports.generateJWTToken = function (req, res) {
 module.exports.verifyJWTToken = function (req, res, next) {//generic function to verify jwt web token
 
     var bearerHeader = req.headers['x-access-token'];
-    var api = req.params.apiname;
+    var api = req.params.apiTokenName;
     var token;
     req.authenticated = false;
     if (bearerHeader) {
@@ -108,7 +108,7 @@ module.exports.verifyBasicAuth = function (req, res, next) {//generic function t
          res.send('Basic authentication failed');
     } else {
 
-        var api = req.params.apiname;
+        var api = req.params.apiTokenName;
 
         var apiexpuser = config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_BAICAUTH_USERNAME', false)
         var apiexpswd = config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_BAICAUTH_PASSWORD', false)
