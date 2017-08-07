@@ -207,9 +207,13 @@
     </Compile>
     <Compile Include="controller\utilities\logger.js" />
     <Compile Include="controller\utilities\mongodbutils.js" />
+    <Compile Include="model\officeLocationModel.js" />
+    <Compile Include="model\customerCareModel.js" />
+    <Compile Include="model\serviceMenuModel.js" />
     <Compile Include="model\dealOfferDetailsModel.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="model\contactMasterModel.js" />
     <Compile Include="model\tripMasterModel.js" />
     <Compile Include="model\hospitalDoctorDetailsModel.js">
       <SubType>Code</SubType>
@@ -217,6 +221,7 @@
     <Compile Include="model\identityCounterModel.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="model\treatmentsOfferedModel.js" />
     <Compile Include="model\userDetailsmodel.js" />
     <Compile Include="routes\route.js" />
     <Compile Include="views\webcontent\assets\js\extensions\revolution.extension.actions.min.js" />
