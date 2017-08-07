@@ -85,7 +85,7 @@ module.exports.updateUserInfo = function (req, res) {
             query[key] = item;
     }
 
-    userModel.findOneAndUpdate({ "emailID": userEmailId }, { "$set": {} }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
+    userModel.findOneAndUpdate({ "emailID": userEmailId }, { "$set": query }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
         if (err) {
             logger.error("Error while updating record : - " + err.message)
             return res.status(500).json({ "Message": err.message });
