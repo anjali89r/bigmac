@@ -40,7 +40,12 @@
     "API_PUTUSER_PAYLOAD": "putUser",
     "API_PUTUSER_SECRETKEY": "My secret key for editing exiting user",
     "API_PUTUSER_BAICAUTH_USERNAME": "libin",
-    "API_PUTUSER_BAICAUTH_PASSWORD": "libin"
+    "API_PUTUSER_BAICAUTH_PASSWORD": "libin",
+
+    "API_POSTHOSPITAL_PAYLOAD": "postHospital",
+    "API_POSTHOSPITAL_SECRETKEY": "My secret key for adding hospital record",
+    "API_POSTHOSPITAL_BAICAUTH_USERNAME": "libin",
+    "API_POSTHOSPITAL_BAICAUTH_PASSWORD": "libin"
 
   }
 }

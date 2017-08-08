@@ -7,7 +7,7 @@ var counterSchema = require('../../model/identityCounterModel.js');
 
 var collection = 'hospital_doctor_details';
 
-module.exports.insertTreatmentDetails = function (req, res) {
+module.exports.createHospitalRecord = function (req, res) {
 
     var doctorID = 10000
     var departmentID = 10000
@@ -76,7 +76,7 @@ module.exports.insertTreatmentDetails = function (req, res) {
             hospitalSchema.hospitalRating.medinovitaRating = 4
 
             var treatmentLength = 0
-            if (typeof (hospitalSchema.schema.Treatment) != 'undefined') {
+            if (typeof (hospitalSchema.schema.Treatment) !== 'undefined') {
                 treatmentLength = parseInt(hospitalSchema.schema.Treatment.length) - 1
             }
 
@@ -106,4 +106,100 @@ module.exports.insertTreatmentDetails = function (req, res) {
         }
     
 };
+//Function to update hospital details
+module.exports.updateHospitalRecord = function (req, res) {
+
+    var hospitalName = req.params.hospitalname;
+    var hospitalCity = req.params.hospitalcity;
+    var hospitalCountry = req.params.hospitalcountry;
+
+    if (hospitalName == null || hospitalCity == null || hospitalCountry==null ) {
+        logger.error("Error while updating hospital record : - hospitalName, hospitalCity and hospitalCountry cannot be null")
+        return res.status(500).json({ "Message": "Hospital Name, Hospital City and Hospital Country cannot be null" });
+    }
+
+    //loop through request parameters and get value
+    var query = {};
+    for (var key in req.body) {
+        item = req.body[key];
+        key = requestToUserModelParamMapping(key)
+        query[key] = item;
+    }
+
+    hospitalModel.findOneAndUpdate({ "hospitalName": hospitalName, "hospitalContact.City": hospitalCity, "hospitalContact.hospitalCountry": hospitalCountry }, { "$set": query }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
+        if (err) {
+            logger.error("Error while updating record : - " + err.message)
+            return res.status(500).json({ "Message": err.message });
+        }
+        res.status(200).json({ "Message": "Hopsital details for " + hospitalName + " have been updated successfully" });
+
+    });
+
+   
+};
+
+//function to get db field name corresponding to form field name
+function requestToUserModelParamMapping(reqParamKey) {
+
+    switch (reqParamKey.toLowerCase()) {
+
+        case 'hospitalname': return "hospitalName";
+
+        case 'hospitalid': return "hospitalID";
+
+        case 'hospitalcontact.$.website': return "hospitalContact.$.website";
+
+        case 'hospitalcontact.$.contactpersonname': return "hospitalContact.$.contactPersonname";
+
+        case 'hospitalcontact.$.addressline1': return "hospitalContact.$.addressLine1";
+
+        case 'hospitalcontact.$.city': return "hospitalContact.$.City";
+
+        case 'hospitalcontact.$.country': return "hospitalContact.$.country";
+
+        case 'hospitalcontact.$.postalcode': return "hospitalContact.$.PostalCode";
+
+        case 'hospitalcontact.$.landmark': return "hospitalContact.$.Landmark";
+
+        case 'accreditation.$.jci': return "Accreditation.$.JCI";
+
+        case 'accreditation.$.nabh': return "Accreditation.$.NABH";
+
+        case 'accreditation.$.nabl': return "Accreditation.$.NABL";
+
+        case 'hospitalrating.userrating.$.type': return "hospitalRating.userRating.$.type";
+
+        case 'hospitalrating.medinovitarating.$.type': return "hospitalRating.medinovitaRating.$.type";
+
+        case 'treatment.$.procedureid': return "Treatment.$.procedureid";
+
+        case 'treatment.$.departmentId': return "Treatment.$.departmentId";
+
+        case 'treatment.$.name': return "treatment.$.name";
+
+        case 'treatment.$.costlowerbound': return "Treatment.$.costLowerBound";
+
+        case 'treatment.$.costupperbound': return " Treatment.$.costUpperBound";
+
+        case 'treatment.$.departmentname': return "Treatment.$.departmentName";
+
+        case 'treatment.$.doctor.$.doctorId': return "Treatment.$.doctor.$.doctorId";
+
+        case 'treatment.$.doctor.$.doctorname': return "Treatment.$.doctor.$.doctorName";
+
+        case 'treatment.$.doctor.$.speciality.$.specialityname': return "Treatment.$.doctor.$.speciality.$.specialityName";
+
+        case 'treatment.$.doctor.$.profilepicdir': return "Treatment.$.doctor.$.profilepicdir";
+
+        case 'treatment.$.doctor.$.medinovitadoctorrating': return "Treatment.$.doctor.$.medinovitadoctorRating";
+
+        case 'treatment.$.doctor.$.doctoruserrating.$.userrating': return "Treatment.$.doctor.$.DoctorUserRating.$.userRating";
+
+        case 'treatment.$.doctor.$.doctoruserrating.$.userId': return "Treatment.$.doctor.$.DoctorUserRating.$.userId";
+
+        default: return reqParamKey;
+
+    }
+}
+
 
