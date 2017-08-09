@@ -3,7 +3,7 @@ var userInfo = require('../controller/api/userDetailsController.js');
 var hospitalInfo = require('../controller/api/hospitalDoctorDetailsController.js');
 var tripInfo = require('../controller/api/tripMasterController.js');
 var security = require('../controller/api/security.js');
-// demo
+
 module.exports = function (app) {
 
     //************************API to operate on user_details Schema**********************************
