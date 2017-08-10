@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+﻿var mongoose = require('mongoose');
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/hospitalDoctorDetailsModel.js');
@@ -200,4 +200,22 @@ function requestToUserModelParamMapping(reqParamKey) {
         default: return reqParamKey;
 
     }
+}
+
+module.exports.getTreatmentlist = function (req, res) {
+    if (req.params.treatmentName.toUpperCase() == "ALL") {
+        hospitalModel.find().distinct('Treatment.name', function (err, result) {
+            if (err) {
+                logger.error("Error retrieving the records from DB : - " + err.message)
+                return res.status(500).json({ "Message": err.message });
+            }
+            res.status(200).json(result.sort());
+
+        });
+    }
+    else {
+        return res.status(200).json("To be implemented");
+    }
+
+
 }

@@ -12,17 +12,18 @@ module.exports = function (app) {
 
     app.post('/api/v1/add/userInfo/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.createUserInfo); //api to insert a new user record in to db
     app.put('/api/v1/update/userInfo/:emailId/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.updateUserInfo);
+    app.get('/api/v1/getTreamentlist/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitalInfo.getTreatmentlist);
     //***********************************************************************************************
      
     //************************API to operate on hospital schema**************************************
-    app.get('/api/v1/insertHospitalRecord', hospitalInfo.insertTreatmentDetails)
+  //  app.get('/api/v1/insertHospitalRecord', hospitalInfo.createHospitalRecord)
     //***********************************************************************************************
 
     //************************API to operate on trip schema******************************************
-    app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails)    
+    //app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails)    
     //***********************************************************************************************
 
-    app.put('/api/v1/insertTripinfo', tripInfo.inserttripDetails)//temp
+    //app.put('/api/v1/insertTripinfo', tripInfo.inserttripDetails)//temp
 
 
     //encrypt and decrypt api
