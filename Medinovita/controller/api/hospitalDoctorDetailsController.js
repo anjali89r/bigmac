@@ -202,47 +202,4 @@ function requestToUserModelParamMapping(reqParamKey) {
     }
 }
 
-module.exports.getTreatmentlist = function (req, res) {
-    try{
-    if (req.params.treatmentName.toUpperCase() == "ALL") {
-        hospitalModel.find().distinct('Treatment.name', function (err, result) {
-            if (err) {
-                logger.error("Error retrieving the records from DB : - " + err.message)
-                return res.status(500).json({ "Message": err.message });
-            }
-            return res.status(200).json(result.sort());
 
-        });
-    }
-    else {
-         hospitalModel.find().distinct('Treatment.name', function (err, result) {
-            if (err)
-            {
-                logger.error("Error retrieving the records from DB : - " + err.message)
-                return res.status(500).json({ "Message": err.message });
-
-            }
-            var treatmentArray = []; 
-            for (var intvalue = 0; intvalue < result.length; intvalue++)
-            {
-                if (result[intvalue].toUpperCase().includes(req.params.treatmentName.toUpperCase()))
-                    {
-                     treatmentArray.push(result[intvalue])
-
-                    }
-                                
-            }
-            
-        return res.status(200).json(treatmentArray);
-        });
-        
-    }
-    }
-    catch (err) {
-
-        return res.status(500).json(err.message);
-    
-    }
-    
-
-}
