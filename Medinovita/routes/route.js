@@ -3,6 +3,7 @@ var userInfo = require('../controller/api/userDetailsController.js');
 var hospitalInfo = require('../controller/api/hospitalDoctorDetailsController.js');
 var tripInfo = require('../controller/api/tripMasterController.js');
 var security = require('../controller/api/security.js');
+var hospitaltreatmentInfo = require('../controller/api/hospitaltreatmentSearchController.js');
 
 module.exports = function (app) {
 
@@ -15,6 +16,8 @@ module.exports = function (app) {
     /* Header should contain basic authentication with credentials from config json and x-access-token = 'webtaoken gnerated using api call */
     app.post('/api/v1/add/userInfo/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.createUserInfo); //api to insert a new user record in to db
     app.put('/api/v1/update/userInfo/:emailId/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.updateUserInfo);
+    app.get('/api/v1/getTreamentlist/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.getTreatmentlist);
+    app.get('/api/v1/searchHospitaldetails/:treatmentName/:country/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.gethospitalDetailbytreatment);
     //***********************************************************************************************
 
     //************************API to operate on hospital schema**************************************
@@ -32,6 +35,14 @@ module.exports = function (app) {
     app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails);
     app.put('/api/v1/insertTripinfo', tripInfo.inserttripDetails);//temp
     //***********************************************************************************************
+  //  app.get('/api/v1/insertHospitalRecord', hospitalInfo.createHospitalRecord)
+    //***********************************************************************************************
+
+    //************************API to operate on trip schema******************************************
+    //app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails)    
+    //***********************************************************************************************
+
+    //app.put('/api/v1/insertTripinfo', tripInfo.inserttripDetails)//temp
 
 
     //encrypt and decrypt api

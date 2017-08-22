@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+﻿var mongoose = require('mongoose');
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/hospitalDoctorDetailsModel.js');

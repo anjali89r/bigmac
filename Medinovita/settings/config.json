@@ -52,5 +52,15 @@
     "API_PUTHOSPITAL_BAICAUTH_USERNAME": "libin",
     "API_PUTHOSPITAL_BAICAUTH_PASSWORD": "libin"
 
+    "API_GETTREATMENT_PAYLOAD": "getTreatment",
+    "API_GETTREATMENT_SECRETKEY": "My secret key for editing exiting user",
+    "API_GETTREATMENT_BAICAUTH_USERNAME": "libin",
+    "API_GETTREATMENT_BAICAUTH_PASSWORD": "libin",
+
+    "API_SEARCHHOSPITAL_PAYLOAD": "searchHospital",
+    "API_SEARCHHOSPITAL_SECRETKEY": "My secret key for editing exiting user",
+    "API_SEARCHHOSPITAL_BAICAUTH_USERNAME": "libin",
+    "API_SEARCHHOSPITAL_BAICAUTH_PASSWORD": "libin"
+
   }
 }
