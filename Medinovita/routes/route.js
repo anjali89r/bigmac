@@ -6,23 +6,32 @@ var security = require('../controller/api/security.js');
 
 module.exports = function (app) {
 
-    //************************API to operate on user_details Schema**********************************
-    //apiTokenName for userInfo is postuser.API to generate token :/api/v1/protected/token/postuser.make sure jwt in config json is updated with postuser
-    //Header should contain basic authentication with credentials from config json and x-access-token = 'webtaoken gnerated using api call'
+    //************************Generate JWT web Token************************************************
+    app.get('/api/v1/protected/token/:apiTokenName', security.generateJWTToken);
+    //**********************************************************************************************
 
+    //************************API to operate on user_details Schema**********************************
+    /* apiTokenName for userInfo is postuser.API to generate token :/api/v1/protected/token/postuser.make sure jwt in config json is updated with postuser */
+    /* Header should contain basic authentication with credentials from config json and x-access-token = 'webtaoken gnerated using api call */
     app.post('/api/v1/add/userInfo/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.createUserInfo); //api to insert a new user record in to db
     app.put('/api/v1/update/userInfo/:emailId/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.updateUserInfo);
     //***********************************************************************************************
-     
+
     //************************API to operate on hospital schema**************************************
-    app.get('/api/v1/insertHospitalRecord', hospitalInfo.insertTreatmentDetails)
+    /*A PI to insert a new hospital record to database */
+    app.post('/api/v1/add/hospitalrecord/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitalInfo.createHospitalRecord);//Insert a new record
+    /* API to update basic hospital information */
+    app.put('/api/v1/update/basicHospitalDetails/:hospitalname/:hospitalcity/:hospitalcountry/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitalInfo.updateHospitalNameNContactDetails);
+    /* API to add new procedure offered by hospital in an existing hospital collection */
+    app.post('/api/v1/add/newtreatment/:hospitalname/:hospitalcity/:hospitalcountry/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitalInfo.addProcedureDetails);
+    /* API to add details of the doctors offering a particular procedure to hospital collection */
+    app.post('/api/v1/add/doctorsofferingtreatment/:hospitalname/:hospitalcity/:hospitalcountry/:procedurename/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitalInfo.addDoctorDetails);
     //***********************************************************************************************
 
     //************************API to operate on trip schema******************************************
-    app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails)    
+    app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails);
+    app.put('/api/v1/insertTripinfo', tripInfo.inserttripDetails);//temp
     //***********************************************************************************************
-
-    app.put('/api/v1/insertTripinfo', tripInfo.inserttripDetails)//temp
 
 
     //encrypt and decrypt api
@@ -31,10 +40,5 @@ module.exports = function (app) {
     app.get('/api/v1/getnonsecureencryptedText/:txt', security.nonsecureEncryptedText);
     app.get('/api/v1/getnonsecuredecryptedText/:txt', security.nonsecuredecryptedText);
 
-    //web token example
-    app.get('/api/v1/protected/token/:apiTokenName', security.generateJWTToken);//api to generate jwt toke
-    //api call with header and web token
-    //app.get('/api/v1/protected/getUserinfo/:apiname', security.verifyBasicAuth,security.verifyJWTToken, userInfo.getAllUserDetails);//http://localhost:1337/api/v1/protected/getUserinfo/getuser & in header x-access-token = 'webtaoken gnerated using previous api call & basic authentication credentials from config.json
-   
-}
+};
 

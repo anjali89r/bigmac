@@ -13,7 +13,7 @@ const collection = 'hospital_doctor_details';
 var hospitalDoctorSchema = new Schema({
 
     hospitalName: { type: String, required: true, trim: true },
-    hospitalID: { type: Number, required: true, unique: true, dropDups: true, default: 10000 },    
+    hospitalID: { type: Number, required: true, unique: true, dropDups: true},    
 
     hospitalContact: {
         website: { type: String, required: true, trim: true },
@@ -34,7 +34,7 @@ var hospitalDoctorSchema = new Schema({
 
     hospitalRating: {
         userRating: [{
-                    type: Number, required: true, 
+                    type: Number, required: false, 
                     min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
                     max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
                     default: 4
@@ -63,7 +63,7 @@ var hospitalDoctorSchema = new Schema({
                     speciality: [{
                         specialityName: { type:String, required: true, trim: true }
                     }],
-                    profilepicdir: { type: String, required: true, trim: true },
+                    profilepicdir: { type: String, required: false, trim: true },
                     medinovitadoctorRating: {
                         type: Number, required: true,
                         min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
@@ -71,12 +71,12 @@ var hospitalDoctorSchema = new Schema({
                         default: 4
                     },
                     DoctorUserRating:[ {  
-                                    userRating:{type: Number, required: true,
+                                    userRating:{type: Number, required: false,
                                         min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
                                         max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
                                         default: 4
                                     },
-                                    userId: { type: Number, required: true, trim: true},
+                                    userId: { type: Number, required: false, trim: true},
                     }],
                 }],
     }],
@@ -84,37 +84,18 @@ var hospitalDoctorSchema = new Schema({
 });
 
 //increase the value of files using autoIncrement plugin
-hospitalDoctorSchema.plugin(autoIncrement.plugin, {model: collection,field: 'hospitalID',startAt: 10000,incrementBy: 1});
-hospitalDoctorSchema.plugin(autoIncrement.plugin, {model: collection,field: 'Treatment.procedureid',startAt: 10000, incrementBy: 1});
-hospitalDoctorSchema.plugin(autoIncrement.plugin, {model: collection,field: 'Treatment.departmentId',startAt: 10000,incrementBy: 1});
-hospitalDoctorSchema.plugin(autoIncrement.plugin, {model: collection,field: 'Treatment.doctor.doctorId',startAt: 10000,incrementBy: 1});
+/*hospitalDoctorSchema.plugin(autoIncrement.plugin, {model: collection,field: 'hospitalID',startAt: 10000,incrementBy: 1});
+hospitalDoctorSchema.plugin(autoIncrement.plugin, {model: collection,field: 'Treatment.$.procedureid',startAt: 10000, incrementBy: 1});
+hospitalDoctorSchema.plugin(autoIncrement.plugin, {model: collection,field: 'Treatment.$.departmentId',startAt: 10000,incrementBy: 1});
+hospitalDoctorSchema.plugin(autoIncrement.plugin, {model: collection,field: 'Treatment.$.doctor.$.doctorId',startAt: 10000,incrementBy: 1});*/
 
 //override the default values before save
 /*hospitalDoctorSchema.pre('save', function (next) {
 
-    var treatmentcnt =parseInt( this.Treatment.length)-1
-    var doctorcount = parseInt(this.Treatment[treatmentcnt].doctor.length)-1
-
-    counterSchema.getNext('Treatment.departmentId', collection, function (departmentId) {
-        this.Treatment = this.Treatment ? this.Treatment : []; 
-        this.Treatment.push({
-            departmentId: 1234
-        });
-    })
-
-    counterSchema.getNext('Treatment.doctor.doctorId', collection, function (doctorId) {
-        this.Treatment[treatmentcnt].doctor[doctorcount].doctorId = doctorId;        
-    })  
-
-    counterSchema.getNext('Treatment.procedureid', collection, function (procedureid) {
-        this.Treatment[treatmentcnt].procedureid = procedureid;
-        console.log(this.Treatment[treatmentcnt].procedureid )
-    })
-
-   next();
    
-});
-*/
+   
+}); */
+
 //create collection.
 module.exports.hospitalModel = mongoose.model(collection, hospitalDoctorSchema);
 

@@ -4,6 +4,7 @@ var logger = require('../controller/utilities/logger.js');
 var Schema = mongoose.Schema;
 
 var collection = 'identitycounters';
+var startCount = 10000;
 
 var identityCounterSchema = new Schema({
 
@@ -16,11 +17,33 @@ module.exports.counterModel = mongoose.model(collection, identityCounterSchema, 
 //query identity collection
 module.exports.getNext = function (field, model, callback) {
 
-    mongoose.model(collection, identityCounterSchema).find({ 'field': field, 'model': model }, { "count": 1, "_id": 0 }, function (err, result) {                
-        if (err) callback(10000)
-        if ((typeof result[0] == 'undefined') || (typeof result[0] == null)) callback(10000) //first time serverstartup identitycounter schema will not b there        
-        callback ( (parseInt(result[0].count) + 1));
-    });
+        const nextPromise=new Promise((resolve, reject) => {
+
+            var nextval = startCount;
+
+            mongoose.model(collection, identityCounterSchema).find({ 'field': field, 'model': model }, { "count": 1, "_id": 0 }, function (err, result) {
+                if ((typeof result[0] == 'undefined') || (typeof result[0] == null)) { //first time serverstartup identitycounter schema will not b there        
+                    mongoose.model(collection, identityCounterSchema).field = field;
+                    mongoose.model(collection, identityCounterSchema).model = model;
+                    mongoose.model(collection, identityCounterSchema).count = startCount 
+                    resolve(startCount)
+                } else {
+                    resolve( parseInt(result[0].count) + 1)
+                }
+
+            })
+       
+        }).
+        then(function (count) {            
+            mongoose.model(collection, identityCounterSchema).findOneAndUpdate({ 'field': field, 'model': model }, { $set: { "count": count } }, { returnOriginal: false, upsert: true }, function (err, doc) {
+                callback(count);
+            });
+            
+        }).
+        catch(function (err) {
+            logger.error( "Error while auto incrementing number - " + err.message)
+            callback(nextval);
+        });
 }
 
 

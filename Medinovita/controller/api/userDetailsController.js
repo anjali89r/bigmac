@@ -10,43 +10,39 @@ module.exports.createUserInfo = function (req, res) {
 
     new Promise(function (resolve, reject) {
   
-        userSchema.emailID = "nit.libin@gmail.com",
-        userSchema.loginPassword = "admin"
-        userSchema.isdCode = 91
-        userSchema.primaryPhonenumber = 9740177277
-        userSchema.secondaryPhonenumber = 9740177277
-        userSchema.whatsappPhonenumber = 9740177277
+        userSchema.emailID = req.body["emailID"],
+        userSchema.loginPassword = req.body["loginPassword"]
+        userSchema.isdCode = parseInt(req.body["isdCode"])
+        userSchema.primaryPhonenumber = parseInt(req.body["primaryPhonenumber"])
+        userSchema.secondaryPhonenumber = parseInt(req.body["secondaryPhonenumber"])
+        userSchema.whatsappPhonenumber = parseInt(req.body["whatsappPhonenumber"])
         
-        userSchema.userTitle = "Mr."
-        userSchema.gender = "Male"
-        userSchema.firstName = "Libin"
-        userSchema.middleName = ''
-        userSchema.nickName = ''
-        userSchema.lastName = "Sebastian"
-        userSchema.dateofbirth = "18/03/1985"
+        userSchema.userTitle = req.body["userTitle"]
+        userSchema.gender = req.body["gender"]
+        userSchema.firstName = req.body["firstName"]
+        userSchema.middleName = req.body["middleName"]
+        userSchema.nickName = req.body["nickName"]
+        userSchema.lastName = req.body["lastName"]
+        userSchema.dateofbirth = req.body["dateofbirth"]
         
-        userSchema.preferredContacttime = "Morning"
-        userSchema.preferredContactmethod = "email"
-        userSchema.emailVerified = "Y"
-        userSchema.userPicdir = ''
-        userSchema.userType = "Patient"
-        userSchema.agentType = "Individual"
+        userSchema.preferredContacttime = req.body["preferredContacttime"]
+        userSchema.preferredContactmethod = req.body["preferredContactmethod"]
+        userSchema.emailVerified = req.body["emailVerified"]
+        userSchema.userPicdir = req.body["userPicdir"]
+        userSchema.userType = req.body["userType"]
+        userSchema.agentType = req.body["agentType"]
 
        userSchema.contactAddress = [{
-            addressType: "Communication",
-            addressLine1: "my address",
-            addressLine2: '',
-            City: "Kochi",
-            postalCode: "682021",
-            residingcountry: "India",
-            landmark: '',
+           addressType: req.body["addressType"],
+           addressLine1: req.body["addressLine1"],
+           addressLine2: req.body["addressLine2"],
+           City: req.body["City"],
+           postalCode: req.body["postalCode"],
+           residingcountry: req.body["residingcountry"],
+           landmark: req.body["landmark"],
         }] 
 
-        userSchema.favourites = [{
-            hospitalid: 1234,
-            doctorid: 4567,
-            treatmentId: 8912,
-        }]
+        userSchema.favourites = [] //this will come from different api
 
         resolve();
     })
