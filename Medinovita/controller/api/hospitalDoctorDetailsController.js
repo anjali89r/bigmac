@@ -6,7 +6,6 @@ var treatmentController=require('./treatmentsOfferedController.js');
 var hospitalModel = mongoose.model('hospital_doctor_details');
 var counterSchema = require('../../model/identityCounterModel.js');
 
-
 var collection = 'hospital_doctor_details';
 var hospitalSchema = new hospitalModel();
 
