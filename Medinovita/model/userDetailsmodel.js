@@ -10,7 +10,6 @@ var SchemaTypes = mongoose.Schema.Types;
 
 const collection = 'user_details';
 
-
 var userDetailsSchema = new Schema({
 
     emailID: {

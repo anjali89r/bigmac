@@ -4,23 +4,24 @@ var hospitalInfo = require('../controller/api/hospitalDoctorDetailsController.js
 var tripInfo = require('../controller/api/tripMasterController.js');
 var security = require('../controller/api/security.js');
 var hospitaltreatmentInfo = require('../controller/api/hospitaltreatmentSearchController.js');
+var enquiryInfo = require('../controller/api/userEnquiryController.js');
 
 module.exports = function (app) {
 
-    //************************Generate JWT web Token************************************************
+    /************************Generate JWT web Token************************************************/
     app.get('/api/v1/protected/token/:apiTokenName', security.generateJWTToken);
-    //**********************************************************************************************
+    /**********************************************************************************************/
 
-    //************************API to operate on user_details Schema**********************************
+    /************************API to operate on user_details Schema**********************************/
     /* apiTokenName for userInfo is postuser.API to generate token :/api/v1/protected/token/postuser.make sure jwt in config json is updated with postuser */
     /* Header should contain basic authentication with credentials from config json and x-access-token = 'webtaoken gnerated using api call */
     app.post('/api/v1/add/userInfo/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.createUserInfo); //api to insert a new user record in to db
     app.put('/api/v1/update/userInfo/:emailId/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.updateUserInfo);
     app.get('/api/v1/getTreamentlist/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.getTreatmentlist);
     app.get('/api/v1/searchHospitaldetails/:treatmentName/:country/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.gethospitalDetailbytreatment);
-    //***********************************************************************************************
+    /***********************************************************************************************/
 
-    //************************API to operate on hospital schema**************************************
+    /************************API to operate on hospital schema**************************************/
     /*A PI to insert a new hospital record to database */
     app.post('/api/v1/add/hospitalrecord/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitalInfo.createHospitalRecord);//Insert a new record
     /* API to update basic hospital information */
@@ -29,7 +30,13 @@ module.exports = function (app) {
     app.post('/api/v1/add/newtreatment/:hospitalname/:hospitalcity/:hospitalcountry/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitalInfo.addProcedureDetails);
     /* API to add details of the doctors offering a particular procedure to hospital collection */
     app.post('/api/v1/add/doctorsofferingtreatment/:hospitalname/:hospitalcity/:hospitalcountry/:procedurename/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitalInfo.addDoctorDetails);
-    //***********************************************************************************************
+    /***********************************************************************************************/
+
+    /************************API operate on user enquiry schema**************************************/
+    app.post('/api/v1/submit/enquiry/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, enquiryInfo.submitUserEnquiry);
+    app.post('/api/v1/submit/response/:userEmail/:enquiryID/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, enquiryInfo.sendEnquiryResponse  );
+
+    /********************************************************************************************************/
 
     //************************API to operate on trip schema******************************************
     app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails);
