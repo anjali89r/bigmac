@@ -5,6 +5,8 @@ var tripInfo = require('../controller/api/tripMasterController.js');
 var security = require('../controller/api/security.js');
 var hospitaltreatmentInfo = require('../controller/api/hospitaltreatmentSearchController.js');
 var enquiryInfo = require('../controller/api/userEnquiryController.js');
+var medicalSection = require('../controller/api/medicalSectionController.js');
+
 
 module.exports = function (app) {
 
@@ -20,6 +22,17 @@ module.exports = function (app) {
     app.get('/api/v1/getTreamentlist/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.getTreatmentlist);
     app.get('/api/v1/searchHospitaldetails/:treatmentName/:country/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.gethospitalDetailbytreatment);
     /***********************************************************************************************/
+
+
+    app.get('/api/v1/getFeaturedtreatments/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, medicalSection.getFeaturedtreatments);
+
+    app.get('/api/v1/getaboutMedical/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, medicalSection.getaboutMedicalsection);
+
+    app.get('/api/v1/gethighlighttreatments/:limitcount/:skipcount/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, medicalSection.gethighlightsection);
+
+    app.post('/api/v1/addFeaturedtreatments/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, medicalSection.addFeaturedtreatments);
+    //***********************************************************************************************
+
 
     /************************API to operate on hospital schema**************************************/
     /*A PI to insert a new hospital record to database */

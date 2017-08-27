@@ -203,6 +203,7 @@
     <Folder Include="views\webcontent\assets\js\pages\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="controller\api\medicalSectionController.js" />
     <Compile Include="controller\api\hospitaltreatmentSearchController.js" />
     <Compile Include="controller\api\tripMasterController.js" />
     <Compile Include="controller\api\hospitalDoctorDetailsController.js">
@@ -221,6 +222,9 @@
     </Compile>
     <Compile Include="controller\utilities\logger.js" />
     <Compile Include="controller\utilities\mongodbutils.js" />
+    <Compile Include="model\highlightSectionModel.js" />
+    <Compile Include="model\aboutMedicalModel.js" />
+    <Compile Include="model\featuredTreatmentModel.js" />
     <Compile Include="model\officeLocationModel.js" />
     <Compile Include="model\customerCareModel.js" />
     <Compile Include="model\serviceMenuModel.js" />
