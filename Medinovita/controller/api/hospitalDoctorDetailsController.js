@@ -9,7 +9,7 @@ var counterSchema = require('../../model/identityCounterModel.js');
 var collection = 'hospital_doctor_details';
 var hospitalSchema = new hospitalModel();
 
-/* **************Add hospital, procedure and doctors details of a partucular hospital in hospital record ***************** */
+/***************Add hospital, procedure and doctors details of a partucular hospital in hospital record ***************** */
 module.exports.createHospitalRecord = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned

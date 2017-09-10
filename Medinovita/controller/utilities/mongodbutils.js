@@ -6,7 +6,6 @@ mongoose.Promise = global.Promise;
 module.exports.getMogoDbCon = function () {
     
     var mongoUri = getmongouri(); //'mongodb://libin:libin@localhost:27017/medinovita';
-
     mongoose.connection.openUri(mongoUri);
     var db = mongoose.connection;
 

@@ -5,7 +5,6 @@ require('../../model/userEnquirymodel.js');
 var userEnquiryModel = mongoose.model('user_enquiry');
 
 var userEnquirySchema = new userEnquiryModel();
-
 /************************ API code to submit new enquiry to Medinovita ****************************/
 module.exports.submitUserEnquiry = function (req, res) {
 

@@ -7,7 +7,7 @@ var counterSchema = require('../../model/identityCounterModel.js');
 
 var collection = 'hospital_doctor_details';
 
-
+/****************************/
 module.exports.getTreatmentlist = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned

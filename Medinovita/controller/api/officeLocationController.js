@@ -11,7 +11,6 @@ module.exports.getOfficeLocations = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call getOfficeLocations")
         return;
     }  
-
     officeLocationModel.aggregate([
        /* {
             "$match": {

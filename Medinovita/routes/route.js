@@ -54,7 +54,8 @@ module.exports = function (app) {
      /*  APi to get list of enquiries where response is due  */
     app.get('/api/v1/get/enquiry/dueresponse/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, enquiryInfo.getPendingEnquiryResponse);
 
-    /*********************************************************************************************************************************************************/   
+    /*********************************************************************************************************************************************************/
+    
     /************************API operate on office address schema********************************************************************************************/
     /*  APi to get list of office locations  */
     app.get('/api/v1/get/officelocations/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, officeLocationInfo.getOfficeLocations);

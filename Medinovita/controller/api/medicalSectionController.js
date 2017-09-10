@@ -10,7 +10,7 @@ var featuredTreatmentModel = mongoose.model('featured_treatment');
 var counterSchema = require('../../model/identityCounterModel.js');
 
 
-
+/************************/
 module.exports.getFeaturedtreatments = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned

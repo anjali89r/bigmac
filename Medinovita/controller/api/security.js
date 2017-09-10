@@ -4,7 +4,7 @@ var config = require('../utilities/confutils.js')
 var jwt = require('jsonwebtoken');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-
+/*********************             ***************/
 module.exports.secureEncryptedText = function (req, res) {
 
     var id = req.params.txt;

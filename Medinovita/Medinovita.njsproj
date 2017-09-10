@@ -12,6 +12,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>347e4c8e-6f9b-430d-9239-7b8f60f3293c</ProjectGuid>
     <ProjectHome>.</ProjectHome>
+	
     <StartupFile>app.js</StartupFile>
     <SearchPath>
     </SearchPath>

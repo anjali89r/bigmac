@@ -10,7 +10,6 @@
     "DB_PORT": "27017",
     "PSWD_ENCRYPTED": "N"
   },
-
   "MONGODB_PROD": {
     "DB_NAME": "medinovita",
     "DB_USER": "libin",
