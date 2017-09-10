@@ -10,8 +10,14 @@ var featuredTreatmentModel = mongoose.model('featured_treatment');
 var counterSchema = require('../../model/identityCounterModel.js');
 
 
-
+/************************/
 module.exports.getFeaturedtreatments = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call getFeaturedtreatments")
+        return;
+    }  
+
     try{
 
         featuredTreatmentModel.find({}, {_id:0},function (err, result) {
@@ -34,6 +40,11 @@ module.exports.getFeaturedtreatments = function (req, res) {
 
 
 module.exports.getaboutMedicalsection = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call getaboutMedicalsection")
+        return;
+    }  
     try {
 
         aboutMedicalModel.findOne({}, {_id:0},function (err, result) {
@@ -56,6 +67,12 @@ module.exports.getaboutMedicalsection = function (req, res) {
 
 
 module.exports.gethighlightsection = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call gethighlightsection")
+        return;
+    }  
+
     try {
         var limitCount = 0;
         var skipCount = 0;
@@ -96,6 +113,10 @@ module.exports.gethighlightsection = function (req, res) {
 }
 
 module.exports.addFeaturedtreatments = function (req, res) {
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call addFeaturedtreatments")
+        return;
+    }  
     try {
 
 

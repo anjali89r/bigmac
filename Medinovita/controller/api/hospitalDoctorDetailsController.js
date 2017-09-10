@@ -9,8 +9,13 @@ var counterSchema = require('../../model/identityCounterModel.js');
 var collection = 'hospital_doctor_details';
 var hospitalSchema = new hospitalModel();
 
-/* **************Add hospital, procedure and doctors details of a partucular hospital in hospital record ***************** */
+/***************Add hospital, procedure and doctors details of a partucular hospital in hospital record ***************** */
 module.exports.createHospitalRecord = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call gethospitalDetailbytreatment")
+        return;
+    }  
 
     //create doctor promise
     const hospitalPromise = new Promise((resolve, reject) => {
@@ -148,6 +153,11 @@ module.exports.createHospitalRecord = function (req, res) {
 /* **************Update basic procedure details of a partucular hospital in hospital record ***************** */
 module.exports.updateHospitalNameNContactDetails = function (req, res) {
 
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call gethospitalDetailbytreatment")
+        return;
+    }  
+
     var hospitalName = req.params.hospitalname;
     var hospitalCity = req.params.hospitalcity;
     var hospitalCountry = req.params.hospitalcountry;
@@ -190,6 +200,11 @@ module.exports.updateHospitalNameNContactDetails = function (req, res) {
 
 /* ************** Add new procedure details of a partucular hospital to existing hospital record ****************** */
 module.exports.addProcedureDetails = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call addProcedureDetails")
+        return;
+    }  
 
     var hospitalName = req.params.hospitalname;
     var hospitalCity = req.params.hospitalcity;
@@ -438,6 +453,11 @@ module.exports.addProcedureDetails = function (req, res) {
 
 //Add new doctor details
 module.exports.addDoctorDetails = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call addDoctorDetails")
+        return;
+    }  
 
     var hospitalName = req.params.hospitalname;
     var hospitalCity = req.params.hospitalcity;

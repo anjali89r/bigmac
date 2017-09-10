@@ -18,6 +18,7 @@ module.exports.createTreatmentRecord = function (paramDict,callback) {
     var procedureparentDepartment = paramDict['procedureparentDepartment'];
     var procedureparentDepartmentid = paramDict['procedureparentDepartmentid'];
 
+
     treatmentModel.find({ "procedureMedicalName": procedureMedicalName }, { "procedureId": 1, "_id": 0 }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
         if (err) {
             logger.error("Error while updating record in treatments offered schema : - " + err.message);

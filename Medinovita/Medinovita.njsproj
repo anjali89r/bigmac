@@ -12,6 +12,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>347e4c8e-6f9b-430d-9239-7b8f60f3293c</ProjectGuid>
     <ProjectHome>.</ProjectHome>
+	
     <StartupFile>app.js</StartupFile>
     <SearchPath>
     </SearchPath>
@@ -205,6 +206,10 @@
   <ItemGroup>
     <Compile Include="controller\api\medicalSectionController.js" />
     <Compile Include="controller\api\hospitaltreatmentSearchController.js" />
+    <Compile Include="controller\api\officeLocationController.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="controller\api\treatmentsOfferedController.js" />
     <Compile Include="controller\api\tripMasterController.js" />
     <Compile Include="controller\api\hospitalDoctorDetailsController.js">
       <SubType>Code</SubType>
@@ -213,6 +218,7 @@
     <Compile Include="controller\api\security.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="controller\api\userEnquiryController.js" />
     <Compile Include="controller\utilities\confutils.js" />
     <Compile Include="controller\utilities\crypto.js">
       <SubType>Code</SubType>
@@ -241,6 +247,7 @@
     </Compile>
     <Compile Include="model\treatmentsOfferedModel.js" />
     <Compile Include="model\userDetailsmodel.js" />
+    <Compile Include="model\userEnquiryModel.js" />
     <Compile Include="routes\route.js" />
     <Compile Include="views\webcontent\assets\js\extensions\revolution.extension.actions.min.js" />
     <Compile Include="views\webcontent\assets\js\extensions\revolution.extension.carousel.min.js" />

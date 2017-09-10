@@ -7,8 +7,14 @@ var counterSchema = require('../../model/identityCounterModel.js');
 
 var collection = 'hospital_doctor_details';
 
-
+/****************************/
 module.exports.getTreatmentlist = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call getTreatmentlist")
+        return;
+    }  
+
     try{
     if (req.params.treatmentName.toUpperCase() == "ALL") {
         hospitalModel.find().distinct('Treatment.name', function (err, result) {
@@ -55,6 +61,11 @@ module.exports.getTreatmentlist = function (req, res) {
 
 
 module.exports.gethospitalDetailbytreatment = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call gethospitalDetailbytreatment")
+        return;
+    }  
 
     try {
 
