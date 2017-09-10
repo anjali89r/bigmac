@@ -16,6 +16,12 @@ module.exports.getMogoDbCon = function () {
     return db;
 };
 
+module.exports.closeMongoDBConnection = function () {
+
+    mongoose.disconnect();;
+    
+};
+
 function getmongouri() {
 
     var dbname = config.getProjectSettings('MONGODB', 'DB_NAME',true);

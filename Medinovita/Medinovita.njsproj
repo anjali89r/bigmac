@@ -205,6 +205,10 @@
   <ItemGroup>
     <Compile Include="controller\api\medicalSectionController.js" />
     <Compile Include="controller\api\hospitaltreatmentSearchController.js" />
+    <Compile Include="controller\api\officeLocationController.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="controller\api\treatmentsOfferedController.js" />
     <Compile Include="controller\api\tripMasterController.js" />
     <Compile Include="controller\api\hospitalDoctorDetailsController.js">
       <SubType>Code</SubType>
@@ -213,6 +217,7 @@
     <Compile Include="controller\api\security.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="controller\api\userEnquiryController.js" />
     <Compile Include="controller\utilities\confutils.js" />
     <Compile Include="controller\utilities\crypto.js">
       <SubType>Code</SubType>
@@ -241,6 +246,7 @@
     </Compile>
     <Compile Include="model\treatmentsOfferedModel.js" />
     <Compile Include="model\userDetailsmodel.js" />
+    <Compile Include="model\userEnquiryModel.js" />
     <Compile Include="routes\route.js" />
     <Compile Include="views\webcontent\assets\js\extensions\revolution.extension.actions.min.js" />
     <Compile Include="views\webcontent\assets\js\extensions\revolution.extension.carousel.min.js" />

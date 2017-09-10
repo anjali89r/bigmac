@@ -9,6 +9,11 @@ var userEnquirySchema = new userEnquiryModel();
 /************************ API code to submit new enquiry to Medinovita ****************************/
 module.exports.submitUserEnquiry = function (req, res) {
 
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call submitUserEnquiry")
+        return;
+    }  
+
     new Promise(function (resolve, reject) {
 
         userEnquiryModel.findOne({ "emailID": req.body["emailID"] }, function (err, doc) {
@@ -73,14 +78,19 @@ module.exports.submitUserEnquiry = function (req, res) {
             }
         })
     })
-        .catch(function (err) {
-            logger.error("Error while inserting record in : - " + err.message)
-            return res.status(500).json({ "Message": err.message });
-        })
+    .catch(function (err) {
+        logger.error("Error while inserting record in : - " + err.message)
+        return res.status(500).json({ "Message": err.message });
+    })
 }
 
 /************************ API code to send response to email ****************************/
 module.exports.sendEnquiryResponse = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call sendEnquiryResponse")
+        return;
+    }  
 
     var userEmailID = req.params.userEmail;
     var enquiryID = req.params.enquiryID;
@@ -141,5 +151,61 @@ module.exports.sendEnquiryResponse = function (req, res) {
         logger.error("Error while inserting record in : - " + err.message)
         return res.status(500).json({ "Message": err.message });
     })
+}
+
+/************************ API code to get un answered queries ****************************/
+module.exports.getPendingEnquiryResponse = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call getPendingEnquiryResponse")
+        return;
+    }  
+
+    userEnquiryModel.aggregate([
+    {
+        "$match": {
+            response: { $exists: false, $ne: [] }
+        }
+    },
+    {
+    "$project": {
+        "_id": 0,
+        "emailID": 1,
+        "enquiry": {
+            "$setDifference": [
+                {
+                    "$map": {
+                        "input": "$enquiry",
+                        "as": "enquiry",
+                        "in": {
+                            "$cond": [//specify the filter here
+                                {
+                                  // "$eq": ["$$enquiry.userFullName", "Libin Sebastian new"] },                                    
+                                },
+                                { "userFullName": "$$enquiry.userFullName", "primaryPhonenumber": "$$enquiry.primaryPhonenumber", "caseDescription": "$$enquiry.caseDescription"},
+                                false
+                            ]
+                        }
+                    }
+                },
+                [false]
+            ]
+        }
+    }
+}
+], function (err, result) {
+
+    if (err) {
+        logger.error("Error while reading list of enquiries where response is required");
+        return res.status(500).json({ "Message": err.message.trim() });
+    } else if (result == null) {
+        logger.info("There are no enquiries where response is due");
+        return res.status(200).json({ "Message": err.message.trim() });
+    }
+    else {
+        return res.json(result);
+    }
+  })
+
 }
 

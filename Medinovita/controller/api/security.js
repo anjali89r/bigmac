@@ -80,6 +80,11 @@ module.exports.generateJWTToken = function (req, res) {
 
 module.exports.verifyJWTToken = function (req, res, next) {//generic function to verify jwt web token
 
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call verifyJWTToken")
+        return;
+    } 
+    
     var bearerHeader = req.headers['x-access-token'];
     var api = req.params.apiTokenName;
     var token;
@@ -92,20 +97,26 @@ module.exports.verifyJWTToken = function (req, res, next) {//generic function to
                 req.decoded = null;
                 next();
                 logger.error("invalid api token - " + token);
-                res.send('invalid api token');
+                res.status(500).json({ "Message": "Invalid API token" });
             } else {
                 req.authenticated = true;
                 next();
             }
         });
+    } else {
+        logger.error("No API token in the code");
+        req.authenticated = false;
+        res.status(500).json({ "Message": "No API token in the request" });
+        next();
     }
 }
 
 module.exports.verifyBasicAuth = function (req, res, next) {//generic function to verify jwt web token
-
     if (!req.headers.authorization) {
         logger.error("Basic authetication failed as credentials not supplied");
-         res.send('Basic authentication failed');
+        res.status(500).json({ "Message": "No authorization in the request" });
+        req.authenticated = false;
+        next()
     } else {
 
         var api = req.params.apiTokenName;
@@ -119,16 +130,19 @@ module.exports.verifyBasicAuth = function (req, res, next) {//generic function t
         parts = auth.split(/:/);                          // split on colon
         username = parts[0],
         password = parts[1];
-        
-        next();
+      
         if (username != apiexpuser || apiexpswd != password) {
             logger.error("Basic authetication failed as credentials do not match");
             logger.error("Actual user name - " + username);
             logger.error("Actual password - " + password);
             logger.error("Expected user name - " + apiexpuser);
             logger.error("Expected password - " + apiexpswd);
-            res.send('Basic authentication failed');            
+            res.status(500).json({ "Message": "Authentication failed" });
+            next();
+        } else {
+            next();
         }
+        
     }
 }
 

@@ -8,6 +8,11 @@ var counterSchema = require('../../model/identityCounterModel.js');
 
 module.exports.inserttripDetails = function (req, res) {
 
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call inserttripDetails")
+        return;
+    }  
+
     tripMasterModel.create(
         {
             "tripid": "1000258",

@@ -1,10 +1,14 @@
 ﻿var mongoose = require('mongoose');
-var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/userDetailsmodel.js');
 var userModel = mongoose.model('user_details');
 
 module.exports.createUserInfo = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call createUserInfo")
+        return;
+    }  
 
     var userSchema = new userModel();
 
@@ -65,6 +69,11 @@ module.exports.createUserInfo = function (req, res) {
 };
 //update user info
 module.exports.updateUserInfo = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call updateUserInfo")
+        return;
+    }  
 
     var userEmailId = req.params.emailId;
 
