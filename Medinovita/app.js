@@ -12,7 +12,7 @@ require('./routes/route.js')(app);//define express router for api calls
 mogoDBUtils.getMogoDbCon();//open dbconnection
 
 //setup server
-var port = process.env.PORT || 1337  //port
+var port = process.env.PORT || 80  //port
 
 app.use(express.static('./views/webcontent/', { index: 'index.html' }))//define home page
 
