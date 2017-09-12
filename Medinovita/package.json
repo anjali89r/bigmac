@@ -31,6 +31,7 @@
     "socket.io": "^2.0.3",
     "uuid": "^3.1.0",
     "winston": "^2.3.1",
-    "winston-daily-rotate-file": "^1.4.6"
+    "winston-daily-rotate-file": "^1.4.6",
+	  "node-windows": "0.1.14"
   }
 }
