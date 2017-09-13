@@ -57,7 +57,6 @@ var holidaySchema = new Schema({
     totalCost: { type: Number, required: false },
     transportCost: { type: Number, required: false }
 
-
 });
 // Hotel sub document this is a single nested subdoc
 var hotelSchema = new Schema({

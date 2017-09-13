@@ -14,7 +14,6 @@ var holidayPackageSchema = new Schema({
     postFollowupDuration: { type: Number, required: false },
     postFollowupFrequency: { type: Number, required: false },
     packageCost: { type: Number, required: false}
-
 });
 
 //create collection.

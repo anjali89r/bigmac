@@ -7,7 +7,6 @@ var Schema = mongoose.Schema;
 const collection = 'treatmentOffered_description';
 
 var treatmentDescriptionSchema = new Schema({
-
     treatmentName: { type: String, required: true, trim: true },
     displayName: { type: String, required: true, trim: true },
     Description: { type: String, required: true, trim: true },
