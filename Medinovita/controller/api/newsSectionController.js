@@ -52,7 +52,7 @@ module.exports.getnewsSection = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call get newsSection")
         return;
     }
-    newsSectionSchema.aggregate([
+    /*newsSectionSchema.aggregate([
         { "$project": { "_id": 0, "newsContent": 1, "newsImagepath": 1, "newsTitle": 1 } },
         { "$match": { "newsDisableflag": "N" } }
     ], function (err, result) {
@@ -62,6 +62,29 @@ module.exports.getnewsSection = function (req, res) {
             return res.status(500).json({ "Message": err.message.trim() });
         } else if (result == null) {
             logger.info("There are no news available in the DB");
+            return res.status(200).json({ "Message": err.message.trim() });
+        }
+        else {
+            return res.json(result);
+        }
+    }) */
+
+    newsSectionModel.aggregate([{"$match":{ "newsDisableflag": "N" }},
+    {
+        "$project": {
+            "_id": 0,
+            "newsContent": 1,
+            "newsImagepath": 1,
+            "newsTitle": 1
+        }
+    }
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while reading list of latest news from DB");
+            return res.status(500).json({ "Message": err.message.trim() });
+        } else if (result == null) {
+            logger.info("There are no latest news present in database");
             return res.status(200).json({ "Message": err.message.trim() });
         }
         else {
