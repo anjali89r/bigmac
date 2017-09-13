@@ -51,13 +51,11 @@ var holidaySchema = new Schema({
     eventId: { type: Number, required: false, unique: true, dropDups: true, default: 10000 },
     packageId: { type: Number, required: false, unique: true, dropDups: true, default: 10000 },
     isHolidayopted: { type: String, required: true, trim: true, enum: ['Y', 'N'] },
-    holidayPriortotreatment: { type: String, required: false, trim: true, enum: ['Y', 'N'] },
-    holidayPosttreatment: { type: String, required: false, trim: true, enum: ['Y', 'N'] },
+    holidayTime: { type: String, required: false, trim: true, enum: ['Post', 'Pre'] },   
     startDate: { type: Date, required: false },
     endDate: { type: Date, required: false },
     totalCost: { type: Number, required: false },
     transportCost: { type: Number, required: false }
-
 
 });
 // Hotel sub document this is a single nested subdoc
