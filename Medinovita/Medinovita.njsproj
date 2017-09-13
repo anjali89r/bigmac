@@ -12,7 +12,6 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>347e4c8e-6f9b-430d-9239-7b8f60f3293c</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-	
     <StartupFile>app.js</StartupFile>
     <SearchPath>
     </SearchPath>
@@ -206,6 +205,7 @@
   <ItemGroup>
     <Compile Include="controller\api\medicalSectionController.js" />
     <Compile Include="controller\api\hospitaltreatmentSearchController.js" />
+    <Compile Include="controller\api\newsSectionController.js" />
     <Compile Include="controller\api\officeLocationController.js">
       <SubType>Code</SubType>
     </Compile>
@@ -231,6 +231,7 @@
     <Compile Include="model\highlightSectionModel.js" />
     <Compile Include="model\aboutMedicalModel.js" />
     <Compile Include="model\featuredTreatmentModel.js" />
+    <Compile Include="model\newsSectionModel.js" />
     <Compile Include="model\officeLocationModel.js" />
     <Compile Include="model\customerCareModel.js" />
     <Compile Include="model\serviceMenuModel.js" />
