@@ -1,68 +1,76 @@
 ﻿var mongoose = require('mongoose');
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
-require('../../model/newsSectionModel.js');
-var newsSectionModel = mongoose.model('treatmentOffered_description');
-var newsSectionSchema = new newsSectionModel();
+require('../../model/treatmentsDescModel.js');
+var treatmentDescModel = mongoose.model('treatmentOffered_description');
+var treatmentDescSchema = new treatmentDescModel();
 
 
 
-module.exports.addnewsSection = function (req, res) {
+module.exports.addtreatmentDescription = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned
-        logger.warn("Response already sent.Hence skipping the function call newsSection")
+        logger.warn("Response already sent.Hence skipping the function call addtreatmentdescription")
         return;
     }
 
     new Promise(function (resolve, reject) {
            /* Initial Validation */
-            if (req.body["newsTitle"] == null || req.body["newsImagepath"] == null || req.body["newsContent"] == null ) {
-                logger.error("Mandatory fields are not supplied from GUI to update locations details");
+        if (req.body["treatmentName"] == null || req.body["displayName"] == null || req.body["treatmentDescription"] == null || req.body["minHospitalization"] == null || req.body["maxHospitalization"] == null || req.body["surgicalTime"] == null || req.body["postFollowupDuration"] == null || req.body["postFollowupFrequency"] == null || req.body["isDisable"] == null ) {
+                logger.error("Mandatory fields are not passed in the request. Please correct request");
                 return reject(res.status(409).json({
                     "Message": "Mandatory fields are missing in the request"
                 }));
             }          
-            newsSectionSchema.newsTitle = req.body["newsTitle"],
-                newsSectionSchema.newsImagepath = req.body["newsImagepath"],
-                newsSectionSchema.newsContent = req.body["newsContent"],
-                newsSectionSchema.newsDisableflag = req.body["newsDisableflag"]
+        treatmentDescSchema.treatmentName = req.body["treatmentName"].toUpperCase(),
+            treatmentDescSchema.displayName = req.body["displayName"],
+            treatmentDescSchema.treatmentDescription = req.body["treatmentDescription"],
+            treatmentDescSchema.minHospitalization = req.body["minHospitalization"],
+            treatmentDescSchema.maxHospitalization = req.body["maxHospitalization"],
+            treatmentDescSchema.surgicalTime = req.body["surgicalTime"],
+            treatmentDescSchema.postFollowupDuration = req.body["postFollowupDuration"],
+            treatmentDescSchema.postFollowupFrequency = req.body["postFollowupFrequency"]
+            treatmentDescSchema.isDisable = req.body["isDisable"]
+        
+        
                     resolve();
            
             })
         .then(function () {
-            newsSectionSchema.save(function (error, data) {
+            treatmentDescSchema.save(function (error, data) {
                 if (error) {
-                    logger.error("Error saving news data to schema : - " + error.message)
+                    logger.error("Error saving treatments data to schema : - " + error.message)
                     return res.status(500).json({ "Message": error.message.trim() });
                 }
                 else {
-                    return res.json({ "Message": "News Info got inserted successfully" });
+                    return res.json({ "Message": "Treatment description was updated to DB" });
                 }
             })
         })
         .catch(function (err) {
-            logger.error("Error while inserting news to schema: - " + err.message)
+            logger.error("Error while inserting treatments data to schema: - " + err.message)
             return res.status(500).json({ "Message": err.message });
         })
 
 }
 
-module.exports.getnewsSection = function (req, res) {
+module.exports.getTreatmentSection = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned
         logger.warn("Response already sent.Hence skipping the function call get newsSection")
         return;
     }
-    newsSectionSchema.aggregate([
-        { "$project": { "_id": 0, "newsContent": 1, "newsImagepath": 1, "newsTitle": 1 } },
-        { "$match": { "newsDisableflag": "N" } }
+    treatmentDescModel.aggregate([
+        { "$match": { "isDisable": "N", "treatmentName": req.params.treatmentName.toUpperCase() } },
+        { "$project": { "_id": 0, "treatmentName": 1, "displayName": 1, "treatmentDescription": 1, "minHospitalization": 1, "maxHospitalization": 1, "surgicalTime": 1, "postFollowupDuration": 1, "postFollowupFrequency": 1} }
+        
     ], function (err, result) {
 
         if (err) {
-            logger.error("Error while reading list of latest news from DB");
+            logger.error("Error while reading treatment description from DB");
             return res.status(500).json({ "Message": err.message.trim() });
         } else if (result == null) {
-            logger.info("There are no news available in the DB");
+            logger.info("There is no treatment description available for the treatment");
             return res.status(200).json({ "Message": err.message.trim() });
         }
         else {

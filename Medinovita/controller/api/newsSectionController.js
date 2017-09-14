@@ -16,7 +16,7 @@ module.exports.addnewsSection = function (req, res) {
     new Promise(function (resolve, reject) {
            /* Initial Validation */
             if (req.body["newsTitle"] == null || req.body["newsImagepath"] == null || req.body["newsContent"] == null ) {
-                logger.error("Mandatory fields are not supplied from GUI to update locations details");
+                logger.error("Mandatory fields are not supplied from GUI to update news section details");
                 return reject(res.status(409).json({
                     "Message": "Mandatory fields are missing in the request"
                 }));
@@ -29,7 +29,7 @@ module.exports.addnewsSection = function (req, res) {
            
             })
         .then(function () {
-            newsSectionSchema.save(function (error, data) {
+            newsSectionSchema.save(function (error,data) {
                 if (error) {
                     logger.error("Error saving news data to schema : - " + error.message)
                     return res.status(500).json({ "Message": error.message.trim() });

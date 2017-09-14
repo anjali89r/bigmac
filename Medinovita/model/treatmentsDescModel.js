@@ -9,12 +9,13 @@ const collection = 'treatmentOffered_description';
 var treatmentDescriptionSchema = new Schema({
     treatmentName: { type: String, required: true, trim: true },
     displayName: { type: String, required: true, trim: true },
-    Description: { type: String, required: true, trim: true },
+    treatmentDescription: { type: String, required: true, trim: true },
     minHospitalization: { type: Number, required: true },
     maxHospitalization: { type: Number, required: true },
     surgicalTime: { type: Number, required: false },
     postFollowupDuration: { type: Number, required: false },
     postFollowupFrequency: { type: Number, required: false },
+    isDisable: { type: String, required: true, trim: true, enum: ['Y', 'N'], default: 'N' }
     
 });
 

@@ -11,6 +11,8 @@ var logger = require('./controller/utilities/logger.js'); //initialize logger cl
 require('./routes/route.js')(app);//define express router for api calls
 mogoDBUtils.getMogoDbCon();//open dbconnection
 
+
+
 //setup server
 var port = process.env.PORT || 80  //port
 
