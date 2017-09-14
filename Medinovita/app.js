@@ -8,10 +8,9 @@ app.disable('x-powered-by')
 var mogoDBUtils = require('./controller/utilities/mongodbutils.js')
 var logger = require('./controller/utilities/logger.js'); //initialize logger class
 
+app.use((req, res, next) => {mogoDBUtils.getMogoDbCon().then(() => next()).catch(next);});
 require('./routes/route.js')(app);//define express router for api calls
-mogoDBUtils.getMogoDbCon();//open dbconnection
-
-
+app.use((req, res, next) => { mogoDBUtils.closeMongoDBConnection().then(() => next()).catch(next); });
 
 //setup server
 var port = process.env.PORT || 80  //port
