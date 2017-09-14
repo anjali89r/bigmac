@@ -8,6 +8,7 @@ var enquiryInfo = require('../controller/api/userEnquiryController.js');
 var medicalSection = require('../controller/api/medicalSectionController.js');
 var officeLocationInfo = require('../controller/api/officeLocationController.js');
 var newsSection = require('../controller/api/newsSectionController.js');
+var treatmentDescription = require('../controller/api/treatmentDescController.js');
 
 
 module.exports = function (app) {
@@ -69,6 +70,12 @@ module.exports = function (app) {
     app.post('/api/v1/post/newssection/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, newsSection.addnewsSection);
     /*  APi to get latest news section  */
     app.get('/api/v1/get/newssection/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, newsSection.getnewsSection);
+
+
+    /*  APi to post news section  */
+    app.post('/api/v1/post/treatmentdescription/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.addtreatmentDescription);
+    /*  APi to get latest news section  */
+    app.get('/api/v1/get/treatmentdescription/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getTreatmentSection);
 
     //************************API to operate on trip schema******************************************
     app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails);
