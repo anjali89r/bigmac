@@ -229,6 +229,9 @@
     </Compile>
     <Compile Include="controller\utilities\logger.js" />
     <Compile Include="controller\utilities\mongodbutils.js" />
+    <Compile Include="model\holidayPackageModel.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="model\treatmentsDescModel.js" />
     <Compile Include="model\highlightSectionModel.js" />
     <Compile Include="model\aboutMedicalModel.js" />
