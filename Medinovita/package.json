@@ -9,7 +9,6 @@
   "author": {
     "name": "libin"
   },
-
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.17.2",
@@ -19,10 +18,11 @@
     "express-session": "^1.15.3",
     "http": "0.0.0",
     "jsonwebtoken": "^7.4.1",
-    "mongoose": "^4.11.5",
+    "mongoose": "^4.11.11",
     "mongoose-auto-increment": "^5.0.1",
     "mongoose-double": "0.0.1",
     "mongoose-integer": "^0.1.1",
+    "node-windows": "0.1.14",
     "nodemon": "^1.11.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
