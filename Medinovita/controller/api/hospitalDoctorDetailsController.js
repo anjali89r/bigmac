@@ -7,7 +7,6 @@ var hospitalModel = mongoose.model('hospital_doctor_details');
 var counterSchema = require('../../model/identityCounterModel.js');
 
 var collection = 'hospital_doctor_details';
-var hospitalSchema = new hospitalModel();
 
 /***************Add hospital, procedure and doctors details of a partucular hospital in hospital record ***************** */
 module.exports.createHospitalRecord = function (req, res) {
@@ -16,6 +15,8 @@ module.exports.createHospitalRecord = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call gethospitalDetailbytreatment")
         return;
     }  
+
+    var hospitalSchema = new hospitalModel();
 
     //create doctor promise
     const hospitalPromise = new Promise((resolve, reject) => {
@@ -158,6 +159,8 @@ module.exports.updateHospitalNameNContactDetails = function (req, res) {
         return;
     }  
 
+    var hospitalSchema = new hospitalModel();
+
     var hospitalName = req.params.hospitalname;
     var hospitalCity = req.params.hospitalcity;
     var hospitalCountry = req.params.hospitalcountry;
@@ -205,6 +208,8 @@ module.exports.addProcedureDetails = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call addProcedureDetails")
         return;
     }  
+
+    var hospitalSchema = new hospitalModel();
 
     var hospitalName = req.params.hospitalname;
     var hospitalCity = req.params.hospitalcity;
@@ -457,7 +462,9 @@ module.exports.addDoctorDetails = function (req, res) {
     if (res.headersSent) {//check if header is already returned
         logger.warn("Response already sent.Hence skipping the function call addDoctorDetails")
         return;
-    }  
+    } 
+
+    var hospitalSchema = new hospitalModel();
 
     var hospitalName = req.params.hospitalname;
     var hospitalCity = req.params.hospitalcity;

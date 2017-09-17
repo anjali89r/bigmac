@@ -3,8 +3,6 @@ var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/newsSectionModel.js');
 var newsSectionModel = mongoose.model('news_section');
-var newsSectionSchema = new newsSectionModel();
-
 
 module.exports.addnewsSection = function (req, res) {
 
@@ -12,6 +10,8 @@ module.exports.addnewsSection = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call newsSection")
         return;
     }
+
+    var newsSectionSchema = new newsSectionModel();
 
     new Promise(function (resolve, reject) {
            /* Initial Validation */
@@ -52,6 +52,9 @@ module.exports.getnewsSection = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call get newsSection")
         return;
     }
+
+    var newsSectionSchema = new newsSectionModel();
+
     /*newsSectionSchema.aggregate([
         { "$project": { "_id": 0, "newsContent": 1, "newsImagepath": 1, "newsTitle": 1 } },
         { "$match": { "newsDisableflag": "N" } }
