@@ -3,7 +3,6 @@ var logger = require('../utilities/logger.js');
 require('../../model/userDetailsmodel.js');
 var userModel = mongoose.model('user_details');
 
-
 module.exports.createUserInfo = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned

@@ -203,6 +203,9 @@
     <Folder Include="views\webcontent\assets\js\pages\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="controller\api\holidayPackageController.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="controller\api\medicalSectionController.js" />
     <Compile Include="controller\api\hospitaltreatmentSearchController.js" />
     <Compile Include="controller\api\treatmentDescController.js" />
@@ -229,7 +232,13 @@
     </Compile>
     <Compile Include="controller\utilities\logger.js" />
     <Compile Include="controller\utilities\mongodbutils.js" />
+    <Compile Include="model\accomodationInfoModel.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="model\holidayPackageModel.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="model\localTransportModel.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="model\treatmentsDescModel.js" />

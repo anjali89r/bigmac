@@ -9,11 +9,11 @@ var holidayPackageSchema = new Schema({
     holidayPackageId: { type: Number, required: true },
     packageShortName: { type: String, required: true, trim: true },
     packageDescription: { type: String, required: true },
-    packageDuration: { type: Number, required: true },
-    tourOperator: { type: Number, required: false },
-    postFollowupDuration: { type: Number, required: false },
-    postFollowupFrequency: { type: Number, required: false },
-    packageCost: { type: Number, required: false}
+    packageDuration: { type: String, required: true },
+    tourOperator: { type: String, required: false },
+    website: { type: String, required: false }, 
+    packageCost: { type: Number, required: false },
+    activeStatus: { type: String, required: false, enum: ['Y', 'N'], default: 'Y'}
 });
 
 //create collection.

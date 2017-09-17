@@ -9,6 +9,7 @@ var medicalSection = require('../controller/api/medicalSectionController.js');
 var officeLocationInfo = require('../controller/api/officeLocationController.js');
 var newsSection = require('../controller/api/newsSectionController.js');
 var treatmentDescription = require('../controller/api/treatmentDescController.js');
+var holidayInfo = require('../controller/api/holidayPackageController.js');
 
 
 module.exports = function (app) {
@@ -63,6 +64,12 @@ module.exports = function (app) {
     app.get('/api/v1/get/officelocations/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, officeLocationInfo.getOfficeLocations);
     /*  APi to post new office location  */
     app.post('/api/v1/post/officelocations/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, officeLocationInfo.addOfficeLocations);
+    /********************************************************************************************************************************************************/
+
+    /************************API operate on hloday schema****************************************************************************************************/
+    /*  APi add new holiday package  */
+    app.post('/api/v1/post/holidayPackage/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, holidayInfo.createHolidayPackage);
+
     /********************************************************************************************************************************************************/
 
 

@@ -3,9 +3,6 @@ var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/treatmentsDescModel.js');
 var treatmentDescModel = mongoose.model('treatmentOffered_description');
-var treatmentDescSchema = new treatmentDescModel();
-
-
 
 module.exports.addtreatmentDescription = function (req, res) {
 
@@ -13,6 +10,8 @@ module.exports.addtreatmentDescription = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call addtreatmentdescription")
         return;
     }
+
+    var treatmentDescSchema = new treatmentDescModel();
 
     new Promise(function (resolve, reject) {
            /* Initial Validation */
@@ -31,10 +30,7 @@ module.exports.addtreatmentDescription = function (req, res) {
             treatmentDescSchema.postFollowupDuration = req.body["postFollowupDuration"],
             treatmentDescSchema.postFollowupFrequency = req.body["postFollowupFrequency"]
             treatmentDescSchema.isDisable = req.body["isDisable"]
-        
-        
-                    resolve();
-           
+                    resolve();           
             })
         .then(function () {
             treatmentDescSchema.save(function (error, data) {
@@ -60,6 +56,9 @@ module.exports.getTreatmentSection = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call get newsSection")
         return;
     }
+
+    var treatmentDescSchema = new treatmentDescModel();
+
     treatmentDescModel.aggregate([
         { "$match": { "isDisable": "N", "treatmentName": req.params.treatmentName.toUpperCase() } },
         { "$project": { "_id": 0, "treatmentName": 1, "displayName": 1, "treatmentDescription": 1, "minHospitalization": 1, "maxHospitalization": 1, "surgicalTime": 1, "postFollowupDuration": 1, "postFollowupFrequency": 1} }

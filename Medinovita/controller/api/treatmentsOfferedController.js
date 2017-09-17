@@ -6,10 +6,12 @@ var treatmentModel = mongoose.model('treatments_offered');
 var counterSchema = require('../../model/identityCounterModel.js');
 
 const collection = 'treatments_offered';
-var treatmentOfferedSchema = new treatmentModel();
+
 
 /* **************Add new procedure details or get the procedure id from treatments schema ***************** */
-module.exports.createTreatmentRecord = function (paramDict,callback) {
+module.exports.createTreatmentRecord = function (paramDict, callback) {
+
+    var treatmentOfferedSchema = new treatmentModel();
 
     var procedureId = paramDict['procedureId'];
     var procedureMedicalName = paramDict['procedureMedicalName'];

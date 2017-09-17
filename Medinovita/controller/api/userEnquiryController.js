@@ -4,7 +4,6 @@ var logger = require('../utilities/logger.js');
 require('../../model/userEnquirymodel.js');
 var userEnquiryModel = mongoose.model('user_enquiry');
 
-var userEnquirySchema = new userEnquiryModel();
 /************************ API code to submit new enquiry to Medinovita ****************************/
 module.exports.submitUserEnquiry = function (req, res) {
 
@@ -12,6 +11,8 @@ module.exports.submitUserEnquiry = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call submitUserEnquiry")
         return;
     }  
+
+    var userEnquirySchema = new userEnquiryModel();
 
     new Promise(function (resolve, reject) {
 
@@ -90,6 +91,8 @@ module.exports.sendEnquiryResponse = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call sendEnquiryResponse")
         return;
     }  
+
+    var userEnquirySchema = new userEnquiryModel();
 
     var userEmailID = req.params.userEmail;
     var enquiryID = req.params.enquiryID;

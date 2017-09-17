@@ -2,7 +2,6 @@
 var logger = require('../utilities/logger.js');
 require('../../model/officeLocationModel.js');
 var officeLocationModel = mongoose.model('office_locations');
-var officeLocationSchema = new officeLocationModel();
 
 /************************ API code to read office locations ****************************/
 module.exports.getOfficeLocations = function (req, res) {
@@ -11,6 +10,9 @@ module.exports.getOfficeLocations = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call getOfficeLocations")
         return;
     }  
+
+    var officeLocationSchema = new officeLocationModel();
+
     officeLocationModel.aggregate([
        /* {
             "$match": {
@@ -75,6 +77,8 @@ module.exports.addOfficeLocations = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call addOfficeLocations")
         return;
     } 
+
+    var officeLocationSchema = new officeLocationModel();
 
     new Promise(function (resolve, reject) {
 
