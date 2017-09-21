@@ -10,6 +10,7 @@ var officeLocationInfo = require('../controller/api/officeLocationController.js'
 var newsSection = require('../controller/api/newsSectionController.js');
 var treatmentDescription = require('../controller/api/treatmentDescController.js');
 var holidayInfo = require('../controller/api/holidayPackageController.js');
+var ourServicesInfo = require('../controller/api/ourServicesController.js');
 
 
 module.exports = function (app) {
@@ -24,7 +25,7 @@ module.exports = function (app) {
     app.post('/api/v1/add/userInfo/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.createUserInfo); //api to insert a new user record in to db
     app.put('/api/v1/update/userInfo/:emailId/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.updateUserInfo);
     app.get('/api/v1/getTreamentlist/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.getTreatmentlist);
-    app.get('/api/v1/searchHospitaldetails/:treatmentName/:country/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.gethospitalDetailbytreatment);
+    app.get('/api/v1/searchHospitaldetails/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.gethospitalDetailbytreatment);
     /***************************************************************************************************************************************************/
 
     /************************API to operate on medical section schema*******************************************************************************************/
@@ -32,7 +33,7 @@ module.exports = function (app) {
 
     app.get('/api/v1/getaboutMedical/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, medicalSection.getaboutMedicalsection);
 
-    app.get('/api/v1/gethighlighttreatments/:limitcount/:skipcount/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, medicalSection.gethighlightsection);
+    app.get('/api/v1/gethighlighttreatments/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, medicalSection.gethighlightsection);
 
     app.post('/api/v1/addFeaturedtreatments/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, medicalSection.addFeaturedtreatments);
     /****************************************************************************************************************************************************/
@@ -79,10 +80,16 @@ module.exports = function (app) {
     app.get('/api/v1/get/newssection/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, newsSection.getnewsSection);
 
 
-    /*  APi to post news section  */
+    /*  APi to post treatmentdescription   */
     app.post('/api/v1/post/treatmentdescription/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.addtreatmentDescription);
-    /*  APi to get latest news section  */
+    /*  APi to get treatment description  */
     app.get('/api/v1/get/treatmentdescription/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getTreatmentSection);
+
+
+    /*  APi to post our services section  */
+    app.post('/api/v1/post/ourservices/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, ourServicesInfo.addServicedetails);
+    /*  APi to get our services details  */
+    app.get('/api/v1/get/ourservices/:serviceShortname/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, ourServicesInfo.getServicesSection);
 
     //************************API to operate on trip schema******************************************
     app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails);

@@ -8,13 +8,15 @@ const collection = 'treatmentOffered_description';
 
 var treatmentDescriptionSchema = new Schema({
     treatmentName: { type: String, required: true, trim: true },
-    displayName: { type: String, required: true, trim: true },
+    procedureName: { type: String, required: true, trim: true },
+    displayImagepath: { type: String, required: true, trim: true },
+    shortDescription: { type: String, required: true, trim: true },
     treatmentDescription: { type: String, required: true, trim: true },
-    minHospitalization: { type: Number, required: true },
-    maxHospitalization: { type: Number, required: true },
-    surgicalTime: { type: Number, required: false },
-    postFollowupDuration: { type: Number, required: false },
-    postFollowupFrequency: { type: Number, required: false },
+    hospitalStay: { type: String, required: true, trim: true },
+    healingTime: { type: String, required: true },
+    surgicalTime: { type: String, required: false },
+    postFollowupDuration: { type: String, required: false },
+    postFollowupFrequency: { type: String, required: false },
     isDisable: { type: String, required: true, trim: true, enum: ['Y', 'N'], default: 'N' }
     
 });
