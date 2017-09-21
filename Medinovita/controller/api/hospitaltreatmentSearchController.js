@@ -70,19 +70,19 @@ module.exports.gethospitalDetailbytreatment = function (req, res) {
     try {
 
         var treatmentName = req.params.treatmentName;
-        var country = req.params.country;
+       // var country = req.params.country;
         var hospitalResult = [];
 
-        if (country == "")
-        {
-            country = "India";
-        }
+       // if (country == "")
+        //{
+         //   country = "India";
+        //}
         if (treatmentName == "")
         {
             return res.status(400).json("Please search with treatment name to get hostpital details");
         }
         //'_id:0 hospitalName hospitalContact Accreditation hospitalRating Treatment'
-        hospitalModel.find({ 'Treatment.name': treatmentName, 'hospitalContact.country': country }, { _id: 0, hospitalName: 1, hospitalContact: 1, Accreditation: 1, hospitalRating: 1, Treatment: 1 }, function (err, result) {
+        hospitalModel.find({ 'Treatment.name': treatmentName}, { _id: 0, hospitalName: 1, hospitalContact: 1, Accreditation: 1, hospitalRating: 1, Treatment: 1 }, function (err, result) {
             if (err) {
                 logger.error("Error retrieving hospital details from DB : - " + err.message)
                 return res.status(500).json({ "Message": err.message });
@@ -112,7 +112,7 @@ module.exports.gethospitalDetailbytreatment = function (req, res) {
     }
     catch (err)
     {
-
+        return res.status(500).json("Error in fetching the data.Please try again");
     }
 
 

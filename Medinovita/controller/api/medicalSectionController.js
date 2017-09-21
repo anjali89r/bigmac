@@ -72,29 +72,10 @@ module.exports.gethighlightsection = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call gethighlightsection")
         return;
     }  
-
+    let limit = parseInt(req.query.limit);
     try {
-        var limitCount = 0;
-        var skipCount = 0;
-        if (req.params.limitcount == 0 || req.params.limitcount == null)
-        {
-            limitCount = 6;
-        }
-        else
-        {
-            limitCount = parseInt(req.params.limitcount);
-        }
 
-        if (req.params.skipCount == 0 || req.params.skipCount == null) {
-            skipCount = 0;
-        }
-        else {
-            skipCount = parseInt(req.params.skipCount);
-        }
-
-
-
-        highlightSectionModel.find({}, {_id:0},{ skip: skipCount, limit: limitCount }, function (err, result) {
+        highlightSectionModel.find({}, { _id: 0 }, { limit: limit }, function (err, result) {
             if (err) {
                 logger.error("Error retrieving the records from DB : - " + err.message)
                 return res.status(500).json({ "Message": err.message });
