@@ -208,6 +208,7 @@
     </Compile>
     <Compile Include="controller\api\medicalSectionController.js" />
     <Compile Include="controller\api\hospitaltreatmentSearchController.js" />
+    <Compile Include="controller\api\homepageController.js" />
     <Compile Include="controller\api\ourServicesController.js" />
     <Compile Include="controller\api\treatmentDescController.js" />
     <Compile Include="controller\api\newsSectionController.js" />
@@ -242,6 +243,7 @@
     <Compile Include="model\localTransportModel.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="model\homepageModel.js" />
     <Compile Include="model\ourServicesModel.js" />
     <Compile Include="model\treatmentsDescModel.js" />
     <Compile Include="model\highlightSectionModel.js" />
