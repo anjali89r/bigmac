@@ -11,6 +11,7 @@ var newsSection = require('../controller/api/newsSectionController.js');
 var treatmentDescription = require('../controller/api/treatmentDescController.js');
 var holidayInfo = require('../controller/api/holidayPackageController.js');
 var ourServicesInfo = require('../controller/api/ourServicesController.js');
+var homepageInfo = require('../controller/api/homepageController.js');
 
 
 module.exports = function (app) {
@@ -90,6 +91,11 @@ module.exports = function (app) {
     app.post('/api/v1/post/ourservices/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, ourServicesInfo.addServicedetails);
     /*  APi to get our services details  */
     app.get('/api/v1/get/ourservices/:serviceShortname/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, ourServicesInfo.getServicesSection);
+
+    /*  APi to post home page links section  */
+    app.post('/api/v1/post/homepagedetails/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, homepageInfo.addHomepagedetails);
+    /*  APi to get our services details  */
+    app.get('/api/v1/get/homepagedetails/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, homepageInfo.getHomepagedetails);
 
     //************************API to operate on trip schema******************************************
     app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails);
