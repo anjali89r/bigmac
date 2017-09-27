@@ -33,6 +33,7 @@
     "winston": "^2.3.1",
     "winston-daily-rotate-file": "^1.4.6",
     "node-windows": "0.1.14",
-    "cors": "2.8.4"
+    "cors": "2.8.4",
+    "helmet": "^3.8.1"
   }
 }
