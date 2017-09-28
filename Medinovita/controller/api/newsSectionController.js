@@ -2,49 +2,12 @@
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/newsSectionModel.js');
+var counterSchema = require('../../model/identityCounterModel.js');
 var newsSectionModel = mongoose.model('news_section');
 
-module.exports.addnewsSection = function (req, res) {
+var collection = 'news_section';
 
-    if (res.headersSent) {//check if header is already returned
-        logger.warn("Response already sent.Hence skipping the function call newsSection")
-        return;
-    }
 
-    var newsSectionSchema = new newsSectionModel();
-
-    new Promise(function (resolve, reject) {
-           /* Initial Validation */
-            if (req.body["newsTitle"] == null || req.body["newsImagepath"] == null || req.body["newsContent"] == null ) {
-                logger.error("Mandatory fields are not supplied from GUI to update news section details");
-                return reject(res.status(409).json({
-                    "Message": "Mandatory fields are missing in the request"
-                }));
-            }          
-            newsSectionSchema.newsTitle = req.body["newsTitle"],
-                newsSectionSchema.newsImagepath = req.body["newsImagepath"],
-                newsSectionSchema.newsContent = req.body["newsContent"],
-                newsSectionSchema.newsDisableflag = req.body["newsDisableflag"]
-                    resolve();
-           
-            })
-        .then(function () {
-            newsSectionSchema.save(function (error,data) {
-                if (error) {
-                    logger.error("Error saving news data to schema : - " + error.message)
-                    return res.status(500).json({ "Message": error.message.trim() });
-                }
-                else {
-                    return res.json({ "Message": "News Info got inserted successfully" });
-                }
-            })
-        })
-        .catch(function (err) {
-            logger.error("Error while inserting news to schema: - " + err.message)
-            return res.status(500).json({ "Message": err.message });
-        })
-
-}
 
 module.exports.getnewsSection = function (req, res) {
 
@@ -60,9 +23,12 @@ module.exports.getnewsSection = function (req, res) {
     {
         "$project": {
             "_id": 0,
-            "newsContent": 1,
-            "newsImagepath": 1,
-            "newsTitle": 1
+            "newsId": 1,
+            "postedDate": 1,
+            "postedBy": 1,
+            "postHeading": 1,
+            "imgPath": 1,
+            "postShortContent":1
         }
     }
     ], function (err, result) {
@@ -78,4 +44,57 @@ module.exports.getnewsSection = function (req, res) {
             return res.json(result);
         }
     })
+}
+
+
+module.exports.addnewsSection = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call addServicedetails")
+        return;
+    }
+
+    var today = new Date().toLocaleDateString('en-GB')
+    //var newsId = 1;
+
+    var newsSectionSchema = new newsSectionModel();
+    const newsIdPromise = new Promise((resolve, reject) =>
+        counterSchema.getNext('newsId', collection, function (id) {
+            newsId = id;
+            resolve(newsId);
+        }));
+
+    new Promise(function (resolve, reject) {
+        /* Initial Validation */
+        if (req.body["postHeading"] == null ||  req.body["imgPath"] == null || req.body["postShortContent"] == null || req.body["newsDisableflag"] == null ) {
+            logger.error("Mandatory fields are not passed in the request. Please correct request");
+            return reject(res.status(400).json({
+                "Message": "Mandatory fields are missing in the request"
+            }));
+        }
+        newsSectionSchema.newsId = newsId,
+            newsSectionSchema.postedBy = 'Medinovita',
+            newsSectionSchema.postedDate = today,
+        newsSectionSchema.postHeading = req.body["postHeading"],
+            newsSectionSchema.imgPath = req.body["imgPath"],
+            newsSectionSchema.postShortContent = req.body["postShortContent"],
+            newsSectionSchema.newsDisableflag = req.body["newsDisableflag"]
+        resolve();
+    })
+        .then(function () {
+            newsSectionSchema.save(function (error, data) {
+                if (error) {
+                    logger.error("Error saving new sections details data to schema : - " + error.message)
+                    return res.status(500).json({ "Message": error.message.trim() });
+                }
+                else {
+                    return res.json({ "Message": "New Sections are updated to DB" });
+                }
+            })
+        })
+        .catch(function (err) {
+            logger.error("Error while inserting new sections to schema: - " + err.message)
+            return res.status(500).json({ "Message": err.message });
+        })
+
 }

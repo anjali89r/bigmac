@@ -7,10 +7,13 @@ var Schema = mongoose.Schema;
 
 var newsection = new Schema({
 
-  
-    newsTitle: { type: String, required: true, trim: true },
-    newsImagepath: { type: String, required: true, trim: true },
-    newsContent: { type: String, required: true, trim: true },
+    
+    newsId: { type: Number, required: true },
+    postHeading: { type: String, required: true, trim: true },
+    postedDate: { type: Date, required: true, default: Date.now },
+    postedBy: { type: String, required: true, trim: true, default: 'Medinovita' },
+    imgPath: { type: String, required: true, trim: true },
+    postShortContent: { type: String, required: true, trim: true },
     newsDisableflag: { type: String, required: true, trim: true, enum: ['Y', 'N'], default: 'N' }
     
     
