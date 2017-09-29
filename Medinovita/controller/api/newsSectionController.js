@@ -1,5 +1,6 @@
 ﻿var mongoose = require('mongoose');
 var Promise = require('promise');
+var moment = require('moment');
 var logger = require('../utilities/logger.js');
 require('../../model/newsSectionModel.js');
 var counterSchema = require('../../model/identityCounterModel.js');
@@ -53,8 +54,8 @@ module.exports.addnewsSection = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call addServicedetails")
         return;
     }
-
-    var today = new Date().toLocaleDateString('en-GB')
+    
+    var today = new moment().format("D MMM, YYYY");
     //var newsId = 1;
 
     var newsSectionSchema = new newsSectionModel();

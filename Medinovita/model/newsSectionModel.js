@@ -10,7 +10,7 @@ var newsection = new Schema({
     
     newsId: { type: Number, required: true },
     postHeading: { type: String, required: true, trim: true },
-    postedDate: { type: Date, required: true, default: Date.now },
+    postedDate: { type: String, required: true },
     postedBy: { type: String, required: true, trim: true, default: 'Medinovita' },
     imgPath: { type: String, required: true, trim: true },
     postShortContent: { type: String, required: true, trim: true },
