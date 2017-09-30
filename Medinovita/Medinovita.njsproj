@@ -209,6 +209,7 @@
     <Compile Include="controller\api\medicalSectionController.js" />
     <Compile Include="controller\api\hospitaltreatmentSearchController.js" />
     <Compile Include="controller\api\homepageController.js" />
+    <Compile Include="controller\api\siteTrafficController.js" />
     <Compile Include="controller\api\ourServicesController.js" />
     <Compile Include="controller\api\treatmentDescController.js" />
     <Compile Include="controller\api\newsSectionController.js" />
@@ -266,6 +267,7 @@
     </Compile>
     <Compile Include="model\treatmentsOfferedModel.js" />
     <Compile Include="model\userDetailsmodel.js" />
+    <Compile Include="model\siteTrafficModel.js" />
     <Compile Include="model\userEnquiryModel.js" />
     <Compile Include="routes\route.js" />
     <Compile Include="views\webcontent\assets\js\extensions\revolution.extension.actions.min.js" />

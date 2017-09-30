@@ -12,6 +12,7 @@ var treatmentDescription = require('../controller/api/treatmentDescController.js
 var holidayInfo = require('../controller/api/holidayPackageController.js');
 var ourServicesInfo = require('../controller/api/ourServicesController.js');
 var homepageInfo = require('../controller/api/homepageController.js');
+var siteTrafficInfo = require('../controller/api/siteTrafficController.js');
 
 
 module.exports = function (app) {
@@ -97,6 +98,8 @@ module.exports = function (app) {
     /*  APi to get our services details  */
     app.get('/api/v1/get/homepagedetails/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, homepageInfo.getHomepagedetails);
 
+    /* API to get web site traffic to DB */
+    app.post('/api/v1/post/sitetraffic/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, siteTrafficInfo.postsiteTraffic);
     //************************API to operate on trip schema******************************************
     app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails);
     //***********************************************************************************************
