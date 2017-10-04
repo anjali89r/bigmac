@@ -59,12 +59,9 @@ module.exports.addnewsSection = function (req, res) {
     //var newsId = 1;
 
     var newsSectionSchema = new newsSectionModel();
-    const newsIdPromise = new Promise((resolve, reject) =>
-        counterSchema.getNext('newsId', collection, function (id) {
-            newsId = id;
-            resolve(newsId);
-        }));
 
+    
+  
     new Promise(function (resolve, reject) {
         /* Initial Validation */
         if (req.body["postHeading"] == null ||  req.body["imgPath"] == null || req.body["postShortContent"] == null || req.body["newsDisableflag"] == null ) {
@@ -73,16 +70,23 @@ module.exports.addnewsSection = function (req, res) {
                 "Message": "Mandatory fields are missing in the request"
             }));
         }
-        newsSectionSchema.newsId = newsId,
-            newsSectionSchema.postedBy = 'Medinovita',
-            newsSectionSchema.postedDate = today,
-        newsSectionSchema.postHeading = req.body["postHeading"],
-            newsSectionSchema.imgPath = req.body["imgPath"],
-            newsSectionSchema.postShortContent = req.body["postShortContent"],
-            newsSectionSchema.newsDisableflag = req.body["newsDisableflag"]
-        resolve();
+       
+            counterSchema.getNext('newsId', collection, function (id) {
+
+                // console.log("id value is " + newsId);
+                resolve(id);
+            })
+        
+       
     })
-        .then(function () {
+        .then(function (newsId) {
+            newsSectionSchema.newsId = newsId,
+                newsSectionSchema.postedBy = 'Medinovita',
+                newsSectionSchema.postedDate = today,
+                newsSectionSchema.postHeading = req.body["postHeading"],
+                newsSectionSchema.imgPath = req.body["imgPath"],
+                newsSectionSchema.postShortContent = req.body["postShortContent"],
+                newsSectionSchema.newsDisableflag = req.body["newsDisableflag"]
             newsSectionSchema.save(function (error, data) {
                 if (error) {
                     logger.error("Error saving new sections details data to schema : - " + error.message)
