@@ -14,27 +14,28 @@ module.exports.addtreatmentDescription = function (req, res) {
     var treatmentDescSchema = new treatmentDescModel();
 
     new Promise(function (resolve, reject) {
-           /* Initial Validation */
+        /* Initial Validation */
         if (req.body["treatmentName"] == null || req.body["displayImagepath"] == null || req.body["procedureName"] == null || req.body["shortDescription"] == null || req.body["treatmentDescription"] == null || req.body["hospitalStay"] == null || req.body["healingTime"] == null || req.body["isDisable"] == null ) {
                 logger.error("Mandatory fields are not passed in the request. Please correct request");
                 return reject(res.status(400).json({
                     "Message": "Mandatory fields are missing in the request"
                 }));
-            }          
-        treatmentDescSchema.treatmentName = req.body["treatmentName"].toUpperCase(),
-            treatmentDescSchema.procedureName = req.body["procedureName"].toUpperCase(),
-            
-            treatmentDescSchema.displayImagepath = req.body["displayImagepath"],
-            treatmentDescSchema.treatmentDescription = req.body["treatmentDescription"],
-            treatmentDescSchema.shortDescription = req.body["shortDescription"],
-            treatmentDescSchema.hospitalStay = req.body["hospitalStay"],
-            treatmentDescSchema.healingTime = req.body["healingTime"],
-            treatmentDescSchema.surgicalTime = req.body["surgicalTime"],
-            treatmentDescSchema.postFollowupDuration = req.body["postFollowupDuration"],
-            treatmentDescSchema.postFollowupFrequency = req.body["postFollowupFrequency"]
-            treatmentDescSchema.isDisable = req.body["isDisable"]
-                    resolve();           
-            })
+        }          
+        treatmentDescSchema.procedureName = req.body["procedureName"],            
+        treatmentDescSchema.displayImagepath = req.body["displayImagepath"],
+        treatmentDescSchema.shortDescription = req.body["shortDescription"],
+        treatmentDescSchema.healingTime = req.body["healingTime"],                   
+        treatmentDescSchema.treatmentName = req.body["treatmentName"],
+        treatmentDescSchema.displayName = req.body["displayName"],
+        treatmentDescSchema.treatmentDescription = req.body["treatmentDescription"],
+        treatmentDescSchema.minHospitalization = req.body["minHospitalization"],
+        treatmentDescSchema.maxHospitalization = req.body["maxHospitalization"],
+        treatmentDescSchema.surgicalTime = req.body["surgicalTime"],
+        treatmentDescSchema.postFollowupDuration = req.body["postFollowupDuration"],
+        treatmentDescSchema.postFollowupFrequency = req.body["postFollowupFrequency"]
+        treatmentDescSchema.isDisable = req.body["isDisable"]
+        resolve();          
+        })
         .then(function () {
             treatmentDescSchema.save(function (error, data) {
                 if (error) {
@@ -63,8 +64,8 @@ module.exports.getTreatmentSection = function (req, res) {
     var treatmentDescSchema = new treatmentDescModel();
 
     treatmentDescModel.aggregate([
-        { "$match": { "isDisable": "N", "treatmentName": req.params.treatmentName.toUpperCase() } },
-        { "$project": { "_id": 0, "treatmentName": 1,"procedureName":1, "displayImagepath": 1, "treatmentDescription": 1, "shortDescription": 1, "hospitalStay": 1, "healingTime": 1, "surgicalTime": 1, "postFollowupFrequency": 1,"postFollowupDuration":1} }
+        { "$match": { "isDisable": "N", "treatmentName": req.params.treatmentName } },
+        { "$project": { "_id": 0, "treatmentName": 1, "displayName": 1, "displayImagepath": 1,"treatmentDescription": 1,"shortDescription": 1, "minHospitalization": 1, "maxHospitalization": 1, "healingTime": 1, "surgicalTime": 1, "postFollowupDuration": 1, "postFollowupFrequency": 1} }
         
     ], function (err, result) {
 

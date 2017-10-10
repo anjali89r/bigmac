@@ -36,26 +36,6 @@
     "API_WEBTOKEN_BAICAUTH_USERNAME": "libin",
     "API_WEBTOKEN_BAICAUTH_PASSWORD": "libin",
 
-    "API_POSTUSER_PAYLOAD": "postUser",
-    "API_POSTUSER_SECRETKEY": "My secret key for office location",
-    "API_POSTUSER_BAICAUTH_USERNAME": "libin",
-    "API_POSTUSER_BAICAUTH_PASSWORD": "libin",
-
-    "API_PUTUSER_PAYLOAD": "putUser",
-    "API_PUTUSER_SECRETKEY": "My secret key for office location",
-    "API_PUTUSER_BAICAUTH_USERNAME": "libin",
-    "API_PUTUSER_BAICAUTH_PASSWORD": "libin",
-
-    "API_POSTHOSPITAL_PAYLOAD": "postUser",
-    "API_POSTHOSPITAL_SECRETKEY": "My secret key for office location",
-    "API_POSTHOSPITAL_BAICAUTH_USERNAME": "libin",
-    "API_POSTHOSPITAL_BAICAUTH_PASSWORD": "libin",
-
-    "API_PUTHOSPITAL_PAYLOAD": "putUser",
-    "API_PUTHOSPITAL_SECRETKEY": "My secret key for office location",
-    "API_PUTHOSPITAL_BAICAUTH_USERNAME": "libin",
-    "API_PUTHOSPITAL_BAICAUTH_PASSWORD": "libin",
-
     "API_GETTREATMENT_PAYLOAD": "getTreatment",
     "API_GETTREATMENT_SECRETKEY": "My secret key for office location",
     "API_GETTREATMENT_BAICAUTH_USERNAME": "libin",
@@ -95,11 +75,6 @@
     "API_POSTFTDTREATMENT_SECRETKEY": "My secret key for office location",
     "API_POSTFTDTREATMENT_BAICAUTH_USERNAME": "libin",
     "API_POSTFTDTREATMENT_BAICAUTH_PASSWORD": "libin",
-
-    "API_OFFICELOCATION_PAYLOAD": "OFFICELOCATION",
-    "API_OFFICELOCATION_SECRETKEY": "My secret key for office location",
-    "API_OFFICELOCATION_BAICAUTH_USERNAME": "libin",
-    "API_OFFICELOCATION_BAICAUTH_PASSWORD": "libin",
 
     "API_NEWSSECTION_PAYLOAD": "NEWSSECTION",
     "API_NEWSSECTION_SECRETKEY": "My secret key for office location",

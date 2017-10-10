@@ -105,13 +105,16 @@ module.exports.createHospitalRecord = function (req, res) {
         paramDict['procedureaboutFilename'] = "";//this value wont come in hospital model
         paramDict['procedureparentDepartment'] = req.body["departmentName"];
         paramDict['procedureparentDepartmentid'] = departmentID;
-        console.log("department id" + departmentID);
         treatmentController.createTreatmentRecord(paramDict, function (doc) { })
 
         hospitalSchema.hospitalID = hospitalID
         hospitalSchema.hospitalName = req.body['hospitalname'];
+        hospitalSchema.serviceActiveFlag = req.body['serviceActiveFlag'];//new
         hospitalSchema.hospitalContact.website = req.body['hospitalcontact_website'];
         hospitalSchema.hospitalContact.contactPersonname = req.body['hospitalcontact_contactpersonname'];
+        hospitalSchema.hospitalContact.emailId = req.body['emailId'];//new
+        hospitalSchema.hospitalContact.primaryPhoneNumber = parseInt(req.body['primaryPhoneNumber']);//new
+        hospitalSchema.hospitalContact.secondaryPhoneNumber = req.body['secondaryPhoneNumber'];//new
         hospitalSchema.hospitalContact.addressLine1 = req.body['hospitalcontact_addressline1'];
         hospitalSchema.hospitalContact.addressLine2 = req.body['hospitalcontact_addressline2'];
         hospitalSchema.hospitalContact.City = req.body['hospitalcontact_city'];
@@ -125,6 +128,7 @@ module.exports.createHospitalRecord = function (req, res) {
 
         hospitalSchema.Treatment = [{
             name: req.body["procedureName"],
+            activeFlag: req.body["isProcedureActive"],//new
             costUpperBound: parseInt(req.body["costUpperBound"]),
             costLowerBound: parseInt(req.body["costLowerBound"]),
             departmentId: departmentID,
@@ -133,13 +137,15 @@ module.exports.createHospitalRecord = function (req, res) {
             doctor: [{
                 doctorId: doctorID,
                 doctorName: req.body["doctorName"],
+                activeFlag: req.body["isDoctorActive"],//new
                 profilepicdir: req.body["profilePicDirectory"],
                 medinovitadoctorRating: parseInt(req.body["medinovitaDoctorRating"]),
-                /*DoctorUserRating: [{
-                    rating: req.body["doctorUserRating"],
+                //Below field should come via another api.However enabling this for calculating cost api with a default value
+                DoctorUserRating: [{
+                    userRating: req.body["doctorUserRating"],
                     userId: req.body["userEmailId"],
-                }],*/ //This should come from another api
-                DoctorUserRating: [],
+                }], 
+                //DoctorUserRating: [], This needs to be uncommented if doctor user rating to be added as blank
                 speciality: [{
                     specialityName: req.body["specialityName"]
                 }]
@@ -185,7 +191,7 @@ module.exports.updateHospitalNameNContactDetails = function (req, res) {
             return res.status(409).json({ "Message": "Hospital " + hospitalName + " does not exists in database" });
         } else {
             //update basic hospital fields
-            hospitalModel.findOneAndUpdate({ "hospitalName": hospitalName, "hospitalContact.City": hospitalCity, "hospitalContact.country": hospitalCountry }, { "$set": query }, { returnOriginal: false, upsert: true }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
+            hospitalModel.findOneAndUpdate({ "hospitalName": hospitalName, "hospitalContact.City": hospitalCity, "hospitalContact.country": hospitalCountry }, { "$set": query }, { new: true }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
                 if (err) {
                     logger.error("Error while updating record : - " + err.message);
                     return res.status(500).json({ "Message": err.message });
@@ -348,6 +354,7 @@ module.exports.addProcedureDetails = function (req, res) {
                         "$push": {
                             "Treatment": {
                                 "name": req.body["procedureName"],
+                                "activeFlag": req.body["isProcedureActive"],//new
                                 "costUpperBound": parseInt(req.body["costUpperBound"]),
                                 "costLowerBound": parseInt(req.body["costLowerBound"]),
                                 "departmentId": departmentID,
@@ -356,19 +363,24 @@ module.exports.addProcedureDetails = function (req, res) {
 
                                 "doctor": {
                                     "doctorId": doctorID,
+                                    "activeFlag": req.body["isDoctorActive"],//new
                                     "doctorName": req.body["doctorName"],
                                     "profilepicdir": req.body["profilePicDirectory"],
                                     "medinovitadoctorRating": parseInt(req.body["medinovitaDoctorRating"]),
                                     "speciality": {
                                         "specialityName": req.body["specialityName"]
                                     },
-                                    "DoctorUserRating": []
+                                    //"DoctorUserRating": []
+                                    "DoctorUserRating": { //At least one default rating is required for cost api
+                                        "userRating": parseFloat(req.body["doctorUserRating"]),
+                                        "userId": req.body["userEmailId"],
+                                    },
                                 }
 
                             }
                         }
                     },
-                    { returnOriginal: false, upsert: true }, function (err, doc) {
+                    { new: true }, function (err, doc) {
 
                         if (err) {
                             logger.error("Error while updating record : - " + err.message);
@@ -388,17 +400,22 @@ module.exports.addProcedureDetails = function (req, res) {
                         "$push": {                            
                             "Treatment.$.doctor": {
                                 "doctorId": doctorID,
+                                "activeFlag": req.body["isDoctorActive"],//new
                                 "doctorName": req.body["doctorName"],
                                 "profilepicdir": req.body["profilePicDirectory"],
                                 "medinovitadoctorRating": parseInt(req.body["medinovitaDoctorRating"]),
                                 "speciality": {
                                     "specialityName": req.body["specialityName"]
                                 },
-                                "DoctorUserRating": []
+                                //"DoctorUserRating": []
+                                "DoctorUserRating": { //At least one default rating is required for cost api
+                                    "userRating": parseFloat(req.body["doctorUserRating"]),
+                                    "userId": req.body["userEmailId"],
+                                },
                             }     
                         }
                     },
-                    { returnOriginal: false, upsert: true }, function (err, doc) {
+                    { new: true }, function (err, doc) {
 
                         if (err) {
                             logger.error("Error while updating record : - " + err.message);                            
@@ -416,6 +433,7 @@ module.exports.addProcedureDetails = function (req, res) {
                                 "procedureid": procedureID,
                                 "departmentId": departmentID,                               
                                 "name": req.body["procedureName"],
+                                "activeFlag": req.body["isProcedureActive"],//new
                                 "costUpperBound": parseInt(req.body["costUpperBound"]),
                                 "costLowerBound": parseInt(req.body["costLowerBound"]),
                                 "departmentName": req.body["departmentName"],                                                                
@@ -425,7 +443,7 @@ module.exports.addProcedureDetails = function (req, res) {
                             }
                         }
                     },
-                    { returnOriginal: false, upsert: true }, function (err, doc) {
+                    { new: true }, function (err, doc) {
 
                         if (err) {
                             logger.error("Error while updating record : - " + err.message);
@@ -549,16 +567,21 @@ module.exports.addDoctorDetails = function (req, res) {
                         "Treatment.$.doctor": {
                             "doctorId": doctorID,
                             "doctorName": req.body["doctorName"],
+                            "activeFlag": req.body["isDoctorActive"],//new
                             "profilepicdir": req.body["profilePicDirectory"],
                             "medinovitadoctorRating": parseInt(req.body["medinovitaDoctorRating"]),
                             "speciality": {
                                 "specialityName": req.body["specialityName"]
                             },
-                            "DoctorUserRating": []
+                            //"DoctorUserRating": []
+                            "DoctorUserRating": { //At least one default rating is required for cost api
+                                "userRating": parseFloat(req.body["doctorUserRating"]),
+                                "userId": req.body["userEmailId"],
+                            }
                         }     
                     }
                 },
-                { returnOriginal: false, upsert: true }, function (err, doc) {
+                { new: true }, function (err, doc) {
 
                 if (err) {
                     logger.error("Error while updating record : - " + err.message);
@@ -586,58 +609,40 @@ function requestToUserModelParamMapping(reqParamKey) {
 
         case 'hospitalname': return "hospitalName";
 
-        case 'hospitalid': return "hospitalID";
+        case 'hospitalID': return "hospitalID";
 
-        case 'hospitalcontact.website': return "hospitalContact.website";
+        case 'serviceActiveFlag': return "serviceActiveFlag";
 
-        case 'hospitalcontact.contactpersonname': return "hospitalContact.contactPersonname";
+        case 'website': return "hospitalContact.website";
 
-        case 'hospitalcontact.addressline1': return "hospitalContact.addressLine1";
+        case 'contactpersonname': return "hospitalContact.contactPersonname";
 
-        case 'hospitalcontact.city': return "hospitalContact.City";
+        case 'emailId': return "hospitalContact.emailId";
 
-        case 'hospitalcontact.country': return "hospitalContact.country";
+        case 'primaryPhoneNumber': return "hospitalContact.primaryPhoneNumber";
 
-        case 'hospitalcontact.postalcode': return "hospitalContact.PostalCode";
+        case 'secondaryPhoneNumber': return "hospitalContact.secondaryPhoneNumber";
 
-        case 'hospitalcontactlandmark': return "hospitalContact.Landmark";
+        case 'hospitalcontact_addressline1': return "hospitalContact.addressLine1";
 
-        case 'accreditation.jci': return "Accreditation.JCI";
+        case 'hospitalcontact_addressline2': return "hospitalContact.addressLine2";
 
-        case 'accreditation.nabh': return "Accreditation.NABH";
+        case 'hospitalcontact_city': return "hospitalContact.City";
 
-        case 'accreditation.nabl': return "Accreditation.NABL";
+        case 'hospitalcontact_country': return "hospitalContact.country";
 
-        case 'hospitalrating.userrating.$.type': return "hospitalRating.userRating.$.type";
+        case 'hospitalcontact_postalcode': return "hospitalContact.PostalCode";
 
-        case 'hospitalrating.medinovitarating.type': return "hospitalRating.medinovitaRating.type";
+        case 'hospitalcontact_landmark': return "hospitalContact.Landmark";
 
-        case 'treatment.$.procedureid': return "Treatment.$.procedureid";
+        case 'accreditation_jci': return "Accreditation.JCI";
 
-        case 'treatment.$.departmentId': return "Treatment.$.departmentId";
+        case 'accreditation_nabh': return "Accreditation.NABH";
 
-        case 'treatment.$.name': return "treatment.$.name";
+        case 'accreditation_nabl': return "Accreditation.NABL";
 
-        case 'treatment.$.costlowerbound': return "Treatment.$.costLowerBound";
-
-        case 'treatment.$.costupperbound': return " Treatment.$.costUpperBound";
-
-        case 'treatment.$.departmentname': return "Treatment.$.departmentName";
-
-        case 'treatment.$.doctor.$.doctorId': return "Treatment.$.doctor.$.doctorId";
-
-        case 'treatment.$.doctor.$.doctorname': return "Treatment.$.doctor.$.doctorName";
-
-        case 'treatment.$.doctor.$.speciality.$.specialityname': return "Treatment.$.doctor.$.speciality.$.specialityName";
-
-        case 'treatment.$.doctor.$.profilepicdir': return "Treatment.$.doctor.$.profilepicdir";
-
-        case 'treatment.$.doctor.$.medinovitadoctorrating': return "Treatment.$.doctor.$.medinovitadoctorRating";
-
-        case 'treatment.$.doctor.$.doctoruserrating.$.userrating': return "Treatment.$.doctor.$.DoctorUserRating.$.userRating";
-
-        case 'treatment.$.doctor.$.doctoruserrating.$.userId': return "Treatment.$.doctor.$.DoctorUserRating.$.userId";
-
+        case 'hospitalrating_medinovitarating': return "hospitalRating.medinovitaRating";
+        
         default: return reqParamKey;
 
     }

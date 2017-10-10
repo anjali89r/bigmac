@@ -2,6 +2,7 @@
 var logger = require('../utilities/logger.js');
 require('../../model/officeLocationModel.js');
 var officeLocationModel = mongoose.model('office_locations');
+var officeLocationSchema = new officeLocationModel();
 
 /************************ API code to read office locations ****************************/
 module.exports.getOfficeLocations = function (req, res) {
@@ -9,26 +10,24 @@ module.exports.getOfficeLocations = function (req, res) {
     if (res.headersSent) {//check if header is already returned
         logger.warn("Response already sent.Hence skipping the function call getOfficeLocations")
         return;
-    }  
-
-    var officeLocationSchema = new officeLocationModel();
+    }
 
     officeLocationModel.aggregate([
-       /* {
-            "$match": {
-                officeCity: { $exists: true }
-            }
-        },*/
+        /* {
+             "$match": {
+                 officeCity: { $exists: true }
+             }
+         },*/
         {
             "$project": {
                 "_id": 0,
                 "country": 1,
-                "officeCity": {                    
+                "officeCity": {
                     "$map": {
                         "input": "$officeCity",
                         "as": "offcity",
                         "in": {
-                            "$ifNull":[ //"$cond": [//specify the filter here                               
+                            "$ifNull": [ //"$cond": [//specify the filter here                               
                                 {
                                     "city": "$$offcity.city",
                                     "officeLocation": {
@@ -44,7 +43,7 @@ module.exports.getOfficeLocations = function (req, res) {
                                                         "contactPerson": "$$offLoc.contactPerson", "contactPerson": "$$offLoc.officeTimings"
                                                     },
                                                     false
-                                               ],
+                                                ],
                                             },//"in": {
                                         },//"$map": {
                                     },//"officeLocation": {
@@ -76,9 +75,7 @@ module.exports.addOfficeLocations = function (req, res) {
     if (res.headersSent) {//check if header is already returned
         logger.warn("Response already sent.Hence skipping the function call addOfficeLocations")
         return;
-    } 
-
-    var officeLocationSchema = new officeLocationModel();
+    }
 
     new Promise(function (resolve, reject) {
 
@@ -88,19 +85,19 @@ module.exports.addOfficeLocations = function (req, res) {
             var cityFound = doc.split(/\|/)[1];
 
             /* Initial Validation */
-            if (req.body["country"] == null || req.body["city"] ==null|| req.body["addressLine1"] == null || req.body["postCode"] == null) {
+            if (req.body["country"] == null || req.body["city"] == null || req.body["addressLine1"] == null || req.body["postCode"] == null) {
                 logger.error("Mandatory fields are not supplied from GUI to update locations details");
                 return reject(res.status(409).json({
                     "Message": "Mandatory fields are missing in the request"
                 }));
             }
 
-            if (countryFound=='false' && cityFound=='false' ) { /* If it's the first location */
+            if (countryFound == 'false' && cityFound == 'false') { /* If it's the first location */
                 /* update country and city */
                 officeLocationSchema.country = req.body["country"],
                     officeLocationSchema.officeCity = [{
                         city: req.body["city"],
-                            officeLocation : [{
+                        officeLocation: [{
                             addressLine1: req.body["addressLine1"],
                             addressLine2: req.body["addressLine2"],
                             officeType: req.body["officeType"],
@@ -112,43 +109,44 @@ module.exports.addOfficeLocations = function (req, res) {
                             officeTimings: req.body["officeTimings"],
                         }]
                     }]
-                resolve()           
-            } else if (countryFound=='true' && cityFound=='false' ) {  
+                resolve()
+            } else if (countryFound == 'true' && cityFound == 'false') {
 
                 officeLocationModel.findOneAndUpdate({
-                    "country": req.body["country"]},
-                {
-                    "$push": {
-                       "officeCity" : {
-                            "city": req.body["city"],
-                            "officeLocation": {
-                            "addressLine1": req.body["addressLine1"],
-                            "addressLine2": req.body["addressLine2"],
-                            "officeType": req.body["officeType"],
-                            "landMark": req.body["landMark"],
-                            "postCode": parseInt(req.body["postCode"]),
-                            "officeEmailId": req.body["officeEmailId"],
-                            "officeContactNumber": parseInt(req.body["officeContactNumber"]),
-                            "contactPerson": req.body["contactPerson"],
-                            "officeTimings": req.body["officeTimings"],
-                        },
-                    }
-                  }
+                    "country": req.body["country"]
                 },
-                { returnOriginal: false, upsert: true }, function (err, doc) {
-                    if (err) {
-                        logger.error("Error while updating record : - " + err.message);
-                        return reject(res.status(409).json({
-                            "Message": "Error while adding office address in country " + req.body["country"] + " and city " + req.body["city"]  + " in user office locations collection"
-                        }));
-                    } else if (doc === null) {
-                        logger.error("Error while updating record : - unable to update office location database");
-                        return reject(res.status(409).json({
-                            "Message": "Error while adding new office location due to " + err.message
-                        }));
-                    }
-                    resolve();
-                });
+                    {
+                        "$push": {
+                            "officeCity": {
+                                "city": req.body["city"],
+                                "officeLocation": {
+                                    "addressLine1": req.body["addressLine1"],
+                                    "addressLine2": req.body["addressLine2"],
+                                    "officeType": req.body["officeType"],
+                                    "landMark": req.body["landMark"],
+                                    "postCode": parseInt(req.body["postCode"]),
+                                    "officeEmailId": req.body["officeEmailId"],
+                                    "officeContactNumber": parseInt(req.body["officeContactNumber"]),
+                                    "contactPerson": req.body["contactPerson"],
+                                    "officeTimings": req.body["officeTimings"],
+                                },
+                            }
+                        }
+                    },
+                    { returnOriginal: false, upsert: true }, function (err, doc) {
+                        if (err) {
+                            logger.error("Error while updating record : - " + err.message);
+                            return reject(res.status(409).json({
+                                "Message": "Error while adding office address in country " + req.body["country"] + " and city " + req.body["city"] + " in user office locations collection"
+                            }));
+                        } else if (doc === null) {
+                            logger.error("Error while updating record : - unable to update office location database");
+                            return reject(res.status(409).json({
+                                "Message": "Error while adding new office location due to " + err.message
+                            }));
+                        }
+                        resolve();
+                    });
             } else {//if (countryFound == true && cityFound == true)
 
                 officeLocationModel.findOneAndUpdate({
@@ -183,32 +181,32 @@ module.exports.addOfficeLocations = function (req, res) {
                         }
                         resolve();
                     });
-            }   
-        })
-    })
-    .then(function () {
-        officeLocationSchema.save(function (error, data) {
-            if (error) {
-                logger.error("Error saving office location schema : - " + error.message)
-                return res.status(500).json({ "Message": error.message.trim() });
-            }
-            else {
-                return res.json({ "Message": "Office location got inserted successfully" });
             }
         })
     })
-    .catch(function (err) {
-        logger.error("Error while inserting record in office location schema: - " + err.message)
-        return res.status(500).json({ "Message": err.message });
-    })
+        .then(function () {
+            officeLocationSchema.save(function (error, data) {
+                if (error) {
+                    logger.error("Error saving office location schema : - " + error.message)
+                    return res.status(500).json({ "Message": error.message.trim() });
+                }
+                else {
+                    return res.json({ "Message": "Office location got inserted successfully" });
+                }
+            })
+        })
+        .catch(function (err) {
+            logger.error("Error while inserting record in office location schema: - " + err.message)
+            return res.status(500).json({ "Message": err.message });
+        })
 
 }
 /* check whether city and country is found in database */
-function checkCityandCountry(req,next) {
+function checkCityandCountry(req, next) {
 
     var cityFound = false;
     var countryfound = false;
-     /* check for both country and city */
+    /* check for both country and city */
     officeLocationModel.findOne({
         "country": req.body["country"], "officeCity": { $elemMatch: { "city": req.body["city"] } }
     }, function (err, doc) {
@@ -222,7 +220,7 @@ function checkCityandCountry(req,next) {
                 } else {
                     next(true + "|" + false)
                 }
-            })           
+            })
         } else {
             next(true + "|" + true)
         }
