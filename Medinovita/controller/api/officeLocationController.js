@@ -133,7 +133,7 @@ module.exports.addOfficeLocations = function (req, res) {
                             }
                         }
                     },
-                    { returnOriginal: false, upsert: true }, function (err, doc) {
+                    { new: true}, function (err, doc) {
                         if (err) {
                             logger.error("Error while updating record : - " + err.message);
                             return reject(res.status(409).json({

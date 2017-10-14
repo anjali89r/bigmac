@@ -347,9 +347,10 @@ var getHospitalStayDuration = function (req, res, callback) {
     var treatmentName = req.query.procedurename
 
     treatmentDescModel.aggregate([
-        { "$match": { "isDisable": "N", "treatmentName": treatmentName } },
+        { "$match": {
+            "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.procedureName": req.query.procedure }, { "treatmentList.activeFlag": "Y" }] }},
 
-        { "$project": { "_id": 0, "minHospitalization": 1} }
+        { "$project": { "_id": 0, "treatmentList.minHospitalization": 1} }
 
     ], function (err, result) {
 
