@@ -12,7 +12,30 @@ require('../../model/treatmentsDescModel.js');
 var treatmentDescModel = mongoose.model('treatmentOffered_description');
 require('../../model/localTransportModel.js');
 var transportModel = mongoose.model('local_transport_details');
+/**************************************************************************************************
+                               Logic for calculating cost
+1.From hospitalDoctorDetailsModel get list of hospitals offering a particular treatment(getHospitalOfferingTreatment)
+2.Get avarage treatment cost from hospitalDoctorDetailsModel(getAvarageCost).
+  This is calualated using the avarage of the cost from various hospitals for the same procedure
+3.Calculate the cost of holiday based on the number of bystanders + patient (getHolidayPackageCost)
+4.Cost of accomodation for patient + bysstander(getAccomodationCost).This function also query treatmentDescModel to caluclate the
+  time to be spent in India as apart of treatment(getHospitalStayDuration)
+5.Calculate the local transport cost based on assumptions and duration of stay in India(getLocalTransportCost).Please refer
+  function header to understand assumptions
+6.Get cost of Visa - yet to be developed
+7.Cost of flight ticket to India
 
+**************************************************************************************************
+                            Data Requirement
+1./api/v1/add/hospitalrecord/:apiTokenName - Add hospital details and cost of treatment
+2./api/v1/add/doctorsofferingtreatment/:hospitalname/:hospitalcity/:hospitalcountry/:procedurename/:apiTokenName - Add  doctors offering a particular treatment
+3./api/v1/post/holidayPackage/:apiTokenName - Add holiday package details
+4./api/v1/post/newtransport/vendor/:apiTokenNam - Add local transport details
+5./api/v1/post/newhotel/vendor/:apiTokenName - Add accomodation details
+6./api/v1/post/treatmentdescription/:apiTokenName -Add procedure details to table,especially hospital stay for a treatment
+7.                                                - Cost of Visa
+8.                                                - Cost of flight ticket to India
+/**************************************************************************************************/
 module.exports.getTreatmentRoughEstimate = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned
