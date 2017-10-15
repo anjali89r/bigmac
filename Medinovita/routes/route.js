@@ -16,6 +16,7 @@ var siteTrafficInfo = require('../controller/api/siteTrafficController.js');
 var transportInfo = require('../controller/api/localTransportController.js');
 var hotelInfo = require('../controller/api/accomodationInfoController.js');
 var treatmentEstimate = require('../controller/api/costController.js');
+var evisacountryInfo = require('../controller/api/evisacountryController.js');
 
 module.exports = function (app) {
 
@@ -128,6 +129,8 @@ module.exports = function (app) {
 
     /* API to get web site traffic to DB */
     app.post('/api/v1/post/sitetraffic/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, siteTrafficInfo.postsiteTraffic);
+    app.get('/api/v1/get/evisacountries/:countryName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, evisacountryInfo.getevisacountry);
+    
     //************************API to operate on trip schema******************************************
     app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails);
     //***********************************************************************************************
