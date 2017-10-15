@@ -203,7 +203,16 @@
     <Folder Include="views\webcontent\assets\js\pages\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="controller\api\accomodationInfoController.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="controller\api\costController.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="controller\api\holidayPackageController.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="controller\api\localTransportController.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="controller\api\medicalSectionController.js" />

@@ -13,7 +13,9 @@ var holidayInfo = require('../controller/api/holidayPackageController.js');
 var ourServicesInfo = require('../controller/api/ourServicesController.js');
 var homepageInfo = require('../controller/api/homepageController.js');
 var siteTrafficInfo = require('../controller/api/siteTrafficController.js');
-
+var transportInfo = require('../controller/api/localTransportController.js');
+var hotelInfo = require('../controller/api/accomodationInfoController.js');
+var treatmentEstimate = require('../controller/api/costController.js');
 
 module.exports = function (app) {
 
@@ -52,7 +54,7 @@ module.exports = function (app) {
     app.post('/api/v1/add/doctorsofferingtreatment/:hospitalname/:hospitalcity/:hospitalcountry/:procedurename/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitalInfo.addDoctorDetails);
     /*******************************************************************************************************************************************************/
 
-    /************************API operate on user enquiry schema*********************************************************************************************/
+    /************************API to operate on user enquiry schema*********************************************************************************************/
     /*  APi to submit user enquiry  */
     app.post('/api/v1/submit/enquiry/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, enquiryInfo.submitUserEnquiry);
      /*  APi to return response for user enquiry  */
@@ -62,31 +64,57 @@ module.exports = function (app) {
 
     /*********************************************************************************************************************************************************/
     
-    /************************API operate on office address schema********************************************************************************************/
+    /************************API to operate on office address schema********************************************************************************************/
     /*  APi to get list of office locations  */
     app.get('/api/v1/get/officelocations/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, officeLocationInfo.getOfficeLocations);
     /*  APi to post new office location  */
     app.post('/api/v1/post/officelocations/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, officeLocationInfo.addOfficeLocations);
     /********************************************************************************************************************************************************/
 
-    /************************API operate on hloday schema****************************************************************************************************/
-    /*  APi add new holiday package  */
+    /************************API to operate on holiday schema****************************************************************************************************/
+    /*  API to add new holiday package  */
     app.post('/api/v1/post/holidayPackage/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, holidayInfo.createHolidayPackage);
-
+    /*  API to update existing holiday package  */
+    app.put('/api/v1/update/holidayPackage/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, holidayInfo.updateHolidayPackage);
+    /*  API to get list of holiday packages  */
+    app.get('/api/v1/get/holidayPackage/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, holidayInfo.getHolidayPackageDetails);
     /********************************************************************************************************************************************************/
 
+     /************************API to operate on transport schema****************************************************************************************************/
+     /*  API to add new transport vendor  */
+    app.post('/api/v1/post/newtransport/vendor/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, transportInfo.addLocalTransportVendorDtls);
+    /*  API to update existing transport vendor details */
+    app.put('/api/v1/update/transport/vendor/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, transportInfo.updateLocalTransportVendorDtls);
+    /*  API to get list of active transport vendor list */
+    app.get('/api/v1/get/transport/vendorlist/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, transportInfo.getActiveTransportVendorDtls);
+    /********************************************************************************************************************************************************/
+
+    /************************API to operate on hotel schema****************************************************************************************************/
+    /*  API to add new hotel provider  */
+    app.post('/api/v1/post/newhotel/vendor/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hotelInfo.addAccomodationVendorDtls);
+    /*  API to update hotel provider  */
+    app.put('/api/v1/update/hotel/vendor/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hotelInfo.updateAccomodationVendorDtls);
+    /*  API to get hotel providers from DB  */
+    app.get('/api/v1/get/hotellist/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hotelInfo.getActiveHotelDtls);
+    /********************************************************************************************************************************************************/
+
+    /************************API to get cost of treatment****************************************************************************************************/
+    //app.get('/api/v1/get/treatmentcost/:procedurename/:bystandercount/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentEstimate.getTreatmentRoughEstimate);
+    app.get('/api/v1/get/treatmentcost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentEstimate.getTreatmentRoughEstimate);
+
+    /********************************************************************************************************************************************************/
 
     /*  APi to post news section  */
     app.post('/api/v1/post/newssection/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, newsSection.addnewsSection);
     /*  APi to get latest news section  */
     app.get('/api/v1/get/newssection/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, newsSection.getnewsSection);
 
-
-    /*  APi to post treatmentdescription   */
+    /************************API to operate on Treatment Description****************************************************************************************************/
+    /*  APi to post treatmentdescription   */    
     app.post('/api/v1/post/treatmentdescription/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.addtreatmentDescription);
     /*  APi to get treatment description  */
-    app.get('/api/v1/get/treatmentdescription/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getTreatmentSection);
-
+    app.get('/api/v1/get/treatmentdescription/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getTreatmentSection);
+    /*******************************************************************************************************************************************************************/
 
     /*  APi to post our services section  */
     app.post('/api/v1/post/ourservices/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, ourServicesInfo.addServicedetails);
@@ -103,16 +131,7 @@ module.exports = function (app) {
     //************************API to operate on trip schema******************************************
     app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails);
     //***********************************************************************************************
-  //  app.get('/api/v1/insertHospitalRecord', hospitalInfo.createHospitalRecord)
-    //***********************************************************************************************
-
-    //************************API to operate on trip schema******************************************
-    //app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails)    
-    //***********************************************************************************************
-
-    //app.put('/api/v1/insertTripinfo', tripInfo.inserttripDetails)//temp
-
-
+  
     //encrypt and decrypt api
     app.get('/api/v1/getsecureencryptedText/:txt', security.secureEncryptedText);//sample call http://localhost:1337/api/v1/getsecureencryptedText/libin
     app.get('/api/v1/getsecuredecryptedText/:txt', security.secureDecryptedText);//this is more secure as the encryption mechanism chnages on every server restart

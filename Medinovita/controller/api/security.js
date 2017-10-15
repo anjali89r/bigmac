@@ -92,7 +92,7 @@ module.exports.verifyJWTToken = function (req, res, next) {//generic function to
     if (bearerHeader) {
         token = bearerHeader;
         jwt.verify(token, config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_SECRETKEY', false), function (err, decoded) {
-            if (err) {                
+            if (err) {            
                 req.authenticated = false;
                 req.decoded = null;
                 next();

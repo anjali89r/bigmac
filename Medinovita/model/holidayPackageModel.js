@@ -6,14 +6,14 @@ const collection = 'holiday_package';
 
 var holidayPackageSchema = new Schema({
 
-    holidayPackageId: { type: Number, required: true },
-    packageShortName: { type: String, required: true, trim: true },
-    packageDescription: { type: String, required: true },
-    packageDuration: { type: String, required: true },
+    holidayPackageId: { type: Number, required: false },
+    packageShortName: { type: String, required: false, trim: true },
+    packageDescription: { type: String, required: false },
+    packageDuration: { type: String, required: false },
     tourOperator: { type: String, required: false },
     website: { type: String, required: false }, 
     packageCost: { type: Number, required: false },
-    activeStatus: { type: String, required: false, enum: ['Y', 'N'], default: 'Y'}
+    activeStatus: { type: String, required: false, enum: ['Y', 'N']}
 });
 
 //create collection.

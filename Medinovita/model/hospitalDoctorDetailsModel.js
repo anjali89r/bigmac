@@ -9,11 +9,15 @@ const collection = 'hospital_doctor_details';
 var hospitalDoctorSchema = new Schema({
 
     hospitalName: { type: String, required: true, trim: true },
-    hospitalID: { type: Number, required: true, unique: true, dropDups: true},    
+    hospitalID: { type: Number, required: true, unique: true, dropDups: true }, 
+    serviceActiveFlag: { type: String, required: true, enum: ['Y', 'N'] },//new
 
     hospitalContact: {
         website: { type: String, required: true, trim: true },
         contactPersonname: { type: String, required: true, trim: true },
+        emailId: { type: String, required: true, trim: true },//new
+        primaryPhoneNumber: { type: Number, required: true }, //new
+        secondaryPhoneNumber: { type: String, required: false }, //new
         addressLine1: { type: String, required: true, trim: true },
         addressLine2: { type: String, required: false, trim: true },
         City: { type: String, required: true, trim: true },
@@ -33,29 +37,36 @@ var hospitalDoctorSchema = new Schema({
                     type: Number, required: false, 
                     min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
                     max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
-                    default: 4
-
         }],
         medinovitaRating: {
                             type: Number, required: true,
                             min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
-                            max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
-                            default: 4
+                            max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],                            
             },
     },
     
     Treatment: [{        
-        procedureid: { type: Number},
+        procedureid: { type: Number },
+        activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },//new
         departmentId: { type: Number},
                 name: { type: String, required: true, trim: true },
                 costUpperBound: { type: Number, required: true },
                 costLowerBound: { type: Number, required: true },                   
-                departmentName: { type: String, required: true, trim: true},
+                departmentName: { type: String, required: true, trim: true },
+                /*discountRatePercent: { type: Number, required: true,},
+                discountStartDate: { type: Date, required: true },
+                discountEndDate: { type: Date, required: true },
+                discountStatus: { type: String, required: true, enum: ['Y', 'N'] },
+                medinovitaDiscountRatePercent: { type: Number, required: true, },
+                medinovitaDiscountStartDate: { type: Date, required: true },
+                medinovitaDiscountEndDate: { type: Date, required: true },
+                medinovitaDiscountStatus: { type: String, required: true, enum: ['Y', 'N'] },*/
                 
                 doctor: [{
 
                     doctorId: { type: Number},
                     doctorName: { type: String, required: true, trim: true },
+                    activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },
                     speciality: [{
                         specialityName: { type:String, required: true, trim: true }
                     }],
@@ -63,16 +74,14 @@ var hospitalDoctorSchema = new Schema({
                     medinovitadoctorRating: {
                         type: Number, required: true,
                         min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
-                        max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
-                        default: 4
+                        max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).']             
                     },
                     DoctorUserRating:[ {  
-                                    userRating:{type: Number, required: false,
+                                    userRating:{type: Number, required: true, //To get default rating for cost api
                                         min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
-                                        max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
-                                        default: 4
+                                        max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).']                                       
                                     },
-                                    userId: { type: Number, required: false, trim: true},
+                                    userId: { type: String, required: false, trim: true},
                     }],
                 }],
     }],
