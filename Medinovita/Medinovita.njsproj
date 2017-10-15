@@ -225,7 +225,6 @@
     <Compile Include="controller\api\officeLocationController.js">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="controller\api\treatmentsOfferedController.js" />
     <Compile Include="controller\api\tripMasterController.js" />
     <Compile Include="controller\api\hospitalDoctorDetailsController.js">
       <SubType>Code</SubType>
@@ -274,7 +273,6 @@
     <Compile Include="model\identityCounterModel.js">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="model\treatmentsOfferedModel.js" />
     <Compile Include="model\userDetailsmodel.js" />
     <Compile Include="model\siteTrafficModel.js" />
     <Compile Include="model\userEnquiryModel.js" />

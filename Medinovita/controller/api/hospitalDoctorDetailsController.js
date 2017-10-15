@@ -2,7 +2,7 @@
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/hospitalDoctorDetailsModel.js');
-var treatmentController=require('./treatmentsOfferedController.js');
+var treatmentController = require('./treatmentDescController.js');
 var hospitalModel = mongoose.model('hospital_doctor_details');
 var counterSchema = require('../../model/identityCounterModel.js');
 
@@ -20,6 +20,12 @@ module.exports.createHospitalRecord = function (req, res) {
 
     //create doctor promise
     const hospitalPromise = new Promise((resolve, reject) => {
+
+        treatmentController.verifyProcedureExistence(req.body["procedureName"], function (flag) {
+            if (flag == 'false') {
+                return reject(res.status(409).json({ "Message": "Please add procedure first to treatments description table using /api/v1/post/treatmentdescription/:apiTokenName" }));
+            }
+        })
 
         hospitalModel.findOne({
             "hospitalName": req.body['hospitalname'], "hospitalContact.City": req.body['hospitalcontact_city'], "hospitalContact.country": req.body['hospitalcontact_country']
@@ -98,15 +104,7 @@ module.exports.createHospitalRecord = function (req, res) {
     function setData(hospitalID, doctorID, departmentID, procedureID) {
 
         /*Update treatments offered collection */
-        var paramDict = [];
-        paramDict['procedureId'] = procedureID
-        paramDict['procedureMedicalName'] = req.body["procedureName"];
-        paramDict['procedureShortName'] = req.body["procedureShortName"];
-        paramDict['procedureaboutFilename'] = "";//this value wont come in hospital model
-        paramDict['procedureparentDepartment'] = req.body["departmentName"];
-        paramDict['procedureparentDepartmentid'] = departmentID;
-        treatmentController.createTreatmentRecord(paramDict, function (doc) { })
-
+      
         hospitalSchema.hospitalID = hospitalID
         hospitalSchema.hospitalName = req.body['hospitalname'];
         hospitalSchema.serviceActiveFlag = req.body['serviceActiveFlag'];//new
@@ -216,6 +214,12 @@ module.exports.addProcedureDetails = function (req, res) {
         return;
     }  
 
+    treatmentController.verifyProcedureExistence(req.body["procedureName"], function (flag) {
+        if (flag == 'false') {
+            return res.status(409).json({ "Message": "Please add procedure first to treatments description table using /api/v1/post/treatmentdescription/:apiTokenName" });
+        }
+    })
+
     var hospitalSchema = new hospitalModel();
 
     var hospitalName = req.params.hospitalname;
@@ -232,7 +236,7 @@ module.exports.addProcedureDetails = function (req, res) {
         logger.error("Error while updating hospital record : - hospitalName, hospitalCity and hospitalCountry cannot be null");
         return res.status(500).json({ "Message": "Hospital Name, Hospital City and Hospital Country cannot be null" });
     }
-
+    
     //create doctor promise
     const doctorPromise = new Promise((resolve, reject) =>
         counterSchema.getNext('Treatment.$.doctor.$.doctorId', collection, function (id) {

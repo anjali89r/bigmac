@@ -2,8 +2,10 @@
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/treatmentsDescModel.js');
+var counterSchema = require('../../model/identityCounterModel.js');
 var treatmentDescModel = mongoose.model('treatmentOffered_description');
 
+var collection = 'hospital_doctor_details'; //hospital and doctor is used here for incrementing ids.
 
 /* API to add new treatment description details */
 module.exports.addtreatmentDescription = function (req, res) {
@@ -39,10 +41,19 @@ module.exports.addtreatmentDescription = function (req, res) {
                     "department": req.body["department"]
                 }, function (err, doc) {
                     if (doc != null) {
-                        logger.info("Department name " + req.body["department"] + " already exists in database");
-                        resolve("true|false");
+                        logger.info("Department name " + req.body["department"] + " already exists in database");   
+                        var appIds = 0
+                        getId("false", "true", function (id) {
+                            appIds = id;
+                            resolve("true|false" + appIds);
+                        })                               
                     } else {
-                        resolve("false|false");
+                        var appIds=0
+                        getId("true", "true", function (id){
+                            appIds = id;  
+                            resolve("false|false|" + appIds);
+                        })                        
+                        
                     }
                 })
             }
@@ -50,15 +61,18 @@ module.exports.addtreatmentDescription = function (req, res) {
     }).then(function (flag) {
         var departmentFound = flag.split(/\|/)[0];
         var treatmentFound = flag.split(/\|/)[1];
-
+        var departmentId = parseInt(flag.split(/\|/)[2])
+        var procedureId = parseInt(flag.split(/\|/)[3])
         //If department and treatments are not in db
        if (departmentFound == 'false' && treatmentFound == 'false'){
                 treatmentSchema.department = req.body["department"],
+                treatmentSchema.departmentId = departmentId,
                 treatmentSchema.departmentDescription= req.body["departmentDescription"],
                 treatmentSchema.serviceActiveFlag = req.body["serviceActiveFlag"],
                 treatmentSchema.departmentImagepath = req.body["departmentImagepath"],            
                 treatmentSchema.treatmentList = [{
-                    procedureName: req.body['procedureName'] ,
+                    procedureName: req.body['procedureName'],
+                    procedureId: procedureId,
                     displayName: req.body['displayName'],
                     treatmentDescription: req.body['treatmentDescription'], 
                     shortDescription: req.body['shortDescription'],   
@@ -79,6 +93,7 @@ module.exports.addtreatmentDescription = function (req, res) {
                    "$push": {
                        "treatmentList": {
                            "procedureName": req.body['procedureName'],
+                           "procedureId": procedureId,
                            "displayName": req.body['displayName'],
                            "treatmentDescription": req.body['treatmentDescription'],
                            "shortDescription": req.body['shortDescription'],   
@@ -160,4 +175,71 @@ module.exports.getTreatmentSection = function (req, res) {
             return res.json(result);
         }
     })
+}
+
+/* Get department and procedure id from counter schema */
+function getId(departmentIDFlag, procedureIdFlag, callback) {
+
+    new Promise(function (resolve, reject) {
+        if (departmentIDFlag == 'true') {
+            counterSchema.getNext('Treatment.$.departmentId', collection, function (id) {
+                departmentID = id;
+                resolve(departmentID);
+            });
+        } else {
+            resolve(0);
+        }
+    }).then(function (departmentID) {
+
+        new Promise(function (resolve, reject) {
+            if (procedureIdFlag == 'true') {
+                counterSchema.getNext('Treatment.$.procedureid', collection, function (id) {
+                    procedureId = id;
+                    resolve(procedureId);
+                    return callback(departmentID + "|" + procedureId)
+                });
+            } else {
+                resolve(0);
+                return callback("0" + "|" + "0")
+            }
+        })
+     }) 
+}
+
+/* **************Get Procedure id,department id from treatments schema ***************** */
+module.exports.isTreatmentExists = function (procedureName, callback) {
+    
+    var dict = [];
+
+    treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "procedureName": procedureName } } }, {
+        "departmentId": 1, "treatmentList.procedureId": 1,"_id": 0
+    }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
+        if (err) {
+            logger.error("Error while reading procedure id,department id from treatments description schema : - " + err.message);
+            callback(dict);
+        } else if (doc!= null) {
+            logger.info("Procedure " + procedureName + " already exists in treatments offered collection");
+            dict["procedureId"] = doc.treatmentList[0].procedureId;            
+            dict["procedureparentDepartmentid"] = doc.departmentId;
+            callback(dict);
+        } else {
+            callback(dict);
+        }
+    });
+}
+
+/* **************Verify if aparticular procedure is already present ***************** */
+module.exports.verifyProcedureExistence = function (procedureName, callback) {
+
+    treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "procedureName": procedureName } } }, { 'treatmentList.$': 1 },
+        function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
+        if (err) {            
+            callback("false");
+        } else if (doc != null) {  
+            callback("true");
+        } else {
+            console.log("false")
+            callback("false");
+        }
+    });
 }
