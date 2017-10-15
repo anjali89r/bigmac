@@ -52,7 +52,7 @@ module.exports.getTreatmentRoughEstimate = function (req, res) {
             logger.info("Accomodation cost - " + retAccomodationCost)
             var retLocalTransportCost = localTransportCost[0].totalTransportationCost
             logger.info("Local transport cost - " + retLocalTransportCost)
-
+            //Calculate totla trip expenses
             var tripExpense = retProcedureCost + retHolidayCost + retAccomodationCost + retLocalTransportCost;
             logger.info("Overall trip cost - " + tripExpense)
             //Convert to json
