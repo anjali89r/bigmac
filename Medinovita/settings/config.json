@@ -31,9 +31,11 @@
     "FILE_LOG_LEVEL": "error"
   },
   "JWT": {
-    "API_WEBTOKEN_PAYLOAD": "webTokenMediAPI",
-    "API_WEBTOKEN_SECRETKEY": "My secret key for authenticating api request",
-    "API_WEBTOKEN_BAICAUTH_USERNAME": "libin",
-    "API_WEBTOKEN_BAICAUTH_PASSWORD": "libin"
+    "API_MEDITRIP_PAYLOAD": "TokenToAuthenticateMedinovitaUser",
+    "API_MEDITRIP_SECRETKEY": "medi tour secret for user acess to website",
+    "API_MEDITRIP_BAICAUTH_USERNAME": "libin",
+    "API_MEDITRIP_BAICAUTH_PASSWORD": "libin",
+    "API_MEDITRIP_AUTO_EXPIRE_FLAG": "Y",
+    "API_MEDITRIP_EXPIRE_IN_MINUTES": 15
   }
 }

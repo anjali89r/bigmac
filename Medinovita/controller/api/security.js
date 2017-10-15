@@ -71,11 +71,11 @@ module.exports.generateJWTToken = function (req, res) {
     var api = req.params.apiTokenName;
     var payload = { api: config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_PAYLOAD', false) }; //jwt.sign(payload, secretOrPrivateKey, [options, callback])
     var secretkey = config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_SECRETKEY', false);
-
+    if (secretkey == null || payload == null ) {
+        return (res.json({ "Message": "Invalid Token configuration for api key - " + api }));        
+    }
     var token = jwt.sign({ payload: payload.api }, secretkey);
-
-    res.send(token);
-    
+    res.send(res.json({ "Token": token }));    
 }
 
 module.exports.verifyJWTToken = function (req, res, next) {//generic function to verify jwt web token
@@ -91,7 +91,7 @@ module.exports.verifyJWTToken = function (req, res, next) {//generic function to
     req.authenticated = false;
     if (bearerHeader) {
         token = bearerHeader;
-        jwt.verify(token, config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_SECRETKEY', false), function (err, decoded) {
+        jwt.verify(token, config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_SECRETKEY', false),function (err, decoded) {
             if (err) {            
                 req.authenticated = false;
                 req.decoded = null;

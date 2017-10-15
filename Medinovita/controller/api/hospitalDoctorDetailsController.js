@@ -137,6 +137,7 @@ module.exports.createHospitalRecord = function (req, res) {
             doctor: [{
                 doctorId: doctorID,
                 doctorName: req.body["doctorName"],
+                doctorDescription: req.body["doctorDescription"],
                 activeFlag: req.body["isDoctorActive"],//new
                 profilepicdir: req.body["profilePicDirectory"],
                 medinovitadoctorRating: parseInt(req.body["medinovitaDoctorRating"]),
@@ -363,6 +364,7 @@ module.exports.addProcedureDetails = function (req, res) {
 
                                 "doctor": {
                                     "doctorId": doctorID,
+                                    "doctorDescription": req.body["doctorDescription"],
                                     "activeFlag": req.body["isDoctorActive"],//new
                                     "doctorName": req.body["doctorName"],
                                     "profilepicdir": req.body["profilePicDirectory"],
@@ -400,6 +402,7 @@ module.exports.addProcedureDetails = function (req, res) {
                         "$push": {                            
                             "Treatment.$.doctor": {
                                 "doctorId": doctorID,
+                                "doctorDescription": req.body["doctorDescription"],
                                 "activeFlag": req.body["isDoctorActive"],//new
                                 "doctorName": req.body["doctorName"],
                                 "profilepicdir": req.body["profilePicDirectory"],
@@ -567,6 +570,7 @@ module.exports.addDoctorDetails = function (req, res) {
                         "Treatment.$.doctor": {
                             "doctorId": doctorID,
                             "doctorName": req.body["doctorName"],
+                            "doctorDescription": req.body["doctorDescription"],
                             "activeFlag": req.body["isDoctorActive"],//new
                             "profilepicdir": req.body["profilePicDirectory"],
                             "medinovitadoctorRating": parseInt(req.body["medinovitaDoctorRating"]),

@@ -66,6 +66,7 @@ var hospitalDoctorSchema = new Schema({
 
                     doctorId: { type: Number},
                     doctorName: { type: String, required: true, trim: true },
+                    doctorDescription: { type: String, required: true, trim: true },
                     activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },
                     speciality: [{
                         specialityName: { type:String, required: true, trim: true }
