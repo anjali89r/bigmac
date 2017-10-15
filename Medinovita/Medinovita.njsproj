@@ -209,6 +209,7 @@
     <Compile Include="controller\api\costController.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="controller\api\evisacountryController.js" />
     <Compile Include="controller\api\holidayPackageController.js">
       <SubType>Code</SubType>
     </Compile>
@@ -246,6 +247,7 @@
     <Compile Include="model\accomodationInfoModel.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="model\eVisacountryModel.js" />
     <Compile Include="model\holidayPackageModel.js">
       <SubType>Code</SubType>
     </Compile>
