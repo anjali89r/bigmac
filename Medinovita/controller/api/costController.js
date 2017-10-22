@@ -24,6 +24,7 @@ var transportModel = mongoose.model('local_transport_details');
   function header to understand assumptions
 6.Get cost of Visa - yet to be developed
 7.Cost of flight ticket to India
+8.20% of the overall cost is the other expense cost
 
 **************************************************************************************************
                             Data Requirement
@@ -77,6 +78,7 @@ module.exports.getTreatmentRoughEstimate = function (req, res) {
             logger.info("Local transport cost - " + retLocalTransportCost)
             //Calculate totla trip expenses
             var tripExpense = retProcedureCost + retHolidayCost + retAccomodationCost + retLocalTransportCost;
+            tripExpense = tripExpense + (tripExpense*20)/100
             logger.info("Overall trip cost - " + tripExpense)
             //Convert to json
             var totalTripExpense = JSON.parse('{ "mediTourEstimate": ' + tripExpense + '}');
@@ -251,7 +253,8 @@ var getHolidayPackageCost = function (req, res) {
     var holidayPackage = req.query.holidaypackage;
     var numPassengers = parseInt(req.query.bystandercount);
     if (holidayPackage == null) {
-        return (JSON.parse(JSON.stringify({ "totalPackageCost": "NA" })))
+        logger.info("No holiday package has been selected")
+        return (JSON.parse(JSON.stringify({ "totalPackageCost": 0 })))
     }
 
     var holidayCostPromise = new Promise(function (resolve, reject) {
@@ -270,10 +273,10 @@ var getHolidayPackageCost = function (req, res) {
 
             if (err) {
                 logger.error("Error while reading holiday packages from from DB");  
-                reject(JSON.parse(JSON.stringify({ "totalPackageCost": 0 })));
+                resolve(JSON.parse(JSON.stringify({ "totalPackageCost": 0 })));
             } else if (!result.length) {
                 logger.info("There are no active holiday packages present in database");
-                reject(JSON.parse(JSON.stringify({ "totalPackageCost":0 })));
+                resolve(JSON.parse(JSON.stringify({ "totalPackageCost":0 })));
             }
             else {
                 resolve(JSON.parse(JSON.stringify(result)))
@@ -371,21 +374,27 @@ var getHospitalStayDuration = function (req, res, callback) {
 
     treatmentDescModel.aggregate([
         { "$match": {
-            "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.procedureName": req.query.procedure }, { "treatmentList.activeFlag": "Y" }] }},
+            "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.procedureName": treatmentName }]
+            // "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.procedureName": treatmentName }, { "treatmentList.activeFlag": "Y" }]
+        }
+        }, { "$unwind": "$treatmentList" }, { $match: { "treatmentList.activeFlag": 'Y' } },
 
         { "$project": { "_id": 0, "treatmentList.minHospitalization": 1} }
 
     ], function (err, result) {
 
+        console.log(JSON.stringify(result))
+
         if (err) {
             logger.error("Error while reading treatment duration from DB");
-            callback(1)
+            callback(5)//Assuming minimum stya of 5 days in india
         } else if (!result.length) {
-            logger.error("There is no treatment description available for the treatment in treatment description model");
-            callback(1);
+            logger.error("There is no treatment description available for the treatment " + treatmentName +  " in treatment description model");
+            callback(5);//Assuming minimum stya of 5 days in india
         }
-        else {                              
-            callback(result[0].minHospitalization);
+        else {  
+            callback(result[0].treatmentList.minHospitalization);
+            logger.info("Minimum stay in India for treatment " + treatmentName + " is " + result[0].treatmentList.minHospitalization )
         }
     })
 
@@ -403,7 +412,8 @@ var getLocalTransportCost = function (req, res) {
         1.Patient will opt for sedan
         2.Patient will be staying within 15 km radius of hospital
         3.Patient/Dependent use transportation facility twice a day
-        4.20% of the total cost will be added as buffer for other travel expense
+        4.Taxi operator charge for onward & return journey in a single trip
+        5.20% of the total cost will be added as buffer for other travel expense
     */
 
     var vehicleType = req.query.vehicletype
@@ -430,12 +440,12 @@ var getLocalTransportCost = function (req, res) {
                         "_id": 0,
                         "dailyTransportationCost": {
                             $sum: [                                    
-                                { $multiply: [{ "$avg": "$vehicle.chargePerKiloMeter" }, (distanceToHospital * 2) ] },                                                                       
+                                { $multiply: [{ "$avg": "$vehicle.chargePerKiloMeter" }, (distanceToHospital * 2*2) ] },                                                                       
                             ]
                         },
                         "totalTransportationCost": {
                             $sum: [
-                                { $multiply: [{ "$avg": "$vehicle.chargePerKiloMeter" }, (distanceToHospital * 2) * duration] },
+                                { $multiply: [{ "$avg": "$vehicle.chargePerKiloMeter" }, (distanceToHospital * 2*2) * duration] },
                             ]
                         }
                     }
