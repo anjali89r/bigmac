@@ -45,7 +45,7 @@ module.exports.addtreatmentDescription = function (req, res) {
                         var appIds = 0
                         getId("false", "true", function (id) {
                             appIds = id;
-                            resolve("true|false" + appIds);
+                            resolve("true|false|" + appIds);
                         })                               
                     } else {
                         var appIds=0
@@ -64,7 +64,7 @@ module.exports.addtreatmentDescription = function (req, res) {
         var departmentId = parseInt(flag.split(/\|/)[2])
         var procedureId = parseInt(flag.split(/\|/)[3])
         //If department and treatments are not in db
-       if (departmentFound == 'false' && treatmentFound == 'false'){
+        if (departmentFound == 'false' && treatmentFound == 'false') {
                 treatmentSchema.department = req.body["department"],
                 treatmentSchema.departmentId = departmentId,
                 treatmentSchema.departmentDescription= req.body["departmentDescription"],
@@ -219,7 +219,7 @@ module.exports.isTreatmentExists = function (procedureName, callback) {
             callback(dict);
         } else if (doc!= null) {
             logger.info("Procedure " + procedureName + " already exists in treatments offered collection");
-            dict["procedureId"] = doc.treatmentList[0].procedureId;            
+            dict["procedureId"] = doc.treatmentList[0].procedureId; 
             dict["procedureparentDepartmentid"] = doc.departmentId;
             callback(dict);
         } else {

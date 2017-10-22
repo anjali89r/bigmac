@@ -8,21 +8,21 @@ const collection = 'hospital_doctor_details';
 
 var hospitalDoctorSchema = new Schema({
 
-    hospitalName: { type: String, required: true, trim: true },
-    hospitalID: { type: Number, required: true, unique: true, dropDups: true }, 
-    serviceActiveFlag: { type: String, required: true, enum: ['Y', 'N'] },//new
+    hospitalName: { type: String, required: false, trim: true },
+    hospitalID: { type: Number, required: false, unique: true, dropDups: true }, 
+    serviceActiveFlag: { type: String, required: false, enum: ['Y', 'N'], default: 'Y'  },//new
 
     hospitalContact: {
-        website: { type: String, required: true, trim: true },
-        contactPersonname: { type: String, required: true, trim: true },
-        emailId: { type: String, required: true, trim: true },//new
-        primaryPhoneNumber: { type: Number, required: true }, //new
+        website: { type: String, required: false, trim: true },
+        contactPersonname: { type: String, required: false, trim: true },
+        emailId: { type: String, required: false, trim: true },//new
+        primaryPhoneNumber: { type: Number, required: false }, //new
         secondaryPhoneNumber: { type: String, required: false }, //new
-        addressLine1: { type: String, required: true, trim: true },
+        addressLine1: { type: String, required: false, trim: true },
         addressLine2: { type: String, required: false, trim: true },
-        City: { type: String, required: true, trim: true },
-        PostalCode: { type: Number, required: true, trim: true },
-        country: { type: String, required: true, trim: true },
+        City: { type: String, required: false, trim: true },
+        PostalCode: { type: Number, required: false, trim: true },
+        country: { type: String, required: false, trim: true },
         Landmark: { type: String, required: false, trim: true },
     },
 
@@ -37,11 +37,13 @@ var hospitalDoctorSchema = new Schema({
                     type: Number, required: false, 
                     min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
                     max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
+                    default: 4
         }],
         medinovitaRating: {
                             type: Number, required: true,
                             min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
-                            max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],                            
+                            max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'], 
+                            default: 4
             },
     },
     
@@ -75,14 +77,17 @@ var hospitalDoctorSchema = new Schema({
                     medinovitadoctorRating: {
                         type: Number, required: true,
                         min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
-                        max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).']             
+                        max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
+                        default: 4
+                        
                     },
                     DoctorUserRating:[ {  
                                     userRating:{type: Number, required: true, //To get default rating for cost api
                                         min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
-                                        max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).']                                       
-                                    },
-                                    userId: { type: String, required: false, trim: true},
+                                        max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
+                                        default: 4
+                                    }, 
+                                    userId: { type: String, required: false, trim: true, default: 'medinovita@gmail.com'},
                     }],
                 }],
     }],

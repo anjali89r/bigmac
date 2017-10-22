@@ -23,7 +23,8 @@ module.exports.createHospitalRecord = function (req, res) {
 
         treatmentController.verifyProcedureExistence(req.body["procedureName"], function (flag) {
             if (flag == 'false') {
-                return reject(res.status(409).json({ "Message": "Please add procedure first to treatments description table using /api/v1/post/treatmentdescription/:apiTokenName" }));
+                return reject(res.status(409).json({
+                    "Message": "Please add procedure " + req.body["procedureName"] + " first to treatments description table using /api/v1/post/treatmentdescription/:apiTokenName" }));
             }
         })
 
@@ -216,7 +217,8 @@ module.exports.addProcedureDetails = function (req, res) {
 
     treatmentController.verifyProcedureExistence(req.body["procedureName"], function (flag) {
         if (flag == 'false') {
-            return res.status(409).json({ "Message": "Please add procedure first to treatments description table using /api/v1/post/treatmentdescription/:apiTokenName" });
+            return res.status(409).json({
+                "Message": "Please add procedure " + req.body["procedureName"] + " first to treatments description table using /api/v1/post/treatmentdescription/:apiTokenName" });
         }
     })
 
@@ -341,16 +343,6 @@ module.exports.addProcedureDetails = function (req, res) {
             var docFound = searchResult.split('|')[1];
             docFound = docFound == "true";//convert to boolean
 
-            /*Update treatments offered collection */
-            var paramDict = [];
-            paramDict['procedureId'] = procedureID
-            paramDict['procedureMedicalName'] = req.body["procedureName"];
-            paramDict['procedureShortName'] = req.body["procedureShortName"];
-            paramDict['procedureaboutFilename'] = "";//this value wont come in hospital model
-            paramDict['procedureparentDepartment'] = req.body["departmentName"];
-            paramDict['procedureparentDepartmentid'] = departmentID;
-            treatmentController.createTreatmentRecord(paramDict, function (doc) { })
-   
              /* Update hospital and doctor details */
             if (procedureFound === false && docFound == false && doctorName != null) {
 
@@ -377,7 +369,7 @@ module.exports.addProcedureDetails = function (req, res) {
                                         "specialityName": req.body["specialityName"]
                                     },
                                     //"DoctorUserRating": []
-                                    "DoctorUserRating": { //At least one default rating is required for cost api
+                                    "DoctorUserRating": { //At least one default rating is required for cost api.new
                                         "userRating": parseFloat(req.body["doctorUserRating"]),
                                         "userId": req.body["userEmailId"],
                                     },
@@ -398,6 +390,7 @@ module.exports.addProcedureDetails = function (req, res) {
 
             /* Update only doctor incase procedure is already added */
             } else if (procedureFound == true && docFound == false && doctorName != null) {
+                
                 hospitalModel.findOneAndUpdate({
                     "hospitalName": hospitalName, "hospitalContact.City": hospitalCity, "hospitalContact.country": hospitalCountry, "Treatment": {
                         $elemMatch: { "name": procedureName }
@@ -433,6 +426,7 @@ module.exports.addProcedureDetails = function (req, res) {
 
             /* Update only procedure information */
             } else if (procedureFound == false && doctorName == null) {
+               
                 hospitalModel.findOneAndUpdate({ "hospitalName": hospitalName, "hospitalContact.City": hospitalCity, "hospitalContact.country": hospitalCountry },
                     {
                         "$push": {
