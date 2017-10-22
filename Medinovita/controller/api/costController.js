@@ -71,13 +71,14 @@ module.exports.getTreatmentRoughEstimate = function (req, res) {
             var retProcedureCost = procedureCost[0].avarageTreatmentCost;
             logger.info("Procedure cost - " + retProcedureCost )
             var retHolidayCost = holidayCost[0].totalPackageCost;
-            logger.info("Holiday cost - " + retHolidayCost)
+            logger.info("Holiday cost - " + holidayCost[0].totalPackageCost)
             var retAccomodationCost = accomodationCost[0].totalAccomodationCost;
             logger.info("Accomodation cost - " + retAccomodationCost)
             var retLocalTransportCost = localTransportCost[0].totalTransportationCost
             logger.info("Local transport cost - " + retLocalTransportCost)
             //Calculate totla trip expenses
             var tripExpense = retProcedureCost + retHolidayCost + retAccomodationCost + retLocalTransportCost;
+            //add 20% buffer
             tripExpense = tripExpense + (tripExpense*20)/100
             logger.info("Overall trip cost - " + tripExpense)
             //Convert to json
@@ -94,6 +95,14 @@ module.exports.getTreatmentRoughEstimate = function (req, res) {
 var getHospitalOfferingTreatment = function (req, res) {
 
     var procedureName = req.query.procedurename;
+
+    if (procedureName == null) {
+        logger.error("Procedure name is blank");
+        return (JSON.stringify({
+            "Message": "Please select a valid procedure name"
+        }));
+    }
+
 
     var hospitallistPromise = new Promise(function (resolve, reject) {
 
@@ -209,6 +218,13 @@ var getAvarageCost = function (req, res) {
 
     var procedureName = req.query.procedurename;
 
+    if (procedureName == null) {
+        logger.error("Procedure name is blank");
+        return(JSON.stringify({
+            "avarageTreatmentCost": "Please select a valid procedure name"
+        }));
+    }
+
     var procedureCostPromise = new Promise(function (resolve, reject) {
 
         hospitalModel.aggregate([
@@ -228,11 +244,12 @@ var getAvarageCost = function (req, res) {
         ], function (err, result) {
 
             if (err) {
-                logger.error("Error while reading treatment cost details from from DB");
-                reject(JSON.stringify({ "Message": err.message.trim() }));
+                logger.error("Error while reading treatment " + procedureName+ " cost details from from DB");
+                reject(JSON.stringify({ "avarageTreatmentCost": err.message.trim() }));
             } else if (!result.length) {
-                logger.info("There are no active treatment records present in database");
-                reject(JSON.stringify({ "Message": "There are no active treatment records present in database" }));
+                logger.error("There are no active treatment records present in database for " + procedureName);
+                reject(JSON.stringify({
+                    "avarageTreatmentCost": "There are no active treatment records for " + procedureName + " present in database" }));
             }
             else {               
                 resolve(JSON.parse(JSON.stringify(result)))
@@ -254,7 +271,7 @@ var getHolidayPackageCost = function (req, res) {
     var numPassengers = parseInt(req.query.bystandercount);
     if (holidayPackage == null) {
         logger.info("No holiday package has been selected")
-        return (JSON.parse(JSON.stringify({ "totalPackageCost": 0 })))
+        return (JSON.parse(JSON.stringify([{ "totalPackageCost": 0 }])))
     }
 
     var holidayCostPromise = new Promise(function (resolve, reject) {
@@ -273,13 +290,14 @@ var getHolidayPackageCost = function (req, res) {
 
             if (err) {
                 logger.error("Error while reading holiday packages from from DB");  
-                resolve(JSON.parse(JSON.stringify({ "totalPackageCost": 0 })));
+                resolve(JSON.parse(JSON.stringify([{ "totalPackageCost": 0 }])));
             } else if (!result.length) {
-                logger.info("There are no active holiday packages present in database");
-                resolve(JSON.parse(JSON.stringify({ "totalPackageCost":0 })));
+                logger.info("There are no active holiday packages with name " + holidayPackage + " present in database");
+                resolve(JSON.parse(JSON.stringify([{  "totalPackageCost":0 }])));
             }
             else {
-                resolve(JSON.parse(JSON.stringify(result)))
+                logger.info(JSON.stringify(result))
+                resolve(JSON.parse(JSON.stringify(result)))                
             }
         })
 
@@ -303,7 +321,7 @@ var getAccomodationCost = function (req, res) {
     var numSingleBedRoomsTobeBooked = 0
 
     if (hotelType == null || numPassengers==null) {
-        return (JSON.parse(JSON.stringify({ "totalAccomodationCost": 0 })))
+        return (JSON.parse(JSON.stringify([{ "totalAccomodationCost": 0 }])))
     }
 
     if (numPassengers <= 2) {
@@ -353,10 +371,10 @@ var getAccomodationCost = function (req, res) {
 
                 if (err) {
                     logger.error("Error while reading accomodation cost from from DB");
-                    reject(JSON.parse(JSON.stringify({ "totalAccomodationCost": 0 })));
+                    reject(JSON.parse(JSON.stringify([{ "totalAccomodationCost": 0 }])));
                 } else if (!result.length) {
                     logger.info("There are no active hotel details present in database");
-                    reject(JSON.parse(JSON.stringify({ "totalAccomodationCost": 0 })));
+                    reject(JSON.parse(JSON.stringify([{ "totalAccomodationCost": 0 }])));
                 }
                 else {
                     resolve(JSON.parse(JSON.stringify(result)))
@@ -383,18 +401,15 @@ var getHospitalStayDuration = function (req, res, callback) {
 
     ], function (err, result) {
 
-        console.log(JSON.stringify(result))
-
         if (err) {
-            logger.error("Error while reading treatment duration from DB");
+            logger.error("Error while reading treatment " +treatmentName  + " duration from DB");
             callback(5)//Assuming minimum stya of 5 days in india
         } else if (!result.length) {
             logger.error("There is no treatment description available for the treatment " + treatmentName +  " in treatment description model");
             callback(5);//Assuming minimum stya of 5 days in india
         }
         else {  
-            callback(result[0].treatmentList.minHospitalization);
-            logger.info("Minimum stay in India for treatment " + treatmentName + " is " + result[0].treatmentList.minHospitalization )
+            callback(result[0].treatmentList.minHospitalization);            
         }
     })
 
@@ -454,10 +469,10 @@ var getLocalTransportCost = function (req, res) {
 
                 if (err) {
                     logger.error("Error while reading transportation cost from from DB");
-                    reject(JSON.parse(JSON.stringify({ "totalTransportationCost": 0 })));
+                    reject(JSON.parse(JSON.stringify([{ "totalTransportationCost": 0 }])));
                 } else if (!result.length) {
                     logger.info("There are no active transportation details present in database");
-                    reject(JSON.parse(JSON.stringify({ "totalTransportationCost": 0 })));
+                    reject(JSON.parse(JSON.stringify([{ "totalTransportationCost": 0 }])));
                 }
                 else {
                     resolve(JSON.parse(JSON.stringify(result)))
