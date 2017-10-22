@@ -21,8 +21,10 @@ var fileSilent = true;
 if (env == 'PROD') {
     consoleSilent = true;
     fileSilent = false;
+} else {
+    consoleSilent = false;
+    fileSilent = false;
 }
-
 
 var logger = new (winston.Logger)({
 
@@ -34,8 +36,8 @@ var logger = new (winston.Logger)({
             silent: consoleSilent
             
         }),
-        new winston.transports.File({
-            level: env === 'PROD' ? fileloglevel : 'debug',
+        new winston.transports.File({ 
+            level: fileloglevel, // Only write logs of info level or higher
             filename: logDir + '/logs.log',
             maxsize: 1024 * 1024 * 10,// 10MB
             silent: fileSilent

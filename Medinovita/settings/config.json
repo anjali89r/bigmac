@@ -27,8 +27,8 @@
   },
   "LOG": {
     "LOGDIR": ".//..//..//log",
-    "CONSOLE_LOG_LEVEL": "info",
-    "FILE_LOG_LEVEL": "error"
+    "CONSOLE_LOG_LEVEL": "silly",
+    "FILE_LOG_LEVEL": "silly"
   },
   "JWT": {
     "API_MEDITRIP_PAYLOAD": "TokenToAuthenticateMedinovitaUser",
