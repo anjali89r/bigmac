@@ -153,7 +153,7 @@ module.exports.getTreatmentSection = function (req, res) {
     treatmentDescModel.aggregate([
         {
             "$match": {
-                "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.procedureName": req.query.procedure }, { "treatmentList.activeFlag": "Y" }] }},         
+                "$and": [{ "serviceActiveFlag": "Y" }, { "department": req.params.department }, { "treatmentList.activeFlag": "Y" }] }},         
         {
             "$project": {
                 "_id": 0, "department": 1, "departmentDescription": 1, "departmentImagepath": 1, "treatmentList.procedureName": 1, "treatmentList.displayName": 1, "treatmentList.treatmentDescription": 1, "treatmentList.shortDescription": 1,
