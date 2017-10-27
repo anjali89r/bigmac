@@ -14,13 +14,13 @@ var logger = require('./controller/utilities/logger.js'); //initialize logger cl
 
 //Open db connectin
 app.use((req, res, next) => {
-    mogoDBUtils
-        .getMogoDbCon()
-        .then(conn => {
-            req.conn = conn;
-            next();
-        })
-        .catch(next);
+     mogoDBUtils
+    .getMogoDbCon()
+    .then(conn => {
+        req.conn = conn;
+        next();
+    })
+    .catch(next);
 });
 
 /*   Route for API end point */
