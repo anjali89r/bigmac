@@ -1,0 +1,9 @@
+# This is needed for code deployment in Git to AWS please dont delete.
+version: 0.0
+os: windows
+files:
+  - source: ./
+    destination: C:\Medinovita\views\webcontent
+hooks:
+  BeforeInstall:
+    - location: \beforedeploy.bat

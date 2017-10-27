@@ -10,7 +10,6 @@
   background-color: #0069b0 !important;
   border: 1px solid rgba(255, 255, 255, 0) !important;
   padding: 6.5px !important;
- 
   font-size: 1rem !important;
   line-height: 2rem !important;
   display: inline-block;
@@ -70,7 +69,7 @@ body {
     width: 100% !important;
   }
   #google_translate_element .goog-te-gadget-simple {
-    width: calc(100% - 32px) !important;
+    width: 95%!important;
     text-align: center;
   }
 }
