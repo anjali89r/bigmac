@@ -86,7 +86,8 @@ module.exports.addnewsSection = function (req, res) {
                 newsSectionSchema.postHeading = req.body["postHeading"],
                 newsSectionSchema.imgPath = req.body["imgPath"],
                 newsSectionSchema.postShortContent = req.body["postShortContent"],
-                newsSectionSchema.newsDisableflag = req.body["newsDisableflag"]
+                newsSectionSchema.newsDisableflag = req.body["newsDisableflag"],
+                newsSectionSchema.newDescription = req.body["newDescription"]
             newsSectionSchema.save(function (error, data) {
                 if (error) {
                     logger.error("Error saving new sections details data to schema : - " + error.message)
@@ -102,4 +103,42 @@ module.exports.addnewsSection = function (req, res) {
             return res.status(500).json({ "Message": err.message });
         })
 
+}
+
+
+
+module.exports.getnewsSectionbyid = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call get newsSection")
+        return;
+    }
+
+    var newsSectionSchema = new newsSectionModel();
+    console.log(req.params.newsId)
+
+    newsSectionModel.aggregate([{ "$match": { "newsId": parseInt(req.params.newsId) } },
+    {
+        "$project": {
+            "_id": 0,
+           
+            "postHeading":1,
+            
+            "newDescription": 1
+           
+        }
+    }
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while reading list of latest news from DB");
+            return res.status(500).json({ "Message": err.message.trim() });
+        } else if (result == null) {
+            logger.info("There are no latest news present in database");
+            return res.status(200).json({ "Message": err.message.trim() });
+        }
+        else {
+            return res.json(result);
+        }
+    })
 }

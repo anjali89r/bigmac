@@ -234,6 +234,7 @@
     <Compile Include="controller\api\security.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="controller\api\contactUsController.js" />
     <Compile Include="controller\api\userEnquiryController.js" />
     <Compile Include="controller\utilities\confutils.js" />
     <Compile Include="controller\utilities\crypto.js">
@@ -277,6 +278,7 @@
     </Compile>
     <Compile Include="model\userDetailsmodel.js" />
     <Compile Include="model\siteTrafficModel.js" />
+    <Compile Include="model\contactUsModel.js" />
     <Compile Include="model\userEnquiryModel.js" />
     <Compile Include="routes\route.js" />
     <Compile Include="views\webcontent\assets\js\extensions\revolution.extension.actions.min.js" />

@@ -14,6 +14,7 @@ var newsection = new Schema({
     postedBy: { type: String, required: true, trim: true, default: 'Medinovita' },
     imgPath: { type: String, required: true, trim: true },
     postShortContent: { type: String, required: true, trim: true },
+    newDescription: { type: String, required: true, trim: true },
     newsDisableflag: { type: String, required: true, trim: true, enum: ['Y', 'N'], default: 'N' }
     
     
