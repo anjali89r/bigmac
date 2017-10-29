@@ -17,6 +17,7 @@ var transportInfo = require('../controller/api/localTransportController.js');
 var hotelInfo = require('../controller/api/accomodationInfoController.js');
 var treatmentEstimate = require('../controller/api/costController.js');
 var evisacountryInfo = require('../controller/api/evisacountryController.js');
+var contactusInfo = require('../controller/api/contactUsController.js');
 
 module.exports = function (app) {
 
@@ -110,6 +111,9 @@ module.exports = function (app) {
     /*  APi to get latest news section  */
     app.get('/api/v1/get/newssection/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, newsSection.getnewsSection);
 
+    /*  APi to get latest news description by newsid  */
+    app.get('/api/v1/get/newssection/:newsId/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, newsSection.getnewsSectionbyid);
+
     /************************API to operate on Treatment Description****************************************************************************************************/
     /*  APi to post treatmentdescription   */    
     app.post('/api/v1/post/treatmentdescription/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.addtreatmentDescription);
@@ -130,6 +134,9 @@ module.exports = function (app) {
     /* API to get web site traffic to DB */
     app.post('/api/v1/post/sitetraffic/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, siteTrafficInfo.postsiteTraffic);
     app.get('/api/v1/get/evisacountries/:countryName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, evisacountryInfo.getevisacountry);
+
+    /* API to get web site traffic to DB */
+    app.post('/api/v1/post/contactus/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, contactusInfo.submitContact);
     
     //************************API to operate on trip schema******************************************
     app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails);
