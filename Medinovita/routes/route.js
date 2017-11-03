@@ -113,8 +113,9 @@ module.exports = function (app) {
     /************************API to operate on Treatment Description****************************************************************************************************/
     /*  APi to post treatmentdescription   */    
     app.post('/api/v1/post/treatmentdescription/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.addtreatmentDescription);
-    /*  APi to get treatment description  */
-    app.get('/api/v1/get/treatmentdescription/:department/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getTreatmentSection);
+    /*  APi to get treatment description with cost  */
+    app.get('/api/v1/get/treatmentdescription/cost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getTreatmentSectionWithCost);
+    app.get('/api/v1/get/treatmentdescription/nocost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getTreatmentSectionWithoutCost);
     /*******************************************************************************************************************************************************************/
 
     /*  APi to post our services section  */
