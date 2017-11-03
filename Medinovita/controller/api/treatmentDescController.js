@@ -1,6 +1,7 @@
 ﻿var mongoose = require('mongoose');
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
+var cost = require('./costController.js');
 require('../../model/treatmentsDescModel.js');
 var counterSchema = require('../../model/identityCounterModel.js');
 var treatmentDescModel = mongoose.model('treatmentOffered_description');
@@ -141,7 +142,7 @@ module.exports.addtreatmentDescription = function (req, res) {
     });
 }
 /* API to get treatment details */
-module.exports.getTreatmentSection = function (req, res) {
+module.exports.getTreatmentSectionold = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned
         logger.warn("Response already sent.Hence skipping the function call get newsSection")
@@ -242,4 +243,134 @@ module.exports.verifyProcedureExistence = function (procedureName, callback) {
             callback("false");
         }
     });
+}
+
+/* API to get treatment details without the avarage cost for each treatment */
+module.exports.getTreatmentSectionWithoutCost = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call get newsSection")
+        return;
+    }
+
+    var department = req.query.department;
+
+    var treatmentDescSchema = new treatmentDescModel();
+
+    treatmentDescModel.aggregate([
+        {
+            "$match": {
+                "$and": [{ "serviceActiveFlag": "Y" }, { "department": department }, { "treatmentList.activeFlag": "Y" }]
+            }
+        },
+        {
+            "$project": {
+                "_id": 0, "department": 1, "departmentDescription": 1, "departmentImagepath": 1, "treatmentList.procedureName": 1, "treatmentList.displayName": 1, "treatmentList.treatmentDescription": 1, "treatmentList.shortDescription": 1,
+                "treatmentList.healingTimeInDays": 1, "treatmentList.minHospitalization": 1, "treatmentList.maxHospitalization": 1, "treatmentList.surgicalTime": 1, "treatmentList.postFollowupDuration": 1, "treatmentList.postFollowupFrequency": 1,
+                "treatmentList.procedureImagepath": 1
+            }
+        }
+
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while reading treatment description from DB");
+            return res.status(500).json({ "Message": err.message.trim() });
+        } else if (result == null) {
+            logger.info("There is no treatment description available for the treatment");
+            return res.status(200).json({ "Message": err.message.trim() });
+        }
+        else {
+            return res.json(result);
+        }
+    })
+}
+
+/* API to get treatment details with avarage cost for each treatment */
+module.exports.getTreatmentSectionWithCost = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call get newsSection")
+        return;
+    }
+
+    var treatmentDescSchema = new treatmentDescModel();
+
+    var department = req.query.department;
+
+    new Promise(function (resolve, reject) {
+
+        treatmentDescModel.aggregate([
+            {
+                "$match": {
+                    "$and": [{ "serviceActiveFlag": "Y" }, { "department": department }, { "treatmentList.activeFlag": "Y" }]
+                }
+            }, {
+                "$project": {
+                    "_id": 0, "department": 1, "departmentDescription": 1, "departmentImagepath": 1, "treatmentList.procedureName": 1, "treatmentList.displayName": 1, "treatmentList.treatmentDescription": 1, "treatmentList.shortDescription": 1,
+                    "treatmentList.healingTimeInDays": 1, "treatmentList.minHospitalization": 1, "treatmentList.maxHospitalization": 1, "treatmentList.surgicalTime": 1, "treatmentList.postFollowupDuration": 1, "treatmentList.postFollowupFrequency": 1,
+                    "treatmentList.procedureImagepath": 1, "tretmentCostColl": 1
+                }
+            }
+
+        ], function (err, result) {
+
+            if (err) {
+                logger.error("Error while reading treatment description from DB");
+                reject(null);
+            } else if (result == null) {
+                logger.info("There is no treatment description available for the treatment");
+                resolve(result)
+            }
+            else {
+                resolve(result)
+            }
+        })
+
+    }).then(function (result) {
+
+        var promises = [];
+
+        for (var i = 0; i < result.length; i++) {
+            var obj = result[i];
+            var procedureList = obj.treatmentList
+            for (var j = 0; j < procedureList.length; j++) {
+                var procedure = procedureList[j];
+                var procedureDisp = procedure.procedureName                                       
+                /*promises.push(cost.getAvarageCostAsInt(procedureDisp).then(function (data) {
+                    console.log(procedureName + ": " + JSON.stringify(data))
+                    //console.log(procedureDisp + ": " + data[0].avarageTreatmentCost)
+                }))*/
+                promises.push(cost.getAvarageCostAsInt(procedureDisp))
+            }
+        }
+
+        Promise.all(promises).then(function (doc) {  
+            console.log(doc)
+            for (var i = 0; i < result.length; i++) {
+                var obj = result[i];
+                var procedureList = obj.treatmentList
+                for (var j = 0; j < procedureList.length; j++) {
+                    var procedure = procedureList[j];
+                    var procedureDisp = procedure.procedureName                    
+                    //loop through array and get  the procedure cost
+                    for (var k = 0; k < doc.length; k++) {
+                        var json = doc[k]                        
+                        if (json[0]._id.procedure.toString().trim() === procedureDisp) {                           
+                            //add new key
+                            procedure["procedureCost"] = json[0].avarageTreatmentCost
+                            k = doc.length + 1
+                        }
+                    }
+                }
+            }
+        }).then(function () {    
+            return res.json(result);
+        }).catch((e) => { 
+           return res.json({ "Message": e.message });
+        });        
+        
+    }).catch(function (err) {
+        return res.json({ "Message": err.message });
+    })
 }
