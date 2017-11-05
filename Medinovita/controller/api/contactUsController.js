@@ -19,31 +19,29 @@ module.exports.submitContact = function (req, res) {
 
         contactusModel.findOne({ "emailID": req.body["emailID"]}, function (err, doc) {
             if (doc == null) { /* If it's the first enquiry from user*/
-                                 contactusSchema.emailID = req.body["emailID"],
-                                 contactusSchema.userFullName = req.body["userFullName"],
-                                 contactusSchema.enquiry =
-                                     {
-                                        subject: req.body["subject"],
-                                        message: req.body["message"],
-                                        updated_at: new Date() 
-                                     }   
-                    
-                                resolve()
+                contactusSchema.emailID = req.body["emailID"],
+                    contactusSchema.userFullName = req.body["userFullName"],
+                    contactusSchema.enquiry =
+                    [{
+                        subject: req.body["subject"],
+                        message: req.body["message"]
+                    }]
+                    resolve(true)
 
             } else {  /* Update if atlest one query is present for the same user*/
-
                 contactusModel.findOneAndUpdate({ "emailID": req.body["emailID"]},
                     {
+                        "$set": {
+                            "userFullName": req.body["userFullName"], "emailID": req.body["emailID"]},                    
                         "$push": {
                             "enquiry": {
                                 "subject": req.body["subject"],
-                                "message": req.body["message"],
-                                "updated_at": new Date()
-                               
+                                "message": req.body["message"],                                                               
                             }
                         }
                     },
-                    { new: true }, function (err, doc) {
+                    { safe: true, upsert: true, new: true }, function (err, doc) {
+                        console.log(JSON.stringify(doc))
                         if (err) {
                             logger.error("Error while updating record : - " + err.message);
                             return reject(res.status(400).json({
@@ -54,22 +52,27 @@ module.exports.submitContact = function (req, res) {
                             return reject(res.status(400).json({
                                 "Message": "Error while saving enquiry for user " + req.body['emailID'] + " due to " + err.message
                             }));
+                        } else {
+                            resolve(false);                           
                         }
-                        resolve();
                     });
             }
         })
-    })
-    .then(function () {
-        contactusSchema.save(function (error, data) {
-            if (error) {
-                logger.error("Error while inserting record in user enquiry collection: - " + error.message)
-                return res.status(500).json({ "Message": error.message.trim() });
-            }
-            else {
-                return res.json({ "Message": "Thank you for contacting,we will get back to you soon" });
-            }
-        })
+    }).then(function (flag) {
+
+        if (flag == true) {//Skip save when same user send request for second time or more due to defect in mongoose
+            contactusSchema.save(function (error, data) {
+                if (error) {
+                    logger.error("Error while inserting record in user enquiry collection: - " + error.message)
+                    return res.status(500).json({ "Message": error.message.trim() });
+                }
+                else {
+                    return res.json({ "Message": "Thank you for contacting,we will get back to you soon" });
+                }
+            })
+        } else {        
+            return res.json({ "Message": "Thank you for contacting,we will get back to you soon" });
+        }
     })
     .catch(function (err) {
         logger.error("Error while inserting record in : - " + err.message)
