@@ -30,7 +30,7 @@ module.exports.submitUserEnquiry = function (req, res) {
                         attachmentName: req.body["attachmentName"],
                         response: []
                     }
-                resolve()
+                resolve(true)
 
             } else {  /* Update if atlest one query is present for the same user*/
 
@@ -62,21 +62,23 @@ module.exports.submitUserEnquiry = function (req, res) {
                                 "Message": "Error while saving enquiry for user " + req.body['emailID'] + " due to " + err.message
                             }));
                         }
-                        resolve();
+                        resolve(false);
                     });
             }
         })
     })
-    .then(function () {
-        userEnquirySchema.save(function (error, data) {
-            if (error) {
-                logger.error("Error while inserting record in user enquiry collection: - " + error.message)
-                return res.status(500).json({ "Message": error.message.trim() });
-            }
-            else {
-                return res.json({ "Message": "Data got inserted successfully" });
-            }
-        })
+    .then(function (flag) {
+        if (flag == true) {//save only for insert and skip for update
+            userEnquirySchema.save(function (error, data) {
+                if (error) {
+                    logger.error("Error while inserting record in user enquiry collection: - " + error.message)
+                    return res.status(500).json({ "Message": error.message.trim() });
+                }
+                else {
+                    return res.json({ "Message": "Data got inserted successfully" });
+                }
+            })
+        }
     })
     .catch(function (err) {
         logger.error("Error while inserting record in : - " + err.message)
