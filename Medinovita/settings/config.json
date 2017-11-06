@@ -37,5 +37,10 @@
     "API_MEDITRIP_BAICAUTH_PASSWORD": "libin",
     "API_MEDITRIP_AUTO_EXPIRE_FLAG": "Y",
     "API_MEDITRIP_EXPIRE_IN_MINUTES": 15
+  },
+  "EMAIL": {
+    "SERVICE": "Gmail",
+    "EMAILID": "medinovita@gmail.com",
+    "PASSWORD": "Kochi@123"
   }
 }
