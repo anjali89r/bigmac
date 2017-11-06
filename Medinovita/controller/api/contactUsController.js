@@ -21,7 +21,7 @@ module.exports.submitContact = function (req, res) {
 
         var sendTO = req.body["emailID"]
         var subject = "Dear " + req.body["userFullName"] + " - Thank you for contacting Medinovita.We will get back to you soon"
-        var emailBody = "Hi " + req.body["userFullName"] + "," + "\r\n" + "\r\n" + "Greetings of the day.This is to acknowledge that We have received your enquiry.We have working on your enquiry and revert back within two working days." + "\r\n" + "\r\n"
+        var emailBody = "Hi " + req.body["userFullName"] + "," + "\r\n" + "\r\n" + "Greetings of the day.This is to acknowledge that we have received your enquiry.We are working on your enquiry and revert back within two working days." + "\r\n" + "\r\n"
             + "Thank you for showing interest in Medinovita." + "\r\n" + "\r\n" + "Message from User - " + req.body["message"] + "\r\n" + "\r\n" + "Thanks & Regards" + "\r\n" + "Medinovita customer care team"
 
         autoMail.sendEmail(sendTO, subject, emailBody,false, function (callback){})
