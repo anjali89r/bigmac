@@ -39,8 +39,8 @@
     "API_MEDITRIP_EXPIRE_IN_MINUTES": 15
   },
   "EMAIL": {
-    "SERVICE": "Gmail",
-    "EMAILID": "medinovita@gmail.com",
-    "PASSWORD": "Kochi@123"
+    "SERVICE": "",
+    "EMAILID": "",
+    "PASSWORD": ""
   }
 }
