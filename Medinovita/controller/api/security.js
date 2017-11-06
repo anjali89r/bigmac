@@ -17,7 +17,7 @@ module.exports.secureEncryptedText = function (req, res) {
     logger.debug("encrypted text ==>" + encrypted);
 
     return res.send(encrypted);
-    
+
 };
 
 module.exports.secureDecryptedText = function (req, res) {
@@ -71,11 +71,11 @@ module.exports.generateJWTToken = function (req, res) {
     var api = req.params.apiTokenName;
     var payload = { api: config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_PAYLOAD', false) }; //jwt.sign(payload, secretOrPrivateKey, [options, callback])
     var secretkey = config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_SECRETKEY', false);
-    if (secretkey == null || payload == null ) {
-        return (res.json({ "Message": "Invalid Token configuration for api key - " + api }));        
+    if (secretkey == null || payload == null) {
+        return (res.json({ "Message": "Invalid Token configuration for api key - " + api }));
     }
     var token = jwt.sign({ payload: payload.api }, secretkey);
-    res.send(res.json({ "Token": token }));    
+    res.send(res.json({ "Token": token }));
 }
 
 module.exports.verifyJWTToken = function (req, res, next) {//generic function to verify jwt web token
@@ -83,16 +83,16 @@ module.exports.verifyJWTToken = function (req, res, next) {//generic function to
     if (res.headersSent) {//check if header is already returned
         logger.warn("Response already sent.Hence skipping the function call verifyJWTToken")
         return;
-    } 
-    
+    }
+
     var bearerHeader = req.headers['x-access-token'];
     var api = req.params.apiTokenName;
     var token;
     req.authenticated = false;
     if (bearerHeader) {
         token = bearerHeader;
-        jwt.verify(token, config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_SECRETKEY', false),function (err, decoded) {
-            if (err) {            
+        jwt.verify(token, config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_SECRETKEY', false), function (err, decoded) {
+            if (err) {
                 req.authenticated = false;
                 req.decoded = null;
                 next();
@@ -123,14 +123,14 @@ module.exports.verifyBasicAuth = function (req, res, next) {//generic function t
 
         var apiexpuser = config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_BAICAUTH_USERNAME', false)
         var apiexpswd = config.getProjectSettings('JWT', 'API_' + api.toUpperCase() + '_BAICAUTH_PASSWORD', false)
-       
+
         var header = req.headers['authorization'] || '';        // get the header
         token = header.split(/\s+/).pop() || '';            // and the encoded auth token
         auth = new Buffer(token, 'base64').toString();    // convert from base64
         parts = auth.split(/:/);                          // split on colon
         username = parts[0],
-        password = parts[1];
-      
+            password = parts[1];
+
         if (username != apiexpuser || apiexpswd != password) {
             logger.error("Basic authetication failed as credentials do not match");
             logger.error("Actual user name - " + username);
@@ -142,9 +142,6 @@ module.exports.verifyBasicAuth = function (req, res, next) {//generic function t
         } else {
             next();
         }
-        
+
     }
 }
-
-
-

@@ -147,7 +147,7 @@ module.exports = function (app) {
     app.get('/api/v1/getsecureencryptedText/:txt', security.secureEncryptedText);//sample call http://localhost:1337/api/v1/getsecureencryptedText/libin
     app.get('/api/v1/getsecuredecryptedText/:txt', security.secureDecryptedText);//this is more secure as the encryption mechanism chnages on every server restart
     app.get('/api/v1/getnonsecureencryptedText/:txt', security.nonsecureEncryptedText);
-    app.get('/api/v1/getnonsecuredecryptedText/:txt', security.nonsecuredecryptedText);
+    app.get('/api/v1/getnonsecuredecryptedText/:txt', security.nonsecuredecryptedText);  
 
   };
 
