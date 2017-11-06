@@ -23,7 +23,6 @@
     "HMAC_ALGORITHM": "SHA256",
     "N_KEY": "97aa341e2$2fce919bbf7cdc5443e491",
     "N_HMAC_KEY": "hslsohddduucdefghijklmmlkkkrstuv"
-
   },
   "LOG": {
     "LOGDIR": ".//..//..//log",
