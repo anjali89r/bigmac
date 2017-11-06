@@ -14,10 +14,9 @@ var contactUsSchema = new Schema({
 
         userFullName: { type: String, required: false, unique: false, trim: true },
         enquiry: [{
-            subject: { type: String, required: true, unique: false, trim: true },
-            message: { type: String, required: true, unique: false, trim: true },
-
-            updated_at: { type: Date, required: true, default: Date.now }
+            subject: { type: String, required: false, unique: false, trim: true },
+            message: { type: String, required: false, unique: false, trim: true },
+            updated_at: { type: Date, required: false, default: Date.now }
         }]
 });
 

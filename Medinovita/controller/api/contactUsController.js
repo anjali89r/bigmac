@@ -2,6 +2,8 @@
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/contactUsModel.js');
+var autoMail=require('./emailController.js');
+
 
 var contactusModel = mongoose.model('contactus');
 
@@ -16,6 +18,13 @@ module.exports.submitContact = function (req, res) {
     var contactusSchema = new contactusModel();
 
     new Promise(function (resolve, reject) {
+
+        var sendTO = req.body["emailID"]
+        var subject = "Dear " + req.body["emailID"] + " - Thank you for contacting Medinovita.We will get back to you soon"
+        var emailBody = "Hi " + req.body["userFullName"] + "," + "\r\n" + "\r\n" + "Greetings of the day.This is to acknoledge that We have received your enquiry.We have working on your enquiry and revert back within two working days." + "\r\n" + "\r\n"
+            + "Thank you for showing interest in Medinovita." + "\r\n" + "\r\n" + "Message from User - " + req.body["message"] + "\r\n" + "\r\n" + "Thanks & Regards" + "\r\n" + "Medinovita customer care team"
+
+        autoMail.sendEmail(sendTO, subject, emailBody,false, function (callback){})
 
         contactusModel.findOne({ "emailID": req.body["emailID"]}, function (err, doc) {
             if (doc == null) { /* If it's the first enquiry from user*/
@@ -41,7 +50,6 @@ module.exports.submitContact = function (req, res) {
                         }
                     },
                     { safe: true, upsert: true, new: true }, function (err, doc) {
-                        console.log(JSON.stringify(doc))
                         if (err) {
                             logger.error("Error while updating record : - " + err.message);
                             return reject(res.status(400).json({
