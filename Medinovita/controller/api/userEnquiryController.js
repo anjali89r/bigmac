@@ -2,6 +2,7 @@
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/userEnquirymodel.js');
+var autoMail = require('./emailController.js');
 var userEnquiryModel = mongoose.model('user_enquiry');
 
 /************************ API code to submit new enquiry to Medinovita ****************************/
@@ -15,6 +16,13 @@ module.exports.submitUserEnquiry = function (req, res) {
     var userEnquirySchema = new userEnquiryModel();
 
     new Promise(function (resolve, reject) {
+
+        var sendTO = req.body["emailID"]
+        var subject = "Dear " + req.body["userFullName"] + " - Thank you for your enquiry.We will get back to you soon"
+        var emailBody = "Hi " + req.body["userFullName"] + "," + "\r\n" + "\r\n" + "Greetings of the day.This is to acknoledge that We have received your enquiry.We have working on your enquiry and revert back within two working days." + "\r\n" + "\r\n"
+            + "Thank you for showing interest in Medinovita." + "\r\n" + "\r\n" + "Message from User - " + req.body["message"] + "\r\n" + "\r\n" + "Thanks & Regards" + "\r\n" + "Medinovita customer care team"
+
+        autoMail.sendEmail(sendTO, subject, emailBody, false, function (callback) { })
 
         userEnquiryModel.findOne({ "emailID": req.body["emailID"] }, function (err, doc) {
             if (doc == null) { /* If it's the first enquiry from user*/

@@ -23,7 +23,6 @@
     "HMAC_ALGORITHM": "SHA256",
     "N_KEY": "97aa341e2$2fce919bbf7cdc5443e491",
     "N_HMAC_KEY": "hslsohddduucdefghijklmmlkkkrstuv"
-
   },
   "LOG": {
     "LOGDIR": ".//..//..//log",
@@ -38,9 +37,11 @@
     "API_MEDITRIP_AUTO_EXPIRE_FLAG": "Y",
     "API_MEDITRIP_EXPIRE_IN_MINUTES": 15
   },
-  "EMAIL": {
-    "SERVICE": "",
-    "EMAILID": "",
-    "PASSWORD": ""
+  "AUTOEMAIL": {
+    "SERVICE": "Gmail",
+    "EMAILID": "medinovita@gmail.com",
+    "PASSWORD": "5dfceb06e1509ab1490d5ecaecc9fb16$7686db27ba3cb83c9968c15b856137e0$61ce51b3788b01d89c6a33f468d81dfe0048425f0cb428b15c6125c9e5e90593",
+    "EMAIL_BCC": "govind84@gmail.com,nit.libin@gmail.com",
+    "PASSWD_ENCRYPTION": "Y"
   }
 }

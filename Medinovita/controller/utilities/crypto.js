@@ -109,11 +109,7 @@ module.exports.decrypt = function (cipher_text) {
     decryptor = crypto.createDecipheriv(ALGORITHM, N_KEY, IV);
     var decryptedText = decryptor.update(ct, 'hex', 'utf8');
     return decryptedText + decryptor.final('utf-8')
-
-
 };
-
-
 
 var constant_time_compare = function (val1, val2) {
     var sentinel;
