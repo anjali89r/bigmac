@@ -109,7 +109,19 @@ module.exports.addOfficeLocations = function (req, res) {
                             officeTimings: req.body["officeTimings"],
                         }]
                     }]
-                resolve()
+
+                 officeLocationSchema.save(function (error, data) {
+                    if (error) {
+                        logger.error("Error saving office location schema : - " + error.message)
+                        reject()
+                        return res.status(500).json({ "Message": error.message.trim() });
+                    } else {
+                        resolve()
+                        return res.json({ "Message": "Office location got inserted successfully" });
+                    }
+                   
+                })
+                
             } else if (countryFound == 'true' && cityFound == 'false') {
 
                 officeLocationModel.findOneAndUpdate({
@@ -144,8 +156,10 @@ module.exports.addOfficeLocations = function (req, res) {
                             return reject(res.status(409).json({
                                 "Message": "Error while adding new office location due to " + err.message
                             }));
-                        }
-                        resolve();
+                        } else {
+                            resolve();
+                            return res.json({ "Message": "Office location got updated successfully" });
+                        }                       
                     });
             } else {//if (countryFound == true && cityFound == true)
 
@@ -167,7 +181,7 @@ module.exports.addOfficeLocations = function (req, res) {
                             }
                         }
                     },
-                    { returnOriginal: false, upsert: true }, function (err, doc) {
+                    { new: true }, function (err, doc) {
                         if (err) {
                             logger.error("Error while updating record : - " + err.message);
                             return reject(res.status(409).json({
@@ -178,27 +192,18 @@ module.exports.addOfficeLocations = function (req, res) {
                             return reject(res.status(409).json({
                                 "Message": "Error while adding new office location due to " + err.message
                             }));
-                        }
-                        resolve();
+                        } else {
+                            resolve();
+                            return res.json({ "Message": "Office location got updated successfully" });
+                        }                       
                     });
             }
         })
     })
-        .then(function () {
-            officeLocationSchema.save(function (error, data) {
-                if (error) {
-                    logger.error("Error saving office location schema : - " + error.message)
-                    return res.status(500).json({ "Message": error.message.trim() });
-                }
-                else {
-                    return res.json({ "Message": "Office location got inserted successfully" });
-                }
-            })
-        })
-        .catch(function (err) {
-            logger.error("Error while inserting record in office location schema: - " + err.message)
-            return res.status(500).json({ "Message": err.message });
-        })
+    .catch(function (err) {
+        logger.error("Error while inserting record in office location schema: - " + err.message)
+        return res.status(500).json({ "Message": err.message });
+    })
 
 }
 /* check whether city and country is found in database */

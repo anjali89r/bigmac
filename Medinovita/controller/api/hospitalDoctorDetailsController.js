@@ -457,16 +457,8 @@ module.exports.addProcedureDetails = function (req, res) {
                 logger.error("Error while updating record : - Unable to update hospital details in database");               
             }
         }).
-        then(function () {
-            hospitalSchema.save(function (error, data) {
-                if (error) {
-                    logger.error("Error while inserting record : - " + error.message);
-                    return res.json({ "Message": error.message });
-                }
-                else {
-                    return res.json({ "Message": "Data got inserted successfully" });
-                }
-            });
+        then(function () {          
+            return res.json({ "Message": "Data got updated successfully" });
         })
         .catch(function (err) {
             return res.json({ "Message": err.message });

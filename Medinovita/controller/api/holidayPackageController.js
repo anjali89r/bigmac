@@ -108,20 +108,7 @@ module.exports.updateHolidayPackage = function (req, res) {
             });
 
     }).then(function () {
-
-        holidaySchema.save(function (error, data) {
-            if (error) {
-                logger.error("Error while inserting record in user holiday package collection: - " + error.message)
-                return res.status(500).json({ "Message": error.message.trim() });
-            } else if (data == null) {
-                logger.error("No record found in DB for package " + req.body["packageShortName"] + " and operator " + req.body["tourOperator"]  )
-                return res.status(500).json({ "Message": "No record found in DB for package " + req.body["packageShortName"] + " and operator " + req.body["tourOperator"]  });
-            }
-            else {
-                return res.json({ "Message": "Data got updated successfully" });
-            }
-        })
-
+        return res.json({ "Message": "Holiday data got updated successfully" });
     }).catch(function (err) {
         return res.json({ "Message": err.message });
     });

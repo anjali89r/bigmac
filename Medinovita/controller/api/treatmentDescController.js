@@ -16,6 +16,8 @@ module.exports.addtreatmentDescription = function (req, res) {
         return;
     }
 
+    var saveFlag=false
+
     var treatmentSchema = new treatmentDescModel();
 
     new Promise(function (resolve, reject) {
@@ -60,84 +62,85 @@ module.exports.addtreatmentDescription = function (req, res) {
             }
         })
     }).then(function (flag) {
+
         var departmentFound = flag.split(/\|/)[0];
         var treatmentFound = flag.split(/\|/)[1];
         var departmentId = parseInt(flag.split(/\|/)[2])
         var procedureId = parseInt(flag.split(/\|/)[3])
         //If department and treatments are not in db
         if (departmentFound == 'false' && treatmentFound == 'false') {
-                treatmentSchema.department = req.body["department"],
+            treatmentSchema.department = req.body["department"],
                 treatmentSchema.departmentId = departmentId,
-                treatmentSchema.departmentDescription= req.body["departmentDescription"],
+                treatmentSchema.departmentDescription = req.body["departmentDescription"],
                 treatmentSchema.serviceActiveFlag = req.body["serviceActiveFlag"],
-                treatmentSchema.departmentImagepath = req.body["departmentImagepath"],            
+                treatmentSchema.departmentImagepath = req.body["departmentImagepath"],
                 treatmentSchema.treatmentList = [{
                     procedureName: req.body['procedureName'],
                     procedureId: procedureId,
                     displayName: req.body['displayName'],
-                    treatmentDescription: req.body['treatmentDescription'], 
-                    shortDescription: req.body['shortDescription'],   
+                    treatmentDescription: req.body['treatmentDescription'],
+                    shortDescription: req.body['shortDescription'],
                     healingTimeInDays: req.body['healingTime'],
-                    minHospitalization : req.body["minHospitalization"],
-                    maxHospitalization : req.body["maxHospitalization"],
-                    surgicalTime : req.body["surgicalTime"],
-                    postFollowupDuration : req.body["postFollowupDuration"],
-                    postFollowupFrequency : req.body["postFollowupFrequency"],            
+                    minHospitalization: req.body["minHospitalization"],
+                    maxHospitalization: req.body["maxHospitalization"],
+                    surgicalTime: req.body["surgicalTime"],
+                    postFollowupDuration: req.body["postFollowupDuration"],
+                    postFollowupFrequency: req.body["postFollowupFrequency"],
                     procedureImagepath: req.body["procedureImagepath"],
                     activeFlag: req.body["activeFlag"]
                 }]
-       } else if (departmentFound == 'true' && treatmentFound == 'false') {//update new field
-           treatmentDescModel.findOneAndUpdate({
-               "department": req.body["department"]
-           },
-               {
-                   "$push": {
-                       "treatmentList": {
-                           "procedureName": req.body['procedureName'],
-                           "procedureId": procedureId,
-                           "displayName": req.body['displayName'],
-                           "treatmentDescription": req.body['treatmentDescription'],
-                           "shortDescription": req.body['shortDescription'],   
-                           "healingTime": req.body['healingTime'],
-                           "minHospitalization": req.body["minHospitalization"],
-                           "maxHospitalization": req.body["maxHospitalization"],
-                           "surgicalTime": req.body["surgicalTime"],
-                           "postFollowupDuration": req.body["postFollowupDuration"],
-                           "postFollowupFrequency": req.body["postFollowupFrequency"],
-                           "procedureImagepath": req.body["procedureImagepath"],
-                           "activeFlag": req.body["activeFlag"]
-                       }
-                   }
-               },
-               { new: true }, function (err, doc) {
-                   if (err) {
-                       logger.error("Error while updating record : - " + err.message);
-                       return res.status(409).json({
-                           "Message": "Error while updating new treatment " + req.body['procedureName'] + " in treatmentOffered_description collection"
-                       });
-                   } else if (doc === null) {
-                       logger.error("Error while updating record : - unable to update treatmentOffered_description database");
-                       return res.status(409).json({
-                           "Message": "Error while adding new record for "+  req.body['procedureName']   + err.message
-                       });
-                   }
-               });
-       }
 
-    }).then(function () {
-
-        treatmentSchema.save(function (error) {
-            if (error) {
-                logger.error("Error while inserting record in treatment details collection: - " + error.message)
-                return res.status(500).json({ "Message": error.message.trim() });
+                treatmentSchema.save(function (error) {
+                    if (error) {
+                        logger.error("Error while inserting record in treatment details collection: - " + error.message)
+                        return res.status(500).json({ "Message": error.message.trim() });
+                    }
+                    else {
+                        return res.json({ "Message": "Data got inserted successfully in treatmentOffered_description collection" });
+                    }
+                })
+            
+        } else if (departmentFound == 'true' && treatmentFound == 'false') {//update new field
+            treatmentDescModel.findOneAndUpdate({
+                "department": req.body["department"]
+            },
+                {
+                    "$push": {
+                        "treatmentList": {
+                            "procedureName": req.body['procedureName'],
+                            "procedureId": procedureId,
+                            "displayName": req.body['displayName'],
+                            "treatmentDescription": req.body['treatmentDescription'],
+                            "shortDescription": req.body['shortDescription'],
+                            "healingTime": req.body['healingTime'],
+                            "minHospitalization": req.body["minHospitalization"],
+                            "maxHospitalization": req.body["maxHospitalization"],
+                            "surgicalTime": req.body["surgicalTime"],
+                            "postFollowupDuration": req.body["postFollowupDuration"],
+                            "postFollowupFrequency": req.body["postFollowupFrequency"],
+                            "procedureImagepath": req.body["procedureImagepath"],
+                            "activeFlag": req.body["activeFlag"]
+                        }
+                    }
+                },
+                { new: true }, function (err, doc) {
+                    if (err) {
+                        logger.error("Error while updating record : - " + err.message);
+                        return res.status(409).json({
+                            "Message": "Error while updating new treatment " + req.body['procedureName'] + " in treatmentOffered_description collection"
+                        });
+                    } else if (doc === null) {
+                        logger.error("Error while updating record : - unable to update treatmentOffered_description database");
+                        return res.status(409).json({
+                            "Message": "Error while adding new record for " + req.body['procedureName'] + err.message
+                        });
+                    } else {
+                        return res.json({ "Message": "Data got updated successfully in treatmentOffered_description collection" });
+                    }                    
+                });
             }
-            else {
-                return res.json({ "Message": "Data got inserted successfully in treatmentOffered_description collection" });
-            }
-        })
 
-    })
-    .catch(function (err) {
+    }).catch(function (err) {
         return res.json({ "Message": err.message });
     });
 }
