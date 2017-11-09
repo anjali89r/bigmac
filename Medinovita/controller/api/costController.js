@@ -214,7 +214,7 @@ var getAvarageCost = function (procedureName) {
     if (procedureName == null) {
         logger.error("Procedure name is blank");
         return (JSON.stringify({
-            "avarageTreatmentCost": "Please select a valid procedure name"
+            "avarageTreatmentCost": 0
         }));
     }
 
@@ -239,11 +239,11 @@ var getAvarageCost = function (procedureName) {
 
             if (err) {
                 logger.error("Error while reading treatment " + procedureName + " cost details from from DB");
-                reject(JSON.stringify({ "avarageTreatmentCost": err.message.trim() }));
+                reject(JSON.stringify({ "avarageTreatmentCost":0 }));
             } else if (!result.length) {
                 logger.error("There are no active treatment records present in database for " + procedureName);
                 reject(JSON.stringify({
-                    "avarageTreatmentCost": "There are no active treatment records for " + procedureName + " present in database"
+                    "avarageTreatmentCost": 0
                 }));
             }
             else {
