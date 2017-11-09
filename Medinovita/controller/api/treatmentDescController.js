@@ -281,7 +281,10 @@ module.exports.getTreatmentSectionWithoutCost = function (req, res) {
             return res.status(500).json({ "Message": err.message.trim() });
         } else if (result == null) {
             logger.info("There is no treatment description available for the treatment");
-            return res.status(200).json({ "Message": err.message.trim() });
+            return res.status(409).json({ "Message": "Department " + department + " does not exists in tretment_description collection" });
+        } else if (!result.length) {
+            logger.error("There is no treatment description available for the treatment");
+            return res.status(409).json({ "Message": "Department " + department + " does not exists in tretment_description collection" });
         }
         else {
             return res.json(result);
@@ -317,13 +320,16 @@ module.exports.getTreatmentSectionWithCost = function (req, res) {
             }
 
         ], function (err, result) {
-
+           
             if (err) {
                 logger.error("Error while reading treatment description from DB");
-                reject(null);
+                return reject(res.status(409).json({ "Message": "Department " + department + " does not exists in tretment_description collection" }));                    
             } else if (result == null) {
-                logger.info("There is no treatment description available for the treatment");
-                resolve(result)
+                logger.error("There is no treatment description available for the treatment");
+                return reject(res.status(409).json({ "Message": "Department " + department + " does not exists in tretment_description collection" }));                    
+            } else if (!result.length) {
+                logger.error("There is no treatment description available for the treatment");
+                return reject(res.status(409).json({ "Message": "Department " + department + " does not exists in tretment_description collection" }));                    
             }
             else {
                 resolve(result)
@@ -349,7 +355,6 @@ module.exports.getTreatmentSectionWithCost = function (req, res) {
         }
 
         Promise.all(promises).then(function (doc) {  
-            console.log(doc)
             for (var i = 0; i < result.length; i++) {
                 var obj = result[i];
                 var procedureList = obj.treatmentList
