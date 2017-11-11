@@ -30,6 +30,23 @@ require('./routes/route.js')(app);//define express router for api calls
 var port = process.env.PORT || 80  //port
 
 app.use(express.static('./views/webcontent/', { index: 'index.html' }))//define home page
+// added for 404 html ,should be called only after all routes
+app.use(function(req, res, next){
+    // respond with html page
+    var options = {
+        root: __dirname + '/views/webcontent/',
+        dotfiles: 'deny',
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+      };
+      res.sendFile('404.html', options, function (err) {
+        if (err) {
+          next(err);
+        }
+      });
 
+  });
 app.listen(port);
 console.log('Listening on port ' + port + '..');
