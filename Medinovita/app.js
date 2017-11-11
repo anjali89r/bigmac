@@ -2,8 +2,12 @@
 var bodyParser = require('body-parser')
 var cors = require('cors')
 var helmet = require('helmet')
+var compression = require('compression')
 
 var app = express();
+
+
+app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.disable('x-powered-by')
