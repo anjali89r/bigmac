@@ -213,6 +213,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="controller\api\evisacountryController.js" />
+    <Compile Include="controller\api\gridFSController.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="controller\api\holidayPackageController.js">
       <SubType>Code</SubType>
     </Compile>

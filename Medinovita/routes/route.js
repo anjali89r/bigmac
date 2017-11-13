@@ -18,6 +18,7 @@ var hotelInfo = require('../controller/api/accomodationInfoController.js');
 var treatmentEstimate = require('../controller/api/costController.js');
 var evisacountryInfo = require('../controller/api/evisacountryController.js');
 var contactusInfo = require('../controller/api/contactUsController.js');
+var gridFS = require('../controller/api/gridFSController.js');
 
 module.exports = function (app) {
 
@@ -119,7 +120,10 @@ module.exports = function (app) {
     app.post('/api/v1/post/treatmentdescription/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.addtreatmentDescription);
     /*  APi to get treatment description with cost  */
     app.get('/api/v1/get/treatmentdescription/cost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getTreatmentSectionWithCost);
+    /*  APi to get treatment description without cost  */
     app.get('/api/v1/get/treatmentdescription/nocost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getTreatmentSectionWithoutCost);
+    /*  APi to get procedure description and summary from gridFS files  */
+    app.get('/api/v1/get/procedureDetails/:procedure/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, gridFS.getProcedureDescription);
     /*******************************************************************************************************************************************************************/
 
     /*  APi to post our services section  */

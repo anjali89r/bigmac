@@ -382,3 +382,40 @@ module.exports.getTreatmentSectionWithCost = function (req, res) {
         return res.json({ "Message": err.message });
     })
 }
+
+/* Function to get procedure details */
+module.exports.getProcedureDetails = function getProcedureDetails(procedureName,callback) {
+
+    var treatmentDescSchema = new treatmentDescModel();
+
+    treatmentDescModel.aggregate([
+        {
+            "$match": {
+                "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.procedureName": procedureName }, { "treatmentList.activeFlag": "Y" }]
+            }
+        },
+        {
+            "$project": {
+                "_id": 0, "department": 1, "departmentDescription": 1, "departmentImagepath": 1, "treatmentList.procedureName": 1, "treatmentList.displayName": 1, "treatmentList.treatmentDescription": 1, "treatmentList.shortDescription": 1,
+                "treatmentList.healingTimeInDays": 1, "treatmentList.minHospitalization": 1, "treatmentList.maxHospitalization": 1, "treatmentList.surgicalTime": 1, "treatmentList.postFollowupDuration": 1, "treatmentList.postFollowupFrequency": 1,
+                "treatmentList.procedureImagepath": 1
+            }
+        }
+
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while reading treatment description from DB");
+            callback (null);
+        } else if (result == null) {
+            logger.info("There is no treatment description available for the treatment");
+            callback(null);
+        }
+        else {
+            callback(result);
+        }
+    })
+}
+
+
+
