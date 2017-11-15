@@ -74,7 +74,12 @@ module.exports.getProcedureDescription = function (req, res) {
             } else {
                 var procedureBrief="Please use the proper template for gridFS"
             }
-            return res.status(200).json({ "ProcedureBrief": procedureBrief, "procedureDetails": content});
+            var demoData = { "ProcedureBrief": procedureBrief, "procedureDetails": content };
+            var rData = { records: demoData }; // wrap the data in a global object... (mustache starts from an object then parses)
+            var page = fs.readFileSync("\\Medinovita\\views\\template.html", "utf8"); // bring in the HTML file
+            var html = mustache.to_html(page, rData); // replace all of the data
+            res.send(html);
+           // return res.status(200).json({ "ProcedureBrief": procedureBrief, "procedureDetails": content});
 
         }).catch(function (err) {
             return res.json({ "Message": err.message });
