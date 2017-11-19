@@ -19,6 +19,8 @@ var treatmentEstimate = require('../controller/api/costController.js');
 var evisacountryInfo = require('../controller/api/evisacountryController.js');
 var contactusInfo = require('../controller/api/contactUsController.js');
 var gridFS = require('../controller/api/gridFSController.js');
+var costComparison = require('../controller/api/costComparisonController.js');
+var templateEngine = require('../controller/api/templateEngineController.js');
 
 module.exports = function (app) {
 
@@ -104,8 +106,12 @@ module.exports = function (app) {
     /************************API to get cost of treatment****************************************************************************************************/
     //app.get('/api/v1/get/treatmentcost/:procedurename/:bystandercount/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentEstimate.getTreatmentRoughEstimate);
     app.get('/api/v1/get/treatmentcost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentEstimate.getTreatmentRoughEstimate);
-
     /********************************************************************************************************************************************************/
+
+    /************************API to work on global treatment cost comparison schema****************************************************************************************************/
+    app.post('/api/v1/post/globaltreatmentcost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, costComparison.addGlobalTreatmentCost);
+    app.get('/api/v1/get/globaltreatmentcost/:procedure/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, costComparison.getcostComparisonData);
+     /********************************************************************************************************************************************************/
 
     /*  APi to post news section  */
     app.post('/api/v1/post/newssection/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, newsSection.addnewsSection);
@@ -125,6 +131,12 @@ module.exports = function (app) {
     /*  APi to get procedure description and summary from gridFS files  */
     app.get('/api/v1/get/procedureDetails/:procedure/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, gridFS.getProcedureDescription);
     /*******************************************************************************************************************************************************************/
+
+    /************************API to render html pages using template engine****************************************************************************************************/
+    /*  API for procedure_template.html */
+    app.get('/api/v1/get/procedure/:procedure/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, templateEngine.getProcedureDescription);
+    /*******************************************************************************************************************************************************************/
+
 
     /*  APi to post our services section  */
     app.post('/api/v1/post/ourservices/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, ourServicesInfo.addServicedetails);
@@ -152,7 +164,7 @@ module.exports = function (app) {
     app.get('/api/v1/getsecuredecryptedText/:txt', security.secureDecryptedText);//this is more secure as the encryption mechanism chnages on every server restart
     app.get('/api/v1/getnonsecureencryptedText/:txt', security.nonsecureEncryptedText);
     app.get('/api/v1/getnonsecuredecryptedText/:txt', security.nonsecuredecryptedText);  
-    app.get('/procedure/:procedure', gridFS.getProcedureDescription);
+    app.get('/procedureinfo/:procedure', hospitalInfo.gettodoc);
 
   };
 

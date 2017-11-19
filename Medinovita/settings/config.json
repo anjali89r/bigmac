@@ -45,6 +45,6 @@
     "PASSWD_ENCRYPTION": "Y"
   },
   "DOCDIR": {
-    "PROCEDUREDIR": "C:/Users/libin/Documents/Visual Studio 2017/Projects/medinovita/gitws/doc/gridFS/"
+    "PROCEDUREDIR": "C:/medinovita/doc/gridFS/"
   }
 }
