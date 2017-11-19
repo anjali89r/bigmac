@@ -34,9 +34,10 @@ module.exports.addtreatmentDescription = function (req, res) {
 
         //check if treatment and procedure details are already stored in table
         treatmentDescModel.findOne({
-            "department": req.body["department"], "treatmentList": { $elemMatch: { "procedureName": req.body["procedureName"] } }
+            "department": req.body["department"]
+        }, {"treatmentList": { $elemMatch: { "procedureName": req.body["procedureName"] } }
         }, function (err, doc) {
-            if (doc != null) {
+            if (doc !=null && doc.department != null) {
                 logger.warn("Procedure name " + req.body['procedureName'] + " already exists in database");
                 return reject(res.status(200).json({ "Message": "Procedure name " + req.body['procedureName'] + " already exists in database" }));
             } else {//check if department is already added to collection
@@ -241,8 +242,7 @@ module.exports.verifyProcedureExistence = function (procedureName, callback) {
             callback("false");
         } else if (doc != null) {  
             callback("true");
-        } else {
-            console.log("false")
+        } else {           
             callback("false");
         }
     });

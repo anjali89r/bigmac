@@ -3,6 +3,9 @@ var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 var config = require('../utilities/confutils.js');
 var treatmentDesc = require('./treatmentDescController.js');
+var costCompare = require('./costComparisonController.js');
+var hospitalData = require('./hospitalDoctorDetailsController.js');
+var mustache = require('mustache')
 
 /*Read contents of flat file */
 module.exports.getFlatFileContent = getFlatFileContent;
@@ -10,7 +13,7 @@ function getFlatFileContent(filePath, next) {
         
     if (fs.existsSync(filePath)) {
 
-        fs.readFile(filePath, 'utf8', function (err, contents) {
+        fs.readFile(filePath, 'utf8', function (err, contents) {            
             if (err) {
                 logger.error("Error while reading the file - " + filePath)
                 logger.error("Error while reading the file - " + err.message.trim())
@@ -32,7 +35,7 @@ module.exports.getProcedureDescription = function (req, res) {
     new Promise(function (resolve, reject) {
         //get the path of flat file with description
         treatmentDesc.getProcedureDetails(procedureName, function (result) {            
-            var relFilePath = result[0].treatmentList[0].treatmentDescription //   Orthopedic/Hip Resurfacing.txt
+            var relFilePath = result[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
             resolve(relFilePath)
         })
 
@@ -89,3 +92,4 @@ module.exports.getProcedureDescription = function (req, res) {
         return res.json({ "Message": err.message });
     });
 }
+

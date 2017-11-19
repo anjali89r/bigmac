@@ -12,6 +12,7 @@
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "compression": "^1.7.1",
     "config-json": "^1.0.0",
     "connect": "^3.6.3",
     "cors": "2.8.4",
@@ -26,6 +27,7 @@
     "mongoose-auto-increment": "^5.0.1",
     "mongoose-double": "0.0.1",
     "mongoose-integer": "^0.1.1",
+    "mustache": "^2.3.0",
     "node-windows": "0.1.14",
     "nodemailer": "^4.3.1",
     "nodemon": "^1.11.0",
@@ -37,7 +39,6 @@
     "socket.io": "^2.0.3",
     "uuid": "^3.1.0",
     "winston": "^2.3.1",
-    "winston-daily-rotate-file": "^1.4.6",
-    "compression":"^1.7.1"
+    "winston-daily-rotate-file": "^1.4.6"
   }
 }

@@ -206,6 +206,9 @@
     <Compile Include="controller\api\accomodationInfoController.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="controller\api\costComparisonController.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="controller\api\costController.js">
       <SubType>Code</SubType>
     </Compile>
@@ -217,6 +220,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="controller\api\holidayPackageController.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="controller\api\templateEngineController.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="controller\api\localTransportController.js">
@@ -252,6 +258,9 @@
     <Compile Include="controller\utilities\logger.js" />
     <Compile Include="controller\utilities\mongodbutils.js" />
     <Compile Include="model\accomodationInfoModel.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="model\costComparisonModel.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="model\eVisacountryModel.js" />

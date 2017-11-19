@@ -642,4 +642,108 @@ function requestToUserModelParamMapping(reqParamKey) {
     }
 }
 
+/*get list of top hospitals for a a particular procedure */
+module.exports.getTopHospitals = getTopHospitals;
+function getTopHospitals(procedure, next) {
+
+    hospitalModel.aggregate([
+        {
+            //"$match": { "serviceActiveFlag": "Y" } 
+            "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": procedure }, { "Treatment.activeFlag": { $in: ["Y"] } }] }
+        },
+
+        {$sort: {
+                'hospitalRating.medinovitaRating': -1 //descending order
+        }},
+        {
+            $project: {
+                "_id": 0,
+                "hospitalName": 1,                
+                "hospitalcity": "$hospitalContact.City",              
+                "hospitalcountry" : "$hospitalContact.country",                
+                "ACC_JCI" : "$Accreditation.JCI",
+                "ACC_NABH": "$Accreditation.NABH",
+                "ACC_NABL": "$Accreditation.NABL"
+            }
+        }
+        
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while fetching top hospitals from hospital and doctors table");
+            next(null)
+        } else if (!result.length) {
+            logger.error("There is no treatment records available for the treatment " + procedure );
+            next(null)
+        } else {
+            next(result)
+        }            
+    })
+ }
+
+/*get list of top doctors for a particular procedure */
+module.exports.getTopDoctors = getTopDoctors;
+function getTopDoctors(procedure, next) {
+
+    hospitalModel.aggregate([
+        {
+            //"$match": { "serviceActiveFlag": "Y" } 
+            "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": procedure }, { "Treatment.doctor.activeFlag": { $in: ["Y"] } }] }
+        },
+        //decompile array
+        { $unwind: "$Treatment" },
+        { $unwind: "$Treatment.doctor" },
+        { $unwind: "$Treatment.doctor.speciality" },
+
+        {
+            $sort: {
+                'Treatment.doctor.medinovitadoctorRating': -1 //descending order
+            }
+        },
+        {
+            $project: {
+                "_id": 0,
+                "docname" : "$Treatment.doctor.doctorName",
+                "docdescription": "$Treatment.doctor.doctorDescription",
+                "docspeciality":"$Treatment.doctor.speciality.specialityName",
+                "docpicdir":"$Treatment.doctor.profilepicdir",
+                "hospitalName": 1,
+                "hospitalcity": "$hospitalContact.City", 
+                "hospitalcountry": "$hospitalContact.country",
+            }
+        }
+
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while fetching top hospitals from hospital and doctors table");
+            next(null)
+        } else if (!result.length) {
+            logger.error("There is no treatment records available for the treatment " + procedure);
+            next(null)
+        } else {
+            next(result)
+        }
+    })
+}
+
+module.exports.gettodoc = function (req, res) {
+
+        if (res.headersSent) {//check if header is already returned
+            logger.warn("Response already sent.Hence skipping the function call getcostComparisonData")
+            return;
+        }
+
+        var procedure = req.params.procedure
+
+        getTopDoctors(procedure, function (cost) {
+
+            if (cost == null) {
+                return res.status(500).json({ "Message": "Error while retriving cost comparison from database" });
+            } else {
+                return res.json(cost);
+            }
+        })
+}
+
 
