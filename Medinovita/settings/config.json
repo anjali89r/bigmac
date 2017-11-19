@@ -45,6 +45,6 @@
     "PASSWD_ENCRYPTION": "Y"
   },
   "DOCDIR": {
-    "PROCEDUREDIR": "C:/medinovita/doc/gridFS/"
+    "PROCEDUREDIR": "C:/Medinovita_Support/doc/gridFS/"
   }
 }
