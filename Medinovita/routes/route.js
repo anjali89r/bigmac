@@ -135,6 +135,7 @@ module.exports = function (app) {
     /************************API to render html pages using template engine****************************************************************************************************/
     /*  API for procedure_template.html */
     app.get('/api/v1/get/procedure/:procedure/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, templateEngine.getProcedureDescription);
+    app.get('/:procedure', templateEngine.getProcedureDescription);
     /*******************************************************************************************************************************************************************/
 
 
