@@ -83,7 +83,7 @@ module.exports.gethospitalDetailbytreatment = function (req, res) {
         }
         // added to reterive all hospital details
         if (treatmentName.toUpperCase() == "ALL") {
-            hospitalModel.find({}, { _id: 0, hospitalName: 1, hospitalContact: 1, Accreditation: 1, hospitalRating: 1, Treatment: 1 }, function (err, result) {
+            hospitalModel.find({}, { _id: 0, hospitalName: 1,hospitalimage:1, hospitalContact: 1, Accreditation: 1, hospitalRating: 1, Treatment: 1 }, function (err, result) {
                 if (err) {
                     logger.error("Error retrieving the records from DB : - " + err.message)
                     return res.status(500).json({ "Message": err.message });
@@ -94,7 +94,7 @@ module.exports.gethospitalDetailbytreatment = function (req, res) {
         }
         else{
         //'_id:0 hospitalName hospitalContact Accreditation hospitalRating Treatment'
-        hospitalModel.find({ 'Treatment.name': treatmentName}, { _id: 0, hospitalName: 1, hospitalContact: 1, Accreditation: 1, hospitalRating: 1, Treatment: 1 }, function (err, result) {
+        hospitalModel.find({ 'Treatment.name': treatmentName}, { _id: 0, hospitalName: 1,hospitalimage:1, hospitalContact: 1, Accreditation: 1, hospitalRating: 1, Treatment: 1 }, function (err, result) {
             if (err) {
                 logger.error("Error retrieving hospital details from DB : - " + err.message)
                 return res.status(500).json({ "Message": err.message });
