@@ -16,7 +16,7 @@ module.exports.getFeaturedtreatments = function (req, res) {
     if (res.headersSent) {//check if header is already returned
         logger.warn("Response already sent.Hence skipping the function call getFeaturedtreatments")
         return;
-    }  
+    }
 
     try{
 
@@ -32,9 +32,9 @@ module.exports.getFeaturedtreatments = function (req, res) {
     catch (err) {
 
         return res.status(500).json(err.message);
-    
+
     }
-    
+
 
 }
 
@@ -44,7 +44,7 @@ module.exports.getaboutMedicalsection = function (req, res) {
     if (res.headersSent) {//check if header is already returned
         logger.warn("Response already sent.Hence skipping the function call getaboutMedicalsection")
         return;
-    }  
+    }
     try {
 
         aboutMedicalModel.findOne({}, {_id:0},function (err, result) {
@@ -71,7 +71,7 @@ module.exports.gethighlightsection = function (req, res) {
     if (res.headersSent) {//check if header is already returned
         logger.warn("Response already sent.Hence skipping the function call gethighlightsection")
         return;
-    }  
+    }
     let limit = parseInt(req.query.limit);
     try {
 
@@ -80,7 +80,7 @@ module.exports.gethighlightsection = function (req, res) {
                 logger.error("Error retrieving the records from DB : - " + err.message)
                 return res.status(500).json({ "Message": err.message });
             }
-            return res.status(200).json(result.sort());
+            return res.status(200).json(result);
 
         });
     }
@@ -97,7 +97,7 @@ module.exports.addFeaturedtreatments = function (req, res) {
     if (res.headersSent) {//check if header is already returned
         logger.warn("Response already sent.Hence skipping the function call addFeaturedtreatments")
         return;
-    }  
+    }
     try {
 
 
@@ -122,7 +122,7 @@ module.exports.addFeaturedtreatments = function (req, res) {
                         logger.error("Error while adding the record : - title cannot be null")
                         return res.status(400).json({ "Message": "title cannot be null for array index " + arrIndex });
                     }
-                
+
             }
             featuredTreatmentModel.insertMany()
 
@@ -134,7 +134,7 @@ module.exports.addFeaturedtreatments = function (req, res) {
 
         }
 
-        
+
     }
     catch (err) {
 
