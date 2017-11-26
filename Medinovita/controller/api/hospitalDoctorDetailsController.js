@@ -660,7 +660,8 @@ function getTopHospitals(procedure, next) {
                 "_id": 0,
                 "hospitalName": 1,                
                 "hospitalcity": "$hospitalContact.City",              
-                "hospitalcountry" : "$hospitalContact.country",                
+                "hospitalcountry": "$hospitalContact.country",  
+                "hospitalimage": 1,
                 "ACC_JCI" : "$Accreditation.JCI",
                 "ACC_NABH": "$Accreditation.NABH",
                 "ACC_NABL": "$Accreditation.NABL"

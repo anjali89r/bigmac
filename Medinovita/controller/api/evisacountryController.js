@@ -7,16 +7,23 @@ require('../../model/eVisacountryModel.js');
 var evisacountry = mongoose.model('evisacountries');
 
 var collection = 'evisacountries';
-
-
 module.exports.getevisacountry = function (req, res) {
 
-    
-    var evisacountrySchema = new evisacountry();
+    var country= req.params.countryName
 
-    if (!req.params.countryName  || req.params.countryName == "null")
-    {
-        return res.status(400).json({ "Message": "Please provide a valid country name to get details" });
+    getevisaDetails(country, function (visaCost){
+
+        return res.json(visaCost)
+    })
+     
+}
+/*modified the function to access fee in cost page */
+module.exports.getevisaDetails = getevisaDetails
+function getevisaDetails(countryName, callback) {
+
+    var evisacountrySchema = new evisacountry();
+    if (!countryName || countryName == null) {
+        callback({ "Message": "Please provide a valid country name to get details" });
     }
 
     evisacountry.aggregate([
@@ -26,21 +33,100 @@ module.exports.getevisacountry = function (req, res) {
 
         if (err) {
             logger.error("Error while reading visacountry details " + err.message.trim());
-            return res.status(500).json({ "Message": "Error in getting the evisacountry details"});
-        } 
+            callback({ "Message": "Error in getting the evisacountry details" });
+        }
         else {
-            //console.log(result[0].countrylist);
-            var filterresult = result[0].countrylist.filter(function (el)
-            {
-                if (req.params.countryName === "all")
+            console.log(result[0].countrylist)
+            var filterresult = result[0].countrylist.filter(function (el) {
+                if (countryName === "all")
                     return el.disabled == false;
-                else if (!req.params.countryName)
-                    console.log(req.params.countryName)
-                    return el.disabled == false && el.country == req.params.countryName
+                else if (!countryName)
+                    console.log("i am here " + countryName )
+                    return el.disabled == false && el.country == countryName
 
             })
-            return res.json(filterresult);
+            callback(filterresult);
         }
     })
+}
+
+/* API to add or update evisa fee */
+module.exports.addorUpdateEvisaFee = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call addorUpdateEvisaFee")
+        return;
+    }
+
+    var evisacountrySchema = new evisacountry();
+
+    new Promise(function (resolve, reject) {
+
+        //check if procedure cost for a country is already stored in table
+        evisacountry.findOne(               
+            { "countrylist": { $elemMatch: { "country": req.body['country'] } } }, function (err, doc) {
+                if (doc !== null && doc.fee != null) {
+                    logger.warn("evisa cost for " + req.body['country'] +  " already exists in database");
+                    resolve(false)  //update                     
+                } else {
+                    resolve(true)  //add record 
+                }
+            })
+    }).then(function (flag) {
+
+        //add new record
+        if (flag == true) {                
+            evisacountrySchema.countrylist = [{
+                id: req.body['id'],
+                country: req.body['country'],
+                fee: req.body['fee'],
+                disabled: req.body["disabled"]
+            }]
+
+            evisacountrySchema.save(function (error) {
+            if (error) {
+                logger.error("Error while inserting record in evisa country collection: - " + error.message)
+                return res.status(500).json({ "Message": error.message.trim() });
+            }
+            else {
+                return res.json({ "Message": "Data got inserted successfully in evisacountries collection" });
+            }
+        })
+
+        } else {//update fee
+            evisacountrySchema.findOneAndUpdate(
+                { "countrylist": { $elemMatch: { "country": req.body['country'] } } 
+            },
+            {
+                "$push": {
+                    "countrylist": {
+                        "id": req.body['id'],
+                        "country": req.body['country'],
+                        "fee": req.body['fee'],
+                        "disabled": req.body["disabled"]
+                    }
+                }
+                },
+                { new: true }, function (err, doc) {
+                    if (err) {
+                        logger.error("Error while updating record : - " + err.message);
+                        return res.status(409).json({
+                            "Message": "Error while updating evisa fee for " + req.body['country'] + " in evisaCountries collection"
+                        });
+                    } else if (doc === null) {
+                        logger.error("Error while updating record : - unable to update evisacountries database");
+                        return res.status(409).json({
+                            "Message": "Error while adding new fee record for " + req.body['country'] + err.message
+                        });
+                    } else {
+                        return res.json({ "Message": "Data got updated successfully in evisacountries collection" });
+                    }
+                });
+        }
+
+    }).catch(function (err) {
+        return res.json({ "Message": err.message });
+    });
 
 }
+

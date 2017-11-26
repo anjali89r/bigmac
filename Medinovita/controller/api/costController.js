@@ -12,6 +12,7 @@ require('../../model/treatmentsDescModel.js');
 var treatmentDescModel = mongoose.model('treatmentOffered_description');
 require('../../model/localTransportModel.js');
 var transportModel = mongoose.model('local_transport_details');
+var evisaCost = require('./evisacountryController.js');
 /**************************************************************************************************
                                Logic for calculating cost
 1.From hospitalDoctorDetailsModel get list of hospitals offering a particular treatment(getHospitalOfferingTreatment)
@@ -36,7 +37,15 @@ var transportModel = mongoose.model('local_transport_details');
 7.                                                - Cost of Visa
 8.                                                - Cost of flight ticket to India
 /**************************************************************************************************/
-module.exports.getTreatmentRoughEstimate = function (req, res) {
+/* wrapper function for external usage */
+module.exports.getTreatmentRoughEstimate_API = function (req, res) {
+    getTreatmentRoughEstimate(req, res, function (data) {
+        return res.status(200).json(data);
+    })    
+}
+
+module.exports.getTreatmentRoughEstimate = getTreatmentRoughEstimate;//for external usage
+function getTreatmentRoughEstimate(req, res,callback) {
 
     if (res.headersSent) {//check if header is already returned
         logger.warn("Response already sent.Hence skipping the function call getTreatmentRoughEstimate")
@@ -54,21 +63,25 @@ module.exports.getTreatmentRoughEstimate = function (req, res) {
         return
     }
 
-    const hospitalInfoPromise = getHospitalOfferingTreatment(req, res);
+    //const hospitalInfoPromise = getHospitalOfferingTreatment(req, res);
     const procedureCostPromise = getAvarageCost(req.query.procedurename)
     const holidayCostPromise = getHolidayPackageCost(req, res)
     const accomodationCostPromise = getAccomodationCost(req, res)
     const localTransportCostPromise = getLocalTransportCost(req, res)
+    const hsopitalStaytPromise = getLocalTransportCost(req, res)
+    const evisaFeePromise = geteVisaCost(req, res)
 
-    Promise.all([hospitalInfoPromise, procedureCostPromise, holidayCostPromise, accomodationCostPromise, localTransportCostPromise])
-        .then(([hospitalInfo, procedureCost, holidayCost, accomodationCost, localTransportCost]) => {
+    Promise.all([procedureCostPromise, holidayCostPromise, accomodationCostPromise, localTransportCostPromise, evisaFeePromise])
+        .then(([procedureCost, holidayCost, accomodationCost, localTransportCost,evisaFee]) => {
             if (res.headersSent) {//check if header is already returned
                 logger.warn("Response already sent.Hence skipping the function call getTreatmentRoughEstimate")
                 return;
-            }
+            }            
             //Calculate total expenses
             var retProcedureCost = procedureCost[0].avarageTreatmentCost;
-            logger.info("Procedure cost - " + retProcedureCost)            
+            logger.info("Procedure cost - " + retProcedureCost) 
+            var retVisaFee = evisaFee[0].fee 
+            logger.info("visa cost - " + retVisaFee)
             var retHolidayCost = holidayCost[0].totalPackageCost;
             logger.info("Holiday cost - " + holidayCost[0].totalPackageCost)
             var retAccomodationCost = accomodationCost[0].totalAccomodationCost;
@@ -76,14 +89,14 @@ module.exports.getTreatmentRoughEstimate = function (req, res) {
             var retLocalTransportCost = localTransportCost[0].totalTransportationCost
             logger.info("Local transport cost - " + retLocalTransportCost)
             //Calculate totla trip expenses
-            var tripExpense = retProcedureCost + retHolidayCost + retAccomodationCost + retLocalTransportCost;
+            var tripExpense = retProcedureCost + retHolidayCost + retAccomodationCost + retLocalTransportCost + (retVisaFee * 65);
             //add 20% buffer
             tripExpense = tripExpense + (tripExpense * 20) / 100
             logger.info("Overall trip cost - " + tripExpense)
             //Convert to json
             var totalTripExpense = JSON.parse('{ "mediTourEstimate": ' + tripExpense + '}');
             //Return response
-            return res.status(200).json({ "totalExpense": totalTripExpense, "HopsitalsOfferingTreatment": hospitalInfo, "ProcedureAvarageCost": procedureCost, "holidayCost": holidayCost, "accomodationExpense": accomodationCost, "localTransportCost": localTransportCost });
+            callback({ "totalExpense": totalTripExpense, "ProcedureAvarageCost": procedureCost, "holidayCost": holidayCost, "visaFee": evisaFee,"accomodationExpense": accomodationCost, "localTransportCost": localTransportCost });
 
         }).catch(function (err) {
             return res.json({ "Message": err.message });
@@ -334,8 +347,8 @@ var getAccomodationCost = function (req, res) {
     }
 
     return new Promise(function (resolve, reject) {
-        getHospitalStayDuration(req, res, function (duration) {
-            resolve(duration)
+        getHospitalStayDuration(procedureName, function (duration) {
+            resolve(duration[0].treatmentList.minHospitalization)
         })
     })
         .then(function (duration) {
@@ -386,9 +399,10 @@ var getAccomodationCost = function (req, res) {
 }
 
 /* Get number of days to be present in a country for a particular treatment */
-var getHospitalStayDuration = function (req, res, callback) {
+module.exports.getHospitalStayDuration = getHospitalStayDuration
+function getHospitalStayDuration (treatmentName, callback) {
 
-    var treatmentName = req.query.procedurename
+    //var treatmentName = req.query.procedurename
 
     treatmentDescModel.aggregate([
         {
@@ -398,19 +412,21 @@ var getHospitalStayDuration = function (req, res, callback) {
             }
         }, { "$unwind": "$treatmentList" }, { $match: { "treatmentList.activeFlag": 'Y' } },
 
-        { "$project": { "_id": 0, "treatmentList.minHospitalization": 1 } }
+        { "$project": { "_id": 0, "treatmentList.minHospitalization": 1, "treatmentList.maxHospitalization": 1 } }
 
     ], function (err, result) {
 
         if (err) {
             logger.error("Error while reading treatment " + treatmentName + " duration from DB");
-            callback(5)//Assuming minimum stya of 5 days in india
+            //Assuming minimum stya of 5 days in india
+            callback(JSON.parse(JSON.stringify([{ "treatmentList.minHospitalization": 5, "treatmentList.maxHospitalization":5 }])))
         } else if (!result.length) {
             logger.error("There is no treatment description available for the treatment " + treatmentName + " in treatment description model");
-            callback(5);//Assuming minimum stya of 5 days in india
-        }
+            callback(JSON.parse(JSON.stringify([{ "treatmentList.minHospitalization": 5, "treatmentList.maxHospitalization": 5 }])))
+        } 
         else {
-            callback(result[0].treatmentList.minHospitalization);
+            //callback(result[0].treatmentList.minHospitalization);           
+            callback(result)
         }
     })
 
@@ -432,17 +448,18 @@ var getLocalTransportCost = function (req, res) {
     */
 
     var vehicleType = req.query.vehicletype
+    var procedureName = req.query.procedurename
     var distanceToHospital = 15 //km
     if (vehicleType == null) {
         vehicleType = 'sedan';
     }
 
     return new Promise(function (resolve, reject) {
-        getHospitalStayDuration(req, res, function (duration) {
-            resolve(duration)
+        getHospitalStayDuration(procedureName, function (duration) {
+            resolve(duration[0].treatmentList.minHospitalization)
         })
     })
-        .then(function (duration) {
+    .then(function (duration) {
 
             return new Promise(function (resolve, reject) {
 
@@ -482,4 +499,23 @@ var getLocalTransportCost = function (req, res) {
             })
         })
 }
+
+
+/* Get cost of evisa */
+var geteVisaCost = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call geteVisaCost")
+        return;
+    }
+  
+    return new Promise(function (resolve, reject) {
+        var country = req.query.countryName
+        evisaCost.getevisaDetails(country, function (visaCost) {
+            resolve(visaCost)
+        })
+    })
+        
+}
+
 

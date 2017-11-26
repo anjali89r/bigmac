@@ -4,6 +4,7 @@ var logger = require('../utilities/logger.js');
 var config = require('../utilities/confutils.js');
 var treatmentDesc = require('./treatmentDescController.js');
 var costCompare = require('./costComparisonController.js');
+var treatmentEstimate = require('./costController.js');
 var hospitalData = require('./hospitalDoctorDetailsController.js');
 var gridFS = require('./gridFSController.js');
 var mustache = require('mustache')
@@ -104,7 +105,7 @@ module.exports.getProcedureDescription_demo = function (req, res) {
         return res.json({ "Message": err.message });
     });
 }
-/*      *******************************procedure_template.html*******************************     */
+/*   *******************************procedure_template.html*******************************     */
 
 /*This function is used to create the html page details the summary of a particular treatment */
 
@@ -136,7 +137,6 @@ module.exports.getProcedureDescription = function (req, res) {
 
         var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
         var filePath = procedureFileDir + relFilePath
-
         new Promise(function (resolve, reject) {
             gridFS.getFlatFileContent(filePath, function (content) {
                 content = fs.readFileSync(filePath, "utf8");
@@ -146,7 +146,7 @@ module.exports.getProcedureDescription = function (req, res) {
                     resolve(content)
                 }
             })
-        }).then(function (content) {
+        }).then(function (content) {         
             /* get treatment cost */
             var costComparePromise = new Promise(function (resolve, reject) {
                 costCompare.getGlobalTreatmentCost(procedureName, function (cost) {
@@ -173,8 +173,8 @@ module.exports.getProcedureDescription = function (req, res) {
                     var topdocdata = topDoctors
 
                     var data = {
-                        "procedure_name": 'Bone Grafting',
-                        "title": 'Bone Grafting in India|low cost Bone Grafting abroad',
+                        "procedure_name": procedureName,
+                        "title": procedureName + ' in India|low cost ' + procedureName+ ' abroad',
                         "procedure_gridFS_data": content,
                         "tophospitals": tophospitaldata,
                         "costdisprows": costComparison,
@@ -197,4 +197,101 @@ module.exports.getProcedureDescription = function (req, res) {
     });
 }
 
-/*      *******************************end : procedure_template.html*******************************     */
+/*    *******************************end : procedure_template.html*******************************     */
+
+/*    ************Start : return the cost of treatment corresponding to a procedure*****************     */
+
+module.exports.gettreatmentEstimate = function (req, res) {
+
+    var procedureName = req.query.procedurename
+
+    new Promise(function (resolve, reject) {
+        //get the path of flat file with description
+        treatmentDesc.getProcedureDetails(procedureName, function (result) {
+            var relFilePath = result[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
+            resolve(relFilePath)
+        })
+
+    }).then(function (relFilePath) {
+
+        var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
+        var filePath = procedureFileDir + relFilePath
+        new Promise(function (resolve, reject) {
+            gridFS.getFlatFileContent(filePath, function (content) {
+                content = fs.readFileSync(filePath, "utf8");
+                if (content.indexOf("Error") > -1) {
+                    return reject(res.status(404).json({ "Message": content }));
+                } else {
+                    resolve(content)
+                }
+            })
+        }).then(function (content) {
+            /* get treatment cost */
+
+            var totalCostPromise = new Promise(function (resolve, reject) {
+                treatmentEstimate.getTreatmentRoughEstimate(req, res, function (estimate) {
+                    resolve(estimate)
+                })
+            })
+            
+            var topHospitalPromise = new Promise(function (resolve, reject) {
+                hospitalData.getTopHospitals(procedureName, function (topHospitals) {
+                    resolve(topHospitals)
+                })
+            })
+
+            var topDocPromise = new Promise(function (resolve, reject) {
+                hospitalData.getTopDoctors(procedureName, function (topDoctors) {
+                    resolve(topDoctors)
+                })
+            })
+            
+            var hospitalStayPromise = new Promise(function (resolve, reject) {
+                treatmentEstimate.getHospitalStayDuration(procedureName, function (hospitalStay) {             
+                    resolve(hospitalStay)
+                })
+            })
+
+            Promise.all([totalCostPromise, hospitalStayPromise, topHospitalPromise, topDocPromise])
+                .then(([estimate, hospitalStay, topHospitals, topDoctors]) => {
+                    
+                   var tophospitaldata = topHospitals
+                   var topdocdata = topDoctors
+              
+                   var overallTripCost=estimate.totalExpense.mediTourEstimate
+                   var holidayPackageCost = estimate.holidayCost[0].totalPackageCost
+                   var localCommuteCost = estimate.localTransportCost[0].totalTransportationCost
+                   var accomodationCost = estimate.accomodationExpense[0].totalAccomodationCost
+                   var evisaFee = estimate.visaFee[0].fee
+                   var costOfProcedure = estimate.ProcedureAvarageCost[0].avarageTreatmentCost                    
+                   var treatmentDuration = hospitalStay[0].treatmentList.minHospitalization + " to " + hospitalStay[0].treatmentList.maxHospitalization + " days"         
+                   var data = {
+                        "totalCost": overallTripCost,
+                        "holidayPkgCost": holidayPackageCost,
+                        "localCommuteCost": localCommuteCost,
+                        "accomodationCost": accomodationCost,
+                        "costOfProcedure": costOfProcedure,
+                        "treatmentduration": treatmentDuration,
+                        "visaFee": evisaFee,
+                        "procedure_name": procedureName,                        
+                        "title": procedureName + ' in India|low cost ' + procedureName + ' abroad',
+                        "procedure_gridFS_data": content,
+                        "tophospitals": tophospitaldata,                       
+                        "topdoctors": topdocdata,                       
+                    };
+
+                    var templateDir = '././views/webcontent/templates/cost_template.html'
+                    var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
+                    var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
+                    var html = mustache.to_html(page, data); // replace all of the data
+                    res.send(html);
+                })
+
+        }).catch(function (err) {
+            return res.json({ "Message": err.message });
+        });
+
+    }).catch(function (err) {
+        return res.json({ "Message": err.message });
+    });
+}
