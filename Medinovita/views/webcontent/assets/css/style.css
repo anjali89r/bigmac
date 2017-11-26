@@ -1,33 +1,4 @@
 @charset "UTF-8";
-/* 
-Template Name: Simple - Multipurpose Premium Html5 Template
-Template URI: http://www.eonythemes.com
-Description: Multipurpose Html5 Template
-Author: Eon
-
--------- # Table Of Contents # -------- //
--------- 1-  General
--------- 2-  Typography
--------- 3-  Elements
--------- 4-  Pricing
--------- 5-  Headers
--------- 6-  Homepages
--------- 7-  About
--------- 8-  Services Pages
--------- 9-  Blog
--------- 10- Portfolio
--------- 11- Category(Shop) - Product
--------- 12- Cart
--------- 13- Compare
--------- 14- Checkout
--------- 15- Contact
--------- 16- 404
--------- 17- FaQs
--------- 18- Footers
--------- 19- Owl Carousel
--------- 20- Coming Soon
--------- # Table Of Contents # ------- //
-*/
 
 /* Page Loader Animation */
 #page-loader {
@@ -102,7 +73,10 @@ Author: Eon
 /* Loader Animation End */
 /* ----------- 1.General --------------
 --------------------------------------*/
+
+
 body {
+  height: 100%;
   position: relative;
   direction: ltr;
   color: #323232;
@@ -114,7 +88,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
-
 body.edge {
   padding: 5px;
 }
@@ -238,6 +211,31 @@ ol {
   margin: 0;
 }
 
+/*medical visa bullets style*/
+/* .visa-gen .para{
+  margin-bottom: 30px;
+} */
+.visa-gen ul.eligibile{
+  list-style-type: disc;
+  margin-left:20px;
+  margin-bottom: 36px;
+}
+.visa-gen ul.eligibile-sub{
+  list-style-type: circle;
+  margin-left:20px;
+}
+.visa-gen ol.documents{
+  list-style-type: disc;
+  margin-left:20px;
+  margin-bottom: 36px;
+}
+.visa-gen ul.documents-photo{
+  list-style-type: circle;
+  margin-left:20px;
+
+}
+
+/*end of med visa*/
 a:focus, a:active,
 select:focus,
 select:active,
@@ -1312,18 +1310,22 @@ p {
 }
 
 .page-header.larger-top {
-  padding-top: 130px;
+
+  padding-top: 30px;
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
   .page-header.larger-top {
-    padding-top: 200px;
+
+    padding-top: 30px;
   }
 }
 
 @media (min-width: 992px) {
   .page-header.larger-top {
-    padding-top: 160px;
+
+    padding-top: 30px;
+
   }
 }
 
@@ -1414,11 +1416,13 @@ p {
   background-color: #000;
   opacity: 0.6;
 }
-
+/*changed as in contact page header*/
 .page-header.custom {
-  background-color: #0069b0;
+
+  background-color: #8D8D8D;
   color: #0087e3;
-  border-color: #0078ca;
+
+  border-color: black;
 }
 
 .page-header.custom h1 {
@@ -3052,6 +3056,7 @@ label.error {
 
 
 @media (min-width: 768px) {
+  
   .services-group .service {
     width: 50%;
     float: left;
@@ -3060,10 +3065,15 @@ label.error {
   }
 }
 @media (max-width: 768px) {
+  .services-group {
+    margin-bottom: 50px;
+    margin-left: 0px!important;
+    margin-right: 0px!important;
+  }
   .services-group .service {
-    
+
     float: left;
-    
+
   }
 }
 
@@ -4489,7 +4499,7 @@ display: none !important;
 }
 /* #searchForm {
   text-align: start!important;
-  
+
 } */
 /* .medinovitaLogo{
   width:30%;
@@ -7682,7 +7692,7 @@ display: none !important;
   .typed-header {
     font-size: 18px;
   }
- 
+
 }
 @media (max-width :412px){
    #getQuoteCountry {
@@ -7693,9 +7703,9 @@ display: none !important;
      width: 75%!important;
    } */
   .responsiveGetQuote{
-       margin-top: -50px; 
+       margin-top: -50px;
   }
-     
+
 }
     @media (max-width:541px){
 
@@ -12224,14 +12234,14 @@ display: none !important;
   }
 }
 
-/* 
+/*
  * 	Owl Carousel - Auto Height Plugin
  */
 .owl-height {
   transition: height 500ms ease-in-out;
 }
 
-/* 
+/*
  *  Core Owl Carousel CSS File
  */
 .owl-carousel {
@@ -12339,7 +12349,7 @@ display: none !important;
   display: block;
 }
 
-/* 
+/*
  * 	Owl Carousel - Lazy Load Plugin
  */
 .owl-carousel .owl-item .owl-lazy {
@@ -12351,7 +12361,7 @@ display: none !important;
   transform-style: preserve-3d;
 }
 
-/* 
+/*
  * 	Owl Carousel - Video Plugin
  */
 .owl-carousel .owl-video-wrapper {
@@ -13221,7 +13231,7 @@ display: none !important;
 
 #Chat-Window-Body{
 width: 300px;
-  
+
   position: fixed;
   bottom: -10px;
   right: 5px;
@@ -13236,6 +13246,8 @@ width: 300px;
   padding: 0;
   margin: 0;
 }
+
+
 .chat ul li {
   margin: 45px 0 0 0;
   font-weight: 300;
@@ -13359,13 +13371,13 @@ width: 300px;
 /*HomePage*/
 
 @media (max-width: 500px) {
- 
+
   .fixedCarousel .item{
     height: 300px!important;
 }
 
 #searchForm{
-    
+
     position: absolute;
     top: 200px!important;
     height: 100%;
@@ -13730,7 +13742,7 @@ button:hover {
     opacity: 0.8;
 }
 
-/* 
+/*
 Cost Page */
 
   .top-margin {
@@ -13755,7 +13767,7 @@ overflow: visible;
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700|Roboto:400,700);
 
 .blog-card {
-  
+
   transition: height 0.3s ease;
   -webkit-transition: height 0.3s ease;
   background: #fff;
@@ -13952,6 +13964,231 @@ overflow: visible;
   }
 }
 
+.index-intro{
+    width: 100%;
+    background-color: #fff;
+}
+.index-intro .jumbotron{
+    padding: 20px 60px;
+
+    background-color: #e05928;
+    background-image: url("../images/banner1.jpg");
+    background-size: cover;
+}
+.bg-white{
+    background-color: #fff;
+    padding-bottom: 50px;
+}
+/* .bg-white.border{
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+} */
+.mb65{
+    margin-bottom: 65px !important;
+}
+.pt70{
+    padding-top: 70px;
+}
+.pb45{
+    padding-bottom: 45px;
+}
+ .country-button{
+    margin-left: 20px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+/*medical page*/
+button.bs-placeholder[role='button']>span{
+  color:white;
+}
+@media (max-width: 991px) {
+  .visa-gen{
+    border-bottom: 0.5px solid black;
+    padding-bottom: 42px;
+  }
+}
+@media (max-width: 991px) {
+  .customer-country {
+   /* float: left;*/
+   margin-top: 66px;
+   margin-left: 30px;
+   margin-bottom: 30px;
+  };
+  /* table#t01{
+    margin-left: 30px;
+  } */
+
+}
+
+@media (min-width: 992px){
+  .customer-country{
+    margin-top:53px;
+     margin-left:70px
+  }
+}
+/* Med-visa table */
+table#t01 .no-show{
+  display: none;
+}
+table#t01{
+  width:62.3%;
+  margin-left: 151px;
+  margin-top: 16px;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+table th{
+  font-size: 1.52rem;
+}
+table td{
+  font-size: 1.4rem;
+}
+th, td {
+  padding: 5px;
+  text-align: left;
+}
+table#t01 tr:nth-child(even) {
+  background-color: #fff;
+}
+table#t01 tr:nth-child(odd) {
+ background-color:#fff;
+}
+table#t01 th {
+  background-color: #4db6ac;
+  color: white;
+}
+@media (max-width: 429px){
+  table#t01{
+    margin-left: 81px;
+  }
+}
+@media (min-width: 430px) and (max-width:640px){
+  table#t01{
+    margin-left: 90px;
+  }
+}
+@media (min-width: 641px) and (max-width:699px){
+  table#t01{
+    margin-left: 120px;
+  }
+}
+/*contact page */
+
+@media screen and (min-width:992px){
+  .right-border{
+    border-right:0.5px solid grey;
+  }
+  .officeAdd{
+    padding-left:80px;
+  }
+}
 
 
-  
+@media screen and (max-width:992px){
+  .officeAdd{
+    padding-left:30px;
+  }
+}
+
+/*our services*/
+
+
+
+.medi-service.page-header{
+  margin: 0 0 0px;
+}
+.row.is-flex {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.row.is-flex > [class*='col-'] {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+@media (max-width:991px){
+  .pl-change{
+    padding-left: 300px;
+    border-right: none;
+    border-bottom: 0.2px solid #bdbdbd;
+  }
+  .font-change{
+
+    margin-left:-186px;
+  }
+}
+@media (max-width:500px){
+  .font-change{
+    font-size:6.6vw;
+  }
+}
+@media (min-width:501px){
+  .font-change{
+    font-size:2.6vw;
+  }
+}
+
+@media (min-width:992px){
+  .pl-change{
+    padding-top:38px;
+    padding-left:70px;
+    border-right:0.2px solid #bdbdbd;
+  }
+
+}
+@media (min-width:992px){
+  .service2, .service4{
+    padding:30px;
+  }
+
+  .service5{
+    padding-left:30px;
+    padding-top:13px;
+  }
+  .service6{
+    padding-left:30px;
+    padding-top:79px;
+  }
+}
+@media (max-width:991px){
+  .service2{
+    padding-left:30px;
+    padding-right:30px;
+    padding-top:0px;
+    padding-bottom:0px;
+  }
+  .service4{
+    padding-left:30px;
+    padding-right:30px;
+    padding-bottom:30px;
+  }
+  .service5{
+    padding-left:30px;
+    padding-bottom:30px;
+  }
+  .service6{
+    padding-left:30px;
+    padding-top:0px;
+  }
+}
+@media (max-width:437px){
+  .break{
+    padding-left:37px;
+  }
+}

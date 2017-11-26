@@ -11,7 +11,7 @@ var hospitalDoctorSchema = new Schema({
     hospitalName: { type: String, required: false, trim: true },
     hospitalID: { type: Number, required: false, unique: true, dropDups: true }, 
     serviceActiveFlag: { type: String, required: false, enum: ['Y', 'N'], default: 'Y'  },//new
-    hospitalimage: { type: String, required: false, trim: true },   // newly added for hospital image in webpage
+    hospitalimage: { type: String, required: false, trim: true, default: 'medinovita/blankHospital.jpg'},   // newly added for hospital image in webpage
 
     hospitalContact: {
         website: { type: String, required: false, trim: true },
@@ -75,7 +75,7 @@ var hospitalDoctorSchema = new Schema({
                     speciality: [{
                         specialityName: { type:String, required: true, trim: true }
                     }],
-                    profilepicdir: { type: String, required: false, trim: true },
+                    profilepicdir: { type: String, required: false, trim: true, default: 'medinovita/blankDoctor.png' },
                     medinovitadoctorRating: {
                         type: Number, required: true,
                         min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
@@ -95,19 +95,6 @@ var hospitalDoctorSchema = new Schema({
     }],
     updated_at: { type: Date, required: true, default: Date.now }
 });
-
-//increase the value of files using autoIncrement plugin
-/*hospitalDoctorSchema.plugin(autoIncrement.plugin, {model: collection,field: 'hospitalID',startAt: 10000,incrementBy: 1});
-hospitalDoctorSchema.plugin(autoIncrement.plugin, {model: collection,field: 'Treatment.$.procedureid',startAt: 10000, incrementBy: 1});
-hospitalDoctorSchema.plugin(autoIncrement.plugin, {model: collection,field: 'Treatment.$.departmentId',startAt: 10000,incrementBy: 1});
-hospitalDoctorSchema.plugin(autoIncrement.plugin, {model: collection,field: 'Treatment.$.doctor.$.doctorId',startAt: 10000,incrementBy: 1});*/
-
-//override the default values before save
-/*hospitalDoctorSchema.pre('save', function (next) {
-
-   
-   
-}); */
 
 //create collection.
 module.exports.hospitalModel = mongoose.model(collection, hospitalDoctorSchema);

@@ -60,3 +60,6 @@ typings/
 # vs studio file
 .suo
 
+#views folder
+/views/*
+

@@ -105,7 +105,7 @@ module.exports = function (app) {
 
     /************************API to get cost of treatment****************************************************************************************************/
     //app.get('/api/v1/get/treatmentcost/:procedurename/:bystandercount/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentEstimate.getTreatmentRoughEstimate);
-    app.get('/api/v1/get/treatmentcost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentEstimate.getTreatmentRoughEstimate);
+    app.get('/api/v1/get/treatmentcost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentEstimate.getTreatmentRoughEstimate_API);
     /********************************************************************************************************************************************************/
 
     /************************API to work on global treatment cost comparison schema****************************************************************************************************/
@@ -133,12 +133,12 @@ module.exports = function (app) {
     /*******************************************************************************************************************************************************************/
 
     /************************API to render html pages using template engine****************************************************************************************************/
-    /*  API for procedure_template.html */
-    app.get('/api/v1/get/procedure/:procedure/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, templateEngine.getProcedureDescription);
+    /*  API for procedure_template.html */   
     app.get('/procedure/:procedure', templateEngine.getProcedureDescription);
+    //sample call http://localhost:1337/api/v1/get/treatmentcost/meditrip?procedurename=Bone Grafting&bystandercount=3&holidaypackage=short name 1&hotelrate=3 star&vehicletype=sedan&countryName='Angola'
+    app.get('/api/v1/get/cost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken,templateEngine.gettreatmentEstimate);
+
     /*******************************************************************************************************************************************************************/
-
-
     /*  APi to post our services section  */
     app.post('/api/v1/post/ourservices/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, ourServicesInfo.addServicedetails);
     /*  APi to get our services details  */
@@ -149,23 +149,24 @@ module.exports = function (app) {
     /*  APi to get our services details  */
     app.get('/api/v1/get/homepagedetails/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, homepageInfo.getHomepagedetails);
 
-    /* API to get web site traffic to DB */
+    /************************API to operate on eVisa schema******************************************/
     app.post('/api/v1/post/sitetraffic/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, siteTrafficInfo.postsiteTraffic);
     app.get('/api/v1/get/evisacountries/:countryName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, evisacountryInfo.getevisacountry);
+    app.post('/api/v1/post/evisacountries/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, evisacountryInfo.addorUpdateEvisaFee);
+    /***********************************************************************************************/
 
     /* API to get web site traffic to DB */
     app.post('/api/v1/post/contactus/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, contactusInfo.submitContact);
     
-    //************************API to operate on trip schema******************************************
+    /************************API to operate on trip schema******************************************/
     app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails);
-    //***********************************************************************************************
+    /***********************************************************************************************/
   
     //encrypt and decrypt api
     app.get('/api/v1/getsecureencryptedText/:txt', security.secureEncryptedText);//sample call http://localhost:1337/api/v1/getsecureencryptedText/libin
     app.get('/api/v1/getsecuredecryptedText/:txt', security.secureDecryptedText);//this is more secure as the encryption mechanism chnages on every server restart
     app.get('/api/v1/getnonsecureencryptedText/:txt', security.nonsecureEncryptedText);
-    app.get('/api/v1/getnonsecuredecryptedText/:txt', security.nonsecuredecryptedText);  
-    app.get('/procedureinfo/:procedure', hospitalInfo.gettodoc);
+    app.get('/api/v1/getnonsecuredecryptedText/:txt', security.nonsecuredecryptedText);      
 
   };
 
