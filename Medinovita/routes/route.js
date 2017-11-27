@@ -130,6 +130,8 @@ module.exports = function (app) {
     app.get('/api/v1/get/treatmentdescription/nocost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getTreatmentSectionWithoutCost);
     /*  APi to get procedure description and summary from gridFS files  */
     app.get('/api/v1/get/procedureDetails/:procedure/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, gridFS.getProcedureDescription);
+    /*  APi to get distinct procedure names from tretment description schema  */
+    app.get('/api/v1/get/distinctprocedurenames/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getUniqueProcedureNames);
     /*******************************************************************************************************************************************************************/
 
     /************************API to render html pages using template engine****************************************************************************************************/

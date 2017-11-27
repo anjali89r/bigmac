@@ -55,11 +55,7 @@ module.exports.getTreatmentlist = function (req, res) {
         return res.status(500).json(err.message);
     
     }
-    
-
 }
-
-
 module.exports.gethospitalDetailbytreatment = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned

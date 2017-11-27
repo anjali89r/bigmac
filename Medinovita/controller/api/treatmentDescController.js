@@ -417,5 +417,38 @@ module.exports.getProcedureDetails = function getProcedureDetails(procedureName,
     })
 }
 
+/* Function to get distinct procedure names */
+module.exports.getUniqueProcedureNames = function (req, res) {
+
+    getUniqueProcedureNames(function (result) {
+        return res.json(result);
+    })
+}
+function getUniqueProcedureNames(callback) {
+
+    treatmentDescModel.aggregate([        
+       
+        { $unwind: "$treatmentList" },
+        { $group: { _id: null, treatmentNames: { $addToSet: "$treatmentList" } } }, //_id:null will return everything from array       
+        {
+            "$project": {
+                "_id": 0, "treatmentNames.procedureName": 1 //"treatmentNames":1 will return everything from the table
+            }
+        }
+
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while reading treatment description from DB");
+            callback(null);
+        } else if (result == null) {
+            logger.info("There is no treatment description available for the treatment");
+            callback(null);
+        }
+        else {
+            callback(result);
+        }
+    })
+}
 
 
