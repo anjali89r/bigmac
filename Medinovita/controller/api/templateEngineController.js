@@ -263,8 +263,10 @@ module.exports.gettreatmentEstimate = function (req, res) {
                    var localCommuteCost = estimate.localTransportCost[0].totalTransportationCost
                    var accomodationCost = estimate.accomodationExpense[0].totalAccomodationCost
                    var evisaFee = estimate.visaFee[0].fee
-                   var costOfProcedure = estimate.ProcedureAvarageCost[0].avarageTreatmentCost                    
-                   var treatmentDuration = hospitalStay[0].treatmentList.minHospitalization + " to " + hospitalStay[0].treatmentList.maxHospitalization + " days"         
+                   var costOfProcedure = estimate.ProcedureAvarageCost[0].avarageTreatmentCost 
+                   var maxHospitalization = hospitalStay[0].treatmentList.maxHospitalization
+                   maxHospitalization = Math.round(maxHospitalization + (.40 * maxHospitalization)) //add 40% buffer                   
+                   var treatmentDuration = hospitalStay[0].treatmentList.minHospitalization + " to " + maxHospitalization  + " days"         
                    var data = {
                         "totalCost": overallTripCost,
                         "holidayPkgCost": holidayPackageCost,

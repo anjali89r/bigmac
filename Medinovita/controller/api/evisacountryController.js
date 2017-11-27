@@ -9,13 +9,13 @@ var evisacountry = mongoose.model('evisacountries');
 var collection = 'evisacountries';
 module.exports.getevisacountry = function (req, res) {
 
-    var country= req.params.countryName
+    var country = req.params.countryName
 
-    getevisaDetails(country, function (visaCost){
+    getevisaDetails(country, function (visaCost) {
 
         return res.json(visaCost)
     })
-     
+
 }
 /*modified the function to access fee in cost page */
 module.exports.getevisaDetails = getevisaDetails
@@ -35,14 +35,13 @@ function getevisaDetails(countryName, callback) {
             logger.error("Error while reading visacountry details " + err.message.trim());
             callback({ "Message": "Error in getting the evisacountry details" });
         }
-        else {
-            console.log(result[0].countrylist)
+        else {           
             var filterresult = result[0].countrylist.filter(function (el) {
                 if (countryName === "all")
                     return el.disabled == false;
                 else if (!countryName)
-                    console.log("i am here " + countryName )
-                    return el.disabled == false && el.country == countryName
+                console.log("i am here " + countryName)
+                return el.disabled == false && el.country == countryName
 
             })
             callback(filterresult);
@@ -63,10 +62,10 @@ module.exports.addorUpdateEvisaFee = function (req, res) {
     new Promise(function (resolve, reject) {
 
         //check if procedure cost for a country is already stored in table
-        evisacountry.findOne(               
+        evisacountry.findOne(
             { "countrylist": { $elemMatch: { "country": req.body['country'] } } }, function (err, doc) {
                 if (doc !== null && doc.fee != null) {
-                    logger.warn("evisa cost for " + req.body['country'] +  " already exists in database");
+                    logger.warn("evisa cost for " + req.body['country'] + " already exists in database");
                     resolve(false)  //update                     
                 } else {
                     resolve(true)  //add record 
@@ -75,7 +74,7 @@ module.exports.addorUpdateEvisaFee = function (req, res) {
     }).then(function (flag) {
 
         //add new record
-        if (flag == true) {                
+        if (flag == true) {
             evisacountrySchema.countrylist = [{
                 id: req.body['id'],
                 country: req.body['country'],
@@ -84,28 +83,29 @@ module.exports.addorUpdateEvisaFee = function (req, res) {
             }]
 
             evisacountrySchema.save(function (error) {
-            if (error) {
-                logger.error("Error while inserting record in evisa country collection: - " + error.message)
-                return res.status(500).json({ "Message": error.message.trim() });
-            }
-            else {
-                return res.json({ "Message": "Data got inserted successfully in evisacountries collection" });
-            }
-        })
+                if (error) {
+                    logger.error("Error while inserting record in evisa country collection: - " + error.message)
+                    return res.status(500).json({ "Message": error.message.trim() });
+                }
+                else {
+                    return res.json({ "Message": "Data got inserted successfully in evisacountries collection" });
+                }
+            })
 
         } else {//update fee
             evisacountrySchema.findOneAndUpdate(
-                { "countrylist": { $elemMatch: { "country": req.body['country'] } } 
-            },
-            {
-                "$push": {
-                    "countrylist": {
-                        "id": req.body['id'],
-                        "country": req.body['country'],
-                        "fee": req.body['fee'],
-                        "disabled": req.body["disabled"]
+                {
+                    "countrylist": { $elemMatch: { "country": req.body['country'] } }
+                },
+                {
+                    "$push": {
+                        "countrylist": {
+                            "id": req.body['id'],
+                            "country": req.body['country'],
+                            "fee": req.body['fee'],
+                            "disabled": req.body["disabled"]
+                        }
                     }
-                }
                 },
                 { new: true }, function (err, doc) {
                     if (err) {
@@ -129,4 +129,3 @@ module.exports.addorUpdateEvisaFee = function (req, res) {
     });
 
 }
-

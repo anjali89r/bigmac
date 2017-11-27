@@ -23,6 +23,7 @@ var accomodationSchema = new Schema({
         secondaryContactNumber: { type: String, required: false }
     },    
     cost: {
+        currency: { type: String, required: true, enum: ['INR', '$']},
         singleBedRoomCost: { type: Number, required: true },
         doubleBedRoomCost: { type: Number, required: true },
         suiteRoomCost: { type: Number, required: false },

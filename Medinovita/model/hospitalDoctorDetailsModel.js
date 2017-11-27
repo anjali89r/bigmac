@@ -53,45 +53,46 @@ var hospitalDoctorSchema = new Schema({
         procedureid: { type: Number },
         activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },//new
         departmentId: { type: Number},
-                name: { type: String, required: true, trim: true },
-                costUpperBound: { type: Number, required: true },
-                costLowerBound: { type: Number, required: true },                   
-                departmentName: { type: String, required: true, trim: true },
-                /*discountRatePercent: { type: Number, required: true,},
-                discountStartDate: { type: Date, required: true },
-                discountEndDate: { type: Date, required: true },
-                discountStatus: { type: String, required: true, enum: ['Y', 'N'] },
-                medinovitaDiscountRatePercent: { type: Number, required: true, },
-                medinovitaDiscountStartDate: { type: Date, required: true },
-                medinovitaDiscountEndDate: { type: Date, required: true },
-                medinovitaDiscountStatus: { type: String, required: true, enum: ['Y', 'N'] },*/
+        name: { type: String, required: true, trim: true },
+        costUpperBound: { type: Number, required: true },
+        costLowerBound: { type: Number, required: true },  
+        currency: { type: String, required: true, enum: ['INR', '$'] }, //new field added on 26/11/17
+        departmentName: { type: String, required: true, trim: true },
+        /*discountRatePercent: { type: Number, required: true,},
+        discountStartDate: { type: Date, required: true },
+        discountEndDate: { type: Date, required: true },
+        discountStatus: { type: String, required: true, enum: ['Y', 'N'] },
+        medinovitaDiscountRatePercent: { type: Number, required: true, },
+        medinovitaDiscountStartDate: { type: Date, required: true },
+        medinovitaDiscountEndDate: { type: Date, required: true },
+        medinovitaDiscountStatus: { type: String, required: true, enum: ['Y', 'N'] },*/
                 
-                doctor: [{
+        doctor: [{
 
-                    doctorId: { type: Number},
-                    doctorName: { type: String, required: true, trim: true },
-                    doctorDescription: { type: String, required: true, trim: true },
-                    activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },
-                    speciality: [{
-                        specialityName: { type:String, required: true, trim: true }
-                    }],
-                    profilepicdir: { type: String, required: false, trim: true, default: 'medinovita/blankDoctor.png' },
-                    medinovitadoctorRating: {
-                        type: Number, required: true,
-                        min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
-                        max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
-                        default: 4
+            doctorId: { type: Number},
+            doctorName: { type: String, required: true, trim: true },
+            doctorDescription: { type: String, required: true, trim: true },
+            activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },
+            speciality: [{
+                specialityName: { type:String, required: true, trim: true }
+            }],
+            profilepicdir: { type: String, required: false, trim: true, default: 'medinovita/blankDoctor.png' },
+            medinovitadoctorRating: {
+                type: Number, required: true,
+                min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
+                max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
+                default: 4
                         
-                    },
-                    DoctorUserRating:[ {  
-                                    userRating:{type: Number, required: true, //To get default rating for cost api
-                                        min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
-                                        max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
-                                        default: 4
-                                    }, 
-                                    userId: { type: String, required: false, trim: true, default: 'medinovita@gmail.com'},
-                    }],
-                }],
+            },
+            DoctorUserRating:[ {  
+                            userRating:{type: Number, required: true, //To get default rating for cost api
+                                min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
+                                max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
+                                default: 4
+                            }, 
+                            userId: { type: String, required: false, trim: true, default: 'medinovita@gmail.com'},
+            }],
+        }],
     }],
     updated_at: { type: Date, required: true, default: Date.now }
 });

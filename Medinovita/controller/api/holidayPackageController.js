@@ -41,6 +41,7 @@ module.exports.createHolidayPackage = function (req, res) {
         holidaySchema.tourOperator = req.body["tourOperator"],
         holidaySchema.website = req.body["operatorWebsite"],
         holidaySchema.packageCost = parseInt(req.body["packageCost"]),
+        holidaySchema.currency = parseInt(req.body["currency"]),
         holidaySchema.activeStatus = req.body["activeStatus"]
         
     }).then(function () {
@@ -88,6 +89,7 @@ module.exports.updateHolidayPackage = function (req, res) {
                 "tourOperator" : req.body["tourOperator"],
                 "website" : req.body["operatorWebsite"],
                 "packageCost": req.body["packageCost"],
+                "currency": req.body["currency"],
                 "activeStatus": req.body["activeStatus"]
 
             }, { returnOriginal: false, upsert: true }, function (err, doc) {
@@ -131,7 +133,8 @@ module.exports.getHolidayPackageDetails = function (req, res) {
             "packageDuration": 1,
             "tourOperator": 1,
             "website": 1,
-            "packageCost": 1
+            "packageCost": 1,
+            "currency": 1
         }
     }
     ], function (err, result) {

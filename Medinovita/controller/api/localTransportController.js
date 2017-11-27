@@ -59,6 +59,7 @@ module.exports.addLocalTransportVendorDtls = function (req, res) {
             additionalChargesPerKiloMeter: parseInt(req.body['additionalCharges']),
             noDriverBataUpToKM: parseInt(req.body['noDriverBataUpToKM']),
             driverBataPerKiloMeter: parseInt(req.body['driverBata']),
+            currency: req.body['currency'],
             activeFlag: req.body['vehicleActiveFlag']
             }]
 
@@ -183,6 +184,7 @@ var updateJustVehicleDetailsOnly = function (req, res) {
                     "vehicle.$.additionalChargesPerKiloMeter": parseInt(req.body['additionalCharges']),
                     "vehicle.$.noDriverBataUpToKM": parseInt(req.body['noDriverBataUpToKM']),
                     "vehicle.$.driverBataPerKiloMeter": parseInt(req.body['driverBata']),
+                    "vehicle.$.currency": req.body['currency'],
                     "vehicle.$.activeFlag": req.body['vehicleActiveFlag']
 
                 }
@@ -250,6 +252,7 @@ var addJustNewVehicleDetailsOnly = function (req, res) {
                          "additionalChargesPerKiloMeter": parseInt(req.body['additionalCharges']),
                          "noDriverBataUpToKM": parseInt(req.body['noDriverBataUpToKM']),
                          "driverBataPerKiloMeter": parseInt(req.body['driverBata']),
+                         "currency": req.body['currency'],
                          "activeFlag": req.body['vehicleActiveFlag']
                      })
                      //save document
@@ -348,6 +351,7 @@ module.exports.getActiveTransportVendorDtls = function (req, res) {
                                         "noAdditionalChargesUpToKM": "$$vehicle.noAdditionalChargesUpToKM",
                                         "additionalChargesPerKiloMeter": "$$vehicle.additionalChargesPerKiloMeter",
                                         "noDriverBataUpToKM": "$$vehicle.noDriverBataUpToKM",
+                                        "currency": "$$vehicle.currency",
                                         "driverBataPerKiloMeter": "$$vehicle.driverBataPerKiloMeter",                                       
                                     },
                                     false

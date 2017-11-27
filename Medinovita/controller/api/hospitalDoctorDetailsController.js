@@ -128,6 +128,7 @@ module.exports.createHospitalRecord = function (req, res) {
         hospitalSchema.Treatment = [{
             name: req.body["procedureName"],
             activeFlag: req.body["isProcedureActive"],//new
+            currency: req.body["currency"],//new added on 26/11
             costUpperBound: parseInt(req.body["costUpperBound"]),
             costLowerBound: parseInt(req.body["costLowerBound"]),
             departmentId: departmentID,
@@ -352,6 +353,7 @@ module.exports.addProcedureDetails = function (req, res) {
                             "Treatment": {
                                 "name": req.body["procedureName"],
                                 "activeFlag": req.body["isProcedureActive"],//new
+                                "currency": req.body["currency"],
                                 "costUpperBound": parseInt(req.body["costUpperBound"]),
                                 "costLowerBound": parseInt(req.body["costLowerBound"]),
                                 "departmentId": departmentID,
@@ -435,6 +437,7 @@ module.exports.addProcedureDetails = function (req, res) {
                                 "departmentId": departmentID,                               
                                 "name": req.body["procedureName"],
                                 "activeFlag": req.body["isProcedureActive"],//new
+                                "currency": req.body["currency"],
                                 "costUpperBound": parseInt(req.body["costUpperBound"]),
                                 "costLowerBound": parseInt(req.body["costLowerBound"]),
                                 "departmentName": req.body["departmentName"],                                                                

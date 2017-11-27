@@ -37,6 +37,9 @@ var evisaCost = require('./evisacountryController.js');
 7.                                                - Cost of Visa
 8.                                                - Cost of flight ticket to India
 /**************************************************************************************************/
+
+var dollerRate = 65;
+
 /* wrapper function for external usage */
 module.exports.getTreatmentRoughEstimate_API = function (req, res) {
     getTreatmentRoughEstimate(req, res, function (data) {
@@ -82,16 +85,16 @@ function getTreatmentRoughEstimate(req, res,callback) {
             logger.info("Procedure cost - " + retProcedureCost) 
             var retVisaFee = evisaFee[0].fee 
             logger.info("visa cost - " + retVisaFee)
-            var retHolidayCost = holidayCost[0].totalPackageCost;
+            var retHolidayCost = holidayCost[0].totalPackageCost;            
             logger.info("Holiday cost - " + holidayCost[0].totalPackageCost)
             var retAccomodationCost = accomodationCost[0].totalAccomodationCost;
             logger.info("Accomodation cost - " + retAccomodationCost)
             var retLocalTransportCost = localTransportCost[0].totalTransportationCost
             logger.info("Local transport cost - " + retLocalTransportCost)
             //Calculate totla trip expenses
-            var tripExpense = retProcedureCost + retHolidayCost + retAccomodationCost + retLocalTransportCost + (retVisaFee * 65);
+            var tripExpense = retProcedureCost + retHolidayCost + retAccomodationCost + retLocalTransportCost + retVisaFee;
             //add 20% buffer
-            tripExpense = tripExpense + (tripExpense * 20) / 100
+            tripExpense = Math.round(tripExpense + (tripExpense * 20) / 100)
             logger.info("Overall trip cost - " + tripExpense)
             //Convert to json
             var totalTripExpense = JSON.parse('{ "mediTourEstimate": ' + tripExpense + '}');
@@ -238,28 +241,78 @@ var getAvarageCost = function (procedureName) {
                 "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": procedureName }, { "Treatment.activeFlag": { $in: ["Y"] } }] }
             },
             { "$unwind": "$Treatment" },            
-            {                 
+            
+            { "$project": { "_id": 0, "Treatment.costLowerBound": 1, "Treatment.currency": 1 } }
+        ], function (err, result) {
+
+            if (err) {
+                logger.error("Error while reading treatment " + procedureName + " cost details from from DB");
+                resolve(JSON.parse(JSON.stringify([{ "avarageTreatmentCost": 0 }])));
+            } else if (!result.length) {
+                logger.error("There are no active treatment records present in database for " + procedureName);
+                resolve(JSON.parse(JSON.stringify([{
+                    "avarageTreatmentCost": 0
+                }])));
+            }
+            else {                
+                var actualcost = 0   
+                    for (i = 0; i <result.length; i++) {
+                        var cost = result[i].Treatment.costLowerBound
+                        var currency = result[i].Treatment.currency
+                        if (currency = "INR") { //currency conversion logic
+                            cost = cost / dollerRate
+                        }                      
+                        actualcost = actualcost + cost                        
+                    }
+                    var avarageCost = Math.round(actualcost / result.length)                 
+                    resolve(JSON.parse(JSON.stringify([{ "avarageTreatmentCost": avarageCost }])))             
+            }
+        })
+
+    })
+    return procedureCostPromise;
+}
+
+/* Get avarage cost of treatment - old logic used in the script where there is no currency conversion used*/
+var getAvarageCost_old = function (procedureName) {
+
+    if (procedureName == null) {
+        logger.error("Procedure name is blank");
+        return (JSON.stringify({
+            "avarageTreatmentCost": 0
+        }));
+    }
+
+    var procedureCostPromise = new Promise(function (resolve, reject) {
+
+        hospitalModel.aggregate([
+            {
+                "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": procedureName }, { "Treatment.activeFlag": { $in: ["Y"] } }] }
+            },
+            { "$unwind": "$Treatment" },
+            {
                 $group: {
                     //_id: null,  
-                    _id: { procedure: procedureName},
+                    _id: { procedure: procedureName },
                     //procedure": { "$first": "$Treatment.name" },                      
                     "avarageTreatmentCost": {
                         $avg: "$Treatment.costLowerBound"
                     }
                 }
-            },// {"$project": { "_id": 0, "procedure": 1,"avarageTreatmentCost" :1}}
+            },
+            // { "$project": { "_id": 0, "procedure": 1, "avarageTreatmentCost": 1 } }
         ], function (err, result) {
 
             if (err) {
                 logger.error("Error while reading treatment " + procedureName + " cost details from from DB");
-                reject(JSON.stringify({ "avarageTreatmentCost":0 }));
+                reject(JSON.stringify({ "avarageTreatmentCost": 0 }));
             } else if (!result.length) {
                 logger.error("There are no active treatment records present in database for " + procedureName);
                 reject(JSON.stringify({
                     "avarageTreatmentCost": 0
                 }));
             }
-            else {
+            else {                
                 resolve(JSON.parse(JSON.stringify(result)))
             }
         })
@@ -295,12 +348,20 @@ var getHolidayPackageCost = function (req, res) {
             },
             {
                 "$project": {
-                    "_id": 0,
-                    "totalPackageCost": { $multiply: ["$packageCost", numPassengers] },
+                    "_id": 0,                    
+                    "totalPackageCost": { 
+                        "$cond": {
+                            "if": {
+                                "$eq": ["$currency", 'INR']
+                            },
+                            "then": {
+                                $ceil: { $divide: [{ $multiply: ["$packageCost", numPassengers] }, dollerRate] }},
+                            "else": { $ceil: { $multiply: ["$packageCost", numPassengers] } },
+                        }
+                    } 
                 }
             }
         ], function (err, result) {
-
             if (err) {
                 logger.error("Error while reading holiday packages from from DB");
                 resolve(JSON.parse(JSON.stringify([{ "totalPackageCost": 0 }])));
@@ -351,51 +412,85 @@ var getAccomodationCost = function (req, res) {
             resolve(duration[0].treatmentList.minHospitalization)
         })
     })
-        .then(function (duration) {
+    .then(function (duration) {
 
-            return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
 
-                hotelModel.aggregate([
-                    {
-                        "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "hotelRating": hotelType }] }
-                    },
-                    {
-                        "$project": {
-                            "_id": 0,
-                            "dailyAccomodationCost": {
-                                $sum: [
-                                    //{ $multiply: [{ $multiply: [{ "$avg": "$cost.doubleBedRoomCost" }, numDoubleBedRoomsTobeBooked] }, duration] },
-                                    { $multiply: [{ "$avg": "$cost.doubleBedRoomCost" }, numDoubleBedRoomsTobeBooked] },
-                                    { $multiply: [{ "$avg": "$cost.singleBedRoomCost" }, numSingleBedRoomsTobeBooked] }
-                                    // { $multiply: [{ $multiply: [{ "$avg": "$cost.singleBedRoomCost" }, numSingleBedRoomsTobeBooked] }, duration] }
-                                ]
-                            },
-                            "totalAccomodationCost": {
-                                $sum: [
-                                    //{ $multiply: [{ $multiply: [{ "$avg": "$cost.doubleBedRoomCost" }, numDoubleBedRoomsTobeBooked] }, duration] },
-                                    { $multiply: [{ "$avg": "$cost.doubleBedRoomCost" }, numDoubleBedRoomsTobeBooked * duration] },
-                                    { $multiply: [{ "$avg": "$cost.singleBedRoomCost" }, numSingleBedRoomsTobeBooked * duration] }
-                                    // { $multiply: [{ $multiply: [{ "$avg": "$cost.singleBedRoomCost" }, numSingleBedRoomsTobeBooked] }, duration] }
-                                ]
+            hotelModel.aggregate([
+                {
+                    "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "hotelRating": hotelType }] }
+                },
+                {
+                    "$project": {
+                        "_id": 0,
+                        "dailyAccomodationCost": {
+                            "$cond": {
+                                "if": {
+                                    "$eq": ["$cost.currency", 'INR']
+                                },
+                                "then": {
+                                    $ceil: {
+                                        $divide: [{
+                                            $sum:
+                                            [
+                                                { $multiply: [{ "$avg": "$cost.doubleBedRoomCost" }, numDoubleBedRoomsTobeBooked] },
+                                                { $multiply: [{ "$avg": "$cost.singleBedRoomCost" }, numSingleBedRoomsTobeBooked] }
+                                            ]
+                                        }, dollerRate]
+                                    }
+
+                                },
+                                "else": {
+                                    $sum: [
+                                        { $multiply: [{ "$avg": "$cost.doubleBedRoomCost" }, numDoubleBedRoomsTobeBooked] },
+                                        { $multiply: [{ "$avg": "$cost.singleBedRoomCost" }, numSingleBedRoomsTobeBooked] }
+                                    ]
+                                }
+                            }
+                        }, "totalAccomodationCost": {
+                            "$cond": {
+                                "if": {
+                                    "$eq": ["$cost.currency", 'INR']
+                                },
+                                "then": {
+                                    $ceil: {
+                                        $divide: [{
+                                            $sum:
+                                            [
+                                                { $multiply: [{ "$avg": "$cost.doubleBedRoomCost" }, numDoubleBedRoomsTobeBooked * duration] },
+                                                { $multiply: [{ "$avg": "$cost.singleBedRoomCost" }, numSingleBedRoomsTobeBooked * duration] }
+                                            ]
+                                        }, dollerRate]
+                                    }
+
+                                },
+                                "else": {
+                                    $sum: [
+                                        { $multiply: [{ "$avg": "$cost.doubleBedRoomCost" }, numDoubleBedRoomsTobeBooked * duration] },
+                                        { $multiply: [{ "$avg": "$cost.singleBedRoomCost" }, numSingleBedRoomsTobeBooked * duration] }
+                                    ]
+                                }
                             }
                         }
-                    }
-                ], function (err, result) {
+                    },
+                                            
+                },
+            ], function (err, result) {
 
-                    if (err) {
-                        logger.error("Error while reading accomodation cost from from DB");
-                        reject(JSON.parse(JSON.stringify([{ "totalAccomodationCost": 0 }])));
-                    } else if (!result.length) {
-                        logger.info("There are no active hotel details present in database");
-                        reject(JSON.parse(JSON.stringify([{ "totalAccomodationCost": 0 }])));
-                    }
-                    else {
-                        resolve(JSON.parse(JSON.stringify(result)))
-                    }
-                })
-
+                if (err) {
+                    logger.error("Error while reading accomodation cost from from DB");
+                    resolve(JSON.parse(JSON.stringify([{ "totalAccomodationCost": 0 }])));
+                } else if (!result.length) {
+                    logger.info("There are no active hotel details present in database");
+                    resolve(JSON.parse(JSON.stringify([{ "totalAccomodationCost": 0 }])));
+                }
+                else {
+                    resolve(JSON.parse(JSON.stringify(result)))
+                }
             })
+
         })
+    })
 }
 
 /* Get number of days to be present in a country for a particular treatment */
@@ -461,45 +556,79 @@ var getLocalTransportCost = function (req, res) {
     })
     .then(function (duration) {
 
-            return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
 
-                transportModel.aggregate([
-                    {
-                        "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "vehicle.vehicleType": vehicleType }, { "vehicle.activeFlag": 'Y' }] }
-                    },
-                    {
-                        "$project": {
-                            "_id": 0,
-                            "dailyTransportationCost": {
-                                $sum: [
-                                    { $multiply: [{ "$avg": "$vehicle.chargePerKiloMeter" }, (distanceToHospital * 2 * 2)] },
-                                ]
-                            },
-                            "totalTransportationCost": {
-                                $sum: [
-                                    { $multiply: [{ "$avg": "$vehicle.chargePerKiloMeter" }, (distanceToHospital * 2 * 2) * duration] },
-                                ]
+            transportModel.aggregate([
+                {
+                    "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "vehicle.vehicleType": vehicleType }, { "vehicle.activeFlag": 'Y' }] }
+                }, 
+                {
+                    $unwind: "$vehicle" },
+                {
+                    "$project": {
+                        "_id": 0,
+                        "dailyTransportationCost": {
+                            "$cond": {
+                                "if": {
+                                    "$eq": ["$vehicle.currency", 'INR']
+                                },
+                                "then": {
+                                    $ceil: {
+                                        $divide: [{
+                                            $sum: [
+                                                { $multiply: [{ "$avg": "$vehicle.chargePerKiloMeter" }, (distanceToHospital * 2 * 2) ] },
+                                            ]
+                                        }, dollerRate]
+                                    }
+
+                                },
+                                "else": {
+                                    $sum: [
+                                        { $multiply: [{ "$avg": "$vehicle.chargePerKiloMeter" }, (distanceToHospital * 2 * 2)] },
+                                    ]
+                                }
+                            }
+                        }, "totalTransportationCost": {
+                            "$cond": {
+                                "if": {
+                                    "$eq": ["$vehicle.currency", 'INR']
+                                },
+                                "then": {
+                                    $ceil: {
+                                        $divide: [{
+                                            $sum: [
+                                                { $multiply: [{ "$avg": "$vehicle.chargePerKiloMeter" }, (distanceToHospital * 2 * 2) * duration] },
+                                            ]
+                                        }, dollerRate]
+                                    }
+
+                                },
+                                "else": {
+                                    $sum: [
+                                        { $multiply: [{ "$avg": "$vehicle.chargePerKiloMeter" }, (distanceToHospital * 2 * 2) * duration] },
+                                    ]
+                                }
                             }
                         }
                     }
-                ], function (err, result) {
+                }
+            ], function (err, result) {
 
-                    if (err) {
-                        logger.error("Error while reading transportation cost from from DB");
-                        reject(JSON.parse(JSON.stringify([{ "totalTransportationCost": 0 }])));
-                    } else if (!result.length) {
-                        logger.info("There are no active transportation details present in database");
-                        reject(JSON.parse(JSON.stringify([{ "totalTransportationCost": 0 }])));
-                    }
-                    else {
-                        resolve(JSON.parse(JSON.stringify(result)))
-                    }
-                })
-
+                if (err) {
+                    logger.error("Error while reading transportation cost from from DB");
+                    resolve(JSON.parse(JSON.stringify([{ "totalTransportationCost": 0 }])));
+                } else if (!result.length) {
+                    logger.info("There are no active transportation details present in database");
+                    resolve(JSON.parse(JSON.stringify([{ "totalTransportationCost": 0 }])));
+                }
+                else {                    
+                    resolve(JSON.parse(JSON.stringify(result)))
+                }
             })
-        })
-}
 
+        })
+    })
+}
 
 /* Get cost of evisa */
 var geteVisaCost = function (req, res) {
