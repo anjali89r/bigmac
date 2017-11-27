@@ -43,6 +43,7 @@ var localTransportSchema = new Schema({
         noDriverBataUpToKM: { type: Number, required: false },
         driverBataPerKiloMeter: { type: Number, required: false },
         activeFlag: { type: String, required: false, enum: ['Y', 'N'] },
+        currency: { type: String, required: true, enum: ['INR', '$'] }, //new field added on 26/11/17
     }]
 });
 

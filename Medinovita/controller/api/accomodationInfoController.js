@@ -52,6 +52,7 @@ module.exports.addAccomodationVendorDtls = function (req, res) {
             }
             hotelSchema.serviceActiveFlag = req.body['serviceActiveFlag'],
 
+            hotelSchema.cost.currency = parseInt(req.body['currency']),
             hotelSchema.cost.singleBedRoomCost = parseInt( req.body['singleBedRoomCost']),
             hotelSchema.cost.doubleBedRoomCost = parseInt(req.body['doubleBedRoomCost']),
             hotelSchema.cost.suiteRoomCost = parseInt( req.body['suiteRoomCost']),
