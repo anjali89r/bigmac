@@ -57,6 +57,8 @@ module.exports = function (app) {
     app.post('/api/v1/add/newtreatment/:hospitalname/:hospitalcity/:hospitalcountry/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitalInfo.addProcedureDetails);
     /* API to add details of the doctors offering a particular procedure to hospital collection */
     app.post('/api/v1/add/doctorsofferingtreatment/:hospitalname/:hospitalcity/:hospitalcountry/:procedurename/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitalInfo.addDoctorDetails);
+    /* API to get hospital name ,procedure sorted by department*/
+    app.get('/api/v1/get/departmentwiseProcedure/:hospital/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken,hospitaltreatmentInfo.getDepartmentAndProcedureList_API);
     /*******************************************************************************************************************************************************/
 
     /************************API to operate on user enquiry schema*********************************************************************************************/
@@ -138,6 +140,8 @@ module.exports = function (app) {
     /*  API for procedure_template.html */   
     app.get('/procedure/:procedure', templateEngine.getProcedureDescription);
     //sample call http://localhost:1337/api/v1/get/treatmentcost/meditrip?procedurename=Bone Grafting&bystandercount=3&holidaypackage=short name 1&hotelrate=3 star&vehicletype=sedan&countryName='Angola'
+
+    app.get('/hospitals/:hospital', templateEngine.getHospitalDescription);
     app.get('/api/v1/get/cost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken,templateEngine.gettreatmentEstimate);
 
     /*******************************************************************************************************************************************************************/

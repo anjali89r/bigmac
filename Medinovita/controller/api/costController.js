@@ -369,8 +369,7 @@ var getHolidayPackageCost = function (req, res) {
                 logger.info("There are no active holiday packages with name " + holidayPackage + " present in database");
                 resolve(JSON.parse(JSON.stringify([{ "totalPackageCost": 0 }])));
             }
-            else {
-                logger.info(JSON.stringify(result))
+            else {                
                 resolve(JSON.parse(JSON.stringify(result)))
             }
         })

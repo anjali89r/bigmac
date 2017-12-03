@@ -11,7 +11,8 @@ var hospitalDoctorSchema = new Schema({
     hospitalName: { type: String, required: false, trim: true },
     hospitalID: { type: Number, required: false, unique: true, dropDups: true }, 
     serviceActiveFlag: { type: String, required: false, enum: ['Y', 'N'], default: 'Y'  },//new
-    hospitalimage: { type: String, required: false, trim: true, default: 'medinovita/blankHospital.jpg'},   // newly added for hospital image in webpage
+    hospitalimage: { type: String, required: false, trim: true, default: 'medinovita/blankHospital.jpg' },   // newly added for hospital image in webpage
+    hospitalDescription: { type: String, required: false, trim: true},   // newly added for hospital description
 
     hospitalContact: {
         website: { type: String, required: false, trim: true },
@@ -28,11 +29,9 @@ var hospitalDoctorSchema = new Schema({
         Landmark: { type: String, required: false, trim: true },
     },
 
-    Accreditation: {
-        JCI: { type: String, required: true, trim: true, enum: ['Y', 'N'], default: 'N' },
-        NABH: { type: String, required: true, trim: true, enum: ['Y', 'N'], default: 'N'},
-        NABL: { type: String, required: true, trim: true, enum: ['Y', 'N'], default: 'N' },
-    },
+    Accreditation: [{
+        agency: { type: String, required: true, trim: true, enum: ['NABH', 'NABL', 'JCI'] },         
+    }],
 
     hospitalRating: {
         userRating: [{

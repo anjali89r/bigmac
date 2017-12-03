@@ -124,5 +124,93 @@ module.exports.gethospitalDetailbytreatment = function (req, res) {
         return res.status(500).json("Error in fetching the data.Please try again");
     }
 
-
 }
+
+/*To get various procedures offered by hospitals grouped by department */
+module.exports.getDepartmentAndProcedureList_API = function (req, res) {
+    var hospitalName = req.params.hospital
+    getDepartmentAndProcedureList(hospitalName, function (value) {       
+        return res.json({ value })
+    })
+}
+module.exports.getDepartmentAndProcedureList = getDepartmentAndProcedureList
+function getDepartmentAndProcedureList(hospitalName, next) {
+
+    hospitalModel.aggregate(
+    [
+        {
+            "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "hospitalName": hospitalName }] }
+        },
+        //decompile array
+        { $unwind: "$Treatment" },
+        {
+            $group: {
+                _id: "$Treatment.departmentName", "procedureList": {
+                    $push: { "procedureName": "$Treatment.name", "cost": "$Treatment.costLowerBound" }
+                }
+            }
+        },
+        {
+            $project: {
+                "_id": 0,
+                "department": '$_id',
+                "procedureList" :1 ,                      
+            }
+        }
+
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while fetching department and procedure details in table");
+            next(null)
+        } else if (!result.length) {
+            logger.error("There is no hospital records available for " + hospitalName);
+            next(null)
+        } else {             
+            next(result)
+        }
+    })
+}
+
+/* Get list of doctors from a particular hospitals based on user rank */
+module.exports.getTopDoctorsinHospital = getTopDoctorsinHospital
+function getTopDoctorsinHospital(hospitalName, next) {
+
+    hospitalModel.aggregate([       
+        {
+            "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "hospitalName": hospitalName }, { "Treatment.doctor.activeFlag": { $in: ["Y"] } }] }
+        },
+        //decompile array
+        { $unwind: "$Treatment" },
+        { $unwind: "$Treatment.doctor" },
+        { $unwind: "$Treatment.doctor.speciality" },
+
+        {
+            $sort: {
+                'Treatment.doctor.medinovitadoctorRating': -1 //descending order
+            }
+        },
+        {
+            $project: {
+                "_id": 0,
+                "docname": "$Treatment.doctor.doctorName",
+                "docdescription": "$Treatment.doctor.doctorDescription",
+                "docspeciality": "$Treatment.doctor.speciality.specialityName",
+                "docpicdir": "$Treatment.doctor.profilepicdir",
+            }
+        }
+
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while fetching department and procedure details in table");
+            next(null)
+        } else if (!result.length) {
+            logger.error("There is no hospital records available for " + hospitalName);
+            next(null)
+        } else {
+            next(result)
+        }
+    })
+}
+

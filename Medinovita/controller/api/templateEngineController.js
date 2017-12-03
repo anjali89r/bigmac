@@ -3,6 +3,7 @@ var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 var config = require('../utilities/confutils.js');
 var treatmentDesc = require('./treatmentDescController.js');
+var treatmentSearch = require('./hospitaltreatmentSearchController.js');
 var costCompare = require('./costComparisonController.js');
 var treatmentEstimate = require('./costController.js');
 var hospitalData = require('./hospitalDoctorDetailsController.js');
@@ -177,7 +178,7 @@ module.exports.getProcedureDescription = function (req, res) {
                         "title": procedureName + ' in India|low cost ' + procedureName+ ' abroad',
                         "procedure_gridFS_data": content,
                         "tophospitals": tophospitaldata,
-                        "costdisprows": costComparison,
+                        "costdisprows": costComparison,                       
                         "topdoctors": topdocdata
                     };
 
@@ -283,6 +284,77 @@ module.exports.gettreatmentEstimate = function (req, res) {
                     };
 
                     var templateDir = '././views/webcontent/templates/cost_template.html'
+                    var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
+                    var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
+                    var html = mustache.to_html(page, data); // replace all of the data
+                    res.send(html);
+                })
+
+        }).catch(function (err) {
+            return res.json({ "Message": err.message });
+        });
+
+    }).catch(function (err) {
+        return res.json({ "Message": err.message });
+    });
+}
+/*    *******************************end : cost_template.html*******************************     */
+
+/*    ************Start : Hospital Details of a particular hospital*****************     */
+module.exports.getHospitalDescription = function (req, res) {
+
+    var hospitalName = req.params.hospital
+
+    new Promise(function (resolve, reject) {
+        //get the path of flat file with description
+        hospitalData.getHospitalBasicDetails(hospitalName, function (result) {
+            resolve(result)
+        })
+                
+    }).then(function (result) {
+        var basicHospData = result
+        var relFilePath = result[0].hospitalDescription //   name of text file
+        var procedureFileDir = config.getProjectSettings('DOCDIR', 'HOSPITALDIR', false)
+        var filePath = procedureFileDir + relFilePath
+        new Promise(function (resolve, reject) {
+            gridFS.getFlatFileContent(filePath, function (content) {
+                content = fs.readFileSync(filePath, "utf8");
+                if (content.indexOf("Error") > -1) {
+                    return reject(res.status(404).json({ "Message": content }));
+                } else {
+                    resolve(content)
+                }
+            })
+        }).then(function (content) {  
+            /* get list of procedures organized by departments */
+            var treatmentsPromise = new Promise(function (resolve, reject) {               
+                treatmentSearch.getDepartmentAndProcedureList(hospitalName, function (treatmentList) {                    
+                    resolve(treatmentList)                   
+                })
+            })
+
+            var doctorPromise = new Promise(function (resolve, reject) {
+                treatmentSearch.getTopDoctorsinHospital(hospitalName, function (doctorList) {                   
+                    resolve(doctorList)
+                })
+            })
+           
+            Promise.all([treatmentsPromise, doctorPromise])
+                .then(([treatmentList, doctorList]) => { 
+                    var idx = 0;
+                    var data = {
+                        "hospital_name": hospitalName,
+                        "hospitalcity": basicHospData[0].hospitalcity,
+                        "hospitalcountry": basicHospData[0].hospitalcountry,
+                        "title": hospitalName + '|low cost medical treatment abroad',
+                        "hospital_gridFS_data": content,
+                        "hospitalimage": basicHospData[0].hospitalimage,
+                        "department": treatmentList,                        
+                        "topdoctors": doctorList,
+                        "Accreditation": basicHospData[0].Accreditation
+                    };
+
+                    var templateDir = '././views/webcontent/templates/hospital_template.html'
                     var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
                     var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
                     var html = mustache.to_html(page, data); // replace all of the data

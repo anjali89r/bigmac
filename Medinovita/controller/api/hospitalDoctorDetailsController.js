@@ -108,6 +108,7 @@ module.exports.createHospitalRecord = function (req, res) {
       
         hospitalSchema.hospitalID = hospitalID
         hospitalSchema.hospitalName = req.body['hospitalname'];
+        hospitalSchema.hospitalDescription = req.body['hospitalDescription'];
         hospitalSchema.serviceActiveFlag = req.body['serviceActiveFlag'];//new
         hospitalSchema.hospitalContact.website = req.body['hospitalcontact_website'];
         hospitalSchema.hospitalContact.contactPersonname = req.body['hospitalcontact_contactpersonname'];
@@ -118,10 +119,10 @@ module.exports.createHospitalRecord = function (req, res) {
         hospitalSchema.hospitalContact.addressLine2 = req.body['hospitalcontact_addressline2'];
         hospitalSchema.hospitalContact.City = req.body['hospitalcontact_city'];
         hospitalSchema.hospitalContact.PostalCode = parseInt(req.body['hospitalcontact_postalcode']);
-        hospitalSchema.hospitalContact.country = req.body['hospitalcontact_country'];
-        hospitalSchema.Accreditation.JCI = req.body['accreditation_jci'];
-        hospitalSchema.Accreditation.NABH = req.body['accreditation_nabh'];
-        hospitalSchema.Accreditation.NABL = req.body['accreditation_nabl'];
+        hospitalSchema.hospitalContact.country = req.body['hospitalcontact_country'];      
+        hospitalSchema.Accreditation = [{
+            agency: req.body['accreditation_agency'],           
+        }];
         //hospitalSchema.hospitalRating.userRating = req.body['hospitalrating_userrating'];//this should come from another api
         hospitalSchema.hospitalRating.medinovitaRating = req.body['hospitalrating_medinovitarating'];
 
@@ -664,10 +665,7 @@ function getTopHospitals(procedure, next) {
                 "hospitalName": 1,                
                 "hospitalcity": "$hospitalContact.City",              
                 "hospitalcountry": "$hospitalContact.country",  
-                "hospitalimage": 1,
-                "ACC_JCI" : "$Accreditation.JCI",
-                "ACC_NABH": "$Accreditation.NABH",
-                "ACC_NABL": "$Accreditation.NABL"
+                "hospitalimage": 1,                
             }
         }
         
@@ -707,12 +705,12 @@ function getTopDoctors(procedure, next) {
         {
             $project: {
                 "_id": 0,
-                "docname" : "$Treatment.doctor.doctorName",
+                "docname": "$Treatment.doctor.doctorName",
                 "docdescription": "$Treatment.doctor.doctorDescription",
-                "docspeciality":"$Treatment.doctor.speciality.specialityName",
-                "docpicdir":"$Treatment.doctor.profilepicdir",
+                "docspeciality": "$Treatment.doctor.speciality.specialityName",
+                "docpicdir": "$Treatment.doctor.profilepicdir",
                 "hospitalName": 1,
-                "hospitalcity": "$hospitalContact.City", 
+                "hospitalcity": "$hospitalContact.City",
                 "hospitalcountry": "$hospitalContact.country",
             }
         }
@@ -730,24 +728,38 @@ function getTopDoctors(procedure, next) {
         }
     })
 }
+/*get Basic hospital details */
+module.exports.getHospitalBasicDetails = function (hospitalName,next) {
 
-module.exports.gettodoc = function (req, res) {
-
-        if (res.headersSent) {//check if header is already returned
-            logger.warn("Response already sent.Hence skipping the function call getcostComparisonData")
-            return;
+    hospitalModel.aggregate([
+        {     
+            "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "hospitalName": hospitalName }]}
+        },       
+        {
+            $project: {
+                "_id": 0,
+                "hospitalName": 1,
+                "hospitalcity": "$hospitalContact.City",
+                "hospitalcountry": "$hospitalContact.country",
+                "hospitalDescription":1,
+                "hospitalimage": 1, 
+                "Accreditation":1
+            }
         }
 
-        var procedure = req.params.procedure
+    ], function (err, result) {
 
-        getTopDoctors(procedure, function (cost) {
-
-            if (cost == null) {
-                return res.status(500).json({ "Message": "Error while retriving cost comparison from database" });
-            } else {
-                return res.json(cost);
-            }
-        })
+        if (err) {
+            logger.error("Error while fetching basic hospital details from table");
+            next(null)
+        } else if (!result.length) {
+            logger.error("There is no hospital records available for " + hospitalName);
+            next(null)
+        } else {
+            next(result)
+        }
+    })
 }
+
 
 
