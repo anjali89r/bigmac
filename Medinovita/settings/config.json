@@ -45,6 +45,7 @@
     "PASSWD_ENCRYPTION": "Y"
   },
   "DOCDIR": {
-    "PROCEDUREDIR": "C:/Medinovita_Support/doc/gridFS/"
+    "PROCEDUREDIR": "C:/Medinovita_Support/Medinovita_Files/Procedure/",
+    "HOSPITALDIR": "C:/Medinovita_Support/Medinovita_Files/Hospital/"
   }
 }
