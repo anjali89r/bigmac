@@ -140,7 +140,7 @@ module.exports = function (app) {
     /*  API for procedure_template.html */   
     app.get('/procedure/:procedure', templateEngine.getProcedureDescription);
     //sample call http://localhost:1337/api/v1/get/treatmentcost/meditrip?procedurename=Bone Grafting&bystandercount=3&holidaypackage=short name 1&hotelrate=3 star&vehicletype=sedan&countryName='Angola'
-
+    /*  API for hospital_template.html */
     app.get('/hospitals/:hospital', templateEngine.getHospitalDescription);
     app.get('/api/v1/get/cost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken,templateEngine.gettreatmentEstimate);
 
@@ -159,6 +159,7 @@ module.exports = function (app) {
     app.post('/api/v1/post/sitetraffic/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, siteTrafficInfo.postsiteTraffic);
     app.get('/api/v1/get/evisacountries/:countryName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, evisacountryInfo.getevisacountry);
     app.post('/api/v1/post/evisacountries/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, evisacountryInfo.addorUpdateEvisaFee);
+    app.get('/api/v1/get/countrylist/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, evisacountryInfo.getCountryListNCode);
     /***********************************************************************************************/
 
     /* API to get web site traffic to DB */

@@ -11,6 +11,8 @@ var evisaSchema = new Schema({
         id: { type: Number, required: true, unique: true },
         country: { type: String, required: true, trim: true, unique: true },
         fee: { type: Number, required: true },
+        dial_code: { type: String, required: true, trim: true, unique: true},
+        code: { type: String, required: true, trim: true },
         disabled: { type: Boolean, required: true, enum: [false, true], default: false }
     }]
 });
