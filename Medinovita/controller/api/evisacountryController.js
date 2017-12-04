@@ -129,3 +129,38 @@ module.exports.addorUpdateEvisaFee = function (req, res) {
     });
 
 }
+
+/* Get list of unique country and isd codes */   
+module.exports.getCountryListNCode = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call getCountryListNCode")
+        return;
+    }  
+
+    getCountryList(function (result) {
+        return res.json({ result })
+    })
+}
+function getCountryList(next) {
+
+    evisacountry.aggregate([
+        {
+            "$match":  { "countrylist.disabled": false }
+        },
+        { "$project": { "_id": 0, "countrylist.country": 1, "countrylist.dial_code": 1, "countrylist.code": 1 } }
+
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while fetching country list from evisa table");
+            next(null)
+        } else if (!result.length) {
+            logger.error("There are no country list available in table");
+            next(null)
+        } else {
+            next(result)
+        }
+    })
+}
+
