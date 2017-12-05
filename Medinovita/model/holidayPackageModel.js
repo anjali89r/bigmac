@@ -9,6 +9,7 @@ var holidayPackageSchema = new Schema({
     holidayPackageId: { type: Number, required: false },
     packageShortName: { type: String, required: false, trim: true },
     packageDescription: { type: String, required: false },
+    packageImageDir: { type: String, required: false },
     packageDuration: { type: String, required: false },
     tourOperator: { type: String, required: false },
     website: { type: String, required: false }, 
