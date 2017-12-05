@@ -36,7 +36,8 @@ module.exports.createHolidayPackage = function (req, res) {
   
         holidaySchema.holidayPackageId = holidayPackageId,   
         holidaySchema.packageShortName = req.body["packageShortName"],
-        holidaySchema.packageDescription=req.body["packageDescription"],
+        holidaySchema.packageDescription = req.body["packageDescription"],
+        holidaySchema.packageImageDir = req.body["packageImageDir"],
         holidaySchema.packageDuration=req.body["packageDuration"],
         holidaySchema.tourOperator = req.body["tourOperator"],
         holidaySchema.website = req.body["operatorWebsite"],
@@ -84,7 +85,8 @@ module.exports.updateHolidayPackage = function (req, res) {
 
             {
                 "packageShortName" : req.body["packageShortName"],
-                "packageDescription" : req.body["packageDescription"],
+                "packageDescription": req.body["packageDescription"],
+                "packageImageDir" : req.body["packageImageDir"],
                 "packageDuration" : req.body["packageDuration"],
                 "tourOperator" : req.body["tourOperator"],
                 "website" : req.body["operatorWebsite"],
@@ -123,6 +125,12 @@ module.exports.getHolidayPackageDetails = function (req, res) {
         logger.warn("Response already sent.Hence skipping the function call getHolidayPackageDetails")
         return;
     }
+    getHolidayPackageList(function (result) {
+        return res.json({result})
+    }) 
+}
+module.exports.getHolidayPackageList = getHolidayPackageList
+function getHolidayPackageList(next) {
 
     holidayModel.aggregate([{ "$match": { "activeStatus": "Y" } },
     {
@@ -132,6 +140,7 @@ module.exports.getHolidayPackageDetails = function (req, res) {
             "packageDescription": 1,
             "packageDuration": 1,
             "tourOperator": 1,
+            "packageImageDir": 1,
             "website": 1,
             "packageCost": 1,
             "currency": 1
@@ -141,14 +150,15 @@ module.exports.getHolidayPackageDetails = function (req, res) {
 
         if (err) {
             logger.error("Error while reading holiday packages from from DB");
-            return res.status(500).json({ "Message": err.message.trim() });
+            next(null)
         } else if (!result.length) {
             logger.info("There are no active holiday packages present in database");
-            return res.status(200).json({ "Message": "There are no active holiday packages present in database" });
+            next(null)
         }
         else {
-            return res.status(200).json(result);
+            next(result);
         }
     })
+
 
 }

@@ -142,7 +142,10 @@ module.exports = function (app) {
     //sample call http://localhost:1337/api/v1/get/treatmentcost/meditrip?procedurename=Bone Grafting&bystandercount=3&holidaypackage=short name 1&hotelrate=3 star&vehicletype=sedan&countryName='Angola'
     /*  API for hospital_template.html */
     app.get('/hospitals/:hospital', templateEngine.getHospitalDescription);
-    app.get('/api/v1/get/cost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken,templateEngine.gettreatmentEstimate);
+    /*  API for cost_template.html */
+    app.get('/api/v1/get/cost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, templateEngine.gettreatmentEstimate);
+    /*  API for holiday_home_template.html */
+    app.get('/holiday/holiday_home', templateEngine.getHolidayHomePage);
 
     /*******************************************************************************************************************************************************************/
     /*  APi to post our services section  */

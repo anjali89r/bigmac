@@ -7,6 +7,7 @@ var treatmentSearch = require('./hospitaltreatmentSearchController.js');
 var costCompare = require('./costComparisonController.js');
 var treatmentEstimate = require('./costController.js');
 var hospitalData = require('./hospitalDoctorDetailsController.js');
+var holidayData = require('./holidayPackageController.js');
 var gridFS = require('./gridFSController.js');
 var mustache = require('mustache')
 
@@ -365,6 +366,32 @@ module.exports.getHospitalDescription = function (req, res) {
             return res.json({ "Message": err.message });
         });
 
+    }).catch(function (err) {
+        return res.json({ "Message": err.message });
+    });
+}
+
+/*    ************Start : get holiday home page*****************     */
+module.exports.getHolidayHomePage = function (req, res) {
+   
+    new Promise(function (resolve, reject) {
+        //get the path of flat file with description
+        holidayData.getHolidayPackageList(function (result) {
+            resolve(result)
+        })
+
+    }).then(function (result) {
+        var data = {
+            "holidayList": result,
+            "title": 'low cost medical treatment abroad',              
+        };
+
+        var templateDir = '././views/webcontent/templates/holiday_home_template.html'
+        var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
+        var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
+        var html = mustache.to_html(page, data); // replace all of the data
+        res.send(html);
+           
     }).catch(function (err) {
         return res.json({ "Message": err.message });
     });
