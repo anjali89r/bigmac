@@ -64,7 +64,7 @@ module.exports.gethospitalDetailbytreatment = function (req, res) {
     }  
 
     try {
-
+        var cityname = req.query.city;
         var treatmentName = req.params.treatmentName;
        // var country = req.params.country;
         var hospitalResult = [];
@@ -88,35 +88,65 @@ module.exports.gethospitalDetailbytreatment = function (req, res) {
     
             });
         }
-        else{
-        //'_id:0 hospitalName hospitalContact Accreditation hospitalRating Treatment'
-        hospitalModel.find({ 'Treatment.name': treatmentName}, { _id: 0, hospitalName: 1,hospitalimage:1, hospitalContact: 1, Accreditation: 1, hospitalRating: 1, Treatment: 1 }, function (err, result) {
-            if (err) {
-                logger.error("Error retrieving hospital details from DB : - " + err.message)
-                return res.status(500).json({ "Message": err.message });
-            }
+        // added to get hospital details when city is not passed
+        else if(cityname == undefined || cityname == null){
+            hospitalModel.find({ 'Treatment.name': treatmentName}, { _id: 0, hospitalName: 1,hospitalimage:1, hospitalContact: 1, Accreditation: 1, hospitalRating: 1, Treatment: 1 }, function (err, result) {
+                if (err) {
+                    logger.error("Error retrieving hospital details from DB : - " + err.message)
+                    return res.status(500).json({ "Message": err.message });
+                }
 
-            console.log(result.length);
-            for (var intArr = 0; intArr < result.length; intArr++)
-            {
-                var tempArray = [];
-                for (var inthospArr = 0; inthospArr < result[intArr].Treatment.length; inthospArr++)
+                console.log(result.length);
+                for (var intArr = 0; intArr < result.length; intArr++)
                 {
-                    if (result[intArr].Treatment[inthospArr].name !== treatmentName)
+                    var tempArray = [];
+                    for (var inthospArr = 0; inthospArr < result[intArr].Treatment.length; inthospArr++)
                     {
-                        result[intArr].Treatment.splice(inthospArr, 1);
-                        inthospArr = 0;
-                        //tempArray.push(result[intArr].Treatment[inthospArr]);
+                        if (result[intArr].Treatment[inthospArr].name !== treatmentName)
+                        {
+                            result[intArr].Treatment.splice(inthospArr, 1);
+                            inthospArr = 0;
+                            //tempArray.push(result[intArr].Treatment[inthospArr]);
+                        }
+                        //console.log(result[intArr].Treatment.filter(function (itm) { return itm.name == treatmentName }));
                     }
-                    //console.log(result[intArr].Treatment.filter(function (itm) { return itm.name == treatmentName }));
+                    
                 }
                 
-            }
-            
-            return res.status(200).json(result.sort());
+                return res.status(200).json(result.sort());
 
-        });
-    }
+            });
+        }
+        // added to filter based on city 
+        else{
+        //'_id:0 hospitalName hospitalContact Accreditation hospitalRating Treatment'
+            hospitalModel.find({ 'Treatment.name': treatmentName,'hospitalContact.City':cityname}, { _id: 0, hospitalName: 1,hospitalimage:1, hospitalContact: 1, Accreditation: 1, hospitalRating: 1, Treatment: 1 }, function (err, result) {
+                if (err) {
+                    logger.error("Error retrieving hospital details from DB : - " + err.message)
+                    return res.status(500).json({ "Message": err.message });
+                }
+
+                console.log(result.length);
+                for (var intArr = 0; intArr < result.length; intArr++)
+                {
+                    var tempArray = [];
+                    for (var inthospArr = 0; inthospArr < result[intArr].Treatment.length; inthospArr++)
+                    {
+                        if (result[intArr].Treatment[inthospArr].name !== treatmentName)
+                        {
+                            result[intArr].Treatment.splice(inthospArr, 1);
+                            inthospArr = 0;
+                            //tempArray.push(result[intArr].Treatment[inthospArr]);
+                        }
+                        //console.log(result[intArr].Treatment.filter(function (itm) { return itm.name == treatmentName }));
+                    }
+                    
+                }
+                
+                return res.status(200).json(result.sort());
+
+            });
+        }
 
     }
     catch (err)
@@ -214,3 +244,30 @@ function getTopDoctorsinHospital(hospitalName, next) {
     })
 }
 
+module.exports.getcitylist = function (req, res) {
+    
+        if (res.headersSent) {//check if header is already returned
+            logger.warn("Response already sent.Hence skipping the function call getTreatmentlist")
+            return;
+        }  
+    
+        try
+        {
+        
+            hospitalModel.find().distinct('hospitalContact.City', function (err, result) {
+                if (err) {
+                    logger.error("Error retrieving the records from DB : - " + err.message)
+                    return res.status(500).json({ "Message": err.message });
+                }
+                return res.status(200).json(result.sort());
+    
+            });
+        
+       
+        }
+        catch (err) {
+    
+            return res.status(500).json(err.message);
+        
+        }
+    }

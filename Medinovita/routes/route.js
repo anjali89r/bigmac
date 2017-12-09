@@ -35,6 +35,7 @@ module.exports = function (app) {
     app.put('/api/v1/update/userInfo/:emailId/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.updateUserInfo);
     app.get('/api/v1/getTreamentlist/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.getTreatmentlist);
     app.get('/api/v1/searchHospitaldetails/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.gethospitalDetailbytreatment);
+    app.get('/api/v1/getcitylist/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.getcitylist);
     /***************************************************************************************************************************************************/
 
     /************************API to operate on medical section schema*******************************************************************************************/
