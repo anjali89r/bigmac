@@ -85,7 +85,7 @@ module.exports = function (app) {
     /*  API to update existing holiday package  */
     app.put('/api/v1/update/holidayPackage/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, holidayInfo.updateHolidayPackage);
     /*  API to get list of holiday packages  */
-    app.get('/api/v1/get/holidayPackage/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, holidayInfo.getHolidayPackageDetails);
+    app.get('/api/v1/get/holidayPackage/:holiday/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, holidayInfo.getHolidayDetails);
     /********************************************************************************************************************************************************/
 
      /************************API to operate on transport schema****************************************************************************************************/
@@ -147,6 +147,8 @@ module.exports = function (app) {
     app.get('/api/v1/get/cost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, templateEngine.gettreatmentEstimate);
     /*  API for holiday_home_template.html */
     app.get('/holiday/holiday_home', templateEngine.getHolidayHomePage);
+    /*  API for holiday_description_template.html */
+    app.get('/holiday/:holidaypackage', templateEngine.getHolidayDescriptionPage);
 
     /*******************************************************************************************************************************************************************/
     /*  APi to post our services section  */

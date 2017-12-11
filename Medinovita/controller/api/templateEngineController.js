@@ -396,3 +396,55 @@ module.exports.getHolidayHomePage = function (req, res) {
         return res.json({ "Message": err.message });
     });
 }
+
+/*    ************Start : get holiday description page*****************     */
+module.exports.getHolidayDescriptionPage = function (req, res) {
+
+    var holidayPackageName = req.params.holidaypackage
+
+    new Promise(function (resolve, reject) {
+        //get the path of flat file with description
+        holidayData.getIndividualHolidayPackageData(holidayPackageName,function (result) {
+            resolve(result)
+        })
+
+    }).then(function (result) {      
+        var relFilePath = result[0].packageDescription //   name of text file
+        var procedureFileDir = config.getProjectSettings('DOCDIR', 'HOLIDAYLDIR', false)
+        var filePath = procedureFileDir + relFilePath
+        new Promise(function (resolve, reject) {
+            gridFS.getFlatFileContent(filePath, function (content) {
+                content = fs.readFileSync(filePath, "utf8");
+                if (content.indexOf("Error") > -1) {
+                    return reject(res.status(404).json({ "Message": content }));
+                } else {
+                    resolve(content)
+                }
+            })
+        }).then(function (content) {
+            /* get list of procedures organized by departments */
+               var data = {
+                        "holidayList": result,
+                        "title": result[0].packageShortName + ' | low cost medical treatment abroad', 
+                        "packageShortName": result[0].packageShortName,
+                        "packageDuration": result[0].packageDuration,
+                        "packageCost": result[0].packageCost,
+                        "currency": result[0].currency,
+                        "packageImageDir": result[0].packageImageDir,
+                        "gridFS_holidayDescription": content
+                    };
+
+                    var templateDir = '././views/webcontent/templates/holiday_description_template.html'
+                    var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
+                    var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
+                    var html = mustache.to_html(page, data); // replace all of the data
+                    res.send(html);
+               
+        }).catch(function (err) {
+            return res.json({ "Message": err.message });
+        });
+
+    }).catch(function (err) {
+        return res.json({ "Message": err.message });
+    });
+}

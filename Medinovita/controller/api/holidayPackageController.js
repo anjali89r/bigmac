@@ -118,14 +118,15 @@ module.exports.updateHolidayPackage = function (req, res) {
     });
 }
 
-/*   Get holiday package details */
-module.exports.getHolidayPackageDetails = function (req, res) {
+/*   Get total holiday package details */
+module.exports.getHolidayDetails = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned
         logger.warn("Response already sent.Hence skipping the function call getHolidayPackageDetails")
         return;
     }
-    getHolidayPackageList(function (result) {
+    var packageName = req.params.holiday
+    getIndividualHolidayPackageData(packageName,function (result) {
         return res.json({result})
     }) 
 }
@@ -159,6 +160,41 @@ function getHolidayPackageList(next) {
             next(result);
         }
     })
-
-
 }
+
+/*   Get holiday package details for a particular package */
+module.exports.getIndividualHolidayPackageData = getIndividualHolidayPackageData
+function getIndividualHolidayPackageData(packageName,next) {
+
+    holidayModel.aggregate([
+        {
+            "$match": { "$and": [{ "activeStatus": "Y" }, { "packageShortName": packageName }] }
+        },
+    {
+        "$project": {
+            "_id": 0,
+            "packageShortName": 1,
+            "packageDescription": 1,
+            "packageDuration": 1,
+            "tourOperator": 1,
+            "packageImageDir": 1,
+            "website": 1,
+            "packageCost": 1,
+            "currency": 1
+        }
+    }
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while reading holiday packages from from DB");
+            next(null)
+        } else if (!result.length) {
+            logger.info("There are no active holiday packages present in database");
+            next(null)
+        }
+        else {
+            next(result);
+        }
+    })
+}
+
