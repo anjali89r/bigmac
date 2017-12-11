@@ -46,6 +46,7 @@
   },
   "DOCDIR": {
     "PROCEDUREDIR": "C:/Medinovita_Support/Medinovita_Files/Procedure/",
-    "HOSPITALDIR": "C:/Medinovita_Support/Medinovita_Files/Hospital/"
+    "HOSPITALDIR": "C:/Medinovita_Support/Medinovita_Files/Hospital/",
+    "HOLIDAYLDIR": "C:/Medinovita_Support/Medinovita_Files/Holiday/"
   }
 }
