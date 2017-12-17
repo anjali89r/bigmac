@@ -110,9 +110,9 @@ module.exports.addFeaturedtreatments = function (req, res) {
                     logger.error("Error while adding the record : - img path cannot be null")
                     return res.status(400).json({ "Message": "img path cannot be null for array index " + arrIndex });
                     }
-                if (req.body[arrIndex].svgImg == null) {
-                        logger.error("Error while adding the record : - svgImg path cannot be null")
-                        return res.status(400).json({ "Message": "svgImg path cannot be null for array index " + arrIndex });
+                if (req.body[arrIndex].pagePath == null) {
+                        logger.error("Error while adding the record : - pagePath path cannot be null")
+                        return res.status(400).json({ "Message": "pagePath path cannot be null for array index " + arrIndex });
                     }
                 if (req.body[arrIndex].shortContent == null) {
                         logger.error("Error while adding the record : - shortContent cannot be null")

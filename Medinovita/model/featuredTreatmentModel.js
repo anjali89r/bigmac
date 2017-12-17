@@ -14,7 +14,7 @@ var featureTreatmentSchema = new Schema({
 
     
     img: { type: String, required: true, trim: true },
-    svgImg: { type: String, required: true, trim: true },
+    pagePath: { type: String, required: true, trim: true },
     shortContent: { type: String, required: true, trim: true },
     title: { type: String, required: true, trim: true }
     
