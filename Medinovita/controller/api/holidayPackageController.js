@@ -118,7 +118,7 @@ module.exports.updateHolidayPackage = function (req, res) {
     });
 }
 
-/*   Get total holiday package details */
+/*   Get individual holiday package details */
 module.exports.getHolidayDetails = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned
@@ -129,6 +129,19 @@ module.exports.getHolidayDetails = function (req, res) {
     getIndividualHolidayPackageData(packageName,function (result) {
         return res.json({result})
     }) 
+}
+
+/*   Get total holiday package details */
+module.exports.getTotalHolidayPackageDetails = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call getTotalHolidayPackageDetails")
+        return;
+    }
+    
+    getHolidayPackageList( function (result) {
+        return res.json({ result })
+    })
 }
 module.exports.getHolidayPackageList = getHolidayPackageList
 function getHolidayPackageList(next) {

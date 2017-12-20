@@ -86,6 +86,8 @@ module.exports = function (app) {
     app.put('/api/v1/update/holidayPackage/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, holidayInfo.updateHolidayPackage);
     /*  API to get list of holiday packages  */
     app.get('/api/v1/get/holidayPackage/:holiday/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, holidayInfo.getHolidayDetails);
+    /*  API to populate holiday packge names in cost  */
+    app.get('/api/get/holidayPackage/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, holidayInfo.getTotalHolidayPackageDetails)
     /********************************************************************************************************************************************************/
 
      /************************API to operate on transport schema****************************************************************************************************/
@@ -135,6 +137,8 @@ module.exports = function (app) {
     app.get('/api/v1/get/procedureDetails/:procedure/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, gridFS.getProcedureDescription);
     /*  APi to get distinct procedure names from tretment description schema  */
     app.get('/api/v1/get/distinctprocedurenames/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getUniqueProcedureNames);
+    /*  APi to get distinct procedure names grouped by department names  */
+    app.get('/api/v1/get/departmentnprocedure/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getDepartmentwiseProcedureNames);
     /*******************************************************************************************************************************************************************/
 
     /************************API to render html pages using template engine****************************************************************************************************/
