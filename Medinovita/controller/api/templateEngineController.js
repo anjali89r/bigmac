@@ -10,6 +10,7 @@ var hospitalData = require('./hospitalDoctorDetailsController.js');
 var holidayData = require('./holidayPackageController.js');
 var gridFS = require('./gridFSController.js');
 var mustache = require('mustache')
+var newsSectiondata = require('./newsSectionController.js');
 
 
 /*This function is a demo function of the mustache template using hardcoded values.do not delete it*/
@@ -448,3 +449,27 @@ module.exports.getHolidayDescriptionPage = function (req, res) {
         return res.json({ "Message": err.message });
     });
 }
+
+module.exports.getnewsSectionbyid = function (req, res) {
+   // console.log(req.params.newsid)
+    new Promise(function (resolve, reject) {
+        //get the path of flat file with description
+        newsSectiondata.getnewsSection(req.params.newsid,function (result) {
+            resolve(result)
+        })
+
+    }).then(function (result) {
+        var data = result;
+
+        // var templateDir = '././views/webcontent/templates/news_template.html'
+        // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
+        // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
+        // var html = mustache.to_html(page, data); // replace all of the data
+        //res.send(html);
+        res.render('news_template',data);
+           
+    }).catch(function (err) {
+        return res.json({ "Message": err.message });
+    });
+        
+    }
