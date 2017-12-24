@@ -103,24 +103,27 @@ width: 100% !important;
   display: table;
   clear: both;
 }
-/* added by libin */
+
 .container-table {
   width:60%;
-  padding:1%;
-  /*height:150px;*/
+   padding:1%;
+  /*height:60%; */
   border:1px solid#cecece;
   background-color: #f3fafe;
-  
 }
+
 .vertical-center-row {
    margin:auto;
-   width:30%;
+   width:30%;  
    padding:63px;
    text-align:center;
 
 }
+/*.top-buffermore { margin-top:16px; }
+.top-bufferless { margin-top:10px; } */
+
 .top-buffermore { margin-top:1%; }
-.top-bufferless { margin-top:2%; }
+.top-bufferless { margin-top:2%; } 
 
 .transperentboarder {
    /* border: 0 none; */
@@ -128,4 +131,21 @@ width: 100% !important;
     box-shadow: none;
 	background: transparent;
 }
-/* added by libin */
+
+ .panel-title > a:before {
+    float: right !important;   
+    padding-right: 5px;
+}
+.panel-title > a.collapsed:before {
+    float: right !important;
+    content:"\f056";
+}
+.panel-title > a:hover, 
+.panel-title > a:active, 
+.panel-title > a:focus  {
+    text-decoration:none;
+}
+.glyphicons:before {
+    margin-right: 5px;
+}
+

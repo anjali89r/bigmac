@@ -47,7 +47,7 @@
       <!-- Modernizr -->
       <script src="./assets/js/modernizr.js"></script>
       <script async src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js'></script>
-      <script src="./assets/customjs/chat.js"></script>
+      
       <script src='https://www.google.com/recaptcha/api.js'></script>
       <script src="./assets/js/plugins.min.js"></script>
       <!-- REVOLUTION JS FILES -->
@@ -98,10 +98,8 @@
                Select Treatment...
                <span class = "caret"></span>
                </button>					   
-               <ul class = "dropdown-menu" role = "menu">
-                  <li><a href = "#">Bone Grafting</a></li>
-                  <li><a href = "#">Dental Implant</a></li>
-                  <li><a href = "#">Total Knee Replacement</a></li>
+               <ul class ="dropdown-menu" id="treatmentCostDropdown" role = "menu">
+                  
                </ul>
             </div>
             <div class="col-sm-4">
@@ -109,7 +107,7 @@
                Dependents
                <span class = "caret"></span>
                </button>					   
-               <ul class = "dropdown-menu" role = "menu">
+               <ul class = "dropdown-menu" id="bystanderDropdown" role = "menu">
                   <li><a href = "#">1</a></li>
                   <li><a href = "#">2</a></li>
                   <li><a href = "#">3</a></li>
@@ -134,12 +132,8 @@
                Select Holiday Package
                <span class = "caret"></span>
                </button>					   
-               <ul class = "dropdown-menu" role = "menu">
-                  <li><a href = "#">Kerala Hills & Backwaters </a></li>
-                  <li><a href = "#">Romantic Munnar</a></li>
-                  <li><a href = "#">Kerala Backwaters</a></li>
-                  <li class="divider"></li>
-                  <li><a href="#">View Holiday Packages</a></li>
+               <ul class = "dropdown-menu" id="holidayPackageDropdown" role = "menu">
+             
                </ul>
             </div>
             <div class="col-sm-8">		
@@ -169,266 +163,25 @@
          <!-- Table for selection -->	
          <div class="col-sm-3">
           <p></p>
-          <a href="#" title="Click to submit enquiry">						 
+          <a href="#" id="getCostDetails" title="Click to submit enquiry" >						 
           <img src="./assets/images/medinovita/Quote.png" class="img-fluid img-thumbnail transperentboarder" alt="Responsive image">
           </a>
        </div>
       </div> 
+      <br/>
+    <br/>
       <!-- Table for selection -->
       <!-- <div class="mb60 mb50-sm"></div> -->
-      <div class="container">
-         <div class="row">
-            <div class="table-responsive">			 
-               <table class="table" id="costTable">
-                  <thead>
-                     <tr>
-                        <th>
-                           Days in Hospital
-                        </th>
-                        <th>
-                           Days outside Hospital
-                        </th>
-                        <th>
-                           Cost of Procedure
-                        </th>
-                        <th>
-                           Accomodation
-                        </th>
-                        <th>
-                           Local Conveyance
-                        </th>
-                        <th>
-                           Visa
-                        </th>
-                        <th>
-                           Transportation
-                        </th>
-                        <th>
-                           Holiday Package
-                        </th>
-                        <th>
-                           Total Cost
-                        </th>
-                     </tr>
-                  </thead>
-                  <tbody id="costRow">
-                     <tr class="info" >
-                        <td>
-                           3
-                        </td>
-                        <td>
-                           5
-                        </td>
-                        <td>
-                           2000$
-                        </td>
-                        <td>
-                           500$
-                        </td>
-                        <td>
-                           100$
-                        </td>
-                        <td>
-                           800$
-                        </td>
-                        <td>
-                           500$
-                        </td>
-                        <td>
-                           150$
-                        </td>
-                        <td>
-                           25000$
-                        </td>
-                     </tr>					 
-					 <button type="button" class="btn btn-link pull-right">Customize package</button>
-                  </tbody>				  
-               </table>			   
-                <!--<div class="input-group input-group-lg center-block pull-right">
-                 <button class="btn pull-right">Customize package</button> 
-				
-               </div> -->
-            </div>			
-         </div>
-      </div>
-      <div class="container">
-         <div class="row">
-            <div class="col-md-5">
-               <caption>
-                  <h2 class="display-4">Top Hospitals for Bone Grafting</h2>
-               </caption>
-               <div class="col-md-3">				  
-                  <img src="./assets/images/medinovita/appolo.png" class="img-thumbnail transperentboarder" alt="Responsive image">
-               </div>
-               <a href="#" title="Click View Details">
-                  <div class="col-md-3">
-                     <h5 class="text-primary">
-                        Appolo Hospitals
-                        <p>Kochi,India</p>
-                     </h5>
-                  </div>
-               </a>
-               <div class="col-md-3">				  
-                  <img src="./assets/images/medinovita/appolo.png" class="img-thumbnail transperentboarder" alt="Responsive image">
-               </div>
-               <a href="#" title="Click View Details">
-                  <div class="col-md-3">
-                     <h5 class="text-primary">
-                        Aster Medicity
-                        <p>Kochi,India</p>
-                     </h5>
-                  </div>
-               </a>
-            </div>
-            <!--Top Doctors-->		
-            <div class="col-md-5">
-               <caption>
-                  <h2 class="display-4">Top Doctors for Bone Grafting</h2>
-               </caption>
-               <div class="col-md-2">				  
-                  <img src="./assets/images/medinovita/doctor.jpg" class="img-thumbnail transperentboarder" alt="Responsive image">
-               </div>
-               <a href="#" title="Click View Details">
-                  <div class="col-md-3">
-                     <h5 class="text-primary">
-                        DR.Rajendran
-                        <p>MBBS,MS(Ortho)</p>
-                     </h5>
-                  </div>
-               </a>
-               <div class="col-md-2">				  
-                  <img src="./assets/images/medinovita/doctor.jpg" class="img-thumbnail transperentboarder" alt="Responsive image">
-               </div>
-               <a href="#" title="Click View Details">
-                  <div class="col-md-3">
-                     <h5 class="text-primary">
-                        Dr.Siva Shankar
-                        <p>MBBS,MS(Ortho),DCH</p>
-                     </h5>
-                  </div>
-               </a>
-            </div>
-            <!-- second -->
-            <!-- Top hospital 2 -->
-            <div class="col-md-5">
-               <div class="col-md-3">				  
-                  <img src="./assets/images/medinovita/appolo.png" class="img-thumbnail transperentboarder" alt="Responsive image">
-               </div>
-               <a href="#" title="Click View Details">
-                  <div class="col-md-3">
-                     <h5 class="text-primary">
-                        Renai Medicy
-                        <p>Kochi,India</p>
-                     </h5>
-                  </div>
-               </a>
-               <div class="col-md-3">				  
-                  <img src="./assets/images/medinovita/appolo.png" class="img-thumbnail transperentboarder" alt="Responsive image">
-               </div>
-               <a href="#" title="Click View Details">
-                  <div class="col-md-3">
-                     <h5 class="text-primary">
-                        KIMS
-                        <p>Trivandrum,India</p>
-                     </h5>
-                  </div>
-               </a>
-            </div>
-            <!--Top Doctors 2-->		
-            <div class="col-md-5">
-               <div class="col-md-2">				  
-                  <img src="./assets/images/medinovita/doctor.jpg" class="img-thumbnail transperentboarder" alt="Responsive image">
-               </div>
-               <a href="#" title="Click View Details">
-                  <div class="col-md-3">
-                     <h5 class="text-primary">
-                        DR.Ravi
-                        <p>MBBS,MS(Ortho)</p>
-                     </h5>
-                  </div>
-               </a>
-               <div class="col-md-2">				  
-                  <img src="./assets/images/medinovita/doctor.jpg" class="img-thumbnail transperentboarder" alt="Responsive image">
-               </div>
-               <a href="#" title="Click View Details">
-                  <div class="col-md-3">
-                     <h5 class="text-primary">
-                        Dr.Mathew
-                        <p>MBBS,MS(Ortho),DCH</p>
-                     </h5>
-                  </div>
-               </a>
-            </div>
-            <!-- end second -->
-            <!-- details of treatment -->		 
-         </div>
-         <!-- Row ,Hospital & Doctor  -->
+      <div id="costTemplateDiv">
+        
       </div>
       <!-- Row ,Hospital & Doctor  main container -->
-      <p></p>
-      <p></p>
-      <div class="container">
-      <div class="row">
-         <div class="col-md-7">
-            <h2 class="mb30">What is Bone Grafting</h2>
-            <p class="h5-responsive">
-               A bone graft is a surgical procedure used to fix problems with bones or joints. Bone grafting, or transplanting of bone tissue, is beneficial in fixing bones that are damaged from trauma, or problem joints. It’s also useful for growing bone around an implanted device, such as a total knee replacement. A bone graft may fill a void where bone is absent or help provide structural stability.
-            <p class="h5-responsive">
-               The bone used in a bone graft can come from your body, a donor, or it can be entirely man-made. The bone graft can provide a framework where new, living bone can grow if it’s accepted by the body.
-            </p>
-            <p class="h5">The two most common types of bone grafts are:</p>
-            <p class="h5-responsive">
-               An allograft uses bone from a deceased donor or a cadaver that has been cleaned and stored in a tissue bank.
-            <p class="h5-responsive">
-               An autograft comes from a bone inside your body, such as your ribs, hips, pelvis, or wrist.
-               The type of graft used depends on the type of injury your surgeon will be repairing. Allografts are commonly used in hip, knee, or long bone reconstruction. Long bones include arms and legs. The advantages are there’s no additional surgery needed to acquire the bone. It also lowers your risk of infection since additional incisions or surgery aren’t required
-            </p>
-            <p class="h5">Why Bone Grafting Is Performed </p>
-            <p class="h5-responsive">
-               Bone grafting is done for numerous reasons, including injury and disease. There are four main reasons bone grafts are used:
-            <p class="h5-responsive">•	A bone graft may be used in the case of multiple or complex fractures or those that don’t heal well after initial treatment.</p>
-            <p class="h5-responsive">•	Fusion helps two bones heal together across a diseased joint. Fusion is most often done on the spine.</p>
-            <p class="h5-responsive">•	Regeneration is used for bone lost to disease, infection, or injury. This can involve using small amounts of bone in bone cavities or large sections of bones.</p>
-            <p class="h5-responsive">•	A graft can be used to help bone heal around surgically implanted devices, like joint replacements, plates, or screws</p>
-            </p>
-            </p>
-            </p>
-            <p class="h5-responsive">
-            <p class="h5">Details of surgery</p>
-            Your doctor will decide which type of bone graft will be used before your surgery. You’ll be given general anesthesia, which will put you into a deep, peaceful sleep. An anesthesiologist will monitor the anesthesia and your recovery.
-            Your surgeon will make an incision in the skin above where the graft is needed. They’ll then shape the donated bone to fit the area. The graft will be held in place using any of the following:
-            <p class="h5-responsive">pins</p>
-            <p class="h5-responsive">plates </p>
-            <p class="h5-responsive">screws</p>
-            <p class="h5-responsive">wires</p>
-            <p class="h5-responsive">cables</p>
-            Once the graft is securely in place, your surgeon will close the incision or wound with stitches and bandage the wound. A cast or splint may be used to support the bone while it heals. Many times, no casting or splint is necessary.
-            </p>
-            <p class="h5">Recovery & rehabilitation</p>
-            <p class="h5-responsive">
-               Recovery from bone grafts depends on the size of the graft and other variables. Typical recovery can take anywhere from two weeks to more than a year. You’ll probably need to avoid vigorous physical activity for as long as your surgeon suggests.
-               Apply ice and elevate your arm or leg after surgery. This is extremely important. It can help prevent swelling, which causes pain and can cause blood clots in your leg. As a general rule, keep your arm or leg above the level of your heart. Even if your injury is in a cast, putting ice bags over the cast may help.
-               During your recovery, you should exercise the muscle groups that weren’t affected by the surgery. This will help keep your body in good shape. You should also maintain a healthy diet, which will aid in the recovery process.
-               One of the best things you can do is quit smoking. This will improve the health of your body after surgery and beyond. Smoking slows the healing and growth of bone. Research has shown that bone grafts fail at a higher rate with smokers. Some surgeons refuse to do elective bone grafting procedures on those who smoke.
-            </p>
-            </p>
-         </div>
-         <div class="col-md-3">
-            <p class="h5-responsive"></p>
-            <div class="row">
-               <p></p>
-               <div class="col-md-10">
-                  <a href="#" title="Click to submit enquiry"> 
-                  <img src="./assets/images/medinovita/contactus.jpg" class="img-fluid img-thumbnail" alt="Responsive image">
-                  </a>
-               </div>
-            </div>
-         </div>
-      </div>
+      
       <!-- End #wrapper -->
       <!-- End -->
 	  <div class="medinovitaFooter"></div>
       <div class="medinovitaModals"></div>
    </body>
+   <script src="./assets/customjs/chat.js"></script>
    <script src="./assets/js/main.js"></script>
 </html>

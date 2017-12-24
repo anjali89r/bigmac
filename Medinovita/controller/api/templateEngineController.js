@@ -466,7 +466,7 @@ module.exports.getnewsSectionbyid = function (req, res) {
         // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
         // var html = mustache.to_html(page, data); // replace all of the data
         //res.send(html);
-        res.render('news_template',data);
+        res.render('newstemplate',data);
            
     }).catch(function (err) {
         return res.json({ "Message": err.message });

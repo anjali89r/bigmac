@@ -30,6 +30,7 @@ app.use((req, res, next) => {
     .catch(next);
 });
 
+
 /*   Route for API end point */
 require('./routes/route.js')(app);//define express router for api calls
 
