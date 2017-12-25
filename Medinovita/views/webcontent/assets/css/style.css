@@ -14502,3 +14502,10 @@ div.margin20{
   }
 }
 
+/* newstemplatemustache */
+@media (min-width:992px){
+  .news-style{
+    border-left: 2px solid rgba(0, 0, 0, 0.26);
+    padding-left:84px;
+  }
+}
