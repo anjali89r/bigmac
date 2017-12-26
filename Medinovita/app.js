@@ -3,6 +3,9 @@ var bodyParser = require('body-parser')
 var cors = require('cors')
 var helmet = require('helmet')
 var compression = require('compression')
+var  mustacheExpress = require('mustache-express');
+
+
 
 var app = express();
 
@@ -27,6 +30,7 @@ app.use((req, res, next) => {
     .catch(next);
 });
 
+
 /*   Route for API end point */
 require('./routes/route.js')(app);//define express router for api calls
 
@@ -34,6 +38,10 @@ require('./routes/route.js')(app);//define express router for api calls
 var port = process.env.PORT || 80  //port
 
 app.use(express.static('./views/webcontent/', { index: 'index.html' }))//define home page
+app.engine('mustache', mustacheExpress());
+
+app.set('view engine', 'mustache');
+app.set('views', './views/webcontent/templates');
 // added for 404 html ,should be called only after all routes
 app.use(function(req, res, next){
     // respond with html page
@@ -45,7 +53,6 @@ app.use(function(req, res, next){
             'x-sent': true
         }
       };
-
       res.status(404).sendFile('404Page.html', options, function (err) {
         if (err) {
           next(err);

@@ -105,40 +105,39 @@ module.exports.addnewsSection = function (req, res) {
 
 }
 
-
-
-module.exports.getnewsSectionbyid = function (req, res) {
-
-    if (res.headersSent) {//check if header is already returned
-        logger.warn("Response already sent.Hence skipping the function call get newsSection")
-        return;
+module.exports.getnewsSection = getnewsSection
+function getnewsSection(newsid,next) {
+    
+        var newsSectionSchema = new newsSectionModel();
+        
+   //  console.log(newsid)
+        newsSectionModel.aggregate([{ "$match": { "newsId": parseInt(newsid) } },
+        {
+            "$project": {
+                "_id": 0,
+               
+                "postHeading":1,
+                
+                "newDescription": 1,
+                "imgPath" : 1,
+                "postedDate": 1
+    
+               
+            }
+        }
+        ], function (err, result) {
+    
+            if (err) {
+                logger.error("Error while reading list of latest news from DB");
+                next(null);
+                
+            } else if (result == null) {
+                logger.info("There are no news available in db for the newsid");
+                next(null);
+            }
+            else {
+                next(result[0]);
+               
+            }
+        })
     }
-
-    var newsSectionSchema = new newsSectionModel();
-    console.log(req.params.newsId)
-
-    newsSectionModel.aggregate([{ "$match": { "newsId": parseInt(req.params.newsId) } },
-    {
-        "$project": {
-            "_id": 0,
-           
-            "postHeading":1,
-            
-            "newDescription": 1
-           
-        }
-    }
-    ], function (err, result) {
-
-        if (err) {
-            logger.error("Error while reading list of latest news from DB");
-            return res.status(500).json({ "Message": err.message.trim() });
-        } else if (result == null) {
-            logger.info("There are no latest news present in database");
-            return res.status(200).json({ "Message": err.message.trim() });
-        }
-        else {
-            return res.json(result);
-        }
-    })
-}

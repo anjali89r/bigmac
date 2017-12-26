@@ -124,7 +124,7 @@ module.exports = function (app) {
     app.get('/api/v1/get/newssection/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, newsSection.getnewsSection);
 
     /*  APi to get latest news description by newsid  */
-    app.get('/api/v1/get/newssection/:newsId/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, newsSection.getnewsSectionbyid);
+    // app.get('/api/v1/get/newssection/:newsId/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, newsSection.getnewsSectionbyid);
 
     /************************API to operate on Treatment Description****************************************************************************************************/
     /*  APi to post treatmentdescription   */    
@@ -153,7 +153,7 @@ module.exports = function (app) {
     app.get('/holiday/holiday_home', templateEngine.getHolidayHomePage);
     /*  API for holiday_description_template.html */
     app.get('/holiday/:holidaypackage', templateEngine.getHolidayDescriptionPage);
-
+    app.get('/news/:newsid/', templateEngine.getnewsSectionbyid);
     /*******************************************************************************************************************************************************************/
     /*  APi to post our services section  */
     app.post('/api/v1/post/ourservices/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, ourServicesInfo.addServicedetails);

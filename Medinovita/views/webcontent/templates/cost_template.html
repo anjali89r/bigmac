@@ -1,0 +1,95 @@
+<div class="container">
+   <div class="row">
+      <div class="table-responsive">
+         <table class="table" id="costTable">
+            <thead>
+               <tr>
+                  <th>Treatment Duration</th>                  
+                  <th>Cost of Procedure</th>
+                  <th>Accomodation</th>
+                  <th>Local Conveyance</th>
+                  <th>Visa</th>                  
+                  <th>Holiday Package</th>
+                  <th>Total Cost</th>
+               </tr>
+            </thead>
+            <tbody id="costRow">
+               <tr class="info" >
+                  <td>{{treatmentduration}}</td>                 
+                  <td>{{costOfProcedure}}$</td>
+                  <td>{{accomodationCost}}$</td>
+                  <td>{{localCommuteCost}}$</td>
+                  <td>{{visaFee}}$</td>                  
+                  <td>{{holidayPkgCost}}$</td>
+                  <td>{{totalCost}}$</td>
+               </tr>               
+            </tbody>
+         </table>
+		 <button type="button" class="btn btn-link pull-right">Customize package</button>
+      </div>
+   </div>
+</div>
+<div class="container">
+   <div class="row">
+      <div class="col-md-5">
+         <caption>
+            <h2 class="display-4">Top Hospitals for {{procedure_name}}</h2>
+         </caption>
+		 {{#tophospitals}} <!--array name hold the cell values-->
+         <div class="col-md-3">				  
+            <img src="{{{hospitalimage}}}" class="img-thumbnail transperentboarder" alt="Responsive image">
+         </div>
+         <a href="#" title="Click View Details">
+            <div class="col-md-3">
+               <h5 class="text-primary">
+                 {{hospitalName}}
+                  <p>{{hospitalcity}},{{hospitalcountry}}</p>
+               </h5>
+            </div>
+         </a>
+		 {{/tophospitals}} <!--array ends here--> 
+      </div>	 
+	 
+      <!--Top Doctors-->		
+      <div class="col-md-5">
+         <caption>
+            <h2 class="display-4">Top Doctors for {{procedure_name}}</h2>
+         </caption>
+		 {{#topdoctors}} <!--array name hold the cell values-->
+         <div class="col-md-2">				  
+            <img src="{{{docpicdir}}}" class="img-thumbnail transperentboarder" alt="Responsive image">
+         </div>
+         <a href="#" title="Click View Details">
+            <div class="col-md-3">
+               <h5 class="text-primary">
+                  {{docname}}
+                  <p>{{docspeciality}}</p>
+               </h5>
+            </div>
+         </a> 
+			{{/topdoctors}} <!--array ends here-->
+      </div>	  
+      <!-- second -->	 
+   </div>
+   <!-- Row ,Hospital & Doctor  -->
+</div>
+<!-- Row ,Hospital & Doctor  main container -->
+<p></p>
+<p></p>
+<div class="container">
+<div class="row">
+   <div class="col-md-7">
+      {{{procedure_gridFS_data}}}
+   </div>
+   <div class="col-md-3">
+      <p class="h5-responsive"></p>
+      <div class="row">
+         <p></p>
+         <div class="col-md-10">
+            <a href="#" title="Click to submit enquiry"> 
+            <img src="./assets/images/medinovita/contactus.jpg" class="img-fluid img-thumbnail" alt="Responsive image">
+            </a>
+         </div>
+      </div>
+   </div>
+</div>
