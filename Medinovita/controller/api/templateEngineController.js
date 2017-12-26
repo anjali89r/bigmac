@@ -93,11 +93,12 @@ module.exports.getProcedureDescription_demo = function (req, res) {
                 "topdoctors": topdocdata
             };
 
-            var templateDir = '././views/webcontent/templates/procedure_template.html'
-            var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
-            var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
-            var html = mustache.to_html(page, data); // replace all of the data
-            res.send(html);
+            // var templateDir = '././views/webcontent/templates/procedure_template.html'
+            // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
+            // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
+            // var html = mustache.to_html(page, data); // replace all of the data
+            // res.send(html);
+            res.render('procedure_template',data);
             // return res.status(200).json({ "ProcedureBrief": procedureBrief, "procedureDetails": content});
 
         }).catch(function (err) {
@@ -184,19 +185,22 @@ module.exports.getProcedureDescription = function (req, res) {
                         "topdoctors": topdocdata
                     };
 
-                    var templateDir = '././views/webcontent/templates/procedure_template.html'
-                    var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
-                    var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
-                    var html = mustache.to_html(page, data); // replace all of the data
-                    res.send(html);
+                    // var templateDir = '././views/webcontent/templates/procedure_template.html'
+                    // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
+                    // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
+                    // var html = mustache.to_html(page, data); // replace all of the data
+                    // res.send(html);
+                    res.render('procedure_template',data);
                 })
 
         }).catch(function (err) {
-            return res.json({ "Message": err.message });
+            // return res.json({ "Message": err.message });
+            return res.redirect('/404');
         });
 
     }).catch(function (err) {
-        return res.json({ "Message": err.message });
+        // return res.json({ "Message": err.message });
+        return res.redirect('/404');
     });
 }
 
@@ -285,19 +289,22 @@ module.exports.gettreatmentEstimate = function (req, res) {
                         "topdoctors": topdocdata,                       
                     };
 
-                    var templateDir = '././views/webcontent/templates/cost_template.html'
-                    var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
-                    var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
-                    var html = mustache.to_html(page, data); // replace all of the data
-                    res.send(html);
+                    // var templateDir = '././views/webcontent/templates/cost_template.html'
+                    // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
+                    // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
+                    // var html = mustache.to_html(page, data); // replace all of the data
+                    // res.send(html);
+                    res.render('cost_template',data);
                 })
 
         }).catch(function (err) {
-            return res.json({ "Message": err.message });
+            // return res.json({ "Message": err.message });
+            return res.redirect('/404');
         });
 
     }).catch(function (err) {
-        return res.json({ "Message": err.message });
+        // return res.json({ "Message": err.message });
+        return res.redirect('/404');
     });
 }
 /*    *******************************end : cost_template.html*******************************     */
@@ -356,19 +363,22 @@ module.exports.getHospitalDescription = function (req, res) {
                         "Accreditation": basicHospData[0].Accreditation
                     };
 
-                    var templateDir = '././views/webcontent/templates/hospital_template.html'
-                    var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
-                    var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
-                    var html = mustache.to_html(page, data); // replace all of the data
-                    res.send(html);
+                    // var templateDir = '././views/webcontent/templates/hospital_template.html'
+                    // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
+                    // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
+                    // var html = mustache.to_html(page, data); // replace all of the data
+                    // res.send(html);
+                    res.render('hospital_template',data);
                 })
 
         }).catch(function (err) {
-            return res.json({ "Message": err.message });
+            // return res.json({ "Message": err.message });
+            return res.redirect('/404');
         });
 
     }).catch(function (err) {
-        return res.json({ "Message": err.message });
+        // return res.json({ "Message": err.message });
+        return res.redirect('/404');
     });
 }
 
@@ -387,14 +397,15 @@ module.exports.getHolidayHomePage = function (req, res) {
             "title": 'low cost medical treatment abroad',              
         };
 
-        var templateDir = '././views/webcontent/templates/holiday_home_template.html'
-        var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
-        var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
-        var html = mustache.to_html(page, data); // replace all of the data
-        res.send(html);
-           
+        // var templateDir = '././views/webcontent/templates/holiday_home_template.html'
+        // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
+        // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
+        // var html = mustache.to_html(page, data); // replace all of the data
+        // res.send(html);
+        res.render('holiday_home_template',data);
     }).catch(function (err) {
-        return res.json({ "Message": err.message });
+        // return res.json({ "Message": err.message });
+        return res.redirect('/404');
     });
 }
 
@@ -435,41 +446,46 @@ module.exports.getHolidayDescriptionPage = function (req, res) {
                         "gridFS_holidayDescription": content
                     };
 
-                    var templateDir = '././views/webcontent/templates/holiday_description_template.html'
-                    var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
-                    var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
-                    var html = mustache.to_html(page, data); // replace all of the data
-                    res.send(html);
+                    // var templateDir = '././views/webcontent/templates/holiday_description_template.html'
+                    // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
+                    // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
+                    // var html = mustache.to_html(page, data); // replace all of the data
+                    // res.send(html);
+                    res.render('holiday_description_template',data);
                
         }).catch(function (err) {
-            return res.json({ "Message": err.message });
+            // console.log(err.message);
+            return res.redirect('/404');
         });
 
     }).catch(function (err) {
-        return res.json({ "Message": err.message });
+        console.log(err.message);
+        return res.redirect('/404')
     });
 }
 
 module.exports.getnewsSectionbyid = function (req, res) {
-   // console.log(req.params.newsid)
-    new Promise(function (resolve, reject) {
+     new Promise(function (resolve, reject) {
         //get the path of flat file with description
         newsSectiondata.getnewsSection(req.params.newsid,function (result) {
             resolve(result)
         })
-
-    }).then(function (result) {
-        var data = result;
-
-        // var templateDir = '././views/webcontent/templates/news_template.html'
-        // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
-        // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
-        // var html = mustache.to_html(page, data); // replace all of the data
-        //res.send(html);
+        }).then(function (result) {
+        var temparray = result.filter(function (el) {
+            return el.newsId == req.params.newsid;
+        });
+        var newsarray = result.filter(function (el) {
+            return el.newsId != req.params.newsid;
+        });
+        var data = temparray[0];
+        data.newsdetails=[];
+        newsarray.forEach(function(key)
+        {
+            data.newsdetails.push({"newsHeading":key.postHeading,"newsId": key.newsId });
+        });
         res.render('newstemplate',data);
-           
-    }).catch(function (err) {
-        return res.json({ "Message": err.message });
+        }).catch(function (err) {
+        return  res.redirect('/404')
     });
         
     }
