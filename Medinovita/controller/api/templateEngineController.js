@@ -467,10 +467,10 @@ module.exports.getHolidayDescriptionPage = function (req, res) {
 module.exports.getnewsSectionbyid = function (req, res) {
      new Promise(function (resolve, reject) {
         //get the path of flat file with description
-        newsSectiondata.getnewsSection(req.params.newsid,function (result) {
+        newsSectiondata.getnewsSectiontemplate(req.params.newsid,function(result) {
             resolve(result)
         })
-        }).then(function (result) {
+        }).then(function(result) {
         var temparray = result.filter(function (el) {
             return el.newsId == req.params.newsid;
         });

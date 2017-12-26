@@ -105,8 +105,10 @@ module.exports.addnewsSection = function (req, res) {
 
 }
 
-module.exports.getnewsSection = getnewsSection
-function getnewsSection(newsid,next) {
+
+module.exports.getnewsSectiontemplate = getnewsSectiontemplate
+
+function getnewsSectiontemplate(newsid,next) {
     
         var newsSectionSchema = new newsSectionModel();
         
@@ -137,8 +139,9 @@ function getnewsSection(newsid,next) {
                 next(null);
             }
             else {
-                next(result);
-               
+                console.log(result)
+                
+               next(result);
             }
         })
     }
