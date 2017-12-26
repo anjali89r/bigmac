@@ -111,11 +111,12 @@ function getnewsSection(newsid,next) {
         var newsSectionSchema = new newsSectionModel();
         
    //  console.log(newsid)
-        newsSectionModel.aggregate([{ "$match": { "newsId": parseInt(newsid) } },
+        //newsSectionModel.aggregate([{ "$match": { "newsId": parseInt(newsid) } },
+        newsSectionModel.aggregate([{"$match":{ "newsDisableflag": "N" }},
         {
             "$project": {
                 "_id": 0,
-               
+                "newsId": 1,
                 "postHeading":1,
                 
                 "newDescription": 1,
@@ -136,7 +137,7 @@ function getnewsSection(newsid,next) {
                 next(null);
             }
             else {
-                next(result[0]);
+                next(result);
                
             }
         })
