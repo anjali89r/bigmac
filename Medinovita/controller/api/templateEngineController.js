@@ -183,13 +183,7 @@ module.exports.getProcedureDescription = function (req, res) {
                         "tophospitals": tophospitaldata,
                         "costdisprows": costComparison,                       
                         "topdoctors": topdocdata
-                    };
-
-                    // var templateDir = '././views/webcontent/templates/procedure_template.html'
-                    // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
-                    // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
-                    // var html = mustache.to_html(page, data); // replace all of the data
-                    // res.send(html);
+                    };                    
                     res.render('procedure_template',data);
                 })
 
@@ -288,12 +282,6 @@ module.exports.gettreatmentEstimate = function (req, res) {
                         "tophospitals": tophospitaldata,                       
                         "topdoctors": topdocdata,                       
                     };
-
-                    // var templateDir = '././views/webcontent/templates/cost_template.html'
-                    // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
-                    // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
-                    // var html = mustache.to_html(page, data); // replace all of the data
-                    // res.send(html);
                     res.render('cost_template',data);
                 })
 
@@ -361,13 +349,7 @@ module.exports.getHospitalDescription = function (req, res) {
                         "department": treatmentList,                        
                         "topdoctors": doctorList,
                         "Accreditation": basicHospData[0].Accreditation
-                    };
-
-                    // var templateDir = '././views/webcontent/templates/hospital_template.html'
-                    // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
-                    // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
-                    // var html = mustache.to_html(page, data); // replace all of the data
-                    // res.send(html);
+                    };                   
                     res.render('hospital_template',data);
                 })
 
@@ -395,13 +377,7 @@ module.exports.getHolidayHomePage = function (req, res) {
         var data = {
             "holidayList": result,
             "title": 'low cost medical treatment abroad',              
-        };
-
-        // var templateDir = '././views/webcontent/templates/holiday_home_template.html'
-        // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
-        // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
-        // var html = mustache.to_html(page, data); // replace all of the data
-        // res.send(html);
+        };       
         res.render('holiday_home_template',data);
     }).catch(function (err) {
         // return res.json({ "Message": err.message });
@@ -444,13 +420,7 @@ module.exports.getHolidayDescriptionPage = function (req, res) {
                         "currency": result[0].currency,
                         "packageImageDir": result[0].packageImageDir,
                         "gridFS_holidayDescription": content
-                    };
-
-                    // var templateDir = '././views/webcontent/templates/holiday_description_template.html'
-                    // var rData = { records: data }; // wrap the data in a global object... (mustache starts from an object then parses)
-                    // var page = fs.readFileSync(templateDir, "utf8"); // bring in the HTML file
-                    // var html = mustache.to_html(page, data); // replace all of the data
-                    // res.send(html);
+                    };                   
                     res.render('holiday_description_template',data);
                
         }).catch(function (err) {
@@ -488,4 +458,53 @@ module.exports.getnewsSectionbyid = function (req, res) {
         return  res.redirect('/404')
     });
         
-    }
+}
+/*    ************Start : get treatments offered sub page*****************     */
+module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
+
+    var department = req.params.department
+
+    new Promise(function (resolve, reject) {
+        //get the path of flat file with description
+        treatmentDesc.getTreatmentDetailsDepartmentwiseWithCost(department, function (result) {
+            resolve(result)
+        })
+
+    }).then(function (result) {
+        /* Department Description */
+        var relFilePath = result[0].departmentDescription //name of text file
+        var procedureFileDir = config.getProjectSettings('DOCDIR', 'DEPARTMENTDIR', false)
+        var filePath = procedureFileDir + relFilePath
+        new Promise(function (resolve, reject) {
+            gridFS.getFlatFileContent(filePath, function (content) {
+                content = fs.readFileSync(filePath, "utf8");
+                if (content.indexOf("Error") > -1) {
+                    return reject(res.status(404).json({ "Message": content }));
+                } else {
+                    resolve(content)
+                }
+            })
+        }).then(function (content) {
+            /* get list of procedures organized by departments */
+            var data = {
+                "department": department,
+                "title": department + ' | low cost medical treatment abroad',
+                "departmentDescription": content,
+                "treatmentList": result[0].treatmentList,
+                "maxHospitalization": result[0].minHospitalization,
+                "healingTimeInDays": result[0].healingTimeInDays,
+                "procedureCost": result[0].procedureCost,
+                "procedureImagepath": result[0].procedureImagepath,
+                "procedureName": result[0].procedureName,
+                "procedureNameAttr": result[0].procedureNameAttr
+            };           
+            res.render('treatments_offered_template', data);
+
+        }).catch(function (err) {
+            return res.redirect('/404');
+        });
+
+    }).catch(function (err) {
+        return res.redirect('/404');
+    });
+}

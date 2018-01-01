@@ -1,8 +1,10 @@
 ﻿var mongoose = require('mongoose');
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
+var gridFS = require('./gridFSController.js');
 var cost = require('./costController.js');
 require('../../model/treatmentsDescModel.js');
+var treatmentSearch = require('./hospitaltreatmentSearchController.js');
 var counterSchema = require('../../model/identityCounterModel.js');
 var treatmentDescModel = mongoose.model('treatmentOffered_description');
 
@@ -300,9 +302,17 @@ module.exports.getTreatmentSectionWithCost = function (req, res) {
         return;
     }
 
-    var treatmentDescSchema = new treatmentDescModel();
-
     var department = req.query.department;
+
+    getTreatmentDetailsDepartmentwiseWithCost(department, function (result) {
+        return res.json(result);
+    })
+}
+/* function to get treatment details with avarage cost for each treatment */
+module.exports.getTreatmentDetailsDepartmentwiseWithCost = getTreatmentDetailsDepartmentwiseWithCost;
+function getTreatmentDetailsDepartmentwiseWithCost(department, next) {
+
+    var treatmentDescSchema = new treatmentDescModel();
 
     new Promise(function (resolve, reject) {
 
@@ -320,18 +330,16 @@ module.exports.getTreatmentSectionWithCost = function (req, res) {
             }
 
         ], function (err, result) {
-           
             if (err) {
                 logger.error("Error while reading treatment description from DB");
-                return reject(res.status(409).json({ "Message": "Department " + department + " does not exists in tretment_description collection" }));                    
+                next("Error while reading treatment description from DB");
             } else if (result == null) {
                 logger.error("There is no treatment description available for the treatment");
-                return reject(res.status(409).json({ "Message": "Department " + department + " does not exists in tretment_description collection" }));                    
+                next("There is no treatment description available for the treatment");
             } else if (!result.length) {
                 logger.error("There is no treatment description available for the treatment");
-                return reject(res.status(409).json({ "Message": "Department " + department + " does not exists in tretment_description collection" }));                    
-            }
-            else {
+                next("There is no treatment description available for the treatment");
+            } else {
                 resolve(result)
             }
         })
@@ -339,52 +347,66 @@ module.exports.getTreatmentSectionWithCost = function (req, res) {
     }).then(function (result) {
 
         var promises = [];
-
+        //loop through department
         for (var i = 0; i < result.length; i++) {
             var obj = result[i];
+            var department = obj.department
             var procedureList = obj.treatmentList
+            //loop through procedures in department
             for (var j = 0; j < procedureList.length; j++) {
                 var procedure = procedureList[j];
-                var procedureDisp = procedure.procedureName                                       
+                var procedureDisp = procedure.procedureName
+                var treatmentDescription = procedure.shortDescription
                 /*promises.push(cost.getAvarageCostAsInt(procedureDisp).then(function (data) {
                     console.log(procedureName + ": " + JSON.stringify(data))
                     //console.log(procedureDisp + ": " + data[0].avarageTreatmentCost)
                 }))*/
                 promises.push(cost.getAvarageCostAsInt(procedureDisp))
+                promises.push(treatmentSearch.getHospitalListByProcedure(procedureDisp))
+                promises.push(treatmentSearch.getProcedureDescriptionFromFile(treatmentDescription))
             }
         }
 
-        Promise.all(promises).then(function (doc) {  
+        Promise.all(promises).then(function (doc) {
+            //loop through department
             for (var i = 0; i < result.length; i++) {
                 var obj = result[i];
+                var costCounter = 0
+                var hospitalCounter = 1
+                var descCounter = 2
                 var procedureList = obj.treatmentList
+                //loop through procedures in department
                 for (var j = 0; j < procedureList.length; j++) {
                     var procedure = procedureList[j];
-                    var procedureDisp = procedure.procedureName                    
-                    //loop through array and get  the procedure cost
-                    for (var k = 0; k < doc.length; k++) {
-                        var json = doc[k]                        
-                        if (json[0]._id.procedure.toString().trim() === procedureDisp) {                           
-                            //add new key
-                            procedure["procedureCost"] = json[0].avarageTreatmentCost
-                            k = doc.length + 1
-                        }
-                    }
+                    var procedureDisp = procedure.procedureName
+                    var json = doc[costCounter]
+                    var hosJson = doc[hospitalCounter]
+                    var descJson = doc[descCounter]
+                    //add new key
+                    procedure["procedureAvarageCost"] = json[0].avarageTreatmentCost + "$"
+                    procedure["procedureNameAttr"] = procedureDisp.split(' ').join('_')
+                    procedure["hospitalList"] = hosJson[0].hospitalList
+                    procedure["treatmentActualDescription"] = descJson[0].procedureActualDescription
+                    //increment counter
+                    costCounter = costCounter + 3
+                    hospitalCounter = hospitalCounter + 3
+                    descCounter = descCounter + 3
                 }
             }
-        }).then(function () {    
-            return res.json(result);
-        }).catch((e) => { 
-           return res.json({ "Message": e.message });
-        });        
-        
+
+        }).then(function () {
+            next(result)
+        }).catch((e) => {
+            next(e.message);
+        });
+
     }).catch(function (err) {
-        return res.json({ "Message": err.message });
+        next(err.message);
     })
 }
 
 /* Function to get procedure details */
-module.exports.getProcedureDetails = function getProcedureDetails(procedureName,callback) {
+module.exports.getProcedureDetails = function getProcedureDetails(procedureName, callback) {
 
     var treatmentDescSchema = new treatmentDescModel();
 
@@ -406,7 +428,7 @@ module.exports.getProcedureDetails = function getProcedureDetails(procedureName,
 
         if (err) {
             logger.error("Error while reading treatment description from DB");
-            callback (null);
+            callback(null);
         } else if (result == null) {
             logger.info("There is no treatment description available for the treatment");
             callback(null);
@@ -426,13 +448,58 @@ module.exports.getUniqueProcedureNames = function (req, res) {
 }
 function getUniqueProcedureNames(callback) {
 
-    treatmentDescModel.aggregate([        
-       
+    treatmentDescModel.aggregate([
+
         { $unwind: "$treatmentList" },
         { $group: { _id: null, treatmentNames: { $addToSet: "$treatmentList" } } }, //_id:null will return everything from array       
         {
             "$project": {
                 "_id": 0, "treatmentNames.procedureName": 1 //"treatmentNames":1 will return everything from the table
+            }
+        }
+
+
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while reading treatment description from DB");
+            callback(null);
+        } else if (result == null) {
+            logger.info("There is no treatment description available for the treatment");
+            callback(null);
+        }
+        else {
+            callback(result);
+        }
+    })
+}
+
+/* Function to get distinct procedure names sorted by department */
+module.exports.getDepartmentwiseProcedureNames = function (req, res) {
+
+    getDepartmentwiseProcedureNames(function (result) {
+        return res.json(result);
+    })
+}
+function getDepartmentwiseProcedureNames(callback) {
+
+    treatmentDescModel.aggregate([
+        {
+            "$match": { "$and": [{ "serviceActiveFlag": "Y" }] }
+        },
+
+        { $unwind: "$treatmentList" },
+        {
+            $group: {
+                _id: "$department", "treatmentNames": {
+                    $push: { "procedureName": "$treatmentList.procedureName", "image": "$treatmentList.procedureImagepath", "hospitalStay": "$treatmentList.maxHospitalization" }
+                }
+            }
+        },
+
+        {
+            "$project": {
+                "_id": 0, "department": '$_id', "treatmentNames": 1
             }
         }
 
@@ -450,5 +517,4 @@ function getUniqueProcedureNames(callback) {
         }
     })
 }
-
 
