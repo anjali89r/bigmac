@@ -153,7 +153,10 @@ module.exports = function (app) {
     app.get('/holiday/holiday_home', templateEngine.getHolidayHomePage);
     /*  API for holiday_description_template.html */
     app.get('/holiday/:holidaypackage', templateEngine.getHolidayDescriptionPage);
+    /*  API for news section.html */
     app.get('/news/:newsid/', templateEngine.getnewsSectionbyid);
+    /* API to populate treatments offered sub menu */
+    app.get('/treatmentsoffered/:department', templateEngine.getDepartmentwiseTreatmentDescription);
     /*******************************************************************************************************************************************************************/
     /*  APi to post our services section  */
     app.post('/api/v1/post/ourservices/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, ourServicesInfo.addServicedetails);

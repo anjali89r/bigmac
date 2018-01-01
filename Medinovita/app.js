@@ -5,11 +5,7 @@ var helmet = require('helmet')
 var compression = require('compression')
 var  mustacheExpress = require('mustache-express');
 
-
-
 var app = express();
-
-
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -38,10 +34,12 @@ require('./routes/route.js')(app);//define express router for api calls
 var port = process.env.PORT || 80  //port
 
 app.use(express.static('./views/webcontent/', { index: 'index.html' }))//define home page
-app.engine('mustache', mustacheExpress());
 
+//Setup template engine
+app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views', './views/webcontent/templates');
+
 // added for 404 html ,should be called only after all routes
 app.use(function(req, res, next){
     // respond with html page

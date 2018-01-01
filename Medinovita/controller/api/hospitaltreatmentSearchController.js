@@ -1,7 +1,9 @@
 ﻿var mongoose = require('mongoose');
 var Promise = require('promise');
+var fs = require('fs');
 var logger = require('../utilities/logger.js');
 require('../../model/hospitalDoctorDetailsModel.js');
+var config = require('../utilities/confutils.js');
 var hospitalModel = mongoose.model('hospital_doctor_details');
 var counterSchema = require('../../model/identityCounterModel.js');
 
@@ -271,3 +273,93 @@ module.exports.getcitylist = function (req, res) {
         
         }
     }
+/* Get list of hospitals offering a particular treatment */
+module.exports.getHospitalListByProcedure = function (procedureName) {
+    return getHospitalListForaTreatment(procedureName)
+}
+function getHospitalListForaTreatment(procedureName) {
+    if (procedureName == null) {
+        logger.error("Procedure name is blank");
+        return (JSON.stringify({
+            "hospitalList": []
+        }));
+    }
+
+    var hospitalPromise = new Promise(function (resolve, reject) {
+
+        hospitalModel.aggregate([
+            {
+                "$match": {
+                    "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": procedureName }, { "Treatment.activeFlag": "Y" }]
+                }
+            },
+            /* $redact is used to filter array.Above $Match will will return the entire sub document.Using $redact we can filter the subdocuments returned */
+            {
+                "$redact": {
+                    "$cond": [
+                        { "$eq": [{ "$ifNull": ["$name", procedureName] }, procedureName] },
+                        "$$DESCEND",
+                        "$$PRUNE"
+                    ]
+                }
+            },
+            { "$unwind": "$Treatment" },//To remove array from results populated
+            /* {
+                 $group: {
+                     _id: "$hospitalName", "treatmentDetails": {
+                         $push: { "cost": "$Treatment.costLowerBound", "procedureName": "$Treatment.name", "currency": "$Treatment.currency" }, "hospitalID": { "$first": "$hospitalID" },
+                     }
+                 }
+             },*/
+            { "$project": { "_id": 0, "hospitalName": 1, "costStartsFrom": "$Treatment.costLowerBound", "procedureName": "$Treatment.name", "currency": "$Treatment.currency", "country": "$hospitalContact.country", "city": "$hospitalContact.City" } }
+        ], function (err, result) {
+
+            if (err) {
+                logger.error("Error while reading hospitals offering " + procedureName + " treatment from from DB");
+                resolve(JSON.parse(JSON.stringify([{ "hospitalList": [] }])));
+            } else if (!result.length) {
+                logger.error("There are no active hospitals offering treatment " + procedureName);
+                resolve(JSON.parse(JSON.stringify([{
+                    "hospitalList": []
+                }])));
+            }
+            else {
+                resolve(JSON.parse(JSON.stringify([{ "hospitalList": result }])))
+            }
+        })
+
+    })
+    return hospitalPromise;
+}
+/* Get procedure description from a file */
+module.exports.getProcedureDescriptionFromFile = function (procedureFilePath) {
+    return getProcedureBriefFromFile(procedureFilePath)
+}
+function getProcedureBriefFromFile(procedureFilePath) {
+
+    if (procedureFilePath == null) {
+        logger.error("Procedure path is blank");
+        return (JSON.stringify({
+            "procedureActualDescription": "Procedure path is blank"
+        }));
+    }
+
+    var filePromise = new Promise(function (resolve, reject) {
+
+        var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
+        var filePath = procedureFileDir + procedureFilePath
+        var content = fs.readFileSync(filePath, "utf8");
+
+        if (content.indexOf("Error") > -1) {
+            resolve(JSON.parse(JSON.stringify([{ "procedureActualDescription": content }])))
+            logger.error("error while reading procedure description for file with path " + procedureFilePath)
+        } else {
+            //remove title give in the file
+            var array = content.toString().split("\n");
+            array[0] = ""
+            content = array.join("\n")
+            resolve(JSON.parse(JSON.stringify([{ "procedureActualDescription": content }])))
+        }
+    })
+    return filePromise;
+}
