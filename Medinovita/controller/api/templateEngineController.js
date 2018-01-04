@@ -495,7 +495,7 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
                 "healingTimeInDays": result[0].healingTimeInDays,
                 "procedureCost": result[0].procedureCost,
                 "procedureImagepath": result[0].procedureImagepath,
-                "procedureName": result[0].procedureName,
+                "firstProcedureName": result[0].treatmentList[0].procedureNameAttr,
                 "procedureNameAttr": result[0].procedureNameAttr
             };           
             res.render('treatments_offered_template', data);
