@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Medinovita", "Medinovita\Medinovita.njsproj", "{347E4C8E-6F9B-430D-9239-7B8F60F3293C}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Root", "Root\rootnovita.njsproj", "{347E4C8E-6F9B-430D-9239-7B8F60F3293C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
