@@ -6,7 +6,7 @@ require('../../model/hospitalDoctorDetailsModel.js');
 var config = require('../utilities/confutils.js');
 var hospitalModel = mongoose.model('hospital_doctor_details');
 var counterSchema = require('../../model/identityCounterModel.js');
-var gridFS = require('./gridFSController.js');
+
 var collection = 'hospital_doctor_details';
 
 
