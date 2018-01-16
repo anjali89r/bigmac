@@ -157,6 +157,9 @@ module.exports = function (app) {
     app.get('/news/:newsid/', templateEngine.getnewsSectionbyid);
     /* API to populate treatments offered sub menu */
     app.get('/treatmentsoffered/:department', templateEngine.getDepartmentwiseTreatmentDescription);
+    /* API to render the treatment search page with hospital details */
+    app.get('/search/:treatmentname',templateEngine.searchhospitalsbytreatment);
+
     /*******************************************************************************************************************************************************************/
     /*  APi to post our services section  */
     app.post('/api/v1/post/ourservices/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, ourServicesInfo.addServicedetails);
