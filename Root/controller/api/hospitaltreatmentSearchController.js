@@ -6,8 +6,9 @@ require('../../model/hospitalDoctorDetailsModel.js');
 var config = require('../utilities/confutils.js');
 var hospitalModel = mongoose.model('hospital_doctor_details');
 var counterSchema = require('../../model/identityCounterModel.js');
-
+var gridFS = require('./gridFSController.js');
 var collection = 'hospital_doctor_details';
+
 
 /****************************/
 module.exports.getTreatmentlist = function (req, res) {
@@ -362,4 +363,135 @@ function getProcedureBriefFromFile(procedureFilePath) {
         }
     })
     return filePromise;
+}
+module.exports.gethospitaltreatmentname = gethospitalrecordsfortreatmentname;
+function gethospitalrecordsfortreatmentname(treatmentname,city,accreditation, next) {
+
+  
+
+    new Promise(function (resolve, reject) {
+
+       if ((city==null || undefined) && (accreditation==null || undefined))
+       {
+            hospitalModel.aggregate([
+                {
+                    "$match": {
+                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": treatmentname }, { "Treatment.activeFlag": "Y" }]
+                    }
+                }, {
+                    "$project": {
+                        "_id": 0, "hospitalName": 1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1, "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,
+                        "Treatment.name": 1,"Treatment.costUpperBound": 1, "Treatment.costLowerBound": 1, "Treatment.currency": 1
+                    }
+                }
+
+            ], function (err, result) {
+                if (err) {
+                    logger.error("Error while reading treatment description from DB");
+                    next("Error while reading treatment description from DB");
+                } else if (result == null) {
+                    logger.error("There is no treatment description available for the treatment");
+                    next("There is no treatment description available for the treatment");
+                } else if (!result.length) {
+                    logger.error("There is no treatment description available for the treatment");
+                    next("There is no treatment description available for the treatment");
+                } else {
+                    resolve(result)
+                }
+            })
+        }
+        else if (accreditation==null || undefined)
+        {
+            hospitalModel.aggregate([
+                {
+                    "$match": {
+                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": treatmentname }, { "Treatment.activeFlag": "Y" },{"hospitalContact.City":city}]
+                    }
+                }, {
+                    "$project": {
+                        "_id": 0, "hospitalName": 1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1, "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,
+                        "Treatment.name": 1,"Treatment.costUpperBound": 1, "Treatment.costLowerBound": 1, "Treatment.currency": 1
+                    }
+                }
+
+            ], function (err, result) {
+                if (err) {
+                    logger.error("Error while reading treatment description from DB");
+                    next("Error while reading treatment description from DB");
+                } else if (result == null) {
+                    logger.error("There is no treatment description available for the treatment");
+                    next("There is no treatment description available for the treatment");
+                } else if (!result.length) {
+                    logger.error("There is no treatment description available for the treatment");
+                    next("There is no treatment description available for the treatment");
+                } else {
+                    resolve(result)
+                }
+            })
+        }
+        else if (city==null || undefined)
+        {
+            hospitalModel.aggregate([
+                {
+                    "$match": {
+                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": treatmentname }, { "Treatment.activeFlag": "Y" },{"Accreditation.agency":accreditation}]
+                    }
+                }, {
+                    "$project": {
+                        "_id": 0, "hospitalName": 1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1, "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,
+                        "Treatment.name": 1,"Treatment.costUpperBound": 1, "Treatment.costLowerBound": 1, "Treatment.currency": 1
+                    }
+                }
+
+            ], function (err, result) {
+                if (err) {
+                    logger.error("Error while reading treatment description from DB");
+                    next("Error while reading treatment description from DB");
+                } else if (result == null) {
+                    logger.error("There is no treatment description available for the treatment");
+                    next("There is no treatment description available for the treatment");
+                } else if (!result.length) {
+                    logger.error("There is no treatment description available for the treatment");
+                    next("There is no treatment description available for the treatment");
+                } else {
+                    resolve(result)
+                }
+            })
+        }
+        else
+        {
+            hospitalModel.aggregate([
+                {
+                    "$match": {
+                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": treatmentname }, { "Treatment.activeFlag": "Y" },{"Accreditation.agency":accreditation},{"hospitalContact.City":city}]
+                    }
+                }, {
+                    "$project": {
+                        "_id": 0, "hospitalName": 1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1, "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,
+                        "Treatment.name": 1,"Treatment.costUpperBound": 1, "Treatment.costLowerBound": 1, "Treatment.currency": 1
+                    }
+                }
+
+            ], function (err, result) {
+                if (err) {
+                    logger.error("Error while reading treatment description from DB");
+                    next("Error while reading treatment description from DB");
+                } else if (result == null) {
+                    logger.error("There is no treatment description available for the treatment");
+                    next("There is no treatment description available for the treatment");
+                } else if (!result.length) {
+                    logger.error("There is no treatment description available for the treatment");
+                    next("There is no treatment description available for the treatment");
+                } else {
+                    resolve(result)
+                }
+            })
+        }
+    }).then(function (result) {
+            
+            next(result)
+        }).catch(function (err) {
+            
+        next(err.message);
+    })
 }
