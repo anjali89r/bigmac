@@ -501,7 +501,7 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
                 "procedureNameAttr": result[0].procedureNameAttr,
                 "procedureCount": result[0].treatmentList.length
 
-            };           
+            };
             res.render('treatments_offered_template', data);
 
         }).catch(function (err) {
@@ -513,4 +513,144 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
     });
 }
 
+module.exports.searchhospitalsbytreatment = function(req,res)
+{
+    var treatmentname = req.params.treatmentname;
+    var city =req.query.city;
+    var accreditation=req.query.accreditation;
+    //console.log(treatmentname);  
+    var data = {
+        "treatmentname": treatmentname,
+        "title": treatmentname + ' | low cost medical treatment abroad',
+        "hospitaldetails": [],
+        "treatmentDescription": "",
+        "city": [],
+        "accreditationdetails":[],
+        
+         }; 
+        
+    new Promise(function (resolve, reject) {
+        //get the path of flat file with description
+        treatmentSearch.gethospitaltreatmentname(treatmentname,city,accreditation, function(result) {
+            resolve(result)
+            //console.log(result)
+        })
+
+        }).then(function(result) {
+            /* Department Description */
+           
+                    result.forEach(function(key)
+                    {
+                        var jciimage=false;
+                        var nabhimage=false;
+                        var nablimage=false;
+                        key.Accreditation.forEach(function(agencylist)
+                        {
+                        
+                            switch (agencylist.agency)
+                            {
+                                case "JCI":
+                                     jciimage=true;
+                                    break;
+                                case "NABH":
+                                   nabhimage = true;
+                               
+                                    break;
+                                case "NABL":
+                        
+                                      nablimage= true;
+                                    
+                                    break;
+                            }
+                        });
+                        
+                        data.hospitaldetails.push({"hospitalName":key.hospitalName,"hospitalimage": key.hospitalimage,"hospitaldescription": key.hospitalDescription,"hospitalCity": key.hospitalContact.City,"hospitalState": key.hospitalContact.State,"hospitalcountry": key.hospitalContact.country,"costLowerBound" : key.Treatment[key.Treatment.findIndex(x => x.name === treatmentname)].costLowerBound,"jciimage":jciimage,"nabhimage":nabhimage,"nablimage":nablimage });
+                        
+                    }); 
+                         
+                    result.forEach(function(contactkey)
+
+                    {
+                       
+                            if (data.city.findIndex(y => y.cityname===contactkey.hospitalContact.City) === -1)
+                            {
+                                data.city.push({"cityname": contactkey.hospitalContact.City,"citycount": 1});
+                            }
+                            else
+                            {
+                                data.city[data.city.findIndex(y => y.cityname===contactkey.hospitalContact.City)].citycount+=1;
+                                
+                            }
+                    });
+                    result.forEach(function(acckey)
+                    {
+                        acckey.Accreditation.forEach(function(accreditationkey)
+                        {
+                          
+                            if (data.accreditationdetails.findIndex(y => y.accreditationagency===accreditationkey.agency) === -1)
+                            {
+                                data.accreditationdetails.push({"accreditationagency":accreditationkey.agency,"accreditationagencycount": 1});
+                            }
+                            else
+                            {
+                                
+                                data.accreditationdetails[data.accreditationdetails.findIndex(y => y.accreditationagency===accreditationkey.agency)].accreditationagencycount+=1;
+                                
+                            }
+                            
+                        });
+                        
+                    });
+
+
+
+            new Promise(function (resolve, reject) {
+                //get the path of flat file with description
+                treatmentDesc.getProcedureDetails(treatmentname, function (procedureresult) {
+                    var relFilePath = procedureresult[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
+                    resolve(relFilePath)
+                })
+               
+            }).then(function (relFilePath) {
+                   
+                   
+                var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
+                var filePath = procedureFileDir + relFilePath
+                //console.log(filePath)
+                new Promise(function (resolve, reject) {
+                    gridFS.getFlatFileContent(filePath, function (procedurecontent) {
+                        procedurecontent = fs.readFileSync(filePath, "utf8");
+                        if (procedurecontent.indexOf("Error") > -1) {
+                            //console.log(procedurecontent)
+                            return reject(res.status(404).json({ "Message": procedurecontent }));
+                        } else {
+                            resolve(procedurecontent)
+                        }
+                    })
+                }).then(function (procedurecontent) {
+                /* get list of procedures organized by departments */
+               // console.log(procedurecontent)
+                   data.treatmentDescription=procedurecontent;
+                   //console.log(data)
+                    
+                   res.render('searchtreatment_template', data);
+
+
+                }).catch(function (err) {
+                     console.log("first catch " + err)
+                    return res.redirect('/404');
+                });
+
+            }).catch(function (err) {
+                console.log("second catch " +err)
+                return res.redirect('/404');
+            });
+               
+               
+        }).catch(function(err)
+        {
+            console.log("last catch " +err)
+            return res.redirect('/404');
+        });
+}
 
