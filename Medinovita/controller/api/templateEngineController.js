@@ -464,6 +464,8 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
 
     var department = req.params.department
 
+    console.log(req.body);
+
     new Promise(function (resolve, reject) {
         //get the path of flat file with description
         treatmentDesc.getTreatmentDetailsDepartmentwiseWithCost(department, function (result) {
@@ -477,7 +479,7 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
         var filePath = procedureFileDir + relFilePath
         new Promise(function (resolve, reject) {
             gridFS.getFlatFileContent(filePath, function (content) {
-                content = fs.readFileSync(filePath, "utf8");
+                content = fs.readFileSync(filePath, "utf8").trim()
                 if (content.indexOf("Error") > -1) {
                     return reject(res.status(404).json({ "Message": content }));
                 } else {
@@ -496,7 +498,9 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
                 "procedureCost": result[0].procedureCost,
                 "procedureImagepath": result[0].procedureImagepath,
                 "firstProcedureName": result[0].treatmentList[0].procedureNameAttr,
-                "procedureNameAttr": result[0].procedureNameAttr
+                "procedureNameAttr": result[0].procedureNameAttr,
+                "procedureCount": result[0].treatmentList.length
+
             };           
             res.render('treatments_offered_template', data);
 
@@ -508,3 +512,5 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
         return res.redirect('/404');
     });
 }
+
+
