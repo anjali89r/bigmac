@@ -19,7 +19,7 @@ var userEenquirySchema = new Schema({
         isdCode: {
                 type: Number, required: false,
                 min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
-                max: [200, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).']
+                max: [900, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).']
             },
             primaryPhonenumber: {
                 type: Number,
