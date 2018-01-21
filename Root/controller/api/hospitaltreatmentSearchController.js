@@ -365,7 +365,7 @@ function getProcedureBriefFromFile(procedureFilePath) {
     return filePromise;
 }
 module.exports.gethospitaltreatmentname = gethospitalrecordsfortreatmentname;
-function gethospitalrecordsfortreatmentname(treatmentname,city,accreditation, next) {
+function gethospitalrecordsfortreatmentname(treatmentdisplayname,city,accreditation, next) {
 
   
 
@@ -376,12 +376,12 @@ function gethospitalrecordsfortreatmentname(treatmentname,city,accreditation, ne
             hospitalModel.aggregate([
                 {
                     "$match": {
-                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": treatmentname }, { "Treatment.activeFlag": "Y" }]
+                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.treatmentdisplayname": treatmentdisplayname }, { "Treatment.activeFlag": "Y" }]
                     }
                 }, {
                     "$project": {
-                        "_id": 0, "hospitalName": 1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1, "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,
-                        "Treatment.name": 1,"Treatment.costUpperBound": 1, "Treatment.costLowerBound": 1, "Treatment.currency": 1
+                        "_id": 0, "hospitalName": 1,"hospitaldisplayname":1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1, "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,
+                        "Treatment.name": 1,"Treatment.treatmentdisplayname": 1,"Treatment.costUpperBound": 1, "Treatment.costLowerBound": 1, "Treatment.currency": 1
                     }
                 }
 
@@ -405,12 +405,12 @@ function gethospitalrecordsfortreatmentname(treatmentname,city,accreditation, ne
             hospitalModel.aggregate([
                 {
                     "$match": {
-                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": treatmentname }, { "Treatment.activeFlag": "Y" },{"hospitalContact.City":city}]
+                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.treatmentdisplayname": treatmentdisplayname }, { "Treatment.activeFlag": "Y" },{"hospitalContact.City":city}]
                     }
                 }, {
                     "$project": {
-                        "_id": 0, "hospitalName": 1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1, "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,
-                        "Treatment.name": 1,"Treatment.costUpperBound": 1, "Treatment.costLowerBound": 1, "Treatment.currency": 1
+                        "_id": 0, "hospitalName": 1,"hospitaldisplayname":1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1, "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,
+                        "Treatment.name": 1,"Treatment.treatmentdisplayname": 1,"Treatment.costUpperBound": 1, "Treatment.costLowerBound": 1, "Treatment.currency": 1
                     }
                 }
 
@@ -434,12 +434,12 @@ function gethospitalrecordsfortreatmentname(treatmentname,city,accreditation, ne
             hospitalModel.aggregate([
                 {
                     "$match": {
-                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": treatmentname }, { "Treatment.activeFlag": "Y" },{"Accreditation.agency":accreditation}]
+                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.treatmentdisplayname": treatmentdisplayname }, { "Treatment.activeFlag": "Y" },{"Accreditation.agency":accreditation}]
                     }
                 }, {
                     "$project": {
-                        "_id": 0, "hospitalName": 1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1, "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,
-                        "Treatment.name": 1,"Treatment.costUpperBound": 1, "Treatment.costLowerBound": 1, "Treatment.currency": 1
+                        "_id": 0, "hospitalName": 1,"hospitaldisplayname":1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1, "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,
+                        "Treatment.name": 1,"Treatment.treatmentdisplayname": 1,"Treatment.costUpperBound": 1, "Treatment.costLowerBound": 1, "Treatment.currency": 1
                     }
                 }
 
@@ -463,12 +463,12 @@ function gethospitalrecordsfortreatmentname(treatmentname,city,accreditation, ne
             hospitalModel.aggregate([
                 {
                     "$match": {
-                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.name": treatmentname }, { "Treatment.activeFlag": "Y" },{"Accreditation.agency":accreditation},{"hospitalContact.City":city}]
+                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.treatmentdisplayname": treatmentdisplayname }, { "Treatment.activeFlag": "Y" },{"Accreditation.agency":accreditation},{"hospitalContact.City":city}]
                     }
                 }, {
                     "$project": {
-                        "_id": 0, "hospitalName": 1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1, "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,
-                        "Treatment.name": 1,"Treatment.costUpperBound": 1, "Treatment.costLowerBound": 1, "Treatment.currency": 1
+                        "_id": 0, "hospitalName": 1,"hospitaldisplayname":1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1, "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,
+                        "Treatment.name": 1,"Treatment.treatmentdisplayname": 1,"Treatment.costUpperBound": 1, "Treatment.costLowerBound": 1, "Treatment.currency": 1
                     }
                 }
 
