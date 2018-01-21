@@ -13,7 +13,7 @@ var hospitalDoctorSchema = new Schema({
     serviceActiveFlag: { type: String, required: false, enum: ['Y', 'N'], default: 'Y'  },//new
     hospitalimage: { type: String, required: false, trim: true, default: 'medinovita/blankHospital.jpg' },   // newly added for hospital image in webpage
     hospitalDescription: { type: String, required: false, trim: true},   // newly added for hospital description
-
+    hospitaldisplayname: { type: String, required: false, trim: true },
     hospitalContact: {
         website: { type: String, required: false, trim: true },
         contactPersonname: { type: String, required: false, trim: true },
@@ -53,6 +53,7 @@ var hospitalDoctorSchema = new Schema({
         activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },//new
         departmentId: { type: Number},
         name: { type: String, required: true, trim: true },
+        treatmentdisplayname: { type: String, required: false, trim: true },
         costUpperBound: { type: Number, required: true },
         costLowerBound: { type: Number, required: true },  
         currency: { type: String, required: true, enum: ['INR', '$'] }, //new field added on 26/11/17
@@ -95,6 +96,23 @@ var hospitalDoctorSchema = new Schema({
     }],
     updated_at: { type: Date, required: true, default: Date.now }
 });
+ // added for the urls like medinovita.in/hospital/aswini-hospital.always use lowercase value and underscore in between words instead of space
+   
+hospitalDoctorSchema.pre('save', function(next) {
+     var hospdisplayname = this.hospitalName;
+  // console.log(hospdisplayname)
+    this.hospitaldisplayname = hospdisplayname.replace(/\s+/g, '-').toLowerCase();
+  // console.log(this.hospitaldisplayname)
+    this.Treatment.forEach(function(el)
+    {
+        var treatmentdisplayname=el.name;
+  
+        el.treatmentdisplayname = treatmentdisplayname.replace(/\s+/g, '-').toLowerCase();
+    }
+    )
+    next();
+  });
+
 
 //create collection.
 module.exports.hospitalModel = mongoose.model(collection, hospitalDoctorSchema);

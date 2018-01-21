@@ -515,13 +515,15 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
 
 module.exports.searchhospitalsbytreatment = function(req,res)
 {
-    var treatmentname = req.params.treatmentname;
+    var treatmentdisplayname = req.params.treatmentname;
+    var treatmentname = ""; // to be hold the actual treatment name like Bone Grafting . This value to be populated from db
     var city =req.query.city;
     var accreditation=req.query.accreditation;
-    //console.log(treatmentname);  
+    //console.log(treatmentdisplayname);  
     var data = {
-        "treatmentname": treatmentname,
-        "title": treatmentname + ' | low cost medical treatment abroad',
+        "treatmentname": treatmentdisplayname,
+        "title": treatmentdisplayname + ' | low cost medical treatment abroad',
+        "treatmenturlname":treatmentdisplayname,
         "hospitaldetails": [],
         "treatmentDescription": "",
         "city": [],
@@ -531,7 +533,7 @@ module.exports.searchhospitalsbytreatment = function(req,res)
         
     new Promise(function (resolve, reject) {
         //get the path of flat file with description
-        treatmentSearch.gethospitaltreatmentname(treatmentname,city,accreditation, function(result) {
+        treatmentSearch.gethospitaltreatmentname(treatmentdisplayname,city,accreditation, function(result) {
             resolve(result)
             //console.log(result)
         })
@@ -564,8 +566,8 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                             }
                         });
                         
-                        data.hospitaldetails.push({"hospitalName":key.hospitalName,"hospitalimage": key.hospitalimage,"hospitaldescription": key.hospitalDescription,"hospitalCity": key.hospitalContact.City,"hospitalState": key.hospitalContact.State,"hospitalcountry": key.hospitalContact.country,"costLowerBound" : key.Treatment[key.Treatment.findIndex(x => x.name === treatmentname)].costLowerBound,"jciimage":jciimage,"nabhimage":nabhimage,"nablimage":nablimage });
-                        
+                        data.hospitaldetails.push({"hospitalName":key.hospitalName,"hospitaldisplayname":key.hospitaldisplayname,"hospitalimage": key.hospitalimage,"hospitaldescription": key.hospitalDescription,"hospitalCity": key.hospitalContact.City,"hospitalState": key.hospitalContact.State,"hospitalcountry": key.hospitalContact.country,"currency":key.Treatment[key.Treatment.findIndex(x => x.treatmentdisplayname === treatmentdisplayname)].currency,"costLowerBound" : key.Treatment[key.Treatment.findIndex(x => x.treatmentdisplayname === treatmentdisplayname)].costLowerBound,"jciimage":jciimage,"nabhimage":nabhimage,"nablimage":nablimage });
+                        treatmentname=key.Treatment[key.Treatment.findIndex(x => x.treatmentdisplayname === treatmentdisplayname)].name;
                     }); 
                          
                     result.forEach(function(contactkey)
@@ -601,9 +603,8 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                         });
                         
                     });
-
-
-
+                   
+                  // console.log("i'm here ",treatmentname);
             new Promise(function (resolve, reject) {
                 //get the path of flat file with description
                 treatmentDesc.getProcedureDetails(treatmentname, function (procedureresult) {
@@ -630,12 +631,14 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                 }).then(function (procedurecontent) {
                 /* get list of procedures organized by departments */
                // console.log(procedurecontent)
+               // set description content
                    data.treatmentDescription=procedurecontent;
-                   //console.log(data)
-                    
+                  // console.log(treatmentname)
+                  // set treatment name without hypen
+                   data.treatmentname=treatmentname;
+                   data.title=treatmentname + " | Best hospitals & doctors";
+
                    res.render('searchtreatment_template', data);
-
-
                 }).catch(function (err) {
                      console.log("first catch " + err)
                     return res.redirect('/404');
