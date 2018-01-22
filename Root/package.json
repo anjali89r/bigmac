@@ -40,6 +40,7 @@
     "uuid": "^3.1.0",
     "winston": "^2.3.1",
     "winston-daily-rotate-file": "^1.4.6",
-    "mustache-express": "1.2.5"
+    "mustache-express": "1.2.5",
+    "serve-static": "1.13.1"
   }
 }
