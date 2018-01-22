@@ -4,14 +4,17 @@ var cors = require('cors')
 var helmet = require('helmet')
 var compression = require('compression')
 var  mustacheExpress = require('mustache-express');
+var serveStatic = require('serve-static')
 
 var app = express();
+
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.disable('x-powered-by')
 app.use(cors())
 app.use(helmet())
+
 var mogoDBUtils = require('./controller/utilities/mongodbutils.js')
 var logger = require('./controller/utilities/logger.js'); //initialize logger class
 
@@ -33,8 +36,12 @@ require('./routes/route.js')(app);//define express router for api calls
 //setup server
 var port = process.env.PORT || 80  //port
 
-app.use(express.static('./views/webcontent/', { index: 'index.html' }))//define home page
-
+//app.use(express.static('./views/webcontent/', { index: 'index.html' }))//define home page
+app.use(serveStatic(__dirname + '/views/webcontent/', {
+    index: 'index.html',
+    maxAge: '1d',
+    setHeaders: setCustomCacheControl
+  }))
 //Setup template engine
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
@@ -60,3 +67,9 @@ app.use(function(req, res, next){
   });
 app.listen(port);
 console.log('Listening on port ' + port + '..');
+function setCustomCacheControl (res, path) {
+    if (serveStatic.mime.lookup(path) === 'text/html') {
+      // Custom Cache-Control for HTML files
+      res.setHeader('Cache-Control', 'public, max-age=0')
+    }
+  }
