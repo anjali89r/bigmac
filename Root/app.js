@@ -4,7 +4,8 @@ var cors = require('cors')
 var helmet = require('helmet')
 var compression = require('compression')
 var  mustacheExpress = require('mustache-express');
-var serveStatic = require('serve-static')
+var serveStatic = require('serve-static');
+var apicache = require('apicache');
 
 var app = express();
 
@@ -14,6 +15,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.disable('x-powered-by')
 app.use(cors())
 app.use(helmet())
+const onlyStatus200 = (req, res) => res.statusCode === 200
+let cache = apicache.options({
+    headers: {
+      'cache-control': 'no-cache'
+    }
+  })
+  .middleware
+const cacheSuccesses = cache('24 hour', onlyStatus200)
+app.use(cacheSuccesses);
 
 var mogoDBUtils = require('./controller/utilities/mongodbutils.js')
 var logger = require('./controller/utilities/logger.js'); //initialize logger class
