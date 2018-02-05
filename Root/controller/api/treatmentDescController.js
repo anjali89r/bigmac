@@ -3,6 +3,7 @@ var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 var gridFS = require('./gridFSController.js');
 var cost = require('./costController.js');
+var _ = require('underscore');
 require('../../model/treatmentsDescModel.js');
 var treatmentSearch = require('./hospitaltreatmentSearchController.js');
 var counterSchema = require('../../model/identityCounterModel.js');
@@ -303,14 +304,15 @@ module.exports.getTreatmentSectionWithCost = function (req, res) {
     }
 
     var department = req.query.department;
-
-    getTreatmentDetailsDepartmentwiseWithCost(department, function (result) {
+    var reqbody = req.body
+    console.log(reqbody)
+    getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, function (result) {
         return res.json(result);
     })
 }
 /* function to get treatment details with avarage cost for each treatment */
 module.exports.getTreatmentDetailsDepartmentwiseWithCost = getTreatmentDetailsDepartmentwiseWithCost;
-function getTreatmentDetailsDepartmentwiseWithCost(department, next) {
+function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
 
     var treatmentDescSchema = new treatmentDescModel();
 
@@ -356,7 +358,7 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, next) {
             for (var j = 0; j < procedureList.length; j++) {
                 var procedure = procedureList[j];
                 var procedureDisp = procedure.procedureName
-                var treatmentDescription = procedure.shortDescription
+                var treatmentDescription = procedure.shortDescription               
                 /*promises.push(cost.getAvarageCostAsInt(procedureDisp).then(function (data) {
                     console.log(procedureName + ": " + JSON.stringify(data))
                     //console.log(procedureDisp + ": " + data[0].avarageTreatmentCost)
@@ -369,8 +371,18 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, next) {
 
         Promise.all(promises).then(function (doc) {
             //loop through department
+            var hosdict = {};
+            var citydict = {};
+            var costdict = {};
+            var proceduredict = {};
+            var costArray=[]
+
             for (var i = 0; i < result.length; i++) {
                 var obj = result[i];
+                obj['distHospitalList'] = []
+                obj['distCityList'] = []
+                obj['distCostList'] = []
+                obj['distProcedure'] = []
                 var costCounter = 0
                 var hospitalCounter = 1
                 var descCounter = 2
@@ -379,6 +391,12 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, next) {
                 for (var j = 0; j < procedureList.length; j++) {
                     var procedure = procedureList[j];
                     var procedureDisp = procedure.procedureName
+                    //to get unique procedure names
+                    if (!(procedureDisp in proceduredict)) {
+                        proceduredict[procedureDisp] = ''
+                        obj['distProcedure'].push({ 'procedureName': procedureDisp })
+                    }
+
                     var json = doc[costCounter]
                     var hosJson = doc[hospitalCounter]
                     var descJson = doc[descCounter]
@@ -387,14 +405,115 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, next) {
                     procedure["procedureNameAttr"] = procedureDisp.split(' ').join('_')
                     procedure["hospitalList"] = hosJson[0].hospitalList
                     procedure["treatmentActualDescription"] = descJson[0].procedureActualDescription
+                    //get unique hospital data to apply filter in treatements offered
+                    var hospJson = procedure["hospitalList"]
+                    for (var k = 0; k < hospJson.length; k++) {
+                        var data = hospJson[k];                        
+                        var hospitalName = data.hospitalName
+                        var city = data.city + "," + data.country
+                        var cost = data.costStartsFrom
+                        if (!(hospitalName in hosdict)) {
+                            hosdict[hospitalName] = ''
+                            obj['distHospitalList'].push({ 'hospitalName': hospitalName })
+                        }
+                        if (!(city in citydict)) {
+                            citydict[city] = ''
+                            obj['distCityList'].push({ 'city': city })
+                        }
+                        if (!(cost in costdict)) {
+                            costdict[cost] = ''
+                            costArray.push(cost)                           
+                        }
+                    }
+
                     //increment counter
                     costCounter = costCounter + 3
                     hospitalCounter = hospitalCounter + 3
                     descCounter = descCounter + 3
                 }
             }
+            //sort cost
+            costArray.sort();
+            for (var x = 0; x < costArray.length; x++) {
+                obj['distCostList'].push({ 'costStartsFrom': costArray[x] })
+            }
 
-        }).then(function () {
+            //code to filter reuslt during form submission
+            var output
+            if (Object.keys(reqbody).length != 0) {//not for the first time when page loads           
+                var myString = JSON.stringify(result);
+                var myObject = JSON.parse(myString);                                
+                
+                var treatmentArray = [] 
+                var hospitalArray = []
+                var cityArray = []
+
+                //Store procedure from form in array
+                if (typeof reqbody.procedure != 'undefined') {       
+                    if (reqbody.procedure instanceof Array) {             
+                        var treatmentArray = reqbody.procedure
+                    } else {                          
+                        treatmentArray.push(reqbody.procedure)
+                    }
+                    output = myObject.map(function (obj) {
+                        obj.treatmentList = obj.treatmentList.filter(function (item) {                           
+                            return treatmentArray.indexOf(item.procedureName) > -1
+                                /*&&
+                                item.hospitalList.some(function (hospital) {
+                                    return hospital.hospitalName == 'Renai Medicity';
+                                });*/
+                        });
+                        return obj;
+                    });
+                }
+                //Store hospital from form in array                
+                if (typeof reqbody.hospitalname != 'undefined') {                  
+                    if (reqbody.hospitalname instanceof Array) {
+                        var hospitalArray = reqbody.hospitalname
+                    } else {
+                        hospitalArray.push(reqbody.hospitalname)
+                    }
+                    output = myObject.map(function (obj) {
+                        obj.treatmentList = obj.treatmentList.filter(function (item) {
+                            return item.hospitalList.some(function (hospital) {
+                                return hospitalArray.indexOf(hospital.hospitalName) > -1
+                            });                            
+                        });
+                        return obj;
+                    });
+                }
+                //Store city from form in array               
+                if (typeof reqbody.city != 'undefined') {                    
+                    if (reqbody.city instanceof Array) {
+                        var cityArray = reqbody.city
+                    } else {
+                        cityArray.push(reqbody.city)
+                    }
+                    output = myObject.map(function (obj) {
+                        obj.treatmentList = obj.treatmentList.filter(function (item) {
+                            return item.hospitalList.some(function (hospital) {
+                                return cityArray.indexOf(hospital.city + "," + hospital.country ) > -1
+                            });
+                        });
+                        return obj;
+                    });
+                }
+                /*
+                var x = myObject.map(function (obj) {
+                    obj.treatmentList = obj.treatmentList.filter(function (item) {
+                        //return item.procedureName == 'Bone Grafting' &&
+                        return treatmentArray.indexOf(item.procedureName) > -1 &&
+                            item.hospitalList.some(function (hospital) {
+                                return hospital.hospitalName == 'Renai Medicity';
+                            });
+                    });
+                    return obj;
+                }); */
+                console.log('came here')
+                result = output                
+         }         
+         
+        }).then(function () {                 
             next(result)
         }).catch((e) => {
             next(e.message);
@@ -474,6 +593,44 @@ function getUniqueProcedureNames(callback) {
     })
 }
 
+
+/* Function to get distinct department names */
+module.exports.getUniqueDepartments = function (req, res) {
+
+    getUniqueDepartments(function (result) {
+        return res.json(result);
+    })
+}
+function getUniqueDepartments(callback) {
+
+    treatmentDescModel.aggregate([
+        {
+            "$match": { "$and": [{ "serviceActiveFlag": "Y" }] }
+        },    
+        {
+            "$project": {
+                "_id": 0, "department": 1 //"treatmentNames":1 will return everything from the table
+            }
+        }
+
+
+    ], function (err, result) {
+
+        if (err) {
+            logger.error("Error while reading departments from DB");
+            callback(null);
+        } else if (result == null) {
+            logger.info("There is no unique departments available in DB");
+            callback(null);
+        }
+        else {
+            callback(result);
+        }
+    })
+}
+
+
+
 /* Function to get distinct procedure names sorted by department */
 module.exports.getDepartmentwiseProcedureNames = function (req, res) {
 
@@ -518,3 +675,8 @@ function getDepartmentwiseProcedureNames(callback) {
     })
 }
 
+function getUniqueDataFromCostAPIResult(hospitalJson,uniquearray,callback) {
+
+
+
+}

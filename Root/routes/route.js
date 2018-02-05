@@ -137,6 +137,8 @@ module.exports = function (app) {
     app.get('/api/v1/get/procedureDetails/:procedure/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, gridFS.getProcedureDescription);
     /*  APi to get distinct procedure names from tretment description schema  */
     app.get('/api/v1/get/distinctprocedurenames/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getUniqueProcedureNames);
+    /*  APi to get distinct department names from tretment description schema  */
+    app.get('/api/v1/get/distinctdepartments/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getUniqueDepartments);
     /*  APi to get distinct procedure names grouped by department names  */
     app.get('/api/v1/get/departmentnprocedure/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getDepartmentwiseProcedureNames);
     /*******************************************************************************************************************************************************************/
@@ -157,6 +159,8 @@ module.exports = function (app) {
     app.get('/news/:newsid/', templateEngine.getnewsSectionbyid);
     /* API to populate treatments offered sub menu */
     app.get('/treatmentsoffered/:department', templateEngine.getDepartmentwiseTreatmentDescription);
+    /* API to populate treatments offered sub menu */
+    app.post('/treatments/:department', templateEngine.getDepartmentwiseTreatmentDescription);
     /* API to render the treatment search page with hospital details */
     app.get('/search/:treatmentname',templateEngine.searchhospitalsbytreatment);
 

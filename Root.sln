@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Root", "Root\rootnovita.njsproj", "{347E4C8E-6F9B-430D-9239-7B8F60F3293C}"
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "rootnovita", "Root\rootnovita.njsproj", "{177F2386-8E29-4B18-8DAA-3B538AA3AB3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{347E4C8E-6F9B-430D-9239-7B8F60F3293C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{347E4C8E-6F9B-430D-9239-7B8F60F3293C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{347E4C8E-6F9B-430D-9239-7B8F60F3293C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{347E4C8E-6F9B-430D-9239-7B8F60F3293C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{177F2386-8E29-4B18-8DAA-3B538AA3AB3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{177F2386-8E29-4B18-8DAA-3B538AA3AB3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{177F2386-8E29-4B18-8DAA-3B538AA3AB3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{177F2386-8E29-4B18-8DAA-3B538AA3AB3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

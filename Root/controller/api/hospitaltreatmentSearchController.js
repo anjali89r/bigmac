@@ -317,9 +317,11 @@ function getHospitalListForaTreatment(procedureName) {
 
             if (err) {
                 logger.error("Error while reading hospitals offering " + procedureName + " treatment from from DB");
+                logger.warn("Add atleast one hospital record offering " + procedureName + " to get proper display in treatments offered page")
                 resolve(JSON.parse(JSON.stringify([{ "hospitalList": [] }])));
             } else if (!result.length) {
                 logger.error("There are no active hospitals offering treatment " + procedureName);
+                logger.warn("Add atleast one hospital record offering " + procedureName + " to get proper display in treatments offered page")
                 resolve(JSON.parse(JSON.stringify([{
                     "hospitalList": []
                 }])));

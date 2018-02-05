@@ -460,15 +460,21 @@ module.exports.getnewsSectionbyid = function (req, res) {
         
 }
 /*    ************Start : get treatments offered sub page*****************     */
+/* Data requirements
+  1. Department and procedures should be available under treatments offered descriptions collection
+  2.Every procedure added under treatments offered descriptions collection should have an entry in hospitals and doctor details table
+  3.Description of the procedure should be available in txt file as per the path given in db
+*/
+
 module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
 
     var department = req.params.department
 
-    console.log(req.body);
-
+    var reqbody=req.body;
+    
     new Promise(function (resolve, reject) {
         //get the path of flat file with description
-        treatmentDesc.getTreatmentDetailsDepartmentwiseWithCost(department, function (result) {
+        treatmentDesc.getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, function (result) {
             resolve(result)
         })
 
@@ -499,7 +505,12 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
                 "procedureImagepath": result[0].procedureImagepath,
                 "firstProcedureName": result[0].treatmentList[0].procedureNameAttr,
                 "procedureNameAttr": result[0].procedureNameAttr,
-                "procedureCount": result[0].treatmentList.length
+                "procedureCount": result[0].treatmentList.length,
+                "distHospitalList": result[0].distHospitalList,
+                "distCityList": result[0].distCityList,
+                "distProcedure": result[0].distProcedure,
+                "cheapestCost": result[0].distCostList[0].costStartsFrom,
+                "maxCost": result[0].distCostList[result[0].distCostList.length - 1].costStartsFrom
 
             };
             res.render('treatments_offered_template', data);
@@ -511,6 +522,14 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
     }).catch(function (err) {
         return res.redirect('/404');
     });
+}
+
+/*    ************Start : get treatments offered sub page*****************     */
+module.exports.getDepartmentwiseTreatmentDescription1 = function (req, res) {
+  
+    var treatmentname = req.params.treatmentname;
+    console.log(treatmentname)
+    return res.redirect('/404');
 }
 
 module.exports.searchhospitalsbytreatment = function(req,res)

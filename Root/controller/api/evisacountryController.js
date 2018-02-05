@@ -39,8 +39,7 @@ function getevisaDetails(countryName, callback) {
             var filterresult = result[0].countrylist.filter(function (el) {
                 if (countryName === "all")
                     return el.disabled == false;
-                else if (!countryName)
-                console.log("i am here " + countryName)
+                else if (!countryName)                
                 return el.disabled == false && el.country == countryName
 
             })
