@@ -1251,7 +1251,7 @@ p {
 /* Page Headers */
 .page-header {
   padding: 25px 0;
-  margin: 0 0 50px;
+  margin: 0 0 10px;
   background-color: #f6f6fa;
   border-bottom: 1px solid #eeeeee;
   /* Parallax + overlay */
@@ -1262,13 +1262,13 @@ p {
 
 @media (min-width: 768px) {
   .page-header {
-    margin-bottom: 60px;
+    margin-bottom: 0px;
   }
 }
 
 @media (min-width: 992px) {
   .page-header {
-    margin-bottom: 70px;
+    margin-bottom: 0px;
   }
 }
 
@@ -1576,6 +1576,7 @@ p {
   background-color: #0069b0;
   border-color: #0069b0;
   color: #fff;
+  margin-top: 40px;
 }
 
 .panel.panel-custom .panel-heading a:hover, .panel.panel-custom .panel-heading a:focus {
@@ -3022,8 +3023,7 @@ label.error {
 
 .services-group {
   margin-bottom: 50px;
-  margin-left:  150px;
-  margin-right: 150px;
+
 }
 
 .services-group .service-row {
@@ -4499,7 +4499,6 @@ display: none !important;
 }
 /* #searchForm {
   text-align: start!important;
-
 } */
 /* .medinovitaLogo{
   width:30%;
@@ -10344,8 +10343,8 @@ display: none !important;
 
 .product .product-top img {
   display: block;
-  width: 100%;
-  height: auto;
+  width: 300px;
+  height: 200px;
 }
 
 .product .image-hover {
@@ -10366,12 +10365,12 @@ display: none !important;
 .product .product-title {
   color: #222;
   font-size: 14px;
-  line-height: 1.3;
+  line-height: -0.7;
   margin-bottom: 2px;
 }
 
 .product .product-title a {
-  color: #222;
+  color: rgb(16, 138, 178);
 }
 
 .product .product-title a:hover, .product .product-title a:focus {
@@ -10380,16 +10379,16 @@ display: none !important;
 
 .product .product-price-container {
   font-size: 16px;
-  color: #f41d1d;
+  color: #3d5afe;
   position: absolute;
   left: 0;
   bottom: 0;
 }
 
 .product .product-price-container .old-price {
-  color: #9e9e9e;
+  color: #0a0909;
   font-size: 13px;
-  text-decoration: line-through;
+  
 }
 
 .product .product-price-container span {
@@ -10457,7 +10456,7 @@ display: none !important;
 
 @media (min-width: 768px) {
   .product.product-list .product-title {
-    font-size: 16px;
+    font-size: 20px;
     margin-bottom: 12px;
   }
   .product.product-list .product-top {
@@ -10474,6 +10473,8 @@ display: none !important;
 .product.product-list .row {
   margin-left: -10px;
   margin-right: -10px;
+  margin-bottom: 40px;
+  margin-top: 10px;
 }
 
 .product.product-list .row > [class*="col-"] {
@@ -12378,7 +12379,7 @@ display: none !important;
   top: 50%;
   margin-left: -40px;
   margin-top: -40px;
-  background: url("../assets/owl.video.play.png") no-repeat;
+  background: url("/assets/owl.video.play.png") no-repeat;
   cursor: pointer;
   z-index: 1;
   -webkit-backface-visibility: hidden;
@@ -14499,13 +14500,5 @@ div.margin20{
     margin-left: 235px;
     margin-top: 6px;
 
-  }
-}
-
-/* newstemplatemustache */
-@media (min-width:992px){
-  .news-style{
-    border-left: 2px solid rgba(0, 0, 0, 0.26);
-    padding-left:84px;
   }
 }

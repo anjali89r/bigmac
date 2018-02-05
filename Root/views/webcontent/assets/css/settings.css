@@ -638,10 +638,10 @@ img.tp-slider-alternative-image	{
 	-	DOTTED OVERLAYS	-
 *********************************/
 .tp-dottedoverlay						{	background-repeat:repeat;width:100%;height:100%;position:absolute;top:0px;left:0px;z-index:3}
-.tp-dottedoverlay.twoxtwo				{	background:url(../assets/gridtile.png)}
-.tp-dottedoverlay.twoxtwowhite			{	background:url(../assets/gridtile_white.png)}
-.tp-dottedoverlay.threexthree			{	background:url(../assets/gridtile_3x3.png)}
-.tp-dottedoverlay.threexthreewhite		{	background:url(../assets/gridtile_3x3_white.png)}
+.tp-dottedoverlay.twoxtwo				{	background:url(/assets/gridtile.png)}
+.tp-dottedoverlay.twoxtwowhite			{	background:url(/assets/gridtile_white.png)}
+.tp-dottedoverlay.threexthree			{	background:url(/assets/gridtile_3x3.png)}
+.tp-dottedoverlay.threexthreewhite		{	background:url(/assets/gridtile_3x3_white.png)}
 
 
 /******************************
@@ -1033,7 +1033,7 @@ img.tp-slider-alternative-image	{
 /************************************
 -	TP BANNER TIMER		-
 *************************************/
-.tp-bannertimer								{	visibility: hidden; width:100%; height:5px; /*background:url(../assets/timer.png);*/ background: #fff; background: rgba(0,0,0,0.15); position:absolute; z-index:200; top:0px}
+.tp-bannertimer								{	visibility: hidden; width:100%; height:5px; /*background:url(/assets/timer.png);*/ background: #fff; background: rgba(0,0,0,0.15); position:absolute; z-index:200; top:0px}
 .tp-bannertimer.tp-bottom					{	top:auto; bottom:0px !important;height:5px}
 
 
@@ -1059,8 +1059,8 @@ img.tp-slider-alternative-image	{
 
 /*  CAPTION SLIDELINK   **/
 .caption.slidelink a div,
-.tp-caption.slidelink a div {	width:3000px; height:1500px;  background:url(../assets/coloredbg.png) repeat}
-.tp-caption.slidelink a span{	background:url(../assets/coloredbg.png) repeat}
+.tp-caption.slidelink a div {	width:3000px; height:1500px;  background:url(/assets/coloredbg.png) repeat}
+.tp-caption.slidelink a span{	background:url(/assets/coloredbg.png) repeat}
 .tp-shape {	width:100%;height:100%;}
 
 
@@ -1142,7 +1142,7 @@ img.tp-slider-alternative-image	{
 	width: 40px;
 	height: 40px;
 	background-color: #fff;
-	background-image:url(../assets/loader.gif);
+	background-image:url(/assets/loader.gif);
 	background-repeat:no-repeat;
 	background-position: center center;
 	box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.15);
@@ -1175,7 +1175,7 @@ img.tp-slider-alternative-image	{
 
 
 .tp-loader.spinner5 	{	
-	background-image:url(../assets/loader.gif);
+	background-image:url(/assets/loader.gif);
 	background-repeat:no-repeat;
 	background-position:10px 10px;
 	background-color:#fff;

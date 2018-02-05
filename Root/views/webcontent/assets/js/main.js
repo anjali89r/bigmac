@@ -7,51 +7,16 @@
 
 var basicKey = "bGliaW46bGliaW4=";
 var xAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVG9rZW5Ub0F1dGhlbnRpY2F0ZU1lZGlub3ZpdGFVc2VyIiwiaWF0IjoxNTA4MDQ0OTMwfQ.cZ3pCte1guE8KQkjd1KfY_bLJ-gOatJm2xlwyiLGAl4";
-var serverName = "https://www.medinovita.in/";
-// var serverName = "http://localhost:3000/";
+//var serverName = "https://www.medinovita.in/";
+var serverName = "http://localhost:1337/";
 var GLOBAL_VARIABLES = {
 	"Language": "en",
 	"Currency": "dollar"
 }
 var countryCodes=[];
-$.ajax({
-	url: serverName+"api/v1/get/countrylist/meditrip",
-	type: 'GET',
-	headers: {
-		"Content-Type": "application/json",
-		"Authorization": "Basic "+ basicKey,
-		"x-access-token": xAccessToken
 
-	},
-	beforeSend: function (xhr) {
-		xhr.setRequestHeader("Authorization", "Basic " + basicKey);
-	},
-	success: function (response) {
-		response.result[0].countrylist.forEach(function(item,index){
-			var locObj={};
-			locObj.name=item.country;
-			locObj.dial_code=item.dial_code;
-			locObj.code=item.code;
-			countryCodes.push(locObj)
-		})
-		$('#modal-container-SubmitEnquiry').on('shown.bs.modal',function(){
-			$('.modal .modal-body').css('overflow-y', 'auto');
-		   $('.modal .modal-body').css('max-height', $(window).height() *0.9);
-   
-		   })
-		   countryCodes.forEach(function(value,index){
-				$('#inputSubmitEnquiryISDCode').append($('<option>', {
-			   value: value.dial_code,
-			   text : value.name.substr(0,5) + " (" + value.code+ ") " + value.dial_code
-		   }));
-	   });
-	},
-	error: function (exception) {
-		console.log(exception);
-	}
-});
 
- 
+
 var officeAddress = "Kakkanad PO,Kochi, Kerala,India";
 
 var whyIndia = "Because India.";
@@ -79,13 +44,33 @@ var whyIndia = "Because India.";
   };
   // END Function replace Native Alert
 
-
-
-
-
 (function ($) {
 	"use strict";
-	$(".medinovitaHeader").load("/assets/pages/header.html",function(){
+	$(".medinovitaHeader").load("/assets/pages/header.html",function(){				
+		$.ajax({
+				url: serverName+"api/v1/get/distinctdepartments/meditrip",
+				type: 'GET',
+				headers: {
+					"Content-Type": "application/json",
+					"Authorization": "Basic "+ basicKey,
+					"x-access-token": xAccessToken
+
+				},
+				beforeSend: function (xhr) {					
+					xhr.setRequestHeader("Authorization", "Basic " + basicKey);
+				},
+				success: function (response) {	
+					var display = JSON.parse(JSON.stringify(response));					
+					$.each(display, function(i) {
+						var value=display[i].department						
+						var li= $('<li class="dropdown"><a onclick=window.location=' + "'/treatmentsoffered/" + value + "'" + '  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">' + value + '</a></li>')
+					    $('#treatmentsOfferedUL').append(li);
+					});									
+				},
+				error: function (exception) {
+					console.log(exception);
+				}
+		})
 		$('#costPageMenu').on('click',function(){
 			document.location.href='/cost.html';
 		})
@@ -101,15 +86,8 @@ var whyIndia = "Because India.";
 		$('#homeMenu').on('click',function(){
 			document.location.href = '/index.html';
 			//homepageCallback();
-		})
-		$('#treatmentsOfferedUL li a').on('click', function (e) {
-			e.preventDefault();
-			var id = $(this).attr('id');
-
-			setCookie("treatmentPage", id,1);
-			document.location.href = '/treatmentsOffered.html';
-		})
-
+		})		
+		
 		$('#medicalVisaPageMenu').on('click', function () {
 
 
@@ -224,7 +202,42 @@ $(".medinovitaModals").load("/assets/pages/modals.html",function(){
 
 		$('#modal-container-SubmitEnquiry').modal('toggle');
 	})
+$.ajax({
+	url: serverName+"api/v1/get/countrylist/meditrip",
+	type: 'GET',
+	headers: {
+		"Content-Type": "application/json",
+		"Authorization": "Basic "+ basicKey,
+		"x-access-token": xAccessToken
 
+	},
+	beforeSend: function (xhr) {
+		xhr.setRequestHeader("Authorization", "Basic " + basicKey);
+	},
+	success: function (response) {
+		response.result[0].countrylist.forEach(function(item,index){
+			var locObj={};
+			locObj.name=item.country;
+			locObj.dial_code=item.dial_code;
+			locObj.code=item.code;
+			countryCodes.push(locObj)
+		})
+		$('#modal-container-SubmitEnquiry').on('shown.bs.modal',function(){
+			$('.modal .modal-body').css('overflow-y', 'auto');
+		   $('.modal .modal-body').css('max-height', $(window).height() *0.9);
+
+		   })
+		   countryCodes.forEach(function(value,index){
+				$('#inputSubmitEnquiryISDCode').append($('<option>', {
+			   value: value.dial_code,
+			   text : value.code + "(" + value.dial_code + ")"
+		   }));
+	   });
+	},
+	error: function (exception) {
+		console.log(exception);
+	}
+});
 
 
 	//Fetch search Treatments list
@@ -1523,7 +1536,7 @@ $('#hospitalsPageMenu').on('click',function(){
 			/* Twitter feed for user*/
 			if ($.fn.tweet && $('.twitter-feed-widget').length) {
 				$('.twitter-feed-widget').tweet({
-					modpath: '../assets/js/twitter/',
+					modpath: '/assets/js/twitter/',
 					avatar_size: '',
 					count: 2,
 					query: 'wrapbootstrap', // change query with username if you want to display search results
@@ -1846,38 +1859,38 @@ function homepageCallback() {
 	var treatmentList = "";
 
 	var featuredTreatmentsItems=[{
-img:"../assets/images/blocks/index-medical/item2.jpg",
-svgImg:"../assets/images/services/index-medical/stethoscope.svg",altText:"Stethoscope",
+img:"/assets/images/blocks/index-medical/item2.jpg",
+svgImg:"/assets/images/services/index-medical/stethoscope.svg",altText:"Stethoscope",
 shortContent:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.",
 title:"Nursing"
 	},
 {
-img:"../assets/images/blocks/index-medical/item1.jpg",
-svgImg:"../assets/images/services/index-medical/microscope.svg",altText:"Microscope",
+img:"/assets/images/blocks/index-medical/item1.jpg",
+svgImg:"/assets/images/services/index-medical/microscope.svg",altText:"Microscope",
 shortContent:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.",
 title:"Laboratory"
 	},
 {
-img:"../assets/images/blocks/index-medical/item1.jpg",
-svgImg:"../assets/images/services/index-medical/microscope.svg",altText:"Microscope",
+img:"/assets/images/blocks/index-medical/item1.jpg",
+svgImg:"/assets/images/services/index-medical/microscope.svg",altText:"Microscope",
 shortContent:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.",
 title:"Laboratory"
 	},
 {
-img:"../assets/images/blocks/index-medical/item1.jpg",
-svgImg:"./assets/images/services/index-medical/microscope.svg",altText:"Microscope",
+img:"/assets/images/blocks/index-medical/item1.jpg",
+svgImg:"/assets/images/services/index-medical/microscope.svg",altText:"Microscope",
 shortContent:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.",
 title:"Laboratory"
 	},
 {
-img:"../assets/images/blocks/index-medical/item1.jpg",
-svgImg:"../assets/images/services/index-medical/microscope.svg",altText:"Microscope",
+img:"/assets/images/blocks/index-medical/item1.jpg",
+svgImg:"/assets/images/services/index-medical/microscope.svg",altText:"Microscope",
 shortContent:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.",
 title:"Laboratory"
 	},
 {
-img:"../assets/images/blocks/index-medical/item1.jpg",
-svgImg:"../assets/images/services/index-medical/microscope.svg",altText:"Microscope",
+img:"/assets/images/blocks/index-medical/item1.jpg",
+svgImg:"/assets/images/services/index-medical/microscope.svg",altText:"Microscope",
 shortContent:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.",
 title:"Laboratory"
 	}]
@@ -1886,7 +1899,7 @@ title:"Laboratory"
 		{
 			"newsId": "1",
 
-			"imgPath": "../assets/images/blog/index-medical/post1.jpg",
+			"imgPath": "/assets/images/blog/index-medical/post1.jpg",
 
 			"postedDate": "17 Jan, 2016",
 
@@ -1903,7 +1916,7 @@ title:"Laboratory"
 		{
 			"newsId": "2",
 
-			"imgPath": "../assets/images/blog/index-medical/post2.jpg",
+			"imgPath": "/assets/images/blog/index-medical/post2.jpg",
 
 			"postedDate": "17 Jan, 2016",
 
@@ -1918,7 +1931,7 @@ title:"Laboratory"
 		{
 			"newsId": "2",
 
-			"imgPath": "../assets/images/blog/index-medical/post3.jpg",
+			"imgPath": "/assets/images/blog/index-medical/post3.jpg",
 
 			"postedDate": "17 Jan, 2016",
 
@@ -1932,44 +1945,44 @@ title:"Laboratory"
 
 	];
 	var homePageHighLightsItems=[{
-		imgSrc:"../assets/images/services/index-medical/first-aid-kit.svg",
+		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
 		altText:"Emergency",
 		title:"Emergency",
 		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
 	},
 {
-		imgSrc:"../assets/images/services/index-medical/first-aid-kit.svg",
+		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
 		altText:"Emergency",
 		title:"Emergency",
 		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
 	},
 {
-		imgSrc:"../assets/images/services/index-medical/first-aid-kit.svg",
+		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
 		altText:"Emergency",
 		title:"Emergency",
 		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
 	},{
-		imgSrc:"../assets/images/services/index-medical/first-aid-kit.svg",
+		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
 		altText:"Emergency",
 		title:"Emergency",
 		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
 	},{
-		imgSrc:"../assets/images/services/index-medical/first-aid-kit.svg",
+		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
 		altText:"Emergency",
 		title:"Emergency",
 		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
 	},{
-		imgSrc:"../assets/images/services/index-medical/first-aid-kit.svg",
+		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
 		altText:"Emergency",
 		title:"Emergency",
 		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
 	},{
-		imgSrc:"../assets/images/services/index-medical/first-aid-kit.svg",
+		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
 		altText:"Emergency",
 		title:"Emergency",
 		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
 	},{
-		imgSrc:"../assets/images/services/index-medical/first-aid-kit.svg",
+		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
 		altText:"Emergency",
 		title:"Emergency",
 		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
@@ -2665,3 +2678,67 @@ function hospitalPageCallback(treatmentName,city){
 	function openSubmitEnquiry(){
 	$("#modal-container-SubmitEnquiry").modal("show");
 	}
+
+//This function is used to set initial height and left padding in treatments offered page
+function setInitialHeightForContainers() {
+        //get and set height for all content and contact divs
+        var initialHeight = $('[id^="content_"]').outerHeight( true );
+		$('[id^="contact_"]').height((initialHeight-2) + 'px');
+        //get and set left offset for all content and contact divs
+        var p = $('[id^="content_"]').filter(':visible:first');
+		var contentleftOffset = p.offset();
+		var p1 = $('[id^="contact_"]').filter(':visible:first');
+		var contactleftOffset = p1.offset();
+		var filterleftOffset = $('#filter').offset();
+        //set left alignment for all content and contact divs
+		$('[id^="content_"]').offset({left: contentleftOffset.left});
+		$('[id^="contact_"]').offset({left: contactleftOffset.left});
+        $('#top_desc').offset({left: filterleftOffset.left});
+
+}
+//This function is used to filter the treatments based on user selection
+function filterProcedureListAndDisplay(isChecked,id){
+	    //get the offset length of first visible content and contact divs in the screen
+		var p = $('[id^="content_"]').filter(':visible:first');
+		var contentleftOffset = p.offset();
+		 //reload the page if all elements are de selected by user
+		if(contentleftOffset==null){
+		   window.location = window.location.href;
+		   return
+        }
+		var p1 = $('[id^="contact_"]').filter(':visible:first');
+		var contactleftOffset = p1.offset();
+		//hide elements
+		if(!isChecked){
+			$('#content_'+ id).hide();
+			$('#contact_'+ id).hide();
+			$('#space_' + id).hide();
+		}else{
+			//Show hidden elements
+			var isVisible = $('#content_'+ id).is(':visible');
+			if(!isVisible){
+				$('#content_'+ id).show();
+				$('#contact_'+ id).show();
+				$('#space_' + id).show();
+			}
+		}
+		//set left alignment for all content and contact divs
+		$('[id^="content_"]').offset({left: contentleftOffset.left});
+		$('[id^="contact_"]').offset({left: contactleftOffset.left});
+}
+//set expand and collapse bootstrap  Accordion
+function setExpandCollpaseAccordion(){
+
+	 // Add minus icon for collapse element which is open by default
+	 $(".collapse.in").each(function(){
+		$(this).siblings(".panel-heading").find(".glyphicon").addClass("glyphicon-minus").removeClass("glyphicon-plus");
+	 });
+
+	 // Toggle plus minus icon on show hide of collapse element
+	 $(".collapse").on('show.bs.collapse', function(){
+		$(this).parent().find(".glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+	 }).on('hide.bs.collapse', function(){
+		$(this).parent().find(".glyphicon").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+	 });
+
+}

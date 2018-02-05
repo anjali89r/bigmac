@@ -9,6 +9,8 @@ var apicache = require('apicache');
 
 var app = express();
 
+var http = require('http');
+var server = http.createServer(app);
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -75,7 +77,7 @@ app.use(function(req, res, next){
       });
 
   });
-app.listen(port);
+server.listen(port);
 console.log('Listening on port ' + port + '..');
 function setCustomCacheControl (res, path) {
     if (serveStatic.mime.lookup(path) === 'text/html') {
