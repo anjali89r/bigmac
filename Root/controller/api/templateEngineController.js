@@ -486,6 +486,9 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
         new Promise(function (resolve, reject) {
             gridFS.getFlatFileContent(filePath, function (content) {
                 content = fs.readFileSync(filePath, "utf8").trim()
+                if (content == null) {
+                    content="Description not available"
+                }
                 if (content.indexOf("Error") > -1) {
                     return reject(res.status(404).json({ "Message": content }));
                 } else {
