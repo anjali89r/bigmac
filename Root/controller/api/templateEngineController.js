@@ -502,6 +502,7 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
                 "title": department + ' | low cost medical treatment abroad',
                 "departmentDescription": content,
                 "treatmentList": result[0].treatmentList,
+                "procedureCount": result[0].treatmentList.length,
                 "maxHospitalization": result[0].minHospitalization,
                 "healingTimeInDays": result[0].healingTimeInDays,
                 "procedureCost": result[0].procedureCost,
