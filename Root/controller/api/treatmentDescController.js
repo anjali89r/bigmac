@@ -543,8 +543,7 @@ module.exports.getProcedureDetails = function getProcedureDetails(procedureName,
             }
         }
 
-    ], function (err, result) {
-
+    ], function (err, result) {        
         if (err) {
             logger.error("Error while reading treatment description from DB");
             callback(null);

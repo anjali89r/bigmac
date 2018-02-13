@@ -29,8 +29,7 @@ function getevisaDetails(countryName, callback) {
     evisacountry.aggregate([
         { "$project": { "_id": 0, "countrylist.country": 1, "countrylist.fee": 1, "countrylist.disabled": 1 } }
 
-    ], function (err, result) {
-
+    ], function (err, result) {        
         if (err) {
             logger.error("Error while reading visacountry details " + err.message.trim());
             callback({ "Message": "Error in getting the evisacountry details" });
@@ -40,10 +39,11 @@ function getevisaDetails(countryName, callback) {
                 if (countryName === "all")
                     return el.disabled == false;
                 else if (!countryName)                
-                return el.disabled == false && el.country == countryName
-
-            })
-            callback(filterresult);
+                    return el.disabled == false && el.country == countryName
+                else if (countryName)  
+                    return el.disabled == false && el.country == countryName
+            })           
+            callback(filterresult);            
         }
     })
 }

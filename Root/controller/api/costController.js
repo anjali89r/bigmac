@@ -66,7 +66,7 @@ function getTreatmentRoughEstimate(req, res,callback) {
         return
     }
 
-    //const hospitalInfoPromise = getHospitalOfferingTreatment(req, res);
+    const hospitalInfoPromise = getHospitalOfferingTreatment(req, res);
     const procedureCostPromise = getAvarageCost(req.query.procedurename)
     const holidayCostPromise = getHolidayPackageCost(req, res)
     const accomodationCostPromise = getAccomodationCost(req, res)
