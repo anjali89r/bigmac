@@ -12,7 +12,7 @@ var treatmentDescription = require('../controller/api/treatmentDescController.js
 var holidayInfo = require('../controller/api/holidayPackageController.js');
 var ourServicesInfo = require('../controller/api/ourServicesController.js');
 var homepageInfo = require('../controller/api/homepageController.js');
-var siteTrafficInfo = require('../controller/api/siteTrafficController.js');
+// var siteTrafficInfo = require('../controller/api/siteTrafficController.js');
 var transportInfo = require('../controller/api/localTransportController.js');
 var hotelInfo = require('../controller/api/accomodationInfoController.js');
 var treatmentEstimate = require('../controller/api/costController.js');
@@ -176,7 +176,7 @@ module.exports = function (app) {
     app.get('/api/v1/get/homepagedetails/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, homepageInfo.getHomepagedetails);
 
     /************************API to operate on eVisa schema******************************************/
-    app.post('/api/v1/post/sitetraffic/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, siteTrafficInfo.postsiteTraffic);
+    // app.post('/api/v1/post/sitetraffic/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, siteTrafficInfo.postsiteTraffic);
     app.get('/api/v1/get/evisacountries/:countryName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, evisacountryInfo.getevisacountry);
     app.post('/api/v1/post/evisacountries/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, evisacountryInfo.addorUpdateEvisaFee);
     app.get('/api/v1/get/countrylist/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, evisacountryInfo.getCountryListNCode);

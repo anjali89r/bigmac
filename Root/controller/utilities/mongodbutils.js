@@ -49,18 +49,26 @@ module.exports.closeMongoDBConnection = function (dbConnect) {
 /*  Get the connection string for Mongo db */
 function getmongouri() {
 
-    var dbname = config.getProjectSettings('MONGODB', 'DB_NAME',true);
-    var uid = config.getProjectSettings('MONGODB', 'DB_USER', true);
-    var paswd = config.getProjectSettings('MONGODB', 'DB_PASSWORD', true);
-    var dbhost = config.getProjectSettings('MONGODB', 'DB_HOST', true);
-    var dbport = config.getProjectSettings('MONGODB', 'DB_PORT', true);
-    var ispaswdencrypted = config.getProjectSettings('MONGODB', 'PSWD_ENCRYPTED', true);
+    // var dbname = config.getProjectSettings('MONGODB', 'DB_NAME',true);
+    // var uid = config.getProjectSettings('MONGODB', 'DB_USER', true);
+    // var paswd = config.getProjectSettings('MONGODB', 'DB_PASSWORD', true);
+    // var dbhost = config.getProjectSettings('MONGODB', 'DB_HOST', true);
+    // var dbport = config.getProjectSettings('MONGODB', 'DB_PORT', true);
+    // var ispaswdencrypted = config.getProjectSettings('MONGODB', 'PSWD_ENCRYPTED', true);
+
+    var dbname = process.env.DBNAME
+    var uid = process.env.DBUID
+    var paswd = process.env.DBPASWD
+    var dbhost = process.env.DBHOST
+    var dbport = process.env.DBPORT
+    var ispaswdencrypted = process.env.DPASWDENCRYPTED
 
     if (ispaswdencrypted.toUpperCase() == 'Y') {       
         paswd = crypto.decrypt(paswd);        
     }
 
-    var mongouri = 'mongodb://' + uid + ':' + paswd + '@' + dbhost + ':' + dbport + '/' + dbname;    
+    var mongouri = 'mongodb://' + uid + ':' + paswd + '@' + dbhost + ':' + dbport + '/' + dbname;   
+    //console.log(mongouri) 
     return mongouri;
 }
 
