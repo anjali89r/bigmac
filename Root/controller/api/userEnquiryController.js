@@ -9,65 +9,71 @@ var userEnquiryModel = mongoose.model('user_enquiry');
 module.exports.submitUserEnquiry = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned
-        logger.warn("Response already sent.Hence skipping the function call submitUserEnquiry")
+        logger.warn('Response already sent.Hence skipping the function call submitUserEnquiry')
         return;
-    }  
+    }
 
     var userEnquirySchema = new userEnquiryModel();
 
     new Promise(function (resolve, reject) {
 
-        var sendTO = req.body["emailID"]
-        var subject = "Dear " + req.body["userFullName"] + " - Thank you for your enquiry"
-        var emailBody = "Dear " + req.body["userFullName"] + "," + "\r\n" + "\r\n" + "Greetings of the day.This is to acknowledge that we have received your enquiry.We are working on your enquiry and revert back within two working days." + "\r\n" + "\r\n"
-            + "Thank you for showing interest in Medinovita." + "\r\n" + "\r\n" + "Message from User - " + req.body["caseDescription"] + "\r\n" + "\r\n" + "Thanks & Regards" + "\r\n" + "Medinovita customer care team"
+        var sendTO = req.body.emailID
+        var subject = 'Dear ' + req.body.userFullName + ' - Thank you for your enquiry'
+        var emailBody = 'Dear ' + req.body.userFullName + ',' + '\r\n' + '\r\n' + 'Greetings of the day.This is to acknowledge that we have received your enquiry.We are working on your enquiry and revert back within two working days.' + '\r\n' + '\r\n'
+            + 'Thank you for showing interest in Medinovita.' + '\r\n' + '\r\n' + 'Message from User - ' + req.body.caseDescription + '\r\n' + '\r\n' + 'Thanks & Regards' + '\r\n' + 'Medinovita customer care team'
 
         autoMail.sendEmail(sendTO, subject, emailBody, false, function (callback) { })
 
-        userEnquiryModel.findOne({ "emailID": req.body["emailID"] }, function (err, doc) {
-            if (doc == null) { /* If it's the first enquiry from user*/
-                userEnquirySchema.emailID = req.body["emailID"],
+        userEnquiryModel.findOne({ emailID: req.body.emailID }, function (err, doc) {
+            if (err)
+            {
+                logger.error('Error while inserting record in user enquiry collection: - ' + error.message)
+                return reject(res.status(500).json({
+                    Message: 'We apologize for an unexpected error. The enquiry is recieved and we will reach out to you in less than 48hrs '}));
+            }
+            else if (doc === null) { /* If it's the first enquiry from user*/
+                userEnquirySchema.emailID = req.body.emailID,
                     userEnquirySchema.enquiry = {
-                        userFullName: req.body["userFullName"],
-                        isdCode: parseInt(req.body["isdCode"]),
-                        primaryPhonenumber: parseInt(req.body["primaryPhonenumber"]),
-                        procedureName: req.body["procedureName"],
-                        commuMedium: req.body["commuMedium"],
-                        caseDescription: req.body["caseDescription"],
-                        attachmentFlag: req.body["attachment"],
-                        attachmentName: req.body["attachmentName"],
+                        userFullName: req.body.userFullName,
+                        isdCode: req.body.isdCode,
+                        primaryPhonenumber: req.body.primaryPhonenumber,
+                        procedureName: req.body.procedureName,
+                        commuMedium: req.body.commuMedium,
+                        caseDescription: req.body.caseDescription,
+                        attachmentFlag: req.body.attachment,
+                        attachmentName: req.body.attachmentName,
                         response: []
                     }
                 resolve(true)
 
             } else {  /* Update if atlest one query is present for the same user*/
 
-                userEnquiryModel.findOneAndUpdate({ "emailID": req.body["emailID"] },
+                userEnquiryModel.findOneAndUpdate({ emailID: req.body.emailID },
                     {
-                        "$push": {
-                            "enquiry": {
-                                "userFullName": req.body["userFullName"],
-                                "isdCode": parseInt(req.body["isdCode"]),
-                                "primaryPhonenumber": parseInt(req.body["primaryPhonenumber"]),
-                                "procedureName": req.body["procedureName"],
-                                "commuMedium": req.body["commuMedium"],
-                                "caseDescription": req.body["caseDescription"],
-                                "attachmentFlag": req.body["attachment"],
-                                "attachmentName": req.body["attachmentName"],
-                                "response": []
+                        $push: {
+                            enquiry: {
+                                userFullName: req.body.userFullName,
+                                isdCode: req.body.isdCode,
+                                primaryPhonenumber: req.body.primaryPhonenumber,
+                                procedureName: req.body.procedureName,
+                                commuMedium: req.body.commuMedium,
+                                caseDescription: req.body.caseDescription,
+                                attachmentFlag: req.body.attachment,
+                                attachmentName: req.body.attachmentName,
+                                response: []
                             }
                         }
                     },
                     { new: true }, function (err, doc) {
                         if (err) {
-                            logger.error("Error while updating record : - " + err.message);
+                            logger.error('Error while updating record : - ' + err.message);
                             return reject(res.status(409).json({
-                                "Message": "Error while saving enquiry for user " + req.body['emailID'] + " in user enquiry collection"
+                                Message: 'Error while saving enquiry for user ' + req.body.emailID + ' in user enquiry collection'
                             }));
                         } else if (doc === null) {
-                            logger.error("Error while updating record : - unable to update database");
+                            logger.error('Error while updating record : - unable to update database');
                             return reject(res.status(409).json({
-                                "Message": "Error while saving enquiry for user " + req.body['emailID'] + " due to " + err.message
+                                Message: 'Error while saving enquiry for user ' + req.body.emailID + ' due to ' + err.message
                             }));
                         }
                         resolve(false);
@@ -76,21 +82,21 @@ module.exports.submitUserEnquiry = function (req, res) {
         })
     })
     .then(function (flag) {
-        if (flag == true) {//save only for insert and skip for update
+        if (flag) {//save only for insert and skip for update
             userEnquirySchema.save(function (error, data) {
                 if (error) {
-                    logger.error("Error while inserting record in user enquiry collection: - " + error.message)
-                    return res.status(500).json({ "Message": error.message.trim() });
+                    logger.error('Error while inserting record in user enquiry collection: - ' + error.message)
+                    return res.status(500).json({ Message: error.message.trim() });
                 }
                 else {
-                    return res.json({ "Message": "Data got inserted successfully" });
+                    return res.json({ Message: 'Data got inserted successfully' });
                 }
             })
         }
     })
     .catch(function (err) {
-        logger.error("Error while inserting record in : - " + err.message)
-        return res.status(500).json({ "Message": err.message });
+        logger.error('Error while inserting record in : - ' + err.message)
+        return res.status(500).json({ Message: err.message });
     })
 }
 
@@ -98,9 +104,9 @@ module.exports.submitUserEnquiry = function (req, res) {
 module.exports.sendEnquiryResponse = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned
-        logger.warn("Response already sent.Hence skipping the function call sendEnquiryResponse")
+        logger.warn('Response already sent.Hence skipping the function call sendEnquiryResponse')
         return;
-    }  
+    }
 
     var userEnquirySchema = new userEnquiryModel();
 
@@ -109,59 +115,65 @@ module.exports.sendEnquiryResponse = function (req, res) {
 
     //Create dbcheck promise
     new Promise(function (resolve, reject) {
-        userEnquiryModel.findOne({ "emailID": userEmailID, "enquiry": { $elemMatch: { "enquiryCode": enquiryID } } }, function (err, doc) {
-             if (doc == null) {
-                 logger.info("Enquiry for user  " + userEmailID + " with query id " + enquiryID + " does not exists in database");
+        userEnquiryModel.findOne({ emailID: userEmailID, enquiry: { $elemMatch: { enquiryCode: enquiryID } } }, function (err, doc) {
+            if(err)
+            {
+                return reject(res.status(500).json({
+                    Message: 'We apologize,there is an issue with submission of enquiry'
+                }));
+            }
+             else if (doc === null) {
+                 logger.info('Enquiry for user  ' + userEmailID + ' with query id ' + enquiryID + ' does not exists in database');
                  return reject(res.status(409).json({
-                     "Message": "Enquiry for user  " + userEmailID + " with query id " + enquiryID + " does not exists in database"
+                     Message: 'Enquiry for user  ' + userEmailID + ' with query id ' + enquiryID + ' does not exists in database'
                  }));
              }
              resolve();
          });
     }).then(function () {
-        userEnquiryModel.findOneAndUpdate({ "emailID": userEmailID, "enquiry": { $elemMatch: { "enquiryCode": enquiryID } }},
+        userEnquiryModel.findOneAndUpdate({ emailID: userEmailID, enquiry: { $elemMatch: { enquiryCode: enquiryID } }},
             {
-                "$push": {
-                    "enquiry.$.response": {
-                        "mediNovitaResponse": req.body["mediNovitaResponse"],
-                        "respondedBy": req.body["respondedBy"],
-                        "contactedMethod": req.body["contactedMethod"],
-                        "emailResponseSent": req.body["emailResponseSent"],
-                        "nextFollowUpDate": req.body["followupDate"],
-                        "followUpAssignee": req.body["followupAssignee"],
-                        "followUpNote": req.body["followupNote"],
+                $push: {
+                    'enquiry.$.response': {
+                        mediNovitaResponse: req.body.mediNovitaResponse,
+                        respondedBy: req.body.respondedBy,
+                        contactedMethod: req.body.contactedMethod,
+                        emailResponseSent: req.body.emailResponseSent,
+                        nextFollowUpDate: req.body.followupDate,
+                        followUpAssignee: req.body.followupAssignee,
+                        followUpNote: req.body.followupNote,
                     }
                 }
             },
             { returnOriginal: false, upsert: true }, function (err, doc) {
                 if (err) {
-                    logger.error("Error while updating record : - " + err.message);
+                    logger.error('Error while updating record : - ' + err.message);
                     return res.status(409).json({
-                        "Message": "Error while saving response for user " + userEmailID + " enquiry in user enquiry collection"
+                        Message: 'Error while saving response for user ' + userEmailID + ' enquiry in user enquiry collection'
                     });
                 } else if (doc === null) {
-                    logger.error("Error while updating record : - unable to update database");
+                    logger.error('Error while updating record : - unable to update database');
                     return res.status(409).json({
-                        "Message": "Error while saving response for user " + userEmailID + " enquiry in user enquiry collection " + err.message
+                        Message: 'Error while saving response for user ' + userEmailID + ' enquiry in user enquiry collection ' + err.message
                     });
-                }                
+                }
             });
 
     }).then(function () {
         userEnquirySchema.save(function (error, data) {
             if (error) {
-                logger.error("Error while inserting record in user enquiry collection: - " + error.message)
-                return res.status(500).json({ "Message": error.message.trim() });
+                logger.error('Error while inserting record in user enquiry collection: - ' + error.message)
+                return res.status(500).json({ Message: error.message.trim() });
             }
             else {
-                return res.json({ "Message": "Data got inserted successfully" });
+                return res.json({ Message: 'Data got inserted successfully' });
             }
         })
 
     })
     .catch(function (err) {
-        logger.error("Error while inserting record in : - " + err.message)
-        return res.status(500).json({ "Message": err.message });
+        logger.error('Error while inserting record in : - ' + err.message)
+        return res.status(500).json({ Message: err.message });
     })
 }
 
@@ -169,32 +181,32 @@ module.exports.sendEnquiryResponse = function (req, res) {
 module.exports.getPendingEnquiryResponse = function (req, res) {
 
     if (res.headersSent) {//check if header is already returned
-        logger.warn("Response already sent.Hence skipping the function call getPendingEnquiryResponse")
+        logger.warn('Response already sent.Hence skipping the function call getPendingEnquiryResponse')
         return;
-    }  
+    }
 
     userEnquiryModel.aggregate([
     {
-        "$match": {
+        $match: {
             response: { $exists: false, $ne: [] }
         }
     },
     {
-    "$project": {
-        "_id": 0,
-        "emailID": 1,
-        "enquiry": {
-            "$setDifference": [
+    $project: {
+        _id: 0,
+        emailID: 1,
+        enquiry: {
+            $setDifference: [
                 {
-                    "$map": {
-                        "input": "$enquiry",
-                        "as": "enquiry",
-                        "in": {
-                            "$cond": [//specify the filter here
+                    $map: {
+                        input: '$enquiry',
+                        as: 'enquiry',
+                        in: {
+                            $cond: [//specify the filter here
                                 {
-                                  // "$eq": ["$$enquiry.userFullName", "Libin Sebastian new"] },                                    
+                                  // "$eq": ["$$enquiry.userFullName", "Libin Sebastian new"] },
                                 },
-                                { "userFullName": "$$enquiry.userFullName", "primaryPhonenumber": "$$enquiry.primaryPhonenumber", "caseDescription": "$$enquiry.caseDescription"},
+                                { userFullName: '$$enquiry.userFullName', primaryPhonenumber: '$$enquiry.primaryPhonenumber', caseDescription: '$$enquiry.caseDescription'},
                                 false
                             ]
                         }
@@ -208,11 +220,11 @@ module.exports.getPendingEnquiryResponse = function (req, res) {
 ], function (err, result) {
 
     if (err) {
-        logger.error("Error while reading list of enquiries where response is required");
-        return res.status(500).json({ "Message": err.message.trim() });
-    } else if (result == null) {
-        logger.info("There are no enquiries where response is due");
-        return res.status(200).json({ "Message": err.message.trim() });
+        logger.error('Error while reading list of enquiries where response is required');
+        return res.status(500).json({ Message: err.message.trim() });
+    } else if (result === null) {
+        logger.info('There are no enquiries where response is due');
+        return res.status(200).json({ Message: err.message.trim() });
     }
     else {
         return res.json(result);
