@@ -6,12 +6,26 @@ var compression = require('compression')
 var  mustacheExpress = require('mustache-express');
 var serveStatic = require('serve-static');
 var apicache = require('apicache');
+var minifyHTML = require('express-minify-html');
 
 var app = express();
 
 var http = require('http');
 var server = http.createServer(app);
 app.use(compression());
+// app.use(minify());
+app.use(minifyHTML({
+  override:      true,
+  exception_url: false,
+  htmlMinifier: {
+      removeComments:            true,
+      collapseWhitespace:        true,
+      collapseBooleanAttributes: true,
+      removeAttributeQuotes:     true,
+      removeEmptyAttributes:     true,
+      minifyJS:                  true
+  }
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.disable('x-powered-by')
