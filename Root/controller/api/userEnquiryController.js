@@ -233,3 +233,55 @@ module.exports.getPendingEnquiryResponse = function (req, res) {
 
 }
 
+/************************ API code to read user questionnaire  ****************************/
+module.exports.submitUserQuestionnaire = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn('Response already sent.Hence skipping the function call submitUserQuestionnaire')
+        return;
+    }
+    var sendTO = '';
+    var subject = '';
+    new Promise(function (resolve, reject) {    
+        sendTO = req.body.contactemail       
+        subject = 'User ' + req.body.Submitted_By + ' submitted questionnaire'
+
+        var welcome = 'Dear ' + req.body.Submitted_By + ',' + '\r\n' + '\r\n' + 'Greetings of the day.This is to acknowledge that we have received your inputs.We are working on high priority to come up with the best packages at attractive rates based on your inputs.We will revert back within two working days.' + '\r\n' + '\r\n'
+            + 'Thank you for showing interest in Medinovita.' + '\r\n' + '\r\n'  + "Below are the details submitted by you.Feel free to submit the survey agin if any of the informations furnished below is inaccurate" + '\r\n' + '\r\n' 
+
+        var emailBody = welcome  + 'Submitted By :  ' + req.body.Submitted_By + '\r\n' + 
+            'Contact Email :  ' + req.body.contactemail + '\r\n' + 
+            'Contact Number :  ' + req.body.contact_number + '\r\n' + 
+            'Patients Age :  ' + req.body.Patient_age + " years"  + '\r\n' + 
+            'Treatment Requested :  ' + req.body.contact_message + '\r\n' + 
+            'Patient Gender :  ' + req.body.gender + '\r\n' + 
+            'Patient Height :  ' + req.body.patient_height + " cm " + '\r\n' + 
+            'Patient Weight :  ' + req.body.Patinet_weight + " kg" + '\r\n' +
+            'Problem Start Date :  ' + req.body.When_did_problem_start + '\r\n' +
+            'Prior treatments :  ' + req.body.prior_treatments + '\r\n' +
+            'Current Symptoms :  ' + req.body.current_symptoms + '\r\n' +
+            'Have you travelled abroad any time for this treatment? :  ' + req.body.radio_travelled_abroad + '\r\n' +
+            'Do you have Medical Reports with you? :  ' + req.body.medical_reports_yes + '\r\n' +
+            'Are you diabetic :  ' + req.body.diebetic + '\r\n' +
+            'Do you have high blood pressure? :  ' + req.body.bp + '\r\n' +
+            'Do you have HIV :  ' + req.body.hiv + '\r\n' +
+            'Do you have Hepatitis B or C :  ' + req.body.Hepatitis + '\r\n' +
+            'When do you plan to travel for treatment :  ' + req.body.travel_date + '\r\n' +
+            'What type of hospitals do you prefer :  ' + req.body.hospital_preference + '\r\n' +
+            'What kind of accomodation do you prefer :  ' + req.body.accomodation_preference + '\r\n' +
+            'Do you have a location preference :  ' + req.body.location_preference + '\r\n' +
+            'Would you like to get Medical Visa assistance? :  ' + req.body.visa_assistance + '\r\n' +
+            'Would you like to get assistance to book flight tickets? :  ' + req.body.flight_ticket + '\r\n' +
+            'Would you like to avail a leisure trip? :  ' + req.body.leisure_trip + '\r\n' +
+            'Preferred Time for call :  ' + req.body.Preferred_time + '\r\n' + '\r\n'  + 'Thanks & Regards' + '\r\n' + 'Medinovita customer care team'              
+            resolve(emailBody)
+
+    }).then(function (emailBody) {        
+        autoMail.sendEmail(sendTO, subject, emailBody, false, function (callback) { }) 
+        return res.status(200).end('Email has been sent successfully');
+    })
+    .catch(function (err) {
+        logger.error('Error while senting email : - ' + err.message)
+        return res.status(500).json({ Message: err.message });
+    })
+}

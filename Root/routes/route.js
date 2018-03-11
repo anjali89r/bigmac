@@ -69,6 +69,8 @@ module.exports = function (app) {
     app.post('/api/v1/submit/response/:userEmail/:enquiryID/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, enquiryInfo.sendEnquiryResponse  );
      /*  APi to get list of enquiries where response is due  */
     app.get('/api/v1/get/enquiry/dueresponse/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, enquiryInfo.getPendingEnquiryResponse);
+    /*  APi to sent email upon user submitting ques tionnaire */
+    app.post('/api/v1/post/questionnaire', enquiryInfo.submitUserQuestionnaire);
 
     /*********************************************************************************************************************************************************/
     
