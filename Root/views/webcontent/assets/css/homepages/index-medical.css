@@ -76,7 +76,7 @@ width: 100% !important;
 }
 
 .text-block.hover-bg {
-  border: 2px solid #fff;
+  border: 2px solid #eeeeee;
   padding-top: 21px;
   padding-bottom: 17px;
   margin-bottom: 20px;
@@ -108,7 +108,7 @@ width: 100% !important;
    padding:1%;
   /*height:60%; */
   border:1px solid#cecece;
-  background-color: #f3fafe;
+  background-color: #eceff1;
 }
 
 .vertical-center-row {

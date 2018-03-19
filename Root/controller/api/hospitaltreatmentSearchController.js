@@ -2,6 +2,7 @@
 var Promise = require('promise');
 var fs = require('fs');
 var logger = require('../utilities/logger.js');
+var gridFS = require('./gridFSController.js');
 require('../../model/hospitalDoctorDetailsModel.js');
 var config = require('../utilities/confutils.js');
 var hospitalModel = mongoose.model('hospital_doctor_details');
@@ -99,7 +100,7 @@ module.exports.gethospitalDetailbytreatment = function (req, res) {
                     return res.status(500).json({ "Message": err.message });
                 }
 
-                console.log(result.length);
+               // console.log(result.length);
                 for (var intArr = 0; intArr < result.length; intArr++)
                 {
                     var tempArray = [];
@@ -129,7 +130,7 @@ module.exports.gethospitalDetailbytreatment = function (req, res) {
                     return res.status(500).json({ "Message": err.message });
                 }
 
-                console.log(result.length);
+               // console.log(result.length);
                 for (var intArr = 0; intArr < result.length; intArr++)
                 {
                     var tempArray = [];
@@ -349,10 +350,11 @@ function getProcedureBriefFromFile(procedureFilePath) {
 
     var filePromise = new Promise(function (resolve, reject) {
 
-        var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
-        var filePath = procedureFileDir + procedureFilePath
-        var content = fs.readFileSync(filePath, "utf8");
-
+       // var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
+        //var filePath = procedureFileDir + procedureFilePath
+        var filePath =  procedureFilePath
+        //var content = fs.readFileSync(filePath, "utf8");
+        gridFS.getFlatFileContent(filePath, function (content) {
         if (content.indexOf("Error") > -1) {
             resolve(JSON.parse(JSON.stringify([{ "procedureActualDescription": content }])))
             logger.error("error while reading procedure description for file with path " + procedureFilePath)
@@ -363,6 +365,7 @@ function getProcedureBriefFromFile(procedureFilePath) {
             content = array.join("\n")
             resolve(JSON.parse(JSON.stringify([{ "procedureActualDescription": content }])))
         }
+      })
     })
     return filePromise;
 }
@@ -372,6 +375,7 @@ function gethospitalrecordsfortreatmentname(treatmentdisplayname,city,accreditat
   
 
     new Promise(function (resolve, reject) {
+       // console.log("treament name is ",treatmentdisplayname)
 
        if ((city==null || undefined) && (accreditation==null || undefined))
        {

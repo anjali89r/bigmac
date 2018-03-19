@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+	    <!-- Global site tag (gtag.js) - Google Analytics added by libin -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107905104-1"></script>
+      <script>
+         window.dataLayer = window.dataLayer || [];
+
+         function gtag() {
+             dataLayer.push(arguments);
+         }
+         gtag('js', new Date());
+
+         gtag('config', 'UA-107905104-1');
+      </script>
+      <!-- Google Tag Manager added by libin-->
+      <script>
+         (function(w, d, s, l, i) {
+             w[l] = w[l] || [];
+             w[l].push({
+                 'gtm.start': new Date().getTime(),
+                 event: 'gtm.js'
+             });
+             var f = d.getElementsByTagName(s)[0],
+                 j = d.createElement(s),
+                 dl = l != 'dataLayer' ? '&l=' + l : '';
+             j.async = true;
+             j.src =
+                 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+             f.parentNode.insertBefore(j, f);
+         })(window, document, 'script', 'dataLayer', 'GTM-KVPCCNV');
+      </script>
+      <!-- End Google Tag Manager -->
+        <meta charset="utf-8">
+        <title>{{title}}</title>
+
+        <!--[if IE]> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <![endif]-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- Below lines added by libin -->
+      <link rel="canonical" href="https://www.medinovita.in/" />
+      <link rel="shortlink" href="https://www.medinovita.in/" />
+      <title>{{title}}</title>
+      <meta property="og:description" content="{{department}} treatments in India with hospital and cost details associated with the various procedures.Medinovita works with best hospitals in India to provide affordable care for you.">
+      <meta NAME="description" CONTENT="{{department}} treatments in India with hospital and cost details associated with the various procedures.Medinovita works with best hospitals in India to provide affordable care for you.">
+      <META NAME="keywords" CONTENT="best hospitals In India,treatments in ayurveda, affordable cost treatment,Health Tourism in India,medical travel abroad, medical tourism overseas,medical travel overseas, health tourism,Medical Visa to India,clinics in India,Cheap medical facility,surgery in India,Ayurveda,Ayurveda India,Medinovita,kerala">
+
+        <!-- Google Fonts -->
+        <link href="//fonts.googleapis.com/css?family=Montserrat:400,700%7COpen+Sans:300,300i,400,400i,600,600i,700,800" rel="stylesheet">
+
+        <link rel="stylesheet" href="/assets/css/plugins.min.css">
+        <link rel="stylesheet" href="/assets/css/style.css">
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="/assets/images/icons/favicon.png">
+
+        <!-- Modernizr -->
+        <script src="/assets/js/modernizr.js"></script>
+		 <!-- script for show more and show less -->
+         <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+         <script src="/assets/js/pages/showmore.js"></script>
+		 <script src="/assets/customjs/chat.js"></script>
+		 <script src="/assets/js/pages/pagination.js"></script>
+		 <script src="/assets/js/pages/userdefined.js"></script>
+         <script src="/assets/js/jquery-ui.min.js"></script>
+		<script>
+			(function ($) {
+			    <!-- Start  : Document ready -->
+				$(document).ready(function() {
+					$(".product-content").shorten({showChars: 235});
+                    $("input[type='checkbox']").on('change', function(){
+					    var nameattr=$(this).attr('name')
+						if(nameattr==='hospitalname'){
+						   $("input[name='procedure']").removeAttr('checked');
+						    $("input[name='city']").removeAttr('checked');
+						}
+
+						if(nameattr==='procedure'){
+						    $("input[name='hospitalname']").removeAttr('checked');
+						    $("input[name='city']").removeAttr('checked');
+						}
+
+						if(nameattr==='city'){
+						    $("input[name='hospitalname']").removeAttr('checked');
+						    $("input[name='procedure']").removeAttr('checked');
+						}
+						$('#filterform').submit();
+
+			        });
+				});
+                 <!-- End  : Document ready -->
+			})(jQuery);
+		</script>
+        <script>
+			$(function () {
+				load({{procedureCount}});
+			});
+		</script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="medinovitaHeader"></div>
+            <div class="main">
+               <div class="page-header larger larger-top  custom "style="background-image:url(//res.cloudinary.com/ddglp4e0g/image/upload/v1510441826/novita/header_oucn1m.jpg)">
+                    <div class="container">
+                        <h1>Treatments Offered - {{department}}</h1>
+                        <ol class="breadcrumb">
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="#">Treatments Offered</a></li>
+                            <li class="active">{{department}}</li>
+                        </ol>
+                    </div><!-- End .container -->
+                </div><!-- End .page-header -->
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9" style="margin-top: 40px;">
+                            <div class="category-filter-row">
+                                <div class="right">
+                                    <span class="cat-product-count">Total Procedures: {{procedureCount}}</span>
+                                    <div class="filter-product-view">
+                                        <a href="#" class="btn btn-sm btn-gray" title="Category Grid"><i class="fa fa-th"></i></a>
+                                        <a href="#" class="btn btn-sm btn-custom" title="Category List"><i class="fa fa-th-list"></i></a>
+                                    </div>
+                                </div><!-- end .right -->
+                                <div class="left">
+                                    <div class="filter-container filter-sort">
+                                        <label>Sort by:</label>
+                                        <select class="form-control input-sm">
+                                            <option value="Date">Popularity</option>
+                                            <option value="Color">Price</option>
+                                            <option value="Size">Duration</option>
+                                        </select>
+                                    </div><!-- End .filter-sort -->
+                                    <div class="filter-container filter-show">
+                                        <label>Show:</label>
+                                        <select class="form-control input-sm">
+                                            <option value="10">10</option>
+                                            <option value="20">20</option>
+                                            <option value="30">30</option>
+                                            <option value="all">ALL</option>
+                                        </select>
+                                    </div><!-- End .filter-show -->
+                                </div><!-- End .left -->
+                            </div><!-- End .category-filter-row -->
+						   {{#treatmentList}}
+                            <div class="product product-list">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-5">
+                                        <div class="product-top">
+                                            <!-- <span class="label popular">Popular</span> -->
+                                            <figure>
+                                                <a href="#" title="{{procedureName}}">
+                                                    <img src="{{{procedureImagepath}}}" alt="Product image" class="product-image">
+                                                    <img src="{{{procedureImagepath}}}" alt="Product image" class="image-hover">
+                                                </a>
+                                            </figure>
+
+                                        </div><!-- End .product-top -->
+                                    </div><!-- End .col-md-4 -->
+                                    <div class="col-md-8 col-sm-7">
+                                        <h3 class="product-title comment"><a href="/procedure/{{procedureName}}">{{procedureName}}</a></h3>
+                                        <div class="product-content">
+                                            {{{treatmentActualDescription}}}
+										</div><!-- End .product-content -->
+										<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+										<div class="panel panel-default">
+											<div class="panel-heading" role="tab" id="heading_{{{procedureNameAttr}}}">
+												<h4 class="panel-title">
+													<a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse_{{{procedureNameAttr}}}" aria-expanded="false" aria-controls="collapse_{{{procedureNameAttr}}}">
+														View Hospitals
+													</a>
+												</h4>
+											</div><!-- End .panel-heading -->
+											<div id="collapse_{{{procedureNameAttr}}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_{{{procedureNameAttr}}}">
+												<div class="panel-body">
+													<ul class="fa-ul">
+													    {{#hospitalList}}
+														   <li><a href="/hospitals/{{hospitalName}}"><i class="fa-li fa fa-chain"></i>{{hospitalName}},{{city}},{{country}}</a></li>
+                                                        {{/hospitalList}}
+													</ul>
+												</div><!-- End .panel-body -->
+											</div><!-- End .panel-collapse -->
+										</div><!-- End .panel -->
+									  </div> <!-- End #accordion -->
+
+                                        <div class="product-price-container">
+                                            <!-- <span class="old-price">$99.00</span> -->
+                                            <span class="product-price">Starts from : {{procedureAvarageCost}}</span>
+                                        </div><!-- End .product-price-container -->
+										<div class="product-price-container">
+                                            <p></p>
+											<a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-blue btn-rounded" >Contact Us</button></a>
+											<a href="/cost.html" class="btn btn-green btn-rounded">Get Quote</a>
+										</div><!-- End .product-price-container -->
+                                    </div><!-- End .col-md-8 -->
+                                </div><!-- end .Row -->
+                            </div><!-- End .product -->
+                            {{/treatmentList}}
+							<!-- Pagination container -->
+                            <nav class="pagination-container" id="tablePaging">
+                                <label>Showing: 1-4 of 16</label>
+                            </nav>
+                        </div><!-- End .col-md-9 -->
+
+						<form action="/treatments/{{department}}" method="post" name="filterform" id="filterform">
+                        <aside class="col-md-3 sidebar shop-sidebar">
+                            <div class="widget">
+                                <div class="filter-group-widget">
+                                    <div class="panel-group" role="tablist" aria-multiselectable="true">
+                                        <div class="panel panel-custom">
+                                            <div class="panel-heading" role="tab" id="procedureFilter-header">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" href="#" aria-expandeprocedureFilterd="true" aria-controls="procedureFilter">
+                                                        Treatment Filter
+                                                        <span class="panel-icon"></span>
+                                                    </a>
+                                                </h4>
+                                            </div><!-- End .panel-heading -->
+                                            <div id="procedureFilter" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="procedureFilter-header">
+                                                <div class="panel-body">
+                                                    <ul class="filter-brand-list">
+													   {{#distProcedure}}
+                                                       <div class="checkbox">
+															<label class="custom-checkbox-wrapper">
+																<span class="custom-checkbox-container">
+																	<input type="checkbox" name="procedure" value="{{procedureName}}" checked>
+																	<span class="custom-checkbox-icon"></span>
+																</span>
+															    <span>{{procedureName}}</span>
+															</label>
+														</div><!-- End .checkbox -->
+                                                        {{/distProcedure}}
+                                                    </ul>
+                                                </div><!-- End .panel-body -->
+                                            </div><!-- End .panel-collapse -->
+                                            </div><!-- End .panel -->
+											<div class="panel panel-custom">
+											<div class="panel-heading" role="tab" id="brandFilter-header">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" href="#brandFilter" aria-expanded="true" aria-controls="brandFilter">
+                                                        Hospital Filter
+                                                        <span class="panel-icon"></span>
+                                                    </a>
+                                                </h4>
+                                            </div><!-- End .panel-heading -->
+                                            <div id="brandFilter" class="panel-collapse collapse" role="tabpanel" aria-labelledby="brandFilter-header">
+                                                <div class="panel-body">
+                                                    <ul class="filter-brand-list">
+													    {{#distHospitalList}}
+                                                        <div class="checkbox">
+															<label class="custom-checkbox-wrapper">
+																<span class="custom-checkbox-container">
+																	<input type="checkbox" name="hospitalname" value="{{hospitalName}}" >
+																	<span class="custom-checkbox-icon"></span>
+																</span>
+															    <span>{{hospitalName}}</span>
+															</label>
+														</div><!-- End .checkbox -->
+                                                        {{/distHospitalList}}
+                                                    </ul>
+                                                </div><!-- End .panel-body -->
+                                            </div><!-- End .panel-collapse -->
+                                        </div><!-- End .panel -->
+										<div class="panel panel-custom">
+                                            <div class="panel-heading" role="tab" id="cityFilter-header">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" href="#cityFilter" aria-expanded="true" aria-controls="cityFilter" >
+                                                        City Filter
+                                                        <span class="panel-icon"></span>
+                                                    </a>
+                                                </h4>
+                                            </div><!-- End .panel-heading -->
+                                            <div id="cityFilter" class="panel-collapse collapse" role="tabpanel" aria-labelledby="cityFilter-header">
+                                                <div class="panel-body">
+                                                    <ul class="filter-brand-list">
+													  {{#distCityList}}
+                                                       <div class="checkbox">
+															<label class="custom-checkbox-wrapper">
+																<span class="custom-checkbox-container">
+																	<input type="checkbox" name="city" value="{{city}}">
+																	<span class="custom-checkbox-icon"></span>
+																</span>
+															    <span>{{city}}</span>
+															</label>
+														</div><!-- End .checkbox -->
+                                                        {{/distCityList}}
+                                                    </ul>
+                                                </div><!-- End .panel-body -->
+                                            </div><!-- End .panel-collapse -->
+                                        </div><!-- End .panel -->
+                                    </div><!-- End .panel-group -->
+                                </div><!-- End .filter-widget -->
+								<div class="filter-price-action">
+									<a href="/treatmentsoffered/{{department}}" class="btn btn-black btn-sm">Clear All Filters</a>
+								</div><!-- End #filter-price-action -->
+                            </div><!-- End .widget -->
+                        </aside>
+						</form>
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .main -->
+            <div class="medinovitaFooter"></div>
+             <div class="medinovitaModals"></div>
+        </div><!-- End #wrapper -->
+        <a id="scroll-top" href="#top" title="Scroll top"><i class="fa fa-angle-up"></i></a>
+        <!-- End -->
+        <script src="/assets/js/plugins.min.js"></script>
+        <script src="/assets/js/main.js"></script>
+    </body>
+</html>

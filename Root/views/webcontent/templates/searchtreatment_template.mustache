@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <!-- Global site tag (gtag.js) - Google Analytics added by libin -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107905104-1"></script>
+      <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', 'UA-107905104-1');
+      </script>
+      <!-- Google Tag Manager added by libin-->
+      <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+         })(window,document,'script','dataLayer','GTM-KVPCCNV');
+      </script>
+      <!-- End Google Tag Manager -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- Below lines added by libin -->
+      <link rel="canonical" href="https://www.medinovita.in/" />
+      <link rel="shortlink" href="https://www.medinovita.in/" />
+      <title>{{title}}</title>
+      <meta property="og:description" content="Interested in medical treatment in India? Medinovita helps you to search for treatments and get most affordable cost at best hospitals in India">
+      <meta NAME="description" content= "Interested in medical treatment in India? Medinovita helps you to search for treatments and get most affordable cost at best hospitals in India">
+      <META NAME="keywords" CONTENT={{treatmentname}} treatment in India, Cost for {{treatmentname}} >
+      <!-- Google Fonts -->
+      <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7COpen+Sans:300,300i,400,400i,600,600i,700,800" rel="stylesheet">
+      <link rel="stylesheet" href="/assets/css/plugins.min.css">
+
+      <link rel="stylesheet" href="/assets/css/style.css">
+
+      <link rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.min.css">
+      <!-- Favicon -->
+      <link rel="icon" type="image/png" href="/assets/images/icons/favicon.png">
+      <!-- Modernizr -->
+      <script src="/assets/js/modernizr.js"></script>
+
+      <script src="/assets/js/plugins.min.js"></script>
+
+      <script src="/assets/js/jquery-ui.min.js"></script>
+      <script type="text/javascript" src="/assets/js/pages/showmore.js"></script>
+   </head>
+   <body>
+
+      <!-- Google Tag Manager (noscript) added by libin-->
+      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KVPCCNV"
+         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+      <!-- End Google Tag Manager (noscript) -->
+      <div id="wrapper">
+      <div class="medinovitaHeader"></div>
+
+      <div id="wrapper">
+      <div class="contact">
+      <div class="page-header larger larger-top  custom "style="background-image:url(//res.cloudinary.com/ddglp4e0g/image/upload/v1510441826/novita/header_oucn1m.jpg)">
+         <div class="container" style="padding-left:30px">
+              <h1 >{{treatmentname}}</h1>
+            <ol class="breadcrumb">
+               <li><a href="/index.html">Home</a></li>
+               <li class="active">Treatments</li>
+               <li class="active">{{treatmentname}}</li>
+            </ol>
+         </div>
+         <!-- End .container -->
+      </div>
+
+      <!-- End .page-header -->
+      <!-- Template added by Libin -->
+      <div class="container" style="padding-left:30px">
+                    <div class="row" >
+                        <div class="col-md-9">
+                        <div class="product-content">
+
+                                   <p>{{{treatmentDescription}}}</p>
+
+                              <br></br>
+                        </div>
+                        <script language="javascript">
+                                        $(document).ready(function() {
+                                            $(".product-content").shorten({
+	                                            showChars: 390,
+                                            });
+                                            // $(".treatmentname-small").shorten({showChars: 500});
+                                        });
+                                    </script>
+                            <div class="product product-list">
+
+                                    {{#hospitaldetails}}
+                                <div class="row treatment-hospdetails">
+                                    <div class="col-md-4 col-sm-5">
+                                        <div class="product-top">
+
+                                            <figure>
+                                                <a href="/hospitals/{{hospitaldisplayname}}" title={{hospitalName}}>
+                                                    <img src={{hospitalimage}} alt="medinovita-hospital" class="product-image">
+                                                    <!-- <img src="assets/images/products/product1-hover.jpg" alt="Product image" class="image-hover"> -->
+                                                </a>
+                                            </figure>
+
+                                        </div><!-- End .product-top -->
+                                    </div><!-- End .col-md-4 -->
+                                    <div class="col-md-8 col-sm-7">
+                                            <h1 class="product-title"><a href="/hospitals/{{hospitaldisplayname}}">{{hospitalName}}</a></h1>
+                                            <a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-lg" style="float:right">Contact Hospital</button></a>
+                                            <div class="product-content">
+                                                <p>{{hospitalCity}},{{hospitalState}}</p>
+                                            </div><!-- End .product-content -->
+
+                                            <div class="product-content">
+
+                                                 <figure>
+                                                     {{#jciimage}}
+                                                        <img src="//res.cloudinary.com/ddglp4e0g/image/upload/c_fit,h_52,w_52/v1515981178/hospital-accreditation/jci.jpg" alt="Hospital is accredited with Joint Commission International" class="product-image">
+                                                    {{/jciimage}}
+                                                    {{^jciimage}}
+
+                                                    {{/jciimage}}
+                                                     {{#nabhimage}}
+                                                         <img src="//res.cloudinary.com/ddglp4e0g/image/upload/c_fit,h_52,w_52/v1515981178/hospital-accreditation/nabh.jpg" alt="Hospital is accredited with National Accreditation Board for Hospitals & Healthcare Providers" class="product-image">
+                                                    {{/nabhimage}}
+                                                    {{^nabhimage}}
+                                                    {{/nabhimage}}
+                                                    {{#nablimage}}
+                                                         <img src="//res.cloudinary.com/ddglp4e0g/image/upload/c_fit,h_52,w_52/v1515981178/hospital-accreditation/iso.gif" alt="medinovita-hospital" class="product-image">
+                                                    {{/nablimage}}
+                                                    {{^nablimage}}
+                                                    {{/nablimage}}
+                                                 </figure>
+                                             </div><!-- End .product-content -->
+                                             <div class="product-price-container">
+                                                <p></p>
+                                                <span class="old-price"><strong>{{treatmentname}}</strong></span>
+                                                <p><span class="old-price">COST FROM</span> <span class="product-price"> &#x20b9;{{costLowerBound}}</span></p>
+
+                                            </div><!-- End .product-price-container -->
+                                    </div><!-- End .col-md-8 -->
+                                </div><!-- end .Row -->
+                                {{/hospitaldetails}}
+                            </div><!-- End .product -->
+
+                            <!-- <nav class="pagination-container">
+                                <label>Showing: 1-4 of 16</label>
+                                <ul class="pagination">
+                                    <li class="active"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li>
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true"><i class="fa fa-angle-right"></i></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav> -->
+                        </div><!-- End .col-md-9 -->
+
+                        <aside class="col-md-3 sidebar shop-sidebar">
+
+                            <div class="widget">
+                                <div class="filter-group-widget">
+                                    <div class="panel-group" role="tablist" aria-multiselectable="true">
+                                        <div class="panel panel-custom">
+                                            <div class="panel-heading" role="tab" id="brandFilter-header">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" href="#brandFilter" aria-expanded="true" aria-controls="brandFilter">
+                                                        Filter By City
+                                                        <span class="panel-icon"></span>
+                                                    </a>
+                                                </h4>
+                                            </div><!-- End .panel-heading -->
+                                            <div id="brandFilter" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="brandFilter-header">
+                                                <div class="panel-body">
+                                                    <ul class="filter-brand-list">
+                                                            {{#city}}
+                                                        <li><a href="/search/{{& treatmenturlname}}?city={{& cityname}}"><i class="fa fa-angle-right"></i>{{cityname}} <span>({{citycount}})</span></a></li>
+                                                        {{/city}}
+                                                    </ul>
+                                                </div><!-- End .panel-body -->
+                                            </div><!-- End .panel-collapse -->
+                                        </div><!-- End .panel -->
+                                        <div class="panel panel-custom">
+                                            <div class="panel-heading" role="tab" id="brandFilter-header">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" href="#brandFilter" aria-expanded="true" aria-controls="brandFilter">
+                                                        Filter By Accreditations
+                                                        <span class="panel-icon"></span>
+                                                    </a>
+                                                </h4>
+                                            </div><!-- End .panel-heading -->
+                                            <div id="brandFilter" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="brandFilter-header">
+                                                <div class="panel-body">
+                                                    <ul class="filter-brand-list">
+                                                            {{#accreditationdetails}}
+                                                        <li><a href="/search/{{& treatmenturlname}}?accreditation={{& accreditationagency}}"><i class="fa fa-angle-right"></i>{{accreditationagency}} <span>({{accreditationagencycount}})</span></a></li>
+                                                        {{/accreditationdetails}}
+                                                    </ul>
+                                                </div><!-- End .panel-body -->
+                                            </div><!-- End .panel-collapse -->
+                                            <div class="filter-price-action">
+                                                            <!-- <a href="#" class="btn btn-custom btn-sm">Filter</a>-->
+                                                            <a href="/search/{{& treatmenturlname}}" class="btn btn-black btn-sm">Clear All Filters</a>
+                                            </div>
+                                        </div><!-- End .panel -->
+                                    </div><!-- End .panel-group -->
+                                </div><!-- End .filter-widget -->
+                            </div><!-- End .widget -->
+                        </aside>
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+
+      <!-- End #wrapper -->
+      <div class="medinovitaFooter"></div>
+      <div class="medinovitaModals"></div>
+        <a id="scroll-top" href="#top" title="Scroll top"><i class="fa fa-angle-up"></i></a>
+   </body>
+   <script src="/assets/customjs/chat.js"></script>
+   <script src="/assets/js/main.js"></script>
+</html>

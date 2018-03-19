@@ -139,7 +139,7 @@ function getnewsSectiontemplate(newsid,next) {
                 next(null);
             }
             else {
-                console.log(result)
+              //  console.log(result)
                 
                next(result);
             }

@@ -21,6 +21,7 @@ aws.config.update({
 var s3 = new aws.S3();
 var S3_BUCKET = 'medinovitastorage'
 
+
 var upload = multer({
     storage: multerS3({
         s3: s3,
@@ -28,7 +29,7 @@ var upload = multer({
         acl: 'private',        
         serverSideEncryption: 'AES256',
         key: function (req, file, cb) {
-            console.log(file);
+           // console.log(file);
             cb(null, Date.now().toString() + "_" +  file.originalname)
         }
     })
