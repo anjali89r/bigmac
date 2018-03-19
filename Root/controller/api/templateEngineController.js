@@ -27,12 +27,12 @@ module.exports.getProcedureDescription_demo = function (req, res) {
 
     }).then(function (relFilePath) {
 
-        var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
-        var filePath = procedureFileDir + relFilePath
-
+        //var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
+       // var filePath = procedureFileDir + relFilePath
+       var filePath =  relFilePath
         new Promise(function (resolve, reject) {
             gridFS.getFlatFileContent(filePath, function (content) {
-                content = fs.readFileSync(filePath, "utf8");
+                //content = fs.readFileSync(filePath, "utf8");
                 if (content.indexOf("Error") > -1) {
                     return reject(res.status(404).json({ "Message": content }));
                 } else {
@@ -139,11 +139,13 @@ module.exports.getProcedureDescription = function (req, res) {
 
     }).then(function (relFilePath) {
 
-        var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
-        var filePath = procedureFileDir + relFilePath
+        //var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
+        //var filePath = procedureFileDir + relFilePath
+        var filePath =  relFilePath
+       // console.log("#########################################",filePath)
         new Promise(function (resolve, reject) {
             gridFS.getFlatFileContent(filePath, function (content) {
-                content = fs.readFileSync(filePath, "utf8");
+               // content = fs.readFileSync(filePath, "utf8");
                 if (content.indexOf("Error") > -1) {
                     return reject(res.status(404).json({ "Message": content }));
                 } else {
@@ -215,11 +217,12 @@ module.exports.gettreatmentEstimate = function (req, res) {
 
     }).then(function (relFilePath) {
 
-        var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
-        var filePath = procedureFileDir + relFilePath
+       // var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
+        //var filePath = procedureFileDir + relFilePath
+        var filePath =  relFilePath
         new Promise(function (resolve, reject) {
             gridFS.getFlatFileContent(filePath, function (content) {
-                content = fs.readFileSync(filePath, "utf8");
+               // content = fs.readFileSync(filePath, "utf8");
                 if (content.indexOf("Error") > -1) {
                     return reject(res.status(404).json({ "Message": content }));
                 } else {
@@ -311,11 +314,12 @@ module.exports.getHospitalDescription = function (req, res) {
     }).then(function (result) {
         var basicHospData = result
         var relFilePath = result[0].hospitalDescription //   name of text file
-        var procedureFileDir = config.getProjectSettings('DOCDIR', 'HOSPITALDIR', false)
-        var filePath = procedureFileDir + relFilePath
+      //  var procedureFileDir = config.getProjectSettings('DOCDIR', 'HOSPITALDIR', false)
+        //var filePath = procedureFileDir + relFilePath
+        var filePath =  relFilePath
         new Promise(function (resolve, reject) {
             gridFS.getFlatFileContent(filePath, function (content) {
-                content = fs.readFileSync(filePath, "utf8");
+               // content = fs.readFileSync(filePath, "utf8");
                 if (content.indexOf("Error") > -1) {
                     return reject(res.status(404).json({ "Message": content }));
                 } else {
@@ -398,11 +402,13 @@ module.exports.getHolidayDescriptionPage = function (req, res) {
 
     }).then(function (result) {      
         var relFilePath = result[0].packageDescription //   name of text file
-        var procedureFileDir = config.getProjectSettings('DOCDIR', 'HOLIDAYLDIR', false)
-        var filePath = procedureFileDir + relFilePath
+       // var procedureFileDir = config.getProjectSettings('DOCDIR', 'HOLIDAYLDIR', false)
+        //var filePath = procedureFileDir + relFilePath
+        var filePath =  relFilePath
+       // console.log(filePath)
         new Promise(function (resolve, reject) {
             gridFS.getFlatFileContent(filePath, function (content) {
-                content = fs.readFileSync(filePath, "utf8");
+               // content = fs.readFileSync(filePath, "utf8");
                 if (content.indexOf("Error") > -1) {
                     return reject(res.status(404).json({ "Message": content }));
                 } else {
@@ -413,7 +419,7 @@ module.exports.getHolidayDescriptionPage = function (req, res) {
             /* get list of procedures organized by departments */
                var data = {
                         "holidayList": result,
-                        "title": result[0].packageShortName + ' | low cost medical treatment abroad', 
+                        "title": result[0].packageShortName + ' | Holiday Packages', 
                         "packageShortName": result[0].packageShortName,
                         "packageDuration": result[0].packageDuration,
                         "packageCost": result[0].packageCost,
@@ -425,11 +431,12 @@ module.exports.getHolidayDescriptionPage = function (req, res) {
                
         }).catch(function (err) {
             // console.log(err.message);
+            logger.error("Error rendering holiday template : - " + err.message)
             return res.redirect('/404');
         });
 
     }).catch(function (err) {
-        console.log(err.message);
+       // console.log(err.message);
         return res.redirect('/404')
     });
 }
@@ -481,11 +488,13 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
     }).then(function (result) {
         /* Department Description */
         var relFilePath = result[0].departmentDescription //name of text file
-        var procedureFileDir = config.getProjectSettings('DOCDIR', 'DEPARTMENTDIR', false)
-        var filePath = procedureFileDir + relFilePath
+        //var procedureFileDir = config.getProjectSettings('DOCDIR', 'DEPARTMENTDIR', false)
+        //var filePath = procedureFileDir + relFilePath
+      
+        var filePath =  relFilePath
         new Promise(function (resolve, reject) {
             gridFS.getFlatFileContent(filePath, function (content) {
-                content = fs.readFileSync(filePath, "utf8").trim()
+                //content = fs.readFileSync(filePath, "utf8").trim()
                 if (content == null) {
                     content="Description not available"
                 }
@@ -532,7 +541,7 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
 module.exports.getDepartmentwiseTreatmentDescription1 = function (req, res) {
   
     var treatmentname = req.params.treatmentname;
-    console.log(treatmentname)
+    //console.log(treatmentname)
     return res.redirect('/404');
 }
 
@@ -638,12 +647,13 @@ module.exports.searchhospitalsbytreatment = function(req,res)
             }).then(function (relFilePath) {
                    
                    
-                var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
-                var filePath = procedureFileDir + relFilePath
+               // var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
+                //var filePath = procedureFileDir + relFilePath
+                var filePath =  relFilePath
                 //console.log(filePath)
                 new Promise(function (resolve, reject) {
                     gridFS.getFlatFileContent(filePath, function (procedurecontent) {
-                        procedurecontent = fs.readFileSync(filePath, "utf8");
+                       // procedurecontent = fs.readFileSync(filePath, "utf8");
                         if (procedurecontent.indexOf("Error") > -1) {
                             //console.log(procedurecontent)
                             return reject(res.status(404).json({ "Message": procedurecontent }));
@@ -663,19 +673,20 @@ module.exports.searchhospitalsbytreatment = function(req,res)
 
                    res.render('searchtreatment_template', data);
                 }).catch(function (err) {
-                     console.log("first catch " + err)
+                    logger.error("Error retrieving treatment details from DB : - " + err.message)
+                    // console.log("first catch " + err)
                     return res.redirect('/404');
                 });
 
             }).catch(function (err) {
-                console.log("second catch " +err)
+                logger.error("Error retrieving treatment details from DB : - " + err.message)
                 return res.redirect('/404');
             });
                
                
         }).catch(function(err)
         {
-            console.log("last catch " +err)
+            logger.error("Error retrieving treatment details from DB : - " + err.message)
             return res.redirect('/404');
         });
 }

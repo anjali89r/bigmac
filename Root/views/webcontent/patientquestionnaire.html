@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Questionnaire</title>
+        <meta name="description" content="User questionnaire">
+
+        <!--[if IE]> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <![endif]-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Google Fonts -->
+        <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700%7COpen+Sans:300,300i,400,400i,600,600i,700,800" rel="stylesheet">
+
+        <link rel="stylesheet" href="assets/css/plugins.min.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+        
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="assets/images/icons/favicon.png">
+
+        <!-- Modernizr -->
+        <script src="assets/js/modernizr.js"></script>
+		<link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.min.css" />
+		<script src="/assets/js/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/assets/css/homepages/bootstrap-custom.css" />		
+</head>
+		
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="main">
+                <div class="page-header larger parallax custom mb0" style="background-image:url(/assets/images/header.jpg)">
+                    <div class="container">
+                        <h1>Patinet Enquiry Form</h1>
+                        <ol class="breadcrumb">
+                            <li><a href="index.html">Home</a></li>                           
+                            <li class="active">Questionnaire</li>
+                        </ol>
+                    </div><!-- End .container -->
+                </div><!-- End .page-header -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+						<p>&nbsp;</p>
+                            <h2>Patient Enquiry Form</h2>
+                            <form method="post" id="questionnaire-form" enctype="multipart/form-data">
+							    <label class="input-desc red-star">★ All fields are mandatory</label>
+								<span>&nbsp;</span>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="contactname" name="Submitted_By" placeholder="User Full Name" required>
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <input type="email" class="form-control" id="contactemail" name="contactemail" placeholder="Email" required>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="contactwebsite" placeholder="Contact number with ISD code e.g +01-3026392291" name="contact_number" required>
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="contactsubject" name="Patient_age" placeholder="Patient Age   e.g 35">
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <textarea class="form-control" rows="6" id="contactmessage" name="contact_message" placeholder="Treatment Requested" required></textarea>
+                                    </div><!-- End .col-md-12 -->
+                                </div><!-- End .row -->
+								
+								<div class="row">
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+											<input type="radio" name="gender" id="inlineRadio1" value="Male" checked > Male
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="gender" id="inlineRadio2" value="Female" > Female
+										</label>
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="contactsubject" name="patient_height" placeholder="Patient Height in Centimter       e.g 183 ">
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								 <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="contactwebsite" placeholder="Patinet weight in Kilograms e.g : 85" name="Patinet_weight" required>
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" id="contactsubject" name="When_did_problem_start" placeholder="When did the problem start.    e.g Feb,2018">
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								 <div class="row">
+                                    <div class="col-md-12">
+                                        <textarea class="form-control" rows="6" id="contactmessage" name="prior_treatments" placeholder="What all treatments user have undergone so far?" required></textarea>
+                                    </div><!-- End .col-md-12 -->
+                                </div><!-- End .row -->
+								
+								<div class="row">
+                                    <div class="col-md-12">
+                                        <textarea class="form-control" rows="6" id="contactmessage" name="current_symptoms" placeholder="What are the current symptoms?" required></textarea>
+                                    </div><!-- End .col-md-12 -->
+                                </div><!-- End .row -->
+								
+								<div class="row">
+                                    <div class="col-md-6">
+									    <span>Have you travelled abroad any time for medical treatment?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+											<input type="radio" name="radio_travelled_abroad" id="inlineRadio1" value="Yes"> Yes
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="radio_travelled_abroad" id="inlineRadio2" value="No" checked> No
+										</label>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								<p>&nbsp;</p>
+								<div class="row">
+                                    <div class="col-md-6">
+									    <span>Do you have medical reports (for eg. X-Ray, Ultrasound, PET, Endoscopy, MRI, CT as relevant) available with you?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+											<input type="radio" name="medical_reports_yes" id="inlineRadio1" value="Yes"> Yes
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="medical_reports_yes" id="inlineRadio2" value="No" checked> No
+										</label>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>Are you diebetic?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+											<input type="radio" name="diebetic" id="inlineRadio1" value="Yes"> Yes
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="diebetic" id="inlineRadio2" value="No" checked> No
+										</label>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>Do you have High Blood Pressure?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+											<input type="radio" name="bp" id="inlineRadio1" value="Yes"> Yes
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="bp" id="inlineRadio2" value="No" checked> No
+										</label>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>Do you have history of any other chronic illness? eg. Hemophilia, Asthma,</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+											<input type="radio" name="chronic_illness" id="inlineRadio1" value="Yes"> Yes
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="chronic_illness" id="inlineRadio2" value="No" checked> No
+										</label>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>Do you have HIV?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+											<input type="radio" name="hiv" id="inlineRadio1" value="Yes"> Yes
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="hiv" id="inlineRadio2" value="No" checked> No
+										</label>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>Do you have Hepatitis B or C ?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+											<input type="radio" name="Hepatitis" id="inlineRadio1" value="Yes"> Yes
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="Hepatitis" id="inlineRadio2" value="No" checked> No
+										</label>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>When do you plan to travel for treatment?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">                                        
+										<select class="form-control input-sm" name="travel_date">
+										    <option value="Select..">Select..</option>
+											<option value="Within 1 or 2 weeks from now">Within 1 or 2 weeks from now</option>
+											<option value="Within next 1 month">Within next 1 month</option>
+											<option value="Within next 1 to 3 months">Within next 1 to 3 months</option>
+											<option value="Within next 3 to 6 months">Within next 3 to 6 months</option>
+											<option value="Do not plan to travel">Do not plan to travel</option>											
+										</select>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>What type of hospitals do you prefer?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">                                        
+                                        <select class="form-control input-sm" name="hospital_preference">
+										    <option value="Select..">Select..</option>
+											<option value="5 - Star">5 - Star</option>
+											<option value="3 - Star">3 - Star</option>
+											<option value="General Hospitals">General Hospitals</option>
+											<option value="Private clinics">Private clinics</option>
+											<option value="No Preference">No Preference</option>											
+										</select>										
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>What kind of accomodation do you prefer?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">                                        
+                                        <select class="form-control input-sm" name="accomodation_preference">
+										    <option value="Select..">Select..</option>
+											<option value="5 - Star">5 - Star</option>
+											<option value="3 - Star">3 - Star</option>
+											<option value="Deluxe">Deluxe</option>
+											<option value="No Preference">No Preference</option>																			
+										</select>										
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>Do you have a location preference?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">                                      
+                                        <select class="form-control input-sm" name="location_preference">
+										    <option value="Select..">Select..</option>
+											<option value="Chennai">Chennai</option>
+											<option value="Bangalore">Bangalore</option>
+											<option value="Mumbai">Mumbai</option>
+											<option value="Delhi">Delhi</option>
+                                            <option value="No preference">No preference</option>											
+										</select>										
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>Would you like to get Medical Visa assistance?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+											<input type="radio" name="visa_assistance" id="inlineRadio1" value="Yes"> Yes
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="visa_assistance" id="inlineRadio2" value="No" checked> No
+										</label>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>Would you like to get assistance to book flight tickets?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+											<input type="radio" name="flight_ticket" id="inlineRadio1" value="Yes"> Yes
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="flight_ticket" id="inlineRadio2" value="No" checked> No
+										</label>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>Would you like to avail a leisure trip?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+											<input type="radio" name="leisure_trip" id="inlineRadio1" value="Yes"> Yes
+										</label>
+
+										<label class="radio-inline">
+											<input type="radio" name="leisure_trip" id="inlineRadio2" value="No" checked> No
+										</label>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>Preferred Time for call</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">                                        
+										<select class="form-control input-sm" name="Preferred_time">
+										    <option value="Select..">Select..</option>
+											<option value="6AM - 9AM">6AM - 9AM</option>
+											<option value="9AM - 12AM">9AM - 12AM</option>
+											<option value="1PM - 3PM">1PM - 3PM</option>
+											<option value="3PM - 5PM">3PM - 5PM</option>											
+										</select>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								<p>&nbsp;</p>
+								<div class="row">								   
+                                    <div class="col-md-6">
+									    <span>Preferred contact method</span>                                        
+                                    </div><!-- End .col-md-6 -->
+                                    <div class="col-md-6">                                        
+										<select class="form-control input-sm" name="Preferred_contact">
+										    <option value="Select..">Select..</option>
+											<option value="Watsapp">Watsapp</option>
+											<option value="Mobile">Mobile</option>
+											<option value="Email">Email</option>
+											<option value="Text Message">Text Message</option>											
+										</select>
+                                    </div><!-- End .col-md-6 -->
+                                </div><!-- End .row -->
+								
+								
+								<p>&nbsp;</p>
+								<div class="row">
+								    <div class="col-md-6">
+									    <span>Would you like to share any medical documents with us?</span>                                        
+                                    </div><!-- End .col-md-6 -->
+									<!-- Bootstrap Upload Control - START -->
+									<div class="col-md-6">
+										<div class="col-md-4"></div>									
+											<!--<form method="post" action ="/upload" enctype="multipart/form-data"> -->
+												<input type="file" id="files" name="files" multiple="multiple" />
+                                                <span style="color:#212121;font-size:12px"><i>(Max file size less than <strong>5mb</strong>.File formats supported <strong>doc,docx,pdf,images</strong>)</i></span>																							
+												<p style="text-align: right; margin-top: 20px;"> 
+														<span class="label" id="uploadmsg"></span>																				   
+												</p>			
+											<!--</form>	  -->                                           
+										<div class="col-md-4"></div>
+									</div>
+
+									<!-- you need to include the ShieldUI CSS and JS assets in order for the Upload widget to work -->
+									<link rel="stylesheet" type="text/css" href="/assets/css/homepages/shieldui.all.min.css" />
+									<script type="text/javascript" src="/assets/js/shieldui-all.min.js"></script>
+
+									<script type="text/javascript">
+										jQuery(function ($) {
+											$("#files").shieldUpload();
+										});
+									</script>
+									<!-- Bootstrap Upload Control - END -->
+								</div>
+								<div class="row">
+									<div class="col-md-12 text-center">																			
+										<input type="submit" class="btn btn-custom min-width" data-loading-text="Sending Message..." value="Submit">
+									</div><!-- End .col-md-12 -->
+								</div><!-- End .row -->
+                                                                
+                            </form>
+                        </div><!-- End .col-md-8 -->
+
+                        <div class="clearfix mb65 visible-sm visible-xs"></div><!-- margin -->
+                        <p>&nbsp;</p>
+                        <div class="col-md-4">
+                            <div class="contact-box">
+                                <h3>Usa Office</h3>
+                                <ul>
+                                    <li><strong>Address:</strong> Hollywood Blvd, Newark, USA </li>
+                                    <li><strong>Phone</strong> +01 010 554 11 22</li>
+                                    <li><strong>Email:</strong> <a href="#">medinovita@gmail.com</a></li>
+                                    <li>
+                                        <strong>Social Media:</strong>
+                                        <div class="social-icons">
+                                            <a href="#" class="social-icon" data-toggle="tooltip" title="Facebook"><i class="fa fa-facebook"></i></a>
+                                            <a href="#" class="social-icon" data-toggle="tooltip" title="Twitter"><i class="fa fa-twitter"></i></a>
+                                            <a href="#" class="social-icon" data-toggle="tooltip" title="Github"><i class="fa fa-github"></i></a>
+                                            <a href="#" class="social-icon" data-toggle="tooltip" title="Linkedin"><i class="fa fa-linkedin"></i></a>
+                                            <a href="#" class="social-icon" data-toggle="tooltip" title="Tumblr"><i class="fa fa-tumblr"></i></a>
+                                            <a href="#" class="social-icon" data-toggle="tooltip" title="Flickr"><i class="fa fa-flickr"></i></a>
+                                        </div><!-- End .social-icons -->
+                                    </li>
+                                </ul>
+                            </div><!-- End .contact-box -->
+
+                            <div class="contact-box">
+                                <h3>India Office</h3>
+                                <ul>
+                                    <li><strong>Address:</strong> 18/295A, Inforpark, Kochin, India </li>
+                                    <li><strong>Phone</strong> +91 9740177277</li>
+                                    <li><strong>Email:</strong> <a href="#">medinovita@gmail.com</a></li>
+                                    <li>
+                                        <strong>Social Media:</strong>
+                                        <div class="social-icons">
+                                            <a href="#" class="social-icon" data-toggle="tooltip" title="Facebook"><i class="fa fa-facebook"></i></a>
+                                            <a href="#" class="social-icon" data-toggle="tooltip" title="Twitter"><i class="fa fa-twitter"></i></a>
+                                            <a href="#" class="social-icon" data-toggle="tooltip" title="Github"><i class="fa fa-github"></i></a>
+                                            <a href="#" class="social-icon" data-toggle="tooltip" title="Linkedin"><i class="fa fa-linkedin"></i></a>
+                                        </div><!-- End .social-icons -->
+                                    </li>
+                                </ul>
+                            </div><!-- End .contact-box -->
+                        </div><!-- End .col-md-4 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+
+                <div class="mb90"></div><!-- margin -->
+
+            </div><!-- End .main -->
+            
+			<footer class="footer">
+                <div class="container">
+                    <div class="row">
+                    </div>
+				</div>
+		    </footer>
+        </div><!-- End #wrapper -->
+        <a id="scroll-top" href="#top" title="Scroll top"><i class="fa fa-angle-up"></i></a>
+
+        <!-- End -->
+       <!--  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDwHqErJP9xLul8Q3e7DqIRgDopNqXwOnk"></script> -->
+	   
+	     <div class="modal fade" id="messageModal" role="dialog">
+				<div class="modal-dialog">
+
+				  <!-- Modal content-->
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <button type="button" class="close" data-dismiss="modal">&times;</button>
+					  <h4 class="modal-title">Questionnaire Submitted</h4>
+					</div>
+					<div class="modal-body">
+					  <p>Thank you for your inputs.Our case manager will contact you within 48hrs.</p>
+					</div>
+					<div class="modal-footer">
+					  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				  </div>
+
+				</div>
+			  </div>
+			</div>
+			
+        <script src="assets/js/plugins.min.js"></script>        
+        <script src="assets/customjs/chat.js"></script>
+        <script src="assets/js/main.js"></script>
+    </body>
+</html>

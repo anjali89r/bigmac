@@ -19,6 +19,7 @@ module.exports.getMogoDbCon = function () {
             var db = mongoose.connection;
 
             db.on('error', function () {
+                logger.error("Error connecting to DB ")
                 throw new Error('unable to connect to database');
                 reject(null)
             });
@@ -68,7 +69,7 @@ function getmongouri() {
     }
 
     var mongouri = 'mongodb://' + uid + ':' + paswd + '@' + dbhost + ':' + dbport + '/' + dbname;   
-    //console.log(mongouri) 
+   // console.log(mongouri) 
     return mongouri;
 }
 

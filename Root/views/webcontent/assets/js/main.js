@@ -1,78 +1,65 @@
-/* ================================================
------------------ Simple Main.js ------------- */
-//Global Variables
-
-
-
-
-var basicKey = "bGliaW46bGliaW4=";
-var xAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVG9rZW5Ub0F1dGhlbnRpY2F0ZU1lZGlub3ZpdGFVc2VyIiwiaWF0IjoxNTA4MDQ0OTMwfQ.cZ3pCte1guE8KQkjd1KfY_bLJ-gOatJm2xlwyiLGAl4";
-//var serverName = "https://www.medinovita.in/";
-var serverName = "http://localhost:1337/";
+var basicKey = 'bGliaW46bGliaW4=';
+var xAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVG9rZW5Ub0F1dGhlbnRpY2F0ZU1lZGlub3ZpdGFVc2VyIiwiaWF0IjoxNTA4MDQ0OTMwfQ.cZ3pCte1guE8KQkjd1KfY_bLJ-gOatJm2xlwyiLGAl4';
+//var serverName = 'https://www.medinovita.in/';
+var serverName = 'http://localhost:3000/';
 var GLOBAL_VARIABLES = {
-	"Language": "en",
-	"Currency": "dollar"
+	Language: 'en',
+	Currency: 'dollar'
 }
-var countryCodes=[];
-
-
-
-var officeAddress = "Kakkanad PO,Kochi, Kerala,India";
-
-var whyIndia = "Because India.";
-
+var countryCodes = [];
+var officeAddress = '';
+var whyIndia = '';
 //Global Methods
 // Function replace Native Alert
-  window.alert = function (msg) {
-    var h, html, source, template;
-    source = $("#tpl-alert").html();
-    template = Handlebars.compile(source);
-    html = $(template({
-      message: new Handlebars.SafeString(msg)
-    }));
-    $("body").append(html);
-    html.addClass("is-visible");
-    h = html.find(".window-message-container").height();
-    html.find(".window-message-container").hide().fadeIn("fast");
-    return html.find("a").on("click", function (_this) {
-      return function (e) {
-        e.stopPropagation();
-        html.remove();
-        return false;
-      };
-    }(this));
-  };
-  // END Function replace Native Alert
-
+window.alert = function (msg) {
+	var h, html, source, template;
+	source = $('#tpl-alert').html();
+	template = Handlebars.compile(source);
+	html = $(template({
+		message: new Handlebars.SafeString(msg)
+	}));
+	$('body').append(html);
+	html.addClass('is-visible');
+	h = html.find('.window-message-container').height();
+	html.find('.window-message-container').hide().fadeIn('fast');
+	return html.find('a').on('click', (function (_this) {
+		return function (e) {
+			e.stopPropagation();
+			html.remove();
+			return false;
+		};
+	}(this)));
+};
+// END Function replace Native Alert
 (function ($) {
-	"use strict";
-	$(".medinovitaHeader").load("/assets/pages/header.html",function(){				
+	'use strict';
+	$('.medinovitaHeader').load('/assets/pages/header.html', function () {
 		$.ajax({
-				url: serverName+"api/v1/get/distinctdepartments/meditrip",
-				type: 'GET',
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": "Basic "+ basicKey,
-					"x-access-token": xAccessToken
+			url: serverName + 'api/v1/get/distinctdepartments/meditrip',
+			type: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Basic ' + basicKey,
+				'x-access-token': xAccessToken
 
-				},
-				beforeSend: function (xhr) {					
-					xhr.setRequestHeader("Authorization", "Basic " + basicKey);
-				},
-				success: function (response) {	
-					var display = JSON.parse(JSON.stringify(response));					
-					$.each(display, function(i) {
-						var value=display[i].department						
-						var li= $('<li class="dropdown"><a onclick=window.location=' + "'/treatmentsoffered/" + value + "'" + '  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">' + value + '</a></li>')
-					    $('#treatmentsOfferedUL').append(li);
-					});									
-				},
-				error: function (exception) {
-					console.log(exception);
-				}
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+			},
+			success: function (response) {
+				var display = JSON.parse(JSON.stringify(response));
+				$.each(display, function (i) {
+					var value = display[i].department
+					var li = $('<li class="dropdown"><a onclick=window.location=' + "'/treatmentsoffered/" + value + "'" + '  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">' + value + '</a></li>')
+					$('#treatmentsOfferedUL').append(li);
+				});
+			},
+			error: function (exception) {
+				console.log(exception);
+			}
 		})
-		$('#costPageMenu').on('click',function(){
-			document.location.href='/cost.html';
+		$('#costPageMenu').on('click', function () {
+			document.location.href = '/cost.html';
 		})
 		$('#contactPageMenu').on('click', function () {
 			//var id = $(this).attr('id');
@@ -83,11 +70,11 @@ var whyIndia = "Because India.";
 
 			document.location.href = '/contact.html';
 		});
-		$('#homeMenu').on('click',function(){
+		$('#homeMenu').on('click', function () {
 			document.location.href = '/index.html';
 			//homepageCallback();
-		})		
-		
+		})
+
 		$('#medicalVisaPageMenu').on('click', function () {
 
 
@@ -97,243 +84,373 @@ var whyIndia = "Because India.";
 		$('#ourServicesPageMenu').on('click', function () {
 			document.location.href = '/ourservices.html';
 		});
-		$('#holidayPageMenu').on('click',function(){
+		$('#holidayPageMenu').on('click', function () {
 			document.location.href = '/holiday/holiday_home';
 		});
 		$('#hospitalsPageMenu').on('click', function () {
 			document.location.href = '/hospitaldoctors.html';
 		});
 
+		//get quote
+		// $('.responsiveGetQuote').on('click', function(){
+		// 	var userInput = $('#getQuoteTreatment').val();
+		// 	console.log('userIn ', userInput);
+		// 	var modifiedUserInput = userInput.replace(/\s+/g, '-').toLowerCase();
+		// 	console.log('mod ' + modifiedUserInput)
+		// 	location.href = serverName + 'search/' + modifiedUserInput;
+
+		// })
+
+		$('#getQuoteTreatment').on('change', function () {
+			var treatmentSelected = $('option:selected', this).val();
+			var modifiedUserInput = treatmentSelected.replace(/\s+/g, '-').toLowerCase();
+			location.href = serverName + 'search/' + modifiedUserInput;
+		});
+
+
 	});
-$(".medinovitaFooter").load("/assets/pages/footer.html",function(){
-$.ajax({
-	url: serverName+"api/v1/get/officelocations/meditrip",
-	type: 'GET',
-	headers: {
-		"Content-Type": "application/json",
-		"Authorization": "Basic "+ basicKey,
-		"x-access-token": xAccessToken
-
-	},
-	beforeSend: function (xhr) {
-		xhr.setRequestHeader("Authorization", "Basic " + basicKey);
-	},
-	success: function (response) {
-		officeAddress = response[0].country +"<br>"+response[0].officeCity[0].city+ "<br>" +response[0].officeCity[0].officeLocation[0].addressLine1 +"<br>"+response[0].officeCity[0].officeLocation[0].addressLine2 + "<br>" + response[0].officeCity[0].officeLocation[0].landMark + "<br>" + response[0].officeCity[0].officeLocation[0].officeEmailId + "<br>" + response[0].officeCity[0].officeLocation[0].contactPerson;
-		document.querySelector('p.office-address').innerHTML = officeAddress;
-	},
-	error: function (exception) {
-		console.log(exception);
-	}
-});
-
-
-
-
-$.ajax({
-	url: serverName+"api/v1/get/homepagedetails/meditrip",
-	type: 'GET',
-	headers: {
-		"Content-Type": "application/json",
-		"Authorization": "Basic " + basicKey,
-		"x-access-token": xAccessToken
-	},
-	beforeSend: function (xhr) {
-		xhr.setRequestHeader("Authorization", "Basic " + basicKey);
-	},
-	success: function (response) {
-
-		document.querySelector('p.why-india').innerHTML = response[0].whyIndiaDesc;
-		var socialMedia = document.querySelectorAll('a.social-icon');
-		socialMedia[0].setAttribute('href', response[0].fburlLink);
-		socialMedia[1].setAttribute('href', response[0].twitterurlLink);
-		socialMedia[2].setAttribute('href', response[0].linkedlinurlLink);
-		//socialMedia[3].setAttribute('href', response[0].instagramurlLink);
-		document.querySelector('p.medinovitaDecs').innerHTML = response[0].whymedinovitaDesc;
-		document.querySelector('p.customerCareNumber').innerHTML = response[0].whatsappCustomercareno;
-		document.querySelector('p.whatsappContactNumber').innerHTML = response[0].customerCareno
-	},
-	error: function (exception) {
-		console.log(exception);
-	}
-});
-});
-$(".medinovitaModals").load("/assets/pages/modals.html",function(){
-
-	$('#submitEnquiryForm').on('submit',function(e){
-		e.preventDefault();
-		var formData=$(this).serializeArray();
-		var v = grecaptcha.getResponse();
-		if (v.length == 0) {
-			document.getElementById('captcha').innerHTML = "Please verify that you are not a robot";
-			return false;
-		}
-		else {
-			document.getElementById('captcha').innerHTML = "Verification completed";
-
-		}
-	$.ajax({
-			url: serverName+"api/v1/submit/enquiry/meditrip",
-			type: 'POST',
+	$('.medinovitaFooter').load('/assets/pages/footer.html', function () {
+		$.ajax({
+			url: serverName + 'api/v1/get/officelocations/meditrip',
+			type: 'GET',
 			headers: {
-					'Content-type': 'application/json',
-				"Authorization": "Basic "+ basicKey,
-				"x-access-token": xAccessToken
+				'Content-Type': 'application/json',
+				Authorization: 'Basic ' + basicKey,
+				'x-access-token': xAccessToken
+
 			},
 			beforeSend: function (xhr) {
-				xhr.setRequestHeader("Authorization", "Basic " + basicKey);
+				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
 			},
-			data:JSON.stringify({emailID:formData[1].value,
-		userFullName:formData[0].value,
-		isdCode:formData[2].value,
-		primaryPhonenumber:formData[3].value,
-		procedureName:formData[4].value,
-		commuMedium:"English",
-		caseDescription:formData[5].value,
-		attachment:"N",
-		attachmentName:"null"}),
 			success: function (response) {
-				alert("Thanks for contacting us, we will get back to you soon")
+				officeAddress = response[0].country + '<br>' + response[0].officeCity[0].city + '<br>' + response[0].officeCity[0].officeLocation[0].addressLine1 + '<br>' + response[0].officeCity[0].officeLocation[0].addressLine2 + '<br>' + response[0].officeCity[0].officeLocation[0].landMark + '<br>' + response[0].officeCity[0].officeLocation[0].officeEmailId + '<br>' + response[0].officeCity[0].officeLocation[0].contactPerson;
+				document.querySelector('p.office-address').innerHTML = officeAddress;
 			},
 			error: function (exception) {
-				console.log(exception)
+				console.log(exception);
 			}
 		});
 
-		$('#modal-container-SubmitEnquiry').modal('toggle');
-	})
-$.ajax({
-	url: serverName+"api/v1/get/countrylist/meditrip",
-	type: 'GET',
-	headers: {
-		"Content-Type": "application/json",
-		"Authorization": "Basic "+ basicKey,
-		"x-access-token": xAccessToken
+		$.ajax({
+			url: serverName + 'api/v1/get/homepagedetails/meditrip',
+			type: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Basic ' + basicKey,
+				'x-access-token': xAccessToken
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+			},
+			success: function (response) {
 
-	},
-	beforeSend: function (xhr) {
-		xhr.setRequestHeader("Authorization", "Basic " + basicKey);
-	},
-	success: function (response) {
-		response.result[0].countrylist.forEach(function(item,index){
-			var locObj={};
-			locObj.name=item.country;
-			locObj.dial_code=item.dial_code;
-			locObj.code=item.code;
-			countryCodes.push(locObj)
-		})
-		$('#modal-container-SubmitEnquiry').on('shown.bs.modal',function(){
-			$('.modal .modal-body').css('overflow-y', 'auto');
-		   $('.modal .modal-body').css('max-height', $(window).height() *0.9);
-
-		   })
-		   countryCodes.forEach(function(value,index){
-				$('#inputSubmitEnquiryISDCode').append($('<option>', {
-			   value: value.dial_code,
-			   text : value.code + "(" + value.dial_code + ")"
-		   }));
-	   });
-	},
-	error: function (exception) {
-		console.log(exception);
-	}
-});
-
-
-	//Fetch search Treatments list
-	$.ajax({
-		url: serverName + "api/v1/getTreamentlist/all/meditrip",
-		type: 'GET',
-		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Basic " + basicKey,
-			"x-access-token": xAccessToken
-
-		},
-		beforeSend: function (xhr) {
-			xhr.setRequestHeader("Authorization", "Basic " + basicKey);
-		},
-		success: function (response) {
-			var treatmentList = response;
-			//Populate Treatment Dropdown
-			$("#getQuoteTreatment").autocomplete({
-				source: treatmentList
-			});
-
-			var selectBox = document.getElementById("selectSubmitEnquiryProcedure");
-			treatmentList.forEach(function (item, index) {
-				var option = document.createElement("option")
-				option.text = item;
-				option.value = item.substr(0, item.length - 10).trim();
-				selectBox.add(option);
-			});
-
-		},
-		error: function (exception) {
-			console.log(exception);
-		}
+				document.querySelector('p.why-india').innerHTML = response[0].whyIndiaDesc;
+				var socialMedia = document.querySelectorAll('a.social-icon');
+				socialMedia[0].setAttribute('href', response[0].fburlLink);
+				socialMedia[1].setAttribute('href', response[0].twitterurlLink);
+				socialMedia[2].setAttribute('href', response[0].linkedlinurlLink);
+				//socialMedia[3].setAttribute('href', response[0].instagramurlLink);
+				document.querySelector('p.medinovitaDecs').innerHTML = response[0].whymedinovitaDesc;
+				document.querySelector('p.customerCareNumber').innerHTML = response[0].whatsappCustomercareno;
+				document.querySelector('p.whatsappContactNumber').innerHTML = response[0].customerCareno
+			},
+			error: function (exception) {
+				console.log(exception);
+			}
+		});
 	});
+	$('.medinovitaModals').load('/assets/pages/modals.html', function () {
 
-if(window.location.href.indexOf("index")>-1 || window.location.href=="https://www.medinovita.in/"){
-	homepageCallback();
-}
-if (window.location.href.indexOf("treatmentsOffered") > -1) {
-	treatmentsOfferedCallback(getCookie("treatmentPage"));
-}
-if (window.location.href.indexOf("medical-visa-to-india") > -1) {
-	medicalVisacallback();
-}
-if(window.location.href.indexOf("cost")>-1){
-	costCallback();
-}
-if(window.location.href.indexOf("SearchTreatment")>-1){
-	searchTreatmentCallback();
-}
-// hospitaldoctors**************
-if (window.location.href.indexOf("hospitaldoctors") > -1) {
-	hospitalPageHtml();
-	hospitalPageCallback("all","");
-}
-// end of hospitaldoctors******************
-});
-//Hospitals and Doctors selected
-$('#hospitalsPageMenu').on('click',function(){
-	$('.main').html('');
-	$('.main').load("hospitalzone.html", function (data) { });
-})
+		$('#submitEnquiryForm').on('submit', function (e) {
+			e.preventDefault();
+			var formData = $(this).serializeArray();
+			// var v = grecaptcha.getResponse();
+			// if (v.length == 0) {
+			// 	document.getElementById('captcha').innerHTML = "Please verify that you are not a robot";
+			// 	return false;
+			// }
+			// else {
+			// 	document.getElementById('captcha').innerHTML = "Verification completed";
+
+			// }
+
+		//Added by libin for s3 file upload
+			var attachmentFlag="N";
+			var attachmentNames='';
+
+			var files = $('#files').get(0).files;
+			var fileSize=(files.length)
+			var formFileData = new FormData();
+			if (fileSize >= 5) {
+				$(this).find("#uploadmsg").text("Only 5 files are allowed at a time");
+				$(this).find("#files").val('')
+				return  false;
+			}
+			if (fileSize >= 1) {
+				var validExt = ".png,.jpeg,.jpg,.pdf,.doc,.docx";
+				attachmentFlag="Y"
+				// Append the files to the formData.
+				for (var i=0; i < fileSize; i++) {
+					var file = files[i];
+					var filePath=file.name
+					attachmentNames = attachmentNames+ filePath + ",";
+					var getFileExt = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
+					formFileData.append('files', file, file.name);
+
+					// file size and extension validation
+					if (file.size*0.000001>5){
+						$(this).find("#files").val('')
+						$(this).find("#uploadmsg").text("Please upload files having size less than 5MB");
+						$(this).find("#uploadmsg").focus();
+						return  false;
+					}else if(validExt.indexOf(getFileExt)<0 ) {
+						$(this).find("#files").val('')
+						$(this).find("#uploadmsg").text("Please upload only allowed file types "+ validExt);
+						$(this).find("#uploadmsg").focus();
+						return  false;
+					}
+				}
+				//give focus to submit button
+				$(this).find("#filesubmit").focus();
+
+				$.ajax({
+					url: serverName+ 'cloud/upload',
+					data: formFileData,
+					type: 'POST',
+					contentType: false,
+					processData: false,
+					async: false, //add this
+					success: function(response) {
+						console.log("success")
+						$(this).find("#uploadmsg").text("File upload is success");
+					},
+					error: function(exception) {
+						$(this).find("#uploadmsg").text("File upload is failed");
+						console.log("exception")
+					},
+				});
+				$(this).find("#files").val('')
+				$(this).find("#uploadmsg").css('color', 'green');
+				$(this).find("#uploadmsg").text(("Files have been uploaded successfully"));
+			}
+
+			$.ajax({
+				url: serverName + 'api/v1/submit/enquiry/meditrip',
+				type: 'POST',
+				headers: {
+					'Content-type': 'application/json',
+					Authorization: 'Basic ' + basicKey,
+					'x-access-token': xAccessToken
+				},
+				beforeSend: function (xhr) {
+
+					xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+				},
+				data: JSON.stringify({
+					emailID: formData[1].value,
+					userFullName: formData[0].value,
+					isdCode: formData[2].value,
+					primaryPhonenumber: formData[3].value,
+					procedureName: formData[4].value,
+					commuMedium: 'English',
+					caseDescription: formData[5].value,
+					attachment: 'N',
+					attachmentName: 'null'
+				}),
+				success: function (response) {
+
+					document.getElementById('submitEnquiryForm').reset();
+					setTimeout(function () {
+						$('#modal-container-SubmitEnquiry').modal('toggle');
+					}, 209);
+
+					setTimeout(function () {
+						$('#messageModal').modal('show');
+					}, 300);
 
 
+				},
+				error: function (exception) {
+					console.log('exception', exception);
+					$('.modalerrormessage').html('Error : ' + exception);
+					// $('.modal-enquiry').css('background-color', '#ccc').html('Your enquiry is received. We will get in touch with you.');
+				}
+			});
+
+		})
+		$.ajax({
+			url: serverName + 'api/v1/get/countrylist/meditrip',
+			type: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Basic ' + basicKey,
+				'x-access-token': xAccessToken
+
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+			},
+			success: function (response) {
+				response.result[0].countrylist.forEach(function (item, index) {
+					var locObj = {};
+					locObj.name = item.country;
+					locObj.dial_code = item.dial_code;
+					locObj.code = item.code;
+					countryCodes.push(locObj)
+				})
+				$('#modal-container-SubmitEnquiry').on('shown.bs.modal', function () {
+					$('.modal .modal-body').css('overflow-y', 'auto');
+					$('.modal .modal-body').css('max-height', $(window).height() * 0.9);
+
+				})
+				countryCodes.forEach(function (value, index) {
+					$('#inputSubmitEnquiryISDCode').append($('<option>', {
+						value: value.dial_code,
+						text: value.name + ' (' + value.dial_code + ')'
+					}));
+				});
+			},
+			error: function (exception) {
+				console.log(exception);
+			}
+		});
 
 
+		//Fetch search Treatments list
+		// $.ajax({
+		// 	url: serverName + 'api/v1/getTreamentlist/all/meditrip',
+		// 	type: 'GET',
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 		Authorization: 'Basic ' + basicKey,
+		// 		'x-access-token': xAccessToken
 
+		// 	},
+		// 	beforeSend: function (xhr) {
+		// 		xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+		// 	},
+		// 	success: function (response) {
+		// 		console.log('list: ', response)
+		// 		var treatmentList = response;
+		// 		//Populate Treatment Dropdown
+		// 		$('#getQuoteTreatment').autocomplete({
+		// 			source: treatmentList
+		// 		});
+
+		// 		var selectBox = document.getElementById('selectSubmitEnquiryProcedure');
+		// 		treatmentList.forEach(function (item, index) {
+		// 			var option = document.createElement('option')
+		// 			option.text = item;
+		// 			option.value = item.replace(/\s+/g, '-').toLowerCase();
+		// 			selectBox.add(option);
+		// 			//console.log(option);
+		// 		});
+
+		// 	},
+		// 	error: function (exception) {
+		// 		console.log(exception);
+		// 	}
+		// });
+		//alter//
+		$.ajax({
+			url: serverName + 'api/v1/getTreamentlist/all/meditrip',
+			type: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Basic ' + basicKey,
+				'x-access-token': xAccessToken
+
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+			},
+			success: function (response) {
+				//console.log('list: ', response)
+				var treatmentList = response;
+				var selectBox = document.getElementById('selectSubmitEnquiryProcedure');
+				treatmentList.forEach(function (item, index) {
+					var option = document.createElement('option')
+					option.text = item;
+					option.value = item.replace(/\s+/g, '-').toLowerCase();
+					selectBox.add(option);
+					//console.log(option);
+				});
+
+				treatmentList.forEach(function (item, index) {
+					$('#getQuoteTreatment').append('<option class="' + item + '"' + 'data-tokens="' + item + '">' + item + '</option>')
+				})
+			var elementExists = document.getElementById("getQuoteTreatment");
+			if (elementExists){
+				$('#getQuoteTreatment').selectpicker('render');
+				$('#getQuoteTreatment').selectpicker('refresh');
+         }
+
+
+				//Populate Treatment Dropdown
+
+
+			},
+			error: function (exception) {
+				console.log(exception);
+			}
+		});
+
+
+		if (window.location.href.indexOf('index') > -1 || window.location.href == 'https://www.medinovita.in/') {
+			homepageCallback();
+		}
+		if (window.location.href.indexOf('treatmentsOffered') > -1) {
+			treatmentsOfferedCallback(getCookie('treatmentPage'));
+		}
+		if (window.location.href.indexOf('medical-visa-to-india') > -1) {
+			medicalVisacallback();
+		}
+		if (window.location.href.indexOf('cost') > -1) {
+			costCallback();
+		}
+		if (window.location.href.indexOf('SearchTreatment') > -1) {
+			searchTreatmentCallback();
+		}
+		// hospitaldoctors**************
+		if (window.location.href.indexOf('hospitaldoctors') > -1) {
+			hospitalPageHtml();
+			hospitalPageCallback('all', '');
+		}
+		// end of hospitaldoctors******************
+	});
+	//Hospitals and Doctors selected
+	$('#hospitalsPageMenu').on('click', function () {
+		$('.main').html('');
+		$('.main').load('hospitalzone.html', function (data) {});
+	})
 
 
 	//Google Translate Section starts
 	// Change font family and color
-	$("iframe").contents().find(".goog-te-menu2-item div, .goog-te-menu2-item:link div, .goog-te-menu2-item:visited div, .goog-te-menu2-item:active div, .goog-te-menu2 *")
+	$('iframe').contents().find('.goog-te-menu2-item div, .goog-te-menu2-item:link div, .goog-te-menu2-item:visited div, .goog-te-menu2-item:active div, .goog-te-menu2 *')
 		.css({
-			'color': '#005d9c',
+			color: '#005d9c',
 			'font-family': 'tahoma'
 		});
 
 	// Change hover effects
-	$("iframe").contents().find(".goog-te-menu2-item div").hover(function () {
+	$('iframe').contents().find('.goog-te-menu2-item div').hover(function () {
 		$(this).css('background-color', '#F38256').find('span.text').css('color', 'white');
 	}, function () {
 		$(this).css('background-color', 'white').find('span.text').css('color', '#544F4B');
 	});
 
 	// Change Google's default blue border
-	$("iframe").contents().find('.goog-te-menu2').css('border', '1px solid #F38256');
+	$('iframe').contents().find('.goog-te-menu2').css('border', '1px solid #F38256');
 
 	// Change the iframe's box shadow
-	$(".goog-te-menu-frame").css({
+	$('.goog-te-menu-frame').css({
 		'-moz-box-shadow': '0 3px 8px 2px #666666',
 		'-webkit-box-shadow': '0 3px 8px 2px #666',
 		'box-shadow': '0 3px 8px 2px #666'
 	});
-	$(".goog-te-combo").css({
-		'color': '#ffffff',
+	$('.goog-te-combo').css({
+		color: '#ffffff',
 		'font-family': 'tahoma'
 	})
 	//Google Translate Section Ends
@@ -384,7 +501,7 @@ $('#hospitalsPageMenu').on('click',function(){
 			this.countTo();
 
 			/* Call function if noUiSlider plugin is included */
-			if (typeof noUiSlider === "object") {
+			if (typeof noUiSlider === 'object') {
 				this.filterSliders();
 			}
 
@@ -431,7 +548,7 @@ $('#hospitalsPageMenu').on('click',function(){
 			}
 		},
 		menuHover: function () {
-			if (typeof Modernizr === "object" && Modernizr.mq('only all and (min-width: 768px)') && !Modernizr.touchevents) {
+			if (typeof Modernizr === 'object' && Modernizr.mq('only all and (min-width: 768px)') && !Modernizr.touchevents) {
 				if ($.fn.hoverIntent) {
 					$('.medinovitaHeader .header').find('.navbar-nav').not('.nav-overlay').hoverIntent({
 						over: function () {
@@ -458,7 +575,7 @@ $('#hospitalsPageMenu').on('click',function(){
 			}
 		},
 		mobileMenuDropdownFix: function () {
-			if (typeof Modernizr === "object" && (Modernizr.mq('only all and (max-width: 767px)') || Modernizr.touchevents)) {
+			if (typeof Modernizr === 'object' && (Modernizr.mq('only all and (max-width: 767px)') || Modernizr.touchevents)) {
 				$('.navbar-nav').not('.nav-overlay').find('.dropdown-toggle').on('click', function (e) {
 					var parent = $(this).closest('li');
 					// close all the siblings and their children
@@ -976,9 +1093,6 @@ $('#hospitalsPageMenu').on('click',function(){
 			});
 
 
-
-
-
 			/* Index-dentist - Testimonials Carousel */
 			$('.testimonials-carousel-dots.owl-carousel').owlCarousel({
 				loop: true,
@@ -1405,7 +1519,6 @@ $('#hospitalsPageMenu').on('click',function(){
 			});
 
 
-
 		},
 		tooltip: function () {
 			// Bootstrap Tooltip
@@ -1431,7 +1544,7 @@ $('#hospitalsPageMenu').on('click',function(){
 		scrollToTop: function () {
 			$('#scroll-top').on('click', function (e) {
 				$('html, body').animate({
-					'scrollTop': 0
+					scrollTop: 0
 				}, 1200);
 				e.preventDefault();
 			});
@@ -1462,13 +1575,13 @@ $('#hospitalsPageMenu').on('click',function(){
 					borderColour: '#e1e1e1',
 					zoomWindowPosition: 1,
 					zoomWindowOffetx: 30,
-					cursor: "crosshair", //
+					cursor: 'crosshair', //
 					zoomWindowFadeIn: 400,
 					zoomWindowFadeOut: 250,
 					lensBorderSize: 3, // lens border size
 					lensOpacity: 1,
 					lensColour: 'rgba(255, 255, 255, 0.5)', // lens color
-					lensShape: "square", // circle lens shape can be uses
+					lensShape: 'square', // circle lens shape can be uses
 					lensSize: 200,
 					scrollZoom: true
 				});
@@ -1492,12 +1605,12 @@ $('#hospitalsPageMenu').on('click',function(){
 					progressVal = $this.data('width');
 
 				$this.css({
-					'width': progressVal + '%'
+					width: progressVal + '%'
 				}, 400);
 			}, {
-					offset: '90%',
-					triggerOnce: true
-				});
+				offset: '90%',
+				triggerOnce: true
+			});
 		},
 		countTo: function () {
 			// CountTo plugin used count animations for homepages
@@ -1506,9 +1619,9 @@ $('#hospitalsPageMenu').on('click',function(){
 					$('.count').waypoint(function () {
 						$(this.element).countTo();
 					}, {
-							offset: '90%',
-							triggerOnce: true
-						});
+						offset: '90%',
+						triggerOnce: true
+					});
 				} else {
 					$('.count').countTo();
 				}
@@ -1627,8 +1740,8 @@ $('#hospitalsPageMenu').on('click',function(){
 				connect: true,
 				step: 50,
 				range: {
-					'min': 0,
-					'max': 1000
+					min: 0,
+					max: 1000
 				}
 			});
 
@@ -1715,7 +1828,7 @@ $('#hospitalsPageMenu').on('click',function(){
 	jQuery(document).ready(function () {
 		// Init our app
 		Simple.init();
-	//	$('.selectpicker').selectpicker();
+		//	$('.selectpicker').selectpicker();
 	});
 
 	// Load Event
@@ -1729,103 +1842,65 @@ $('#hospitalsPageMenu').on('click',function(){
 	});
 
 
-	// Google Map api v3 - Map for contact pages
-	// if (document.getElementById("map") && typeof google === "object") {
-	// 	// Map pin coordinates and content of pin box
-	// 	var locations = [
-	// 		[
-	// 			'<address><strong>Address:</strong> Hollywood Blvd, Los Angeles, CA, USA <br> <strong>Phone:</strong> +01 010 554 11 22 </address>',
-	// 			34.101780, -118.333655
-	// 		]
-	// 	];
-
-	// 	var map = new google.maps.Map(document.getElementById('map'), {
-	// 		zoom: 14,
-	// 		center: new google.maps.LatLng(34.101780, -118.333655), // Map Center coordinates
-	// 		scrollwheel: false,
-	// 		mapTypeId: google.maps.MapTypeId.ROADMAP
-	// 	});
-
-	// 	var infowindow = new google.maps.InfoWindow();
-
-
-	// 	var marker, i;
-
-	// 	for (i = 0; i < locations.length; i++) {
-	// 		marker = new google.maps.Marker({
-	// 			position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-	// 			map: map,
-	// 			animation: google.maps.Animation.DROP,
-	// 			icon: 'assets/images/pin.png'
-	// 		});
-
-	// 		google.maps.event.addListener(marker, 'click', (function (marker, i) {
-	// 			return function () {
-	// 				infowindow.setContent(locations[i][0]);
-	// 				infowindow.open(map, marker);
-	// 			}
-	// 		})(marker, i));
-	// 	}
-	// }
 
 	//Login Page
 
-//contact page
+	//contact page
 
-$('#contact-form').submit(function(event){
-	event.preventDefault();
-	var contactname = $('#contactname').val();
-	var contactemail = $('#contactemail').val();
-	var contactsubject = $('#contactsubject').val();
-	var contactmessage = $('#contactmessage').val();
-	var contactsubmit = $('#sendMessage').val();
+	$('#contact-form').submit(function (event) {
+		event.preventDefault();
+		var contactname = $('#contactname').val();
+		var contactemail = $('#contactemail').val();
+		var contactsubject = $('#contactsubject').val();
+		var contactmessage = $('#contactmessage').val();
+		var contactsubmit = $('#sendMessage').val();
 
-	$.ajax({
-type: 'post',
-url: serverName + 'api/v1/post/contactus/meditrip',
-headers: {
-"Content-Type": "application/json",
-"Authorization": "Basic " + basicKey,
-"x-access-token": xAccessToken
+		$.ajax({
+			type: 'post',
+			url: serverName + 'api/v1/post/contactus/meditrip',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Basic ' + basicKey,
+				'x-access-token': xAccessToken
 
-},
-beforeSend: function (xhr) {
-xhr.setRequestHeader("Authorization", "Basic " + basicKey);
-},
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+			},
 
-data:JSON.stringify({emailID:contactemail,
-userFullName:contactname,
-subject:contactsubject,
-message:contactmessage,
-}),
-success: function (response) {
-// alert("Thanks for contacting us, we will get back to you soon")
-// $('.form-message').append("<span ><strong> Thanks for contacting us, we will get back to you soon</strong></span>");
-// $('#contactname, #contactemail, #contactsubject, #contactmessage').val("");
-
-
-$('.officeAdd').hide();
-$('.toHide').slideUp(400, function(){
-	$('.form-message').append("<span>Thank you for contacting us, we will get back to you as soon as possible!</span>");
-});
+			data: JSON.stringify({
+				emailID: contactemail,
+				userFullName: contactname,
+				subject: contactsubject,
+				message: contactmessage,
+			}),
+			success: function (response) {
+				// alert("Thanks for contacting us, we will get back to you soon")
+				// $('.form-message').append("<span ><strong> Thanks for contacting us, we will get back to you soon</strong></span>");
+				// $('#contactname, #contactemail, #contactsubject, #contactmessage').val("");
 
 
-//$('#toHide').hide();
-// $('.form-message').append("<span ><strong> Thanks for contacting us, we will get back to you soon</strong></span>");
-//$('#toShow').html(response);
+				$('.officeAdd').hide();
+				$('.toHide').slideUp(400, function () {
+					$('.form-message').append('<span>Thank you for contacting us, we will get back to you as soon as possible!</span>');
+				});
 
-},
-error: function (exception) {
-console.log(exception)
-}
-});
-return false;
 
-});
+				//$('#toHide').hide();
+				// $('.form-message').append("<span ><strong> Thanks for contacting us, we will get back to you soon</strong></span>");
+				//$('#toShow').html(response);
+
+			},
+			error: function (exception) {
+				console.log(exception)
+			}
+		});
+		return false;
+
+	});
 
 
 })(jQuery);
-
 
 
 // (function (i, s, o, g, r, a, m) {
@@ -1848,159 +1923,162 @@ return false;
 //homepage functions
 
 
-
-
-
 //Callbacks
 
 //HomePage Load callback
 function homepageCallback() {
 	//Homepage Variables
-	var treatmentList = "";
+	var treatmentList = '';
 
-	var featuredTreatmentsItems=[{
-img:"/assets/images/blocks/index-medical/item2.jpg",
-svgImg:"/assets/images/services/index-medical/stethoscope.svg",altText:"Stethoscope",
-shortContent:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.",
-title:"Nursing"
-	},
-{
-img:"/assets/images/blocks/index-medical/item1.jpg",
-svgImg:"/assets/images/services/index-medical/microscope.svg",altText:"Microscope",
-shortContent:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.",
-title:"Laboratory"
-	},
-{
-img:"/assets/images/blocks/index-medical/item1.jpg",
-svgImg:"/assets/images/services/index-medical/microscope.svg",altText:"Microscope",
-shortContent:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.",
-title:"Laboratory"
-	},
-{
-img:"/assets/images/blocks/index-medical/item1.jpg",
-svgImg:"/assets/images/services/index-medical/microscope.svg",altText:"Microscope",
-shortContent:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.",
-title:"Laboratory"
-	},
-{
-img:"/assets/images/blocks/index-medical/item1.jpg",
-svgImg:"/assets/images/services/index-medical/microscope.svg",altText:"Microscope",
-shortContent:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.",
-title:"Laboratory"
-	},
-{
-img:"/assets/images/blocks/index-medical/item1.jpg",
-svgImg:"/assets/images/services/index-medical/microscope.svg",altText:"Microscope",
-shortContent:"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.",
-title:"Laboratory"
-	}]
+	var featuredTreatmentsItems = [{
+			img: '/assets/images/blocks/index-medical/item2.jpg',
+			svgImg: '/assets/images/services/index-medical/stethoscope.svg',
+			altText: 'Stethoscope',
+			shortContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.',
+			title: 'Nursing'
+		},
+		{
+			img: '/assets/images/blocks/index-medical/item1.jpg',
+			svgImg: '/assets/images/services/index-medical/microscope.svg',
+			altText: 'Microscope',
+			shortContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.',
+			title: 'Laboratory'
+		},
+		{
+			img: '/assets/images/blocks/index-medical/item1.jpg',
+			svgImg: '/assets/images/services/index-medical/microscope.svg',
+			altText: 'Microscope',
+			shortContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.',
+			title: 'Laboratory'
+		},
+		{
+			img: '/assets/images/blocks/index-medical/item1.jpg',
+			svgImg: '/assets/images/services/index-medical/microscope.svg',
+			altText: 'Microscope',
+			shortContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.',
+			title: 'Laboratory'
+		},
+		{
+			img: '/assets/images/blocks/index-medical/item1.jpg',
+			svgImg: '/assets/images/services/index-medical/microscope.svg',
+			altText: 'Microscope',
+			shortContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.',
+			title: 'Laboratory'
+		},
+		{
+			img: '/assets/images/blocks/index-medical/item1.jpg',
+			svgImg: '/assets/images/services/index-medical/microscope.svg',
+			altText: 'Microscope',
+			shortContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto debitis nemo ipsa iure aliquid! Impedit et rem in distin.',
+			title: 'Laboratory'
+		}
+	]
 	var latestNewsItems = [
 
 		{
-			"newsId": "1",
+			newsId: '1',
 
-			"imgPath": "/assets/images/blog/index-medical/post1.jpg",
+			imgPath: '/assets/images/blog/index-medical/post1.jpg',
 
-			"postedDate": "17 Jan, 2016",
+			postedDate: '17 Jan, 2016',
 
-			"postedBy": "Admin",
+			postedBy: 'Admin',
 
-			"postHeading": "Lorem ipsum dolor sit ametli elits.",
+			postHeading: 'Lorem ipsum dolor sit ametli elits.',
 
-			"postShortContent": "Molestiae neque doloremque, voluptatum nostrum praesentium esse fugiat sus siel. Deserunt praesentium archite.",
+			postShortContent: 'Molestiae neque doloremque, voluptatum nostrum praesentium esse fugiat sus siel. Deserunt praesentium archite.',
 
-
-
-		},
-
-		{
-			"newsId": "2",
-
-			"imgPath": "/assets/images/blog/index-medical/post2.jpg",
-
-			"postedDate": "17 Jan, 2016",
-
-			"postedBy": "Admin",
-
-			"postHeading": "Lorem ipsum dolor sit ametli elits.",
-
-			"postShortContent": "Molestiae neque doloremque, voluptatum nostrum praesentium esse fugiat sus siel. Deserunt praesentium archite.",
 
 		},
 
 		{
-			"newsId": "2",
+			newsId: '2',
 
-			"imgPath": "/assets/images/blog/index-medical/post3.jpg",
+			imgPath: '/assets/images/blog/index-medical/post2.jpg',
 
-			"postedDate": "17 Jan, 2016",
+			postedDate: '17 Jan, 2016',
 
-			"postedBy": "Admin",
+			postedBy: 'Admin',
 
-			"postHeading": "Lorem ipsum dolor sit ametli elits.",
+			postHeading: 'Lorem ipsum dolor sit ametli elits.',
 
-			"postShortContent": "Molestiae neque doloremque, voluptatum nostrum praesentium esse fugiat sus siel. Deserunt praesentium archite.",
+			postShortContent: 'Molestiae neque doloremque, voluptatum nostrum praesentium esse fugiat sus siel. Deserunt praesentium archite.',
+
+		},
+
+		{
+			newsId: '2',
+
+			imgPath: '/assets/images/blog/index-medical/post3.jpg',
+
+			postedDate: '17 Jan, 2016',
+
+			postedBy: 'Admin',
+
+			postHeading: 'Lorem ipsum dolor sit ametli elits.',
+
+			postShortContent: 'Molestiae neque doloremque, voluptatum nostrum praesentium esse fugiat sus siel. Deserunt praesentium archite.',
 
 		}
 
 	];
-	var homePageHighLightsItems=[{
-		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
-		altText:"Emergency",
-		title:"Emergency",
-		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
-	},
-{
-		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
-		altText:"Emergency",
-		title:"Emergency",
-		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
-	},
-{
-		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
-		altText:"Emergency",
-		title:"Emergency",
-		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
-	},{
-		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
-		altText:"Emergency",
-		title:"Emergency",
-		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
-	},{
-		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
-		altText:"Emergency",
-		title:"Emergency",
-		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
-	},{
-		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
-		altText:"Emergency",
-		title:"Emergency",
-		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
-	},{
-		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
-		altText:"Emergency",
-		title:"Emergency",
-		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
-	},{
-		imgSrc:"/assets/images/services/index-medical/first-aid-kit.svg",
-		altText:"Emergency",
-		title:"Emergency",
-		content:"Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem."
-	}]
-
+	var homePageHighLightsItems = [{
+			imgSrc: '/assets/images/services/index-medical/first-aid-kit.svg',
+			altText: 'Emergency',
+			title: 'Emergency',
+			content: 'Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem.'
+		},
+		{
+			imgSrc: '/assets/images/services/index-medical/first-aid-kit.svg',
+			altText: 'Emergency',
+			title: 'Emergency',
+			content: 'Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem.'
+		},
+		{
+			imgSrc: '/assets/images/services/index-medical/first-aid-kit.svg',
+			altText: 'Emergency',
+			title: 'Emergency',
+			content: 'Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem.'
+		}, {
+			imgSrc: '/assets/images/services/index-medical/first-aid-kit.svg',
+			altText: 'Emergency',
+			title: 'Emergency',
+			content: 'Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem.'
+		}, {
+			imgSrc: '/assets/images/services/index-medical/first-aid-kit.svg',
+			altText: 'Emergency',
+			title: 'Emergency',
+			content: 'Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem.'
+		}, {
+			imgSrc: '/assets/images/services/index-medical/first-aid-kit.svg',
+			altText: 'Emergency',
+			title: 'Emergency',
+			content: 'Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem.'
+		}, {
+			imgSrc: '/assets/images/services/index-medical/first-aid-kit.svg',
+			altText: 'Emergency',
+			title: 'Emergency',
+			content: 'Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem.'
+		}, {
+			imgSrc: '/assets/images/services/index-medical/first-aid-kit.svg',
+			altText: 'Emergency',
+			title: 'Emergency',
+			content: 'Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem.'
+		}
+	]
 
 
 	$.ajax({
-		url: serverName + "api/v1/gethighlighttreatments/meditrip?limit=8",
+		url: serverName + 'api/v1/gethighlighttreatments/meditrip?limit=8',
 		type: 'GET',
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Basic " + basicKey,
-			"x-access-token": xAccessToken
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
 
 		},
 		beforeSend: function (xhr) {
-			xhr.setRequestHeader("Authorization", "Basic " + basicKey);
+			xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
 		},
 		success: function (response) {
 			var homePageHighLightsItems = response;
@@ -2018,16 +2096,16 @@ title:"Laboratory"
 	});
 
 	$.ajax({
-		url: serverName + "api/v1/get/newssection/meditrip",
+		url: serverName + 'api/v1/get/newssection/meditrip',
 		type: 'GET',
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Basic " + basicKey,
-			"x-access-token": xAccessToken
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
 
 		},
 		beforeSend: function (xhr) {
-			xhr.setRequestHeader("Authorization", "Basic " + basicKey);
+			xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
 		},
 		success: function (response) {
 			var latestNewsItems = response
@@ -2044,7 +2122,7 @@ title:"Laboratory"
 
 			});
 			$('#latestNewsCarousel').html(latestNewsHtmlString);
-	/* Index-medical - Latest Post Medical Carousel */
+			/* Index-medical - Latest Post Medical Carousel */
 			$('.latest-posts-medical-carousel.owl-carousel').owlCarousel({
 				loop: false,
 				margin: 30,
@@ -2076,21 +2154,21 @@ title:"Laboratory"
 	});
 
 	$.ajax({
-		url: serverName + "api/v1/getaboutMedical/meditrip",
+		url: serverName + 'api/v1/getaboutMedical/meditrip',
 		type: 'GET',
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Basic " + basicKey,
-			"x-access-token": xAccessToken
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
 
 		},
 		beforeSend: function (xhr) {
-			xhr.setRequestHeader("Authorization", "Basic " + basicKey);
+			xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
 		},
 		success: function (response) {
 			var aboutData = response;
-		$('#aboutSubtitle').text(aboutData.aboutSubTitle);
-		$('#aboutContent').html($.parseHTML(aboutData.aboutContent))
+			$('#aboutSubtitle').text(aboutData.aboutSubTitle);
+			$('#aboutContent').html($.parseHTML(aboutData.aboutContent))
 		},
 		error: function (exception) {
 			console.log(exception);
@@ -2099,21 +2177,28 @@ title:"Laboratory"
 
 	//Get Featured Treatment
 	$.ajax({
-		url: serverName + "api/v1/getFeaturedtreatments/meditrip",
+		url: serverName + 'api/v1/getFeaturedtreatments/meditrip',
 		type: 'GET',
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Basic " + basicKey,
-			"x-access-token": xAccessToken
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
 
 		},
 		success: function (response) {
 
-			var featuredTreatmentsHtmlString="";
-response.forEach(function(item,index){
-featuredTreatmentsHtmlString+=' <div class="col-sm-4"><div class="text-block hover-bg text-center" style="background-image:url('+ item.img+')"><h3 class="block-title"><a href="#">'+item.title+'</a></h3><p>'+item.shortContent +'</p><a href='+ item.pagePath+' class="readmore custom2">ReadMore <i class="fa fa-angle-right"></i></a></div></div>'
-});
-$('#featuredTreatmentsSection').html(featuredTreatmentsHtmlString);
+			var featuredTreatmentsHtmlStringOne = '';
+			var featuredTreatmentsHtmlStringTwo = '';
+			response.forEach(function (item, index) {
+				if (index <= 2) {
+					featuredTreatmentsHtmlStringOne += ' <div class="col-sm-4"><div class="text-block hover-bg text-center" style="background-image:url(' + item.img + ')"><h3 class="block-title"><a href="#">' + item.title + '</a></h3><p>' + item.shortContent + '</p><div class="index' + index + '"><a href=' + item.pagePath + ' class="readmore custom2">ReadMore <i class="fa fa-angle-right"></i></a></div></div></div>'
+				} else if (index > 2) {
+					featuredTreatmentsHtmlStringTwo += ' <div class="col-sm-4"><div class="text-block hover-bg text-center" style="background-image:url(' + item.img + ')"><h3 class="block-title"><a href="#">' + item.title + '</a></h3><p>' + item.shortContent + '</p><div class="index' + index + '"><a href=' + item.pagePath + ' class="readmore custom2">ReadMore <i class="fa fa-angle-right"></i></a></div></div></div>'
+				}
+
+			});
+			$('#featuredTreatmentsSection1').html(featuredTreatmentsHtmlStringOne);
+			$('#featuredTreatmentsSection2').html(featuredTreatmentsHtmlStringTwo);
 		},
 		error: function (exception) {
 			console.log(exception);
@@ -2121,42 +2206,39 @@ $('#featuredTreatmentsSection').html(featuredTreatmentsHtmlString);
 	});
 
 	//Homepage Carousel initialization
-		$('#homepageCarousel').carousel({
+	$('#homepageCarousel').carousel({
 		interval: 3500,
 		cycle: true
 	});
 
 
-
-//Populate latest news modal
-	$(document).on("click", ".latestNewsReadmore", function () {
-		debugger;
+	//Populate latest news modal
+	$(document).on('click', '.latestNewsReadmore', function () {
+		//debugger;
 		var newsID = $(this).data('id');
-		$("#modal-container-LatestNews #myModalLabel").text(newsID);
-		$("#modal-container-LatestNews .modal-body").text("Modal Content");
+		$('#modal-container-LatestNews #myModalLabel').text(newsID);
+		$('#modal-container-LatestNews .modal-body').text('Modal Content');
 	});
 
 
-
 	//Country Dropdown
-	var availableCountries = [
-  {
-    "text"  : "India",
-    "value" : "India"
-  }
+	var availableCountries = [{
+			text: 'India',
+			value: 'India'
+		}
 
-];
+	];
 
-			// var optionList = document.getElementById('getQuoteCountry').options;
-			// availableCountries.forEach( function(option,index)
-			// {
-			// 	optionList.add( new Option(option.text, option.value ) )
-			// });
+	// var optionList = document.getElementById('getQuoteCountry').options;
+	// availableCountries.forEach( function(option,index)
+	// {
+	// 	optionList.add( new Option(option.text, option.value ) )
+	// });
 
-$('.responsiveGetQuote').on('click',function(){
-	document.location.href="/SearchTreatment.html";
-	setCookie("Search-Treatment",$('#getQuoteTreatment').val(),1)
-});
+	// $('.responsiveGetQuote').on('click',function(){
+	// 	document.location.href="/SearchTreatment.html";
+	// 	setCookie("Search-Treatment",$('#getQuoteTreatment').val(),1)
+	// });
 
 }
 
@@ -2167,22 +2249,28 @@ function costCallback(data) {
 
 
 	$.ajax({
-		url: serverName + "api/v1/get/distinctprocedurenames/meditrip",
+		url: serverName + 'api/v1/get/distinctprocedurenames/meditrip',
 		type: 'GET',
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Basic " + basicKey,
-			"x-access-token": xAccessToken
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
 
 		},
 		beforeSend: function (xhr) {
-			xhr.setRequestHeader("Authorization", "Basic " + basicKey);
+			xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
 		},
 		success: function (response) {
-			response[0].treatmentNames.forEach(function(item,index){
-				$('#treatmentCostDropdown').append("<li><a href = '#'>"+item["procedureName"]+"</a></li>")
-			})
+			response[0].treatmentNames.forEach(function (item, index) {
+				//$('#treatmentCostDropdown').append("<li><a href = '#'>"+item["procedureName"]+"</a></li>")
 
+				var selectOption = $('<option>' + item.procedureName + '</option>')
+				$('.treatment-select #costSelectTreatment').append(selectOption);
+
+				// $('.treatment-select #costSelectTreatment').append('<option class= costtreatmentselect data-tokens="'+ item["procedureName"]+'">' + item["procedureName"] +'</option>')
+			})
+			$('#costSelectTreatment').selectpicker('render');
+			$('#costSelectTreatment').selectpicker('refresh');
 
 		},
 		error: function (exception) {
@@ -2191,50 +2279,96 @@ function costCallback(data) {
 	})
 
 	$.ajax({
-		url: serverName + "api/v1/get/holidayPackage/meditrip",
+		url: serverName + 'api/v1/get/evisacountries/all/meditrip',
 		type: 'GET',
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Basic " + basicKey,
-			"x-access-token": xAccessToken
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
+
+		},
+		success: function (response) {
+			// console.log("visa-response: "+ response);
+			var countryArr = [];
+			response.forEach(function (item) {
+				countryArr.push({
+					country: item.country,
+					fee: item.fee
+				});
+				// console.log("my country " + item.country)
+			})
+			//console.log("countryArr-response: "+ countryArr[1].country);
+
+			countryArr.forEach(function (item) {
+
+				var selectOption = $('<option>' + item.country + '</option>')
+				$('.treatment-select #costcountry').append(selectOption);
+
+				// $('.treatment-select #costcountry').append('<option class="costcountry" data-tokens="'+ item.country+'">' + item.country +'</option>')
+
+			})
+			$('#costcountry').selectpicker('render');
+			$('#costcountry').selectpicker('refresh');
+
+		},
+		error: function (exception) {
+			console.log(exception);
+		}
+	});
+
+
+	$.ajax({
+		url: serverName + 'api/get/holidayPackage/meditrip',
+		type: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
 
 		},
 		beforeSend: function (xhr) {
-			xhr.setRequestHeader("Authorization", "Basic " + basicKey);
+			xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
 		},
 		success: function (response) {
-			response.result.forEach(function(item,index){
-				$('#holidayPackageDropdown').append("<li><a href = '#'>"+item["packageShortName"]+"</a></li>")
+			response.result.forEach(function (item, index) {
+
+				var selectOption = $('<option>' + item.packageShortName + '</option>')
+				$('.treatment-select #holidayPackageDropdown').append(selectOption);
+
+
+				// $('.treatment-select #holidayPackageDropdown').append('<option class="costholidaypackage" data-tokens="'+ item["packageShortName"]+'">' + item["packageShortName"] +'</option>')
 			})
-			$("#treatmentCostDropdown li a").on('click',function(){
-				// remove previously added selectedLi
-				$('.selectedLi').removeClass('selectedLi');
-				// add class `selectedLi`
-				$(this).addClass('selectedLi');
-				var selText = $(this).text();///User selected value...****
-				$(this).parent().parent().prev().html(selText+' <span class="caret"></span>');
+			$('#holidayPackageDropdown').selectpicker('render');
+			$('#holidayPackageDropdown').selectpicker('refresh');
+			// 	$("#treatmentCostDropdown li a").on('click',function(){
+			// 		// remove previously added selectedLi
+			// 		$('.selectedLi').removeClass('selectedLi');
+			// 		// add class `selectedLi`
+			// 		$(this).addClass('selectedLi');
+			// 		var selText = $(this).text();///User selected value...****
+			// 		$(this).parent().parent().prev().html(selText+' <span class="caret"></span>');
 
-		  });
+			//   });
 
-		  $("#bystanderDropdown li a").click(function(){
-			// remove previously added selectedLi
-			$('.selectedBystanderLi').removeClass('selectedBystanderLi');
-			// add class `selectedLi`
-			$(this).addClass('selectedBystanderLi');
-			var selText = $(this).text();
-			$(this).parent().parent().prev().html(selText+' <span class="caret"></span>');
+			//   $("#bystanderDropdown li a").click(function(){
+			// 	// remove previously added selectedLi
+			// 	$('.selectedBystanderLi').removeClass('selectedBystanderLi');
+			// 	// add class `selectedLi`
+			// 	$(this).addClass('selectedBystanderLi');
+			// 	var selText = $(this).text();
+			// 	$(this).parent().parent().prev().html(selText+' <span class="caret"></span>');
 
 
-		});
-		$("#holidayPackageDropdown li a").on('click',function(){
-			// remove previously added selectedLi
-			$('.selectedpackageLi').removeClass('selectedpackageLi');
-			// add class `selectedLi`
-			$(this).addClass('selectedpackageLi');
-			var selText = $(this).text();
-			$(this).parent().parent().prev().html(selText+' <span class="caret"></span>');
+			// });
+			// $("#holidayPackageDropdown li a").on('click',function(){
+			// 	// remove previously added selectedLi
+			// 	$('.selectedpackageLi').removeClass('selectedpackageLi');
+			// 	// add class `selectedLi`
+			// 	$(this).addClass('selectedpackageLi');
+			// 	var selText = $(this).text();
+			// 	$(this).parent().parent().prev().html(selText+' <span class="caret"></span>');
 
-		});
+			// });
 
 		},
 		error: function (exception) {
@@ -2242,85 +2376,89 @@ function costCallback(data) {
 		}
 	})
 
-		$('.top-doctors-carousel.owl-carousel').owlCarousel({
-				loop: false,
-				margin: 30,
-				responsiveClass: true,
-				nav: true,
-				navText: ['<i class="fa fa-angle-left">', '<i class="fa fa-angle-right">'],
-				dots: false,
-				autoplay: true,
-				autoplayTimeout: 150000,
-				responsive: {
-					0: {
-						items: 1
-					},
-					480: {
-						items: 1
-					},
-					768: {
-						items: 2
-					},
-					992: {
-						items: 2
-					}
-				}
-			});
+	$('.top-doctors-carousel.owl-carousel').owlCarousel({
+		loop: false,
+		margin: 30,
+		responsiveClass: true,
+		nav: true,
+		navText: ['<i class="fa fa-angle-left">', '<i class="fa fa-angle-right">'],
+		dots: false,
+		autoplay: true,
+		autoplayTimeout: 150000,
+		responsive: {
+			0: {
+				items: 1
+			},
+			480: {
+				items: 1
+			},
+			768: {
+				items: 2
+			},
+			992: {
+				items: 2
+			}
+		}
+	});
 
-			$('.top-hospitals-carousel.owl-carousel').owlCarousel({
-				loop: false,
-				margin: 30,
-				responsiveClass: true,
-				nav: true,
-				navText: ['<i class="fa fa-angle-left">', '<i class="fa fa-angle-right">'],
-				dots: false,
-				autoplay: true,
-				autoplayTimeout: 150000,
-				responsive: {
-					0: {
-						items: 1
-					},
-					480: {
-						items: 1
-					},
-					768: {
-						items: 2
-					},
-					992: {
-						items: 2
-					}
-				}
-			});
-
-			$('#getCostDetails').on('click',function(e){
-				var procedurName=$('#treatmentCostDropdown li a.selectedLi').text();
-
-				var bystandercount=$('#bystanderDropdown li a.selectedBystanderLi').text();
-
-				var holidayPackage=$('#holidayPackageDropdown li a.selectedpackageLi').text();
+	$('.top-hospitals-carousel.owl-carousel').owlCarousel({
+		loop: false,
+		margin: 30,
+		responsiveClass: true,
+		nav: true,
+		navText: ['<i class="fa fa-angle-left">', '<i class="fa fa-angle-right">'],
+		dots: false,
+		autoplay: true,
+		autoplayTimeout: 150000,
+		responsive: {
+			0: {
+				items: 1
+			},
+			480: {
+				items: 1
+			},
+			768: {
+				items: 2
+			},
+			992: {
+				items: 2
+			}
+		}
+	});
 
 
-$.ajax({
-	url: serverName + "api/v1/get/cost/meditrip?procedurename="+ procedurName+"&bystandercount="+ bystandercount+"&holidaypackage="+holidayPackage+"&hotelrate=3 star&vehicletype=sedan&countryName=Albania",
-	type: 'GET',
-	headers: {
-		"Content-Type": "application/json",
-		"Authorization": "Basic " + basicKey,
-		"x-access-token": xAccessToken
+	$('#getCostDetails').on('click', function (e) {
+		var procedurName = $('#costSelectTreatment').val();
 
-	},
-	beforeSend: function (xhr) {
-		xhr.setRequestHeader("Authorization", "Basic " + basicKey);
-	},
-	success: function (response) {
-		$('#costTemplateDiv').html(response);
-	},
-	error: function (exception) {
-		console.log(exception);
-	}
-})
-e.preventDefault();
-});
+		var bystandercount = $('#bystanderDropdown').val();
+
+		var holidayPackage = $('#holidayPackageDropdown').val();
+
+		var countryName = $('#costcountry').val();
+
+
+		$.ajax({
+			url: serverName + 'api/v1/get/cost/meditrip?procedurename=' + procedurName + '&bystandercount=' + bystandercount + '&holidaypackage=' + holidayPackage + '&hotelrate=3 star&vehicletype=sedan&countryName=' + countryName,
+			type: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Basic ' + basicKey,
+				'x-access-token': xAccessToken
+
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+			},
+			success: function (response) {
+				console.log(response);
+				$('#costTemplateDiv').html(response);
+			},
+			error: function (exception) {
+				console.log(exception);
+			}
+		})
+		e.preventDefault();
+	});
 }
 
 
@@ -2329,51 +2467,51 @@ function treatmentsOfferedCallback(id) {
 	var treatmentCategory = '';
 	switch (id) {
 		case 'cardiacTreatmentMenu':
-			treatmentCategory = "Cardiac";
+			treatmentCategory = 'Cardiac';
 			break;
 		case 'ayurvedaTreatmentMenu':
-			treatmentCategory = "Ayurveda";
+			treatmentCategory = 'Ayurveda';
 			break;
 		case 'dentalTreatmentMenu':
-			treatmentCategory = "Dental";
+			treatmentCategory = 'Dental';
 			break;
 		default:
-			treatmentCategory = "Cardiac";
+			treatmentCategory = 'Cardiac';
 			break;
 	}
 
 	$.ajax({
-		url: serverName + "api/v1/get/treatmentdescription/nocost/meditrip?department=" + treatmentCategory,
+		url: serverName + 'api/v1/get/treatmentdescription/nocost/meditrip?department=' + treatmentCategory,
 		type: 'GET',
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Basic " + basicKey,
-			"x-access-token": xAccessToken
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
 
 		},
 		beforeSend: function (xhr) {
-			xhr.setRequestHeader("Authorization", "Basic " + basicKey);
+			xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
 		},
 		success: function (response) {
 
 			$('.treatmentDecsription h1').html(response[0].department);
 			$('.treatmentDecsription p').html(response[0].departmentDescription);
-			var htmlString='<h2 style="margin-top: 20px">Available Procedures</h2>';
-			console.log(JSON.stringify(response,null,'\t'))
-			response.forEach(function(item,index){
+			var htmlString = '<h2 style="margin-top: 20px">Available Procedures</h2>';
+			console.log(JSON.stringify(response, null, '\t'))
+			response.forEach(function (item, index) {
 
-			var treatmentArray=item.treatmentList;
+				var treatmentArray = item.treatmentList;
 
-		treatmentArray.forEach(function(treatmentItem,treatmentIndex){
-		var displayName=treatmentItem.displayName;
-		var treatmentDescription=treatmentItem.treatmentDescription;
-		var procedureImagepath=treatmentItem.procedureImagepath.replace(/\//g, "\/");
-		htmlString += '<div class="blog-card"><div class="photo photo1" style="background: url('+procedureImagepath+') center no-repeat;"></div><ul class="details"><li class="author"><a href="#">' + treatmentItem.procedureName + '</a></li><li class="date"> Heal Time: ' + treatmentItem.healingTimeInDays + '</li><li class="date"> Surgical Time: ' + treatmentItem.surgicalTime + '</li><li class="date"> Estimate Cost: ' + treatmentItem.procedureCost +'</li></ul><div class="description"><h1>' + displayName+'</h1><h2>' + displayName + '</h2><p class="summary">' + treatmentDescription+'</p><a href="/procedure/Bone Grafting">Read More</a></div></div>'
-			//htmlString+='<div class="treatments-hover" style="min-height:100px;padding:20px;width:90%;overflow:auto;border-radius: 7px;position:relative;margin-bottom: 20px;background-color:#eff6ef;border-bottom: 1px solid #DAD8D8;border-right: 0.2px solid #DAD8D8;"><div class="one-third" style="width:120px"><img src="'+procedureImagepath +'" height="100" width="140" style="display:inline-block"/></div><div class="three-fourths last-col" style="line-height: 1em;background-color: #eff6ef"> <p>'+displayName+'</p> <p><u>Hospital Stay:</u> '+treatmentItem.minHospitalization+'-'+treatmentItem.maxHospitalization+' days</p>     <p><u>Healing Time:</u> '+treatmentItem.healingTimeInDays+' days</p>     <p>Description of Procedure:</br>'+treatmentDescription+'</p></div>   <a href="#" style="float:right">more details</a></div>'
+				treatmentArray.forEach(function (treatmentItem, treatmentIndex) {
+					var displayName = treatmentItem.displayName;
+					var treatmentDescription = treatmentItem.treatmentDescription;
+					var procedureImagepath = treatmentItem.procedureImagepath.replace(/\//g, '\/');
+					htmlString += '<div class="blog-card"><div class="photo photo1" style="background: url(' + procedureImagepath + ') center no-repeat;"></div><ul class="details"><li class="author"><a href="#">' + treatmentItem.procedureName + '</a></li><li class="date"> Heal Time: ' + treatmentItem.healingTimeInDays + '</li><li class="date"> Surgical Time: ' + treatmentItem.surgicalTime + '</li><li class="date"> Estimate Cost: ' + treatmentItem.procedureCost + '</li></ul><div class="description"><h1>' + displayName + '</h1><h2>' + displayName + '</h2><p class="summary">' + treatmentDescription + '</p><a href="/procedure/Bone Grafting">Read More</a></div></div>'
+					//htmlString+='<div class="treatments-hover" style="min-height:100px;padding:20px;width:90%;overflow:auto;border-radius: 7px;position:relative;margin-bottom: 20px;background-color:#eff6ef;border-bottom: 1px solid #DAD8D8;border-right: 0.2px solid #DAD8D8;"><div class="one-third" style="width:120px"><img src="'+procedureImagepath +'" height="100" width="140" style="display:inline-block"/></div><div class="three-fourths last-col" style="line-height: 1em;background-color: #eff6ef"> <p>'+displayName+'</p> <p><u>Hospital Stay:</u> '+treatmentItem.minHospitalization+'-'+treatmentItem.maxHospitalization+' days</p>     <p><u>Healing Time:</u> '+treatmentItem.healingTimeInDays+' days</p>     <p>Description of Procedure:</br>'+treatmentDescription+'</p></div>   <a href="#" style="float:right">more details</a></div>'
 
-	});
-});
-document.getElementById('availableProceduresDiv').innerHTML=htmlString;
+				});
+			});
+			document.getElementById('availableProceduresDiv').innerHTML = htmlString;
 
 		},
 		error: function (exception) {
@@ -2382,93 +2520,95 @@ document.getElementById('availableProceduresDiv').innerHTML=htmlString;
 	});
 
 	///api/v1/searchHospitaldetails/Dental/searchHospital
-//contactPageCallBack(data);
+	//contactPageCallBack(data);
 
 
 }
 
 //Search Treatment Callback
-function searchTreatmentCallback()
-{
-	var treatmentName=getCookie("Search-Treatment");
+function searchTreatmentCallback() {
+	var treatmentName = getCookie('Search-Treatment');
 	$.ajax({
-		url: serverName + "api/v1/searchHospitaldetails/"+treatmentName+"/meditrip",
+		url: serverName + 'api/v1/searchHospitaldetails/' + treatmentName + '/meditrip',
 		type: 'GET',
 		headers: {
-				"Content-Type": "application/json",
-				"Authorization": "Basic " + basicKey,
-				"x-access-token": xAccessToken
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
 
 		},
-		success: function(response){
-			var htmlString="";
-			response.forEach(function(item,index){
-				htmlString += '<div class="card-media"><div class="card-media-object-container"><div class="card-media-object" style="background-image: url(' + item.hospitalimage + ');"></div><span class="card-media-object-tag subtle">Trusted</span><ul class="card-media-object-social-list"></ul></div><div class="card-media-body"><div class="card-media-body-top"><span class="" style="font-size:20px;color:blue">' + item.hospitalName + '</span><button class="btn btn-success pull-right" onclick="openSubmitEnquiry()">Contact Us</button><div class="card-media-body-top-icons u-float-right"></div></div><span class="card-media-body-heading">'
-				+item.hospitalContact.country+', '+ item.hospitalContact.addressLine1+', '+ item.hospitalContact.City+', '+ item.hospitalContact.PostalCode+'<br>'+item.hospitalContact.website +'</span><div class="card-media-body-supporting-bottom"><span class="card-media-body-supporting-bottom-text subtle">NABL: '+item.Accreditation.NABL+', NABH: '+item.Accreditation.NABH+', JCI: '+item.Accreditation.JCI+'</span><span class="card-media-body-supporting-bottom-text subtle u-float-right"></span></div><div class="card-media-body-supporting-bottom card-media-body-supporting-bottom-reveal"><span class="card-media-body-supporting-bottom-text subtle">'+item.Treatment[0].name+'</span><a href="#/" class="card-media-body-supporting-bottom-text card-media-link u-float-right">More Details</a></div></div></div>';
+		success: function (response) {
+			var htmlString = '';
+			response.forEach(function (item, index) {
+				htmlString += '<div class="card-media"><div class="card-media-object-container"><div class="card-media-object" style="background-image: url(' + item.hospitalimage + ');"></div><span class="card-media-object-tag subtle">Trusted</span><ul class="card-media-object-social-list"></ul></div><div class="card-media-body"><div class="card-media-body-top"><span class="" style="font-size:20px;color:blue">' + item.hospitalName + '</span><button class="btn btn-success pull-right" onclick="openSubmitEnquiry()">Contact Us</button><div class="card-media-body-top-icons u-float-right"></div></div><span class="card-media-body-heading">' +
+					item.hospitalContact.country + ', ' + item.hospitalContact.addressLine1 + ', ' + item.hospitalContact.City + ', ' + item.hospitalContact.PostalCode + '<br>' + item.hospitalContact.website + '</span><div class="card-media-body-supporting-bottom"><span class="card-media-body-supporting-bottom-text subtle">NABL: ' + item.Accreditation.NABL + ', NABH: ' + item.Accreditation.NABH + ', JCI: ' + item.Accreditation.JCI + '</span><span class="card-media-body-supporting-bottom-text subtle u-float-right"></span></div><div class="card-media-body-supporting-bottom card-media-body-supporting-bottom-reveal"><span class="card-media-body-supporting-bottom-text subtle">' + item.Treatment[0].name + '</span><a href="#/" class="card-media-body-supporting-bottom-text card-media-link u-float-right">More Details</a></div></div></div>';
 			});
-	$('#seearchTreatmentPageContainer').append(htmlString);
+			$('#seearchTreatmentPageContainer').append(htmlString);
 
 		},
 		error: function (exception) {
-				console.log(exception);
+			console.log(exception);
 		}
-});
+	});
 }
-
 
 
 function setCookie(cname, cvalue, exdays) {
 	var d = new Date();
 	d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-	var expires = "expires=" + d.toUTCString();
-	document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+	var expires = 'expires=' + d.toUTCString();
+	document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
 }
-function medicalVisacallback(){
 
-			$.ajax({
-				url: serverName + "api/v1/get/evisacountries/all/meditrip",
-				type: 'GET',
-				headers: {
-						"Content-Type": "application/json",
-						"Authorization": "Basic " + basicKey,
-						"x-access-token": xAccessToken
+function medicalVisacallback() {
 
-				},
-				success: function(response){
-					 // console.log("visa-response: "+ response);
-						var countryArr = [];
-				response.forEach(function(item){
-						countryArr.push({"country": item.country, "fee": item.fee});
-					 // console.log("my country " + item.country)
-				})
-				//console.log("countryArr-response: "+ countryArr[1].country);
+	$.ajax({
+		url: serverName + 'api/v1/get/evisacountries/all/meditrip',
+		type: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
 
-				countryArr.forEach(function(item){
-						$('.select-country #countryfeeslist').append('<option class="'+item.fee + '"' +'data-tokens="'+ item.country+'">' + item.country +'</option>')
-				})
-				$('.selectpicker').selectpicker('render');
-				$('.selectpicker').selectpicker('refresh');
-				},
-				error: function (exception) {
-						console.log(exception);
-				}
-		});
-		$('.selectpicker').on('change', function(){
-			$('table#t01 tr').hide();
-			var countrySelected = $("option:selected",this).val();
+		},
+		success: function (response) {
+			// console.log("visa-response: "+ response);
+			var countryArr = [];
+			response.forEach(function (item) {
+				countryArr.push({
+					country: item.country,
+					fee: item.fee
+				});
+				// console.log("my country " + item.country)
+			})
+			//console.log("countryArr-response: "+ countryArr[1].country);
 
-			var countryFee  = $('option:selected',this).attr('class');
+			countryArr.forEach(function (item) {
+				$('.select-country #countryfeeslist').append('<option class="' + item.fee + '"' + 'data-tokens="' + item.country + '">' + item.country + '</option>')
+			})
+			$('#countryfeeslist').selectpicker('render');
+			$('#countryfeeslist').selectpicker('refresh');
+		},
+		error: function (exception) {
+			console.log(exception);
+		}
+	});
+	$('.selectpicker').on('change', function () {
+		$('table#t01 tr').hide();
+		var countrySelected = $('option:selected', this).val();
 
-			$('table#t01 tr th').removeClass('no-show');
+		var countryFee = $('option:selected', this).attr('class');
+
+		$('table#t01 tr th').removeClass('no-show');
 
 
-			$('table#t01 tbody').append('<tr><th >Country</th><th>Fees (USD)<br><div style="font-size:0.9rem;">2.5% additional charge on bank transactions</div></th></tr>'+'<tr class="new-row"><td>'+countrySelected+'</td><td>'+countryFee+'</td></tr>');
+		$('table#t01 tbody').append('<tr><th >Country</th><th>Fees (USD)<br><div style="font-size:0.9rem;">2.5% additional charge on bank transactions</div></th></tr>' + '<tr class="new-row"><td>' + countrySelected + '</td><td>' + countryFee + '</td></tr>');
 
-			});
+	});
 }
 
 function getCookie(cname) {
-	var name = cname + "=";
+	var name = cname + '=';
 	var ca = document.cookie.split(';');
 	for (var i = 0; i < ca.length; i++) {
 		var c = ca[i];
@@ -2479,36 +2619,36 @@ function getCookie(cname) {
 			return c.substring(name.length, c.length);
 		}
 	}
-	return "";
+	return '';
 }
 
 
 //1hospitalPageCallback
-function hospitalPageHtml(){
+function hospitalPageHtml() {
 	$.ajax({
-		url: serverName + "api/v1/getTreamentlist/all/meditrip",
+		url: serverName + 'api/v1/getTreamentlist/all/meditrip',
 		type: 'GET',
-    headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Basic " + basicKey,
-			"x-access-token": xAccessToken
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
 
 		},
 		beforeSend: function (xhr) {
-			xhr.setRequestHeader("Authorization", "Basic " + basicKey);
+			xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
 		},
 		success: function (response) {
 			var treatmentList = response;
 			//Populate Treatment Dropdown
-			console.log("treatment :" + response )
-			treatmentList.forEach(function(item){
-				var selectOption = $('<option>'+item+'</option>')
+			//console.log('treatment :' + response)
+			treatmentList.forEach(function (item) {
+				var selectOption = $('<option>' + item + '</option>')
 				$('.hospital-select #selectTreatment').append(selectOption);
 			})
 
 
-			$('.selectpicker').selectpicker('render');
-			$('.selectpicker').selectpicker('refresh');
+			$('#selectTreatment').selectpicker('render');
+			$('#selectTreatment').selectpicker('refresh');
 		},
 		error: function (exception) {
 			console.log(exception);
@@ -2516,126 +2656,121 @@ function hospitalPageHtml(){
 	});
 	//console.log("hello " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()+ ":" +today.getMilliseconds())
 	$.ajax({
-		url: serverName + "api/v1/getcitylist/meditrip",
+		url: serverName + 'api/v1/getcitylist/meditrip',
 		type: 'GET',
-    headers: {
-			"Content-Type": "application/json",
-			"Authorization": "Basic " + basicKey,
-			"x-access-token": xAccessToken
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
 
 		},
 		beforeSend: function (xhr) {
-			xhr.setRequestHeader("Authorization", "Basic " + basicKey);
+			xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
 		},
 		success: function (response) {
 			var citylist = response;
 			//Populate citry name Dropdown
-			console.log("city :" + response )
-			citylist.forEach(function(item){
-				var selectOption = $('<option>'+item+'</option>')
+			//console.log('city :' + response)
+			citylist.forEach(function (item) {
+				var selectOption = $('<option>' + item + '</option>')
 				$('.hospital-select-city #selectCity').append(selectOption);
 			})
 
-			$('.selectpicker').selectpicker('render');
-			$('.selectpicker').selectpicker('refresh');
+			$('#selectCity').selectpicker('render');
+			$('#selectCity').selectpicker('refresh');
 		},
 		error: function (exception) {
 			console.log(exception);
 		}
 	});
 
-	$('.searchhosp button').on('click', function(){
+	$('.searchhosp button').on('click', function () {
 
-						var treatmentSel = $("#selectTreatment").val();
-						//console.log("selected treat: "+treatmentSel)
-						var citySel = $('#selectCity').val();
-						//console.log("selected city: "+citySel);
-						if(treatmentSel=="" || citySel==""){
-							//console.log('un selected!');
-							//alert('select city')
-						}
-						else{
-						hospitalPageCallback(treatmentSel, citySel);
-						}
+		var treatmentSel = $('#selectTreatment').val();
+		//console.log("selected treat: "+treatmentSel)
+		var citySel = $('#selectCity').val();
+		//console.log("selected city: "+citySel);
+		if (treatmentSel == '' || citySel == '') {
+			//console.log('un selected!');
+			//alert('select city')
+		} else {
+			hospitalPageCallback(treatmentSel, citySel);
+		}
 
-				})
+	})
 
 
 }
 
 //2hospitalPageCallback
-function hospitalPageCallback(treatmentName,city){
+function hospitalPageCallback(treatmentName, city) {
 	//var today = new Date();
-		// to load tratmentList in selectbox
-		//console.log("hello " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()+ ":" +today.getMilliseconds())
+	// to load tratmentList in selectbox
+	//console.log("hello " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()+ ":" +today.getMilliseconds())
 
-		//*****shortcut******** */
-		//console.log("hello " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()+ ":" +today.getMilliseconds())
+	//*****shortcut******** */
+	//console.log("hello " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()+ ":" +today.getMilliseconds())
 
-		$.ajax({
-			url: serverName+"api/v1/searchHospitaldetails/"+treatmentName+"/meditrip?city="+city,
-			type: 'GET',
-			headers: {
-				"Content-Type": "application/json",
-				"Authorization": "Basic "+ basicKey,
-				"x-access-token": xAccessToken
+	$.ajax({
+		url: serverName + 'api/v1/searchHospitaldetails/' + treatmentName + '/meditrip?city=' + city,
+		type: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
 
-			},
-			beforeSend: function (xhr) {
-				xhr.setRequestHeader("Authorization", "Basic " + basicKey);
-			},
+		},
+		beforeSend: function (xhr) {
+			xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+		},
 
-			success: function(response){
-				//console.log(" response: " + response);
-				//$('.tobehidden').hide();
+		success: function (response) {
+			//console.log(" response: " + response);
+			//$('.tobehidden').hide();
 			//	console.log("hello");
-				var mainDiv = $('.hosp-main');
-				if(response == ""){
-					//console.log("no response");
-					mainDiv.html('<div style="text-align:center;font-weight:bold;font-size:1.4em;">No hospital records in the selected city</div>');
-					$('.pagination').hide();
-				}
-				else{
-					$('.pagination').show();
+			var mainDiv = $('.hosp-main');
+			if (response == '') {
+				//console.log("no response");
+				mainDiv.html('<div style="text-align:center;font-weight:bold;font-size:1.4em;">No hospital records in the selected city</div>');
+				$('.pagination').hide();
+			} else {
+				$('.pagination').show();
 				mainDiv.html('');
-				$.each(response, function(index, hospital){
+				$.each(response, function (index, hospital) {
 
 					var myHtml = '';
 
 					var rowDiv = $('.hosp-row');
 
-					if(hospital.Treatment.length > 3){
-						var treatmentArr = hospital.Treatment.slice(0,3);
-						$.each(treatmentArr, function(index, item){
-							if(index !== treatmentArr.length-1){
+					if (hospital.Treatment.length > 3) {
+						var treatmentArr = hospital.Treatment.slice(0, 3);
+						$.each(treatmentArr, function (index, item) {
+							if (index !== treatmentArr.length - 1) {
 								myHtml += item.name + ', ';
-							}
-							else{
-								myHtml += item.name ;
+							} else {
+								myHtml += item.name;
 							}
 						})
+					} else {
+						$.each(hospital.Treatment, function (index, treatment) {
+
+
+							if (index !== hospital.Treatment.length - 1) {
+								myHtml += treatment.name + ', ';
+							} else {
+								myHtml += treatment.name;
+							}
+
+						})
+
 					}
-					else{
-					$.each(hospital.Treatment, function(index, treatment){
-
-
-						if(index !== hospital.Treatment.length-1){
-										myHtml += treatment.name + ', ';
-									}
-									else{
-										myHtml += treatment.name ;
-									}
-
-					})
-
-				}
-					if(index%2 === 0){
-						var htmlStr = $('<div class="row is-flex hosp-row" style="margin-bottom:30px"><div class="col-md-5 test even hosp-'+index+'"'+ 'style="background-color:#fafafa; padding:28px"><p class="test1"><img src='+hospital.hospitalimage+'><a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right">Contact</button></a><a href="/hospitals/'+hospital.hospitalName+'"><strong style="font-size:18px;line-height:1.6em;">'+hospital.hospitalName+'</strong></a><br><i class="fa fa-map-marker"  aria-hidden="true"></i>'+' ' + hospital.hospitalContact.City+', '+hospital.hospitalContact.country + '<br><span>Specialities: '+myHtml+'</span></p><div class="margin20"> <a href="/hospitals/'+ hospital.hospitalName+'"style="float:right;font-weight:bold">Learn More...</a></div></div></div>')
+					var modifiedhosname = hospital.hospitalName.replace(/\s+/g, '-').toLowerCase();
+					if (index % 2 === 0) {
+						var htmlStr = $('<div class="row is-flex hosp-row" style="margin-bottom:30px"><div class="col-md-5 test even hosp-' + index + '"' + 'style="background-color:#f9f9f9; padding:28px"><p class="test1"><img src=' + hospital.hospitalimage + '><a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right">Contact</button></a><a href="/hospitals/' + modifiedhosname + '"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a><br><i class="fa fa-map-marker"  aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '<br><span>Specialities: ' + myHtml + '</span></p><div class="margin20"> <a href="/hospitals/' + hospital.hospitalName + '"style="float:right;font-weight:bold">Learn More...</a></div></div></div>')
 
 						mainDiv.append(htmlStr);
-					}
-					else{
-						var htmlStrr = $('<div class="col-md-5 col-md-offset-1 test odd hosp-'+index+'"'+ 'style="background-color:#fafafa; padding:28px"><p class="test1"><img src='+hospital.hospitalimage+'><a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right">Contact</button></a><a href="/hospitals/'+hospital.hospitalName+'"><strong style="font-size:18px;line-height:1.6em;">'+hospital.hospitalName+'</strong></a><br><i class="fa fa-map-marker color=blue" aria-hidden="true"></i>'+' ' +hospital.hospitalContact.City+', '+hospital.hospitalContact.country + '<br><span>Specialities: '+myHtml+'</span></p><div class="margin20"> <a href="/hospitals/'+hospital.hospitalName+'" style="float:right;font-weight:bold">Learn More...</a></div></div>')
+					} else {
+						var htmlStrr = $('<div class="col-md-5 col-md-offset-1 test odd hosp-' + index + '"' + 'style="background-color:#f9f9f9; padding:28px"><p class="test1"><img src=' + hospital.hospitalimage + '><a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right">Contact</button></a><a href="/hospitals/' + modifiedhosname + '"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a><br><i class="fa fa-map-marker color=blue" aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '<br><span>Specialities: ' + myHtml + '</span></p><div class="margin20"> <a href="/hospitals/' + hospital.hospitalName + '" style="float:right;font-weight:bold">Learn More...</a></div></div>')
 
 						rowDiv.last().append(htmlStrr);
 					}
@@ -2643,19 +2778,19 @@ function hospitalPageCallback(treatmentName,city){
 				})
 				//console.log("hello " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()+ ":" +today.getMilliseconds())
 				// *****************pagination***********************
-				var items = $(".hosp-main .row");
+				var items = $('.hosp-main .row');
 				//console.log("items: ", items)
 				var numItems = items.length;
 				var perPage = 5;
 				//console.log("numItems, perPage: "+numItems +" " +perPage)
 				items.slice(perPage).hide();
-				if(numItems != 0){
-					$(".pagination").pagination({
+				if (numItems != 0) {
+					$('.pagination').pagination({
 						items: numItems,
 						itemsOnPage: perPage,
-						cssStyle: "dark-theme",
+						cssStyle: 'dark-theme',
 
-						onPageClick: function(pageNumber) {
+						onPageClick: function (pageNumber) {
 							var showFrom = perPage * (pageNumber - 1);
 							var showTo = showFrom + perPage;
 							items.hide().slice(showFrom, showTo).show();
@@ -2665,80 +2800,171 @@ function hospitalPageCallback(treatmentName,city){
 				// *****************end of pagination***********************
 			}
 		},
-			error: function (exception) {
-						console.log(exception);
-					}
-		});
+		error: function (exception) {
+			console.log(exception);
+		}
+	});
 
 	// *******end of shortcut**********/
 
 
+}
 
-	}
-	function openSubmitEnquiry(){
-	$("#modal-container-SubmitEnquiry").modal("show");
-	}
+function openSubmitEnquiry() {
+	$('#modal-container-SubmitEnquiry').modal('show');
+}
 
 //This function is used to set initial height and left padding in treatments offered page
 function setInitialHeightForContainers() {
-        //get and set height for all content and contact divs
-        var initialHeight = $('[id^="content_"]').outerHeight( true );
-		$('[id^="contact_"]').height((initialHeight-2) + 'px');
-        //get and set left offset for all content and contact divs
-        var p = $('[id^="content_"]').filter(':visible:first');
-		var contentleftOffset = p.offset();
-		var p1 = $('[id^="contact_"]').filter(':visible:first');
-		var contactleftOffset = p1.offset();
-		var filterleftOffset = $('#filter').offset();
-        //set left alignment for all content and contact divs
-		$('[id^="content_"]').offset({left: contentleftOffset.left});
-		$('[id^="contact_"]').offset({left: contactleftOffset.left});
-        $('#top_desc').offset({left: filterleftOffset.left});
+	//get and set height for all content and contact divs
+	var initialHeight = $('[id^="content_"]').outerHeight(true);
+	$('[id^="contact_"]').height((initialHeight - 2) + 'px');
+	//get and set left offset for all content and contact divs
+	var p = $('[id^="content_"]').filter(':visible:first');
+	var contentleftOffset = p.offset();
+	var p1 = $('[id^="contact_"]').filter(':visible:first');
+	var contactleftOffset = p1.offset();
+	var filterleftOffset = $('#filter').offset();
+	//set left alignment for all content and contact divs
+	$('[id^="content_"]').offset({
+		left: contentleftOffset.left
+	});
+	$('[id^="contact_"]').offset({
+		left: contactleftOffset.left
+	});
+	$('#top_desc').offset({
+		left: filterleftOffset.left
+	});
 
 }
 //This function is used to filter the treatments based on user selection
-function filterProcedureListAndDisplay(isChecked,id){
-	    //get the offset length of first visible content and contact divs in the screen
-		var p = $('[id^="content_"]').filter(':visible:first');
-		var contentleftOffset = p.offset();
-		 //reload the page if all elements are de selected by user
-		if(contentleftOffset==null){
-		   window.location = window.location.href;
-		   return
-        }
-		var p1 = $('[id^="contact_"]').filter(':visible:first');
-		var contactleftOffset = p1.offset();
-		//hide elements
-		if(!isChecked){
-			$('#content_'+ id).hide();
-			$('#contact_'+ id).hide();
-			$('#space_' + id).hide();
-		}else{
-			//Show hidden elements
-			var isVisible = $('#content_'+ id).is(':visible');
-			if(!isVisible){
-				$('#content_'+ id).show();
-				$('#contact_'+ id).show();
-				$('#space_' + id).show();
-			}
+function filterProcedureListAndDisplay(isChecked, id) {
+	//get the offset length of first visible content and contact divs in the screen
+	var p = $('[id^="content_"]').filter(':visible:first');
+	var contentleftOffset = p.offset();
+	//reload the page if all elements are de selected by user
+	if (contentleftOffset == null) {
+		window.location = window.location.href;
+		return
+	}
+	var p1 = $('[id^="contact_"]').filter(':visible:first');
+	var contactleftOffset = p1.offset();
+	//hide elements
+	if (!isChecked) {
+		$('#content_' + id).hide();
+		$('#contact_' + id).hide();
+		$('#space_' + id).hide();
+	} else {
+		//Show hidden elements
+		var isVisible = $('#content_' + id).is(':visible');
+		if (!isVisible) {
+			$('#content_' + id).show();
+			$('#contact_' + id).show();
+			$('#space_' + id).show();
 		}
-		//set left alignment for all content and contact divs
-		$('[id^="content_"]').offset({left: contentleftOffset.left});
-		$('[id^="contact_"]').offset({left: contactleftOffset.left});
+	}
+	//set left alignment for all content and contact divs
+	$('[id^="content_"]').offset({
+		left: contentleftOffset.left
+	});
+	$('[id^="contact_"]').offset({
+		left: contactleftOffset.left
+	});
 }
 //set expand and collapse bootstrap  Accordion
-function setExpandCollpaseAccordion(){
+function setExpandCollpaseAccordion() {
 
-	 // Add minus icon for collapse element which is open by default
-	 $(".collapse.in").each(function(){
-		$(this).siblings(".panel-heading").find(".glyphicon").addClass("glyphicon-minus").removeClass("glyphicon-plus");
-	 });
+	// Add minus icon for collapse element which is open by default
+	$('.collapse.in').each(function () {
+		$(this).siblings('.panel-heading').find('.glyphicon').addClass('glyphicon-minus').removeClass('glyphicon-plus');
+	});
 
-	 // Toggle plus minus icon on show hide of collapse element
-	 $(".collapse").on('show.bs.collapse', function(){
-		$(this).parent().find(".glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
-	 }).on('hide.bs.collapse', function(){
-		$(this).parent().find(".glyphicon").removeClass("glyphicon-minus").addClass("glyphicon-plus");
-	 });
+	// Toggle plus minus icon on show hide of collapse element
+	$('.collapse').on('show.bs.collapse', function () {
+		$(this).parent().find('.glyphicon').removeClass('glyphicon-plus').addClass('glyphicon-minus');
+	}).on('hide.bs.collapse', function () {
+		$(this).parent().find('.glyphicon').removeClass('glyphicon-minus').addClass('glyphicon-plus');
+	});
 
 }
+
+$('#questionnaire-form').on('submit', function (e) {	
+	e.preventDefault();
+    $.ajax({
+			url: serverName+ 'api/v1/post/questionnaire',
+			data: $("#questionnaire-form").serialize(),
+			type: 'POST',			
+			success: function(response) {				
+				$('#messageModal').modal('show');
+				document.getElementById("questionnaire-form").reset();				
+		        $(this).find("#uploadmsg").css('color', 'green');
+				$(this).find("#uploadmsg").text("Submitted form successfully");
+			},
+			error: function(exception) {			
+		        $(this).find("#uploadmsg").css('color', 'red');
+				$(this).find("#uploadmsg").text("Failed to submit the questionannire");								
+			},
+		});
+		
+		var attachmentFlag="N";
+		var attachmentNames='';
+
+		var files = $('#files').get(0).files;
+		var fileSize=(files.length)
+		var formFileData = new FormData();
+		
+		if (fileSize >= 1) {
+			var validExt = ".png,.jpeg,.jpg,.pdf,.doc,.docx";
+			attachmentFlag="Y"
+			if (fileSize >= 5) {
+			$(this).find("#uploadmsg").text("Only 5 files are allowed at a time");
+			$(this).find("#files").val('')
+			return  false;
+		}
+		// Append the files to the formData.
+		for (var i=0; i < fileSize; i++) {
+			var file = files[i];
+			var filePath=file.name
+			attachmentNames = attachmentNames+ filePath + ",";
+			var getFileExt = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
+			formFileData.append('files', file, file.name);
+
+			// file size and extension validation
+			if (file.size*0.000001>5){
+				$(this).find("#files").val('')
+				$(this).find("#uploadmsg").text("Please upload files having size less than 5MB");
+				$(this).find("#uploadmsg").focus();
+				return  false;
+			}else if(validExt.indexOf(getFileExt)<0 ) {
+				$(this).find("#files").val('')
+				$(this).find("#uploadmsg").text("Please upload only allowed file types "+ validExt);
+				$(this).find("#uploadmsg").focus();
+				return  false;
+			}
+		}
+		//give focus to submit button
+		$(this).find("#filesubmit").focus();
+
+		$.ajax({
+			url: serverName+ 'cloud/upload',
+			data: formFileData,
+			type: 'POST',
+			contentType: false,
+			processData: false,
+			async: false, //add this
+			success: function(response) {
+				$(this).find("#files").val('')
+				console.log("File upload success")				
+			},
+			error: function(exception) {
+				$(this).find("#uploadmsg").text("File upload is failed");
+				console.log("upload exception")
+				$(this).find("#files").val('')
+				$(this).find("#uploadmsg").css('color', 'red');
+				$(this).find("#uploadmsg").text(("File upload failed,but rest of the details were submitted successfully"));
+			},
+		});
+		$(this).find("#files").val('')
+	}
+})
+

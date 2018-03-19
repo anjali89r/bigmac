@@ -1,0 +1,122 @@
+<div class="container container-table table-section" style="margin-bottom:20px;">
+   <div class="row" style="padding:10px;">
+      <div class="table-responsive">
+          <caption>
+              <h2 class="display-4 costhead">Cost Estimate for {{procedure_name}}</h2>
+           </caption>
+           <div style="overflow-x:auto;">
+         <table class="table cost-table" id="costTable">
+            <thead>
+               <tr>
+                  <th>Treatment Duration</th>
+                  <th>Cost of Procedure</th>
+                  <th>Accomodation</th>
+                  <th>Local Conveyance</th>
+                  <th>Visa</th>
+                  <th>Holiday Package</th>
+                  <th>Total Cost</th>
+               </tr>
+            </thead>
+            <tbody id="costRow">
+               <tr class="info" >
+                  <td>{{treatmentduration}}</td>
+                  <td>${{costOfProcedure}}</td>
+                  <td>${{accomodationCost}}</td>
+                  <td>${{localCommuteCost}}</td>
+                  <td>${{visaFee}}</td>
+                  <td>${{holidayPkgCost}}</td>
+                  <td>${{totalCost}}</td>
+               </tr>
+            </tbody>
+         </table>
+        </div>
+		<!-- <button type="button" class="btn btn-link pull-right">Customize package</button> -->
+      </div>
+   </div>
+</div>
+<div class="container container-table img-section">
+  <div class="row" style="padding:10px;">
+     <div class="col-md-12">
+        <div class="col-md-6">
+           <caption>
+              <h2 class="display-4 ">Top Hospitals for {{procedure_name}}</h2>
+           </caption>
+           <section class="topdoctorshospital">
+        {{#tophospitals}} <!--array name hold the cell values-->
+
+             <div class="media">
+                <div>
+                  <img src="{{{hospitalimage}}}" class="img-thumbnail transperentboarder" alt="Responsive image">
+                </div>
+                <div>
+                  <a href="#" title="Click View Details">
+                        <h5 class="text-primary">
+                          {{hospitalName}},
+                            <p>{{hospitalcity}},{{hospitalcountry}}</p>
+                        </h5>
+                  </a>
+                </div>
+              </div>
+
+        {{/tophospitals}} <!--array ends here-->
+      </section>
+        </div>
+         <!--Top Doctors-->
+        <div class="col-md-6">
+           <caption>
+              <h2 class="display-4">Top Doctors for {{procedure_name}}</h2>
+           </caption>
+           <section class="topdoctorshospital">
+           {{#topdoctors}} <!--array name hold the cell values-->
+
+             <div class="media">
+                <div>
+                    <img src="{{{docpicdir}}}" class="img-thumbnail transperentboarder" alt="Responsive image">
+                </div>
+                <div>
+                  <a href="#" title="Click View Details">
+                        <h5 class="text-primary">
+                            {{docname}}
+                            <p>{{docspeciality}}</p>
+                        </h5>
+                  </a>
+                </div>
+              </div>
+
+           {{/topdoctors}} <!--array ends here-->
+          </section>
+        </div>
+     </div>
+  </div>
+</div>
+
+<!-- Row ,Hospital & Doctor  main container -->
+<p></p>
+<p></p>
+<!-- <div class="container contact-div" style="margin-bottom:20px; background-image:url(/assets/images/medinovita/contactusbanner.png)">
+  <a href="#"  title="Click to submit enquiry">
+      <button class="btn btn-success"> Contact Us</button>
+
+    </a>
+</div> -->
+
+<div class="container contact-div" style="margin-bottom:10px;">
+
+        <a href="#modal-container-SubmitEnquiry" title="Click to submit enquiry" data-toggle="modal" role="button">
+            <img src="/assets/images/medinovita/contactusbanner.png" class="img-fluid img-thumbnail contact-section" alt="Responsive image">
+        </a>
+
+
+
+</div>
+<div class="container container-table detail-section" style="margin-bottom:20px;">
+    <div class="row" style="line-height:1.4em; font-size:14px; text-align:justify; padding:20px;">
+      <div class="col-md-12">
+          {{{procedure_gridFS_data}}}
+      </div>
+    </div>
+</div>
+
+
+
+

@@ -154,7 +154,7 @@ module.exports = function (app) {
     /*  API for cost_template.html */
     app.get('/api/v1/get/cost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, templateEngine.gettreatmentEstimate);
     /*  API for holiday_home_template.html */
-    app.get('/holiday/holiday_home', templateEngine.getHolidayHomePage);
+    app.get('/holiday/holiday-home', templateEngine.getHolidayHomePage);
     /*  API for holiday_description_template.html */
     app.get('/holiday/:holidaypackage', templateEngine.getHolidayDescriptionPage);
     /*  API for news section.html */

@@ -305,7 +305,7 @@ module.exports.getTreatmentSectionWithCost = function (req, res) {
 
     var department = req.query.department;
     var reqbody = req.body
-    console.log(reqbody)
+    //console.log(reqbody)
     getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, function (result) {
         return res.json(result);
     })
@@ -509,7 +509,7 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
                     });
                     return obj;
                 }); */
-                console.log('came here')
+               // console.log('came here')
                 result = output                
          }         
          

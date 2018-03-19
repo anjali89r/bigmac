@@ -5,27 +5,49 @@ var config = require('../utilities/confutils.js');
 var treatmentDesc = require('./treatmentDescController.js');
 var costCompare = require('./costComparisonController.js');
 var hospitalData = require('./hospitalDoctorDetailsController.js');
-var mustache = require('mustache')
+var mustache = require('mustache');
+var aws = require('aws-sdk');;
+var s3 = new aws.S3();
 
 /*Read contents of flat file */
 module.exports.getFlatFileContent = getFlatFileContent;
 function getFlatFileContent(filePath, next) {
-        
-    if (fs.existsSync(filePath)) {
-
-        fs.readFile(filePath, 'utf8', function (err, contents) {            
-            if (err) {
-                logger.error("Error while reading the file - " + filePath)
-                logger.error("Error while reading the file - " + err.message.trim())
+    
+        var params = {
+            Bucket: process.env.s3filebucket, 
+            Key: filePath
+        };
+     //  console.log("************************",filePath)
+        s3.getObject(params, function(err, data) {
+            if (err)
+            {
+                logger.error("Error while reading the file - " + err.stack.trim())
                 next("Error while reading the file")
-            } else {
-                next(contents);
-            }
+
+            } 
+            else
+            {
+                next(data.Body.toString("utf8"))
+
+            }   
+            
         });
-    } else {
-        logger.error("File does not exist in path - " + filePath)
-        next("Error - File does not Exists")
-    }
+
+    // if (fs.existsSync(filePath)) {
+
+    //     fs.readFile(filePath, 'utf8', function (err, contents) {            
+    //         if (err) {
+    //             logger.error("Error while reading the file - " + filePath)
+    //             logger.error("Error while reading the file - " + err.message.trim())
+    //             next("Error while reading the file")
+    //         } else {
+    //             next(contents);
+    //         }
+    //     });
+    // } else {
+    //     logger.error("File does not exist in path - " + filePath)
+    //     next("Error - File does not Exists")
+    // }
 }
 /*This function is used to return summary and description  */
 module.exports.getProcedureDescription = function (req, res) {
@@ -41,9 +63,9 @@ module.exports.getProcedureDescription = function (req, res) {
 
     }).then(function (relFilePath) {
 
-        var procedureFileDir=config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)  
-        var filePath = procedureFileDir + relFilePath
-
+       //var procedureFileDir=config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)  
+       // var filePath = procedureFileDir + relFilePath
+       var filePath = relFilePath
         new Promise(function (resolve, reject) {
             getFlatFileContent(filePath, function (content) {
                 

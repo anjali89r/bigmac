@@ -3202,7 +3202,7 @@ label.error {
 }
 
 .text-block .block-icon {
-  dispay: inline-block;
+  display: inline-block;
   width: 48px;
   height: 48px;
   text-align: center;
@@ -4516,7 +4516,7 @@ display: none !important;
 }
 
 .header-info-boxes .header-info-box {
-  display: inline-block;
+  /* display: inline-block; */
   position: relative;
   padding-left: 40px;
   font-size: 10px;
@@ -5394,13 +5394,13 @@ display: none !important;
   }
 }
 
-@media (min-width: 768px) and (max-width: 991px) {
+/* @media (min-width: 768px) and (max-width: 991px) {
   .header.header2 .navbar-collapse {
     display: block;
     float: left;
     width: 100%;
   }
-}
+} */
 
 .header.header2 .dropdown.header-dropdown .dropdown-menu {
   border-color: #f0f0f6;
@@ -7701,9 +7701,9 @@ display: none !important;
    /* .responsiveSearchTreatment {
      width: 75%!important;
    } */
-  .responsiveGetQuote{
+  /* .responsiveGetQuote{
        margin-top: -50px;
-  }
+  } */
 
 }
     @media (max-width:541px){
@@ -10388,7 +10388,7 @@ display: none !important;
 .product .product-price-container .old-price {
   color: #0a0909;
   font-size: 13px;
-  
+
 }
 
 .product .product-price-container span {
@@ -13412,9 +13412,9 @@ width: 300px;
 
 @media (min-width: 1200px)
 {
-.container {
+/* .container {
     width: 1300px;
-}
+} */
 }
 @media (max-width: 400px)
 {
@@ -14039,7 +14039,7 @@ table#t01{
   margin-top: 16px;
 }
 table, th, td {
-  border: 1px solid black;
+  border: 1px solid #CCCCCC;
   border-collapse: collapse;
 }
 table th{
@@ -14501,4 +14501,279 @@ div.margin20{
     margin-top: 6px;
 
   }
+}
+
+
+/*header.html */
+
+@media (min-width: 768px) and (max-width: 991px){
+  #holidayPageMenu, #contactPageMenu{
+    display: none;
+  }
+}
+@media (max-width: 880px){
+  .customerCare{
+    display: none;
+  }
+}
+
+@media (min-width: 881px){
+  .customerCare{
+    display: inline-block;
+  }
+}
+
+@media (max-width: 744px){
+  .whatsapp{
+    display: none;
+  }
+}
+@media (min-width: 745px){
+  .whatsapp{
+    display: inline-block;
+  }
+}
+.hot-menu{
+  display: inline-block;
+}
+.enquiry{
+  display: inline-block;
+}
+
+/*mainjs-Get Featured Treatment*/
+@media (min-width: 768px) and (max-width: 1199px){
+  .index2{
+    padding-top: 19px;
+  }
+  .index5{
+    padding-top: 22px;
+  }
+}
+/*INDEX.HTML*/
+.carousel-inner{
+  overflow: visible !important;
+}
+
+@media (min-width: 1200px) and (max-width: 1412px){
+  .myCont {
+    width: 1170px;
+}
+  .index2{
+    padding-top: 19px;
+  }
+  .index5{
+    padding-top: 21px;
+  }
+}
+
+ @media (min-width: 1413px){
+
+.myCont {
+    width: 1300px;
+}
+}
+/*bootstrap select*/
+@media (min-width: 579px){
+  .responsiveSearchTreatment .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn){
+    width:50%;
+  }
+}
+@media  (max-width: 578px){
+  .responsiveSearchTreatment .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn){
+    width:100%;
+    margin-left: 14px;
+  }
+}
+.responsiveSearchTreatment .btn-info.active,
+.responsiveSearchTreatment .btn-info:active,
+.responsiveSearchTreatment .btn-info:hover, .open>.dropdown-toggle.btn-info{
+  background-color: white;
+    border-color: orange;
+}
+
+/*COST.HTML-UNUSED*/
+@media (min-width: 768px){
+  .myCost{
+    margin-left: 110px;
+    padding: 10px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1199px){
+  .cost-estimate{
+    margin-left: -11px;
+  }
+  .cost-btn{
+
+    margin-left: 176px;
+  }
+}
+@media (min-width: 1200px){
+  .cost-estimate{
+    margin-left: -111px;
+  }
+}
+@media (min-width: 768px){
+  .cost-checkbox{
+
+    margin-top:20px;
+  }
+  .cost-btn{
+
+    margin-left:176px
+  }
+}
+@media (max-width: 751px){
+  .cost-btn{
+    float: left;
+    margin-top:20px;
+  }
+  .cost-checkbox{
+    padding-left: 0px;
+  }
+}
+@media (min-width: 992px){
+  .cost-btn{
+    margin-top: 40px;
+  }
+}
+ @media (min-width: 768px) and (max-width: 991px){
+  .cost-btn{
+    margin-top: -80px;
+  }
+}
+@media (max-width: 991px){
+  .addMargin{
+    margin-top: 10px;
+  }
+}
+@media (min-width:767px) and (max-width: 991px){
+
+  .styling{
+    margin-left: 200px;
+  }
+  .styling-checkbox{
+    margin-left: 158px;
+  }
+}
+
+@media (min-width: 992px){
+  .costButton{
+   float: right;
+  }
+  .styling-checkbox{
+    margin-left: -10px;
+  }
+}
+@media (max-width: 991px){
+  .costButton{
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+/* .container-table{
+  width: 80%;
+} */
+@media (max-width: 767px){
+  .container-table{
+    width: 80%;
+  }
+}
+.topdoctorshospital{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.topdoctorshospital .media{
+  min-width: 0;
+  margin: 5px;
+}
+.topdoctorshospital img{
+  width: 200px;
+  max-width: 100%;
+  max-height: 200px;
+}
+.container-table {
+  background-color: #f9f9f9;
+  border: none;
+}
+
+/*table*/
+table{
+  border: 1px solid #CCCCCC;
+}
+
+.cost-table>tbody>tr.info>td, .cost-table>tbody>tr.info>th, .cost-table>tbody>tr>td.info, .cost-table>tbody>tr>th.info, .cost-table>tfoot>tr.info>td, .cost-table>tfoot>tr.info>th, .cost-table>tfoot>tr>td.info, .cost-table>tfoot>tr>th.info, .cost-table>thead>tr.info>td, .cost-table>thead>tr.info>th, .cost-table>thead>tr>td.info, .cost-table>thead>tr>th.info{
+  background-color: #fff;
+}
+
+.cost-table tbody > tr.info > td:first-child {
+  background-color: #fff;
+}
+
+.cost-table thead > tr > th{
+  color: #433f3f;
+  background-color: #fff;
+
+}
+.cost-table thead > tr{
+  border-top: none;
+}
+/* .table-section,.img-section,.detail-section,.contact-section{
+  cursor: pointer;
+} */
+.table-section:hover,.detail-section:hover,.img-section:hover{
+  box-shadow: 5px 5px 6px 6px #aaaaaa;
+}
+/* box-shadow: 5px 5px 6px #aaaaaa; */
+.contact-section{
+  border: none;
+  border-radius: 46px;
+}
+.contact-div{
+  padding: 1px;
+}
+.table-section,.img-section, .detail-section{
+  border-radius: 10px;
+}
+.costhead{
+  text-align: center;
+}
+/*hospitals and doctors page*/
+.test{
+  border-radius: 10px;
+}
+.test:hover{
+  box-shadow: 5px 5px 6px 6px #aaaaaa;
+}
+/*modals.html*/
+.modal-enquiry{
+  text-align: center;
+  font-weight:bold;
+  font-size: 16px;
+  border-radius: 0px;
+  padding: 20px;
+  box-shadow: 2px 2px 2px #fff;
+}
+.btn-info {
+  color: black;
+  background-color: #fff;
+  border-color: #0d47a1;
+  height: 50px
+}
+.quote-list button.bs-placeholder[role='button']>span{
+  color:black;
+}
+.btn-info:hover {
+  background-color: white;
+
+}
+
+.treatment-hospdetails
+{
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  padding: 13px;
+  box-shadow: 2px 2px 2px 2px #ccc;
 }

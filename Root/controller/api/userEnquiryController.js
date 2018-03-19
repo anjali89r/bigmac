@@ -1,7 +1,7 @@
 ﻿var mongoose = require('mongoose');
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
-require('../../model/userEnquirymodel.js');
+require('../../model/userEnquiryModel.js');
 var autoMail = require('./emailController.js');
 var userEnquiryModel = mongoose.model('user_enquiry');
 

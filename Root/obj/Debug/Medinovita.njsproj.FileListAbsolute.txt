@@ -1,2 +1,0 @@
-C:\Users\libin\Documents\Visual Studio 2017\Projects\medinovita\Medinovita\obj\Debug\Medinovita.njsprojResolveAssemblyReference.cache
-C:\medinovita\bigmac\Medinovita\obj\Debug\Medinovita.njsprojResolveAssemblyReference.cache
