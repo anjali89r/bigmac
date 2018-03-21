@@ -21,6 +21,7 @@ var contactusInfo = require('../controller/api/contactUsController.js');
 var gridFS = require('../controller/api/gridFSController.js');
 var costComparison = require('../controller/api/costComparisonController.js');
 var templateEngine = require('../controller/api/templateEngineController.js');
+var cloudcontroller= require('../controller/api/cloudController.js');
 
 module.exports = function (app) {
 
@@ -197,5 +198,8 @@ module.exports = function (app) {
     app.get('/api/v1/getnonsecureencryptedText/:txt', security.nonsecureEncryptedText);
     app.get('/api/v1/getnonsecuredecryptedText/:txt', security.nonsecuredecryptedText);      
 
+
+    // file upload
+    app.post('/cloud/upload',cloudcontroller.uploadfile)
   };
 
