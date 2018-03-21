@@ -7,8 +7,12 @@ var costCompare = require('./costComparisonController.js');
 var hospitalData = require('./hospitalDoctorDetailsController.js');
 var mustache = require('mustache');
 var aws = require('aws-sdk');;
+aws.config.update({
+    accessKeyId: process.env.ACCESSKEY,
+    secretAccessKey: process.env.SECRETKEY,
+    region: process.env.REGION
+});
 var s3 = new aws.S3();
-
 /*Read contents of flat file */
 module.exports.getFlatFileContent = getFlatFileContent;
 function getFlatFileContent(filePath, next) {

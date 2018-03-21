@@ -11,25 +11,25 @@ var officeAddress = '';
 var whyIndia = '';
 //Global Methods
 // Function replace Native Alert
-window.alert = function (msg) {
-	var h, html, source, template;
-	source = $('#tpl-alert').html();
-	template = Handlebars.compile(source);
-	html = $(template({
-		message: new Handlebars.SafeString(msg)
-	}));
-	$('body').append(html);
-	html.addClass('is-visible');
-	h = html.find('.window-message-container').height();
-	html.find('.window-message-container').hide().fadeIn('fast');
-	return html.find('a').on('click', (function (_this) {
-		return function (e) {
-			e.stopPropagation();
-			html.remove();
-			return false;
-		};
-	}(this)));
-};
+// window.alert = function (msg) {
+// 	var h, html, source, template;
+// 	source = $('#tpl-alert').html();
+// 	template = Handlebars.compile(source);
+// 	html = $(template({
+// 		message: new Handlebars.SafeString(msg)
+// 	}));
+// 	$('body').append(html);
+// 	html.addClass('is-visible');
+// 	h = html.find('.window-message-container').height();
+// 	html.find('.window-message-container').hide().fadeIn('fast');
+// 	return html.find('a').on('click', (function (_this) {
+// 		return function (e) {
+// 			e.stopPropagation();
+// 			html.remove();
+// 			return false;
+// 		};
+// 	}(this)));
+// };
 // END Function replace Native Alert
 (function ($) {
 	'use strict';
@@ -107,6 +107,10 @@ window.alert = function (msg) {
 			location.href = serverName + 'search/' + modifiedUserInput;
 		});
 
+		$(".medinovitaModals").on("hidden.bs.modal", function(){
+			//$(".modal-body1").html("");
+			document.getElementById('submitEnquiryForm').reset();
+		});
 
 	});
 	$('.medinovitaFooter').load('/assets/pages/footer.html', function () {
@@ -221,7 +225,7 @@ window.alert = function (msg) {
 					processData: false,
 					async: false, //add this
 					success: function(response) {
-						console.log("success")
+						//console.log("success")
 						$(this).find("#uploadmsg").text("File upload is success");
 					},
 					error: function(exception) {
@@ -258,7 +262,7 @@ window.alert = function (msg) {
 					attachmentName: 'null'
 				}),
 				success: function (response) {
-
+					$(this).find("#uploadmsg").text("");
 					document.getElementById('submitEnquiryForm').reset();
 					setTimeout(function () {
 						$('#modal-container-SubmitEnquiry').modal('toggle');
