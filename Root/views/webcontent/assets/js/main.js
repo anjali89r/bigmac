@@ -1,7 +1,7 @@
 var basicKey = 'bGliaW46bGliaW4=';
 var xAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVG9rZW5Ub0F1dGhlbnRpY2F0ZU1lZGlub3ZpdGFVc2VyIiwiaWF0IjoxNTA4MDQ0OTMwfQ.cZ3pCte1guE8KQkjd1KfY_bLJ-gOatJm2xlwyiLGAl4';
-//var serverName = 'https://www.medinovita.in/';
-var serverName = 'http://localhost:3000/';
+var serverName = 'https://www.medinovita.in/';
+//var serverName = 'http://localhost:1337/';
 var GLOBAL_VARIABLES = {
 	Language: 'en',
 	Currency: 'dollar'
@@ -178,9 +178,10 @@ var whyIndia = '';
 
 			// }
 
-		//Added by libin for s3 file upload
+		    //Added by libin for s3 file upload
 			var attachmentFlag="N";
 			var attachmentNames='';
+			var uniqueNumber=getUniqueNumber();
 
 			var files = $('#files').get(0).files;
 			var fileSize=(files.length)
@@ -216,30 +217,30 @@ var whyIndia = '';
 				}
 				//give focus to submit button
 				$(this).find("#filesubmit").focus();
-
+				//upload files to aws		
 				$.ajax({
-					url: serverName+ 'cloud/upload',
+					url: serverName+ 'cloud/zip/upload/'+uniqueNumber,
 					data: formFileData,
 					type: 'POST',
 					contentType: false,
 					processData: false,
+					cache: false,
 					async: false, //add this
 					success: function(response) {
-						//console.log("success")
-						$(this).find("#uploadmsg").text("File upload is success");
+						$(this).find("#uploadmsg").text("File upload is success");			
 					},
 					error: function(exception) {
-						$(this).find("#uploadmsg").text("File upload is failed");
-						console.log("exception")
+                        $(this).find("#uploadmsg").text("File upload is failed");
+						console.log("exception -" + exception)						
 					},
-				});
+				});				
 				$(this).find("#files").val('')
 				$(this).find("#uploadmsg").css('color', 'green');
 				$(this).find("#uploadmsg").text(("Files have been uploaded successfully"));
 			}
 
 			$.ajax({
-				url: serverName + 'api/v1/submit/enquiry/meditrip',
+				url: serverName + 'api/v1/submit/enquiry/' + uniqueNumber + '/meditrip',
 				type: 'POST',
 				headers: {
 					'Content-type': 'application/json',
@@ -258,8 +259,8 @@ var whyIndia = '';
 					procedureName: formData[4].value,
 					commuMedium: 'English',
 					caseDescription: formData[5].value,
-					attachment: 'N',
-					attachmentName: 'null'
+					attachment: attachmentFlag,
+					attachmentName: uniqueNumber + ".zip"
 				}),
 				success: function (response) {
 					$(this).find("#uploadmsg").text("");
@@ -271,8 +272,6 @@ var whyIndia = '';
 					setTimeout(function () {
 						$('#messageModal').modal('show');
 					}, 300);
-
-
 				},
 				error: function (exception) {
 					console.log('exception', exception);
@@ -2894,6 +2893,7 @@ function setExpandCollpaseAccordion() {
 
 $('#questionnaire-form').on('submit', function (e) {	
 	e.preventDefault();
+	var uniqueNumber=getUniqueNumber();
     $.ajax({
 			url: serverName+ 'api/v1/post/questionnaire',
 			data: $("#questionnaire-form").serialize(),
@@ -2948,9 +2948,9 @@ $('#questionnaire-form').on('submit', function (e) {
 		}
 		//give focus to submit button
 		$(this).find("#filesubmit").focus();
-
+				
 		$.ajax({
-			url: serverName+ 'cloud/upload',
+			url: serverName+ 'cloud/zip/upload/'+uniqueNumber,
 			data: formFileData,
 			type: 'POST',
 			contentType: false,
@@ -2971,4 +2971,64 @@ $('#questionnaire-form').on('submit', function (e) {
 		$(this).find("#files").val('')
 	}
 })
+//Added by Libin to populate the model when user click on a link in enquiries page
+$('.enq_desc_lnk').on('click', function (e) {	
+	e.preventDefault();
+	$('#questionnairemodel').modal('show');
+    var txt=$(".hdn_desc").text();	
+	$('#questionnairemodel').find(".mdlbody").text((txt));
+})
+$('.enq_quest_lnk').on('click', function (e) {	
+	e.preventDefault();
+	var txt=$(".hdn_qstn").text();
+	if (txt=='') {
+		txt='User is yet to submit enquiry'
+	}
+	$('#questionnairemodel').modal('show');
+    $('#questionnairemodel').find(".mdlbody").text((txt));	
+})
 
+$('#meddoc').on('click', function (e) {	
+	e.preventDefault();	
+	$.ajax({
+			url: serverName + 'api/v1/get/medicaldocs/meditrip',
+			type: 'POST',			
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Basic ' + basicKey,
+				'x-access-token': xAccessToken
+
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+			},
+			data: JSON.stringify({
+					fileNames: $(this).attr("value")					
+			}),	
+            dataType: 'json',			
+			success: function (response) {				
+			},
+			error: function (exception) {
+				console.log(exception);
+			}
+		})
+	
+})
+
+function getUniqueNumber(){
+	
+	var date = new Date();
+	var components = [
+		date.getYear(),
+		date.getMonth(),
+		date.getDate(),
+		date.getHours(),
+		date.getMinutes(),
+		date.getSeconds(),
+		date.getMilliseconds()
+	];
+
+	var id = components.join("") + Math.random().toString().replace(".","");
+	
+	return id
+}

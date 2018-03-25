@@ -13,6 +13,8 @@ module.exports.submitUserEnquiry = function (req, res) {
         return;
     }
 
+    var enqid = req.params.enquiryID  
+
     var userEnquirySchema = new userEnquiryModel();
 
     new Promise(function (resolve, reject) {
@@ -20,6 +22,7 @@ module.exports.submitUserEnquiry = function (req, res) {
         var sendTO = req.body.emailID
         var subject = 'Dear ' + req.body.userFullName + ' - Thank you for your enquiry'
         var emailBody = 'Dear ' + req.body.userFullName + ',' + '\r\n' + '\r\n' + 'Greetings of the day.This is to acknowledge that we have received your enquiry.We are working on your enquiry and revert back within two working days.' + '\r\n' + '\r\n'
+            + "Your enquiry reference number is - " + enqid + ".Please quote this number for any future communication." + '\r\n' + '\r\n'
             + 'Thank you for showing interest in Medinovita.' + '\r\n' + '\r\n' + 'Message from User - ' + req.body.caseDescription + '\r\n' + '\r\n' + 'Thanks & Regards' + '\r\n' + 'Medinovita customer care team'
 
         autoMail.sendEmail(sendTO, subject, emailBody, false, function (callback) { })
@@ -40,6 +43,7 @@ module.exports.submitUserEnquiry = function (req, res) {
                         procedureName: req.body.procedureName,
                         commuMedium: req.body.commuMedium,
                         caseDescription: req.body.caseDescription,
+                        enquiryCode: enqid,
                         attachmentFlag: req.body.attachment,
                         attachmentName: req.body.attachmentName,
                         response: []
@@ -58,6 +62,7 @@ module.exports.submitUserEnquiry = function (req, res) {
                                 procedureName: req.body.procedureName,
                                 commuMedium: req.body.commuMedium,
                                 caseDescription: req.body.caseDescription,
+                                enquiryCode: enqid,
                                 attachmentFlag: req.body.attachment,
                                 attachmentName: req.body.attachmentName,
                                 response: []
@@ -284,4 +289,54 @@ module.exports.submitUserQuestionnaire = function (req, res) {
         logger.error('Error while senting email : - ' + err.message)
         return res.status(500).json({ Message: err.message });
     })
+}
+/************************ API code to return enquiry details to client  ****************************/
+module.exports.getOutstandingEnquiryDetails = function (req, res) {
+    if (res.headersSent) {//check if header is already returned
+        logger.warn('Response already sent.Hence skipping the function call getEnquiryDetails')
+        return;
+    }
+
+    getPendingEnquiryDetails(function (result) {
+        return res.json(result);
+    })
+
+}
+module.exports.getPendingEnquiryDetails = getPendingEnquiryDetails;
+function getPendingEnquiryDetails(callback) {
+   
+    new Promise(function (resolve, reject) {
+
+        userEnquiryModel.aggregate([
+            {
+                "$match": {
+                    "enquiry.status": { '$ne': 'Closed' }                    
+                }
+            }, {
+                "$project": {
+                    "_id": 0, "emailID": 1, "enquiry.userFullName": 1, "enquiry.enquiryCode": 1, "enquiry.attachmentName": 1, "enquiry.primaryPhonenumber": 1,"enquiry.caseDescription" :1, "enquiry.questionnaire": 1, "enquiry.status": 1, "enquiry.attachmentName": 1
+                }
+            }
+
+        ], function (err, result) {
+            if (err) {
+                logger.error("Error while reading enquiry from DB");
+                callback (reject("Error while reading enquiry from DB"));
+            } else if (result == null) {
+                logger.error("There are no enquiry with status !=closed available in DB");
+                callback(reject("There are no enquiry with status !=closed available in DB"));            
+            } else {
+                resolve(result)
+            }
+        })
+
+
+    }).then(function (result) {       
+        callback(result);
+    })
+    .catch(function (err) {
+        logger.error('Error while retriving data from enquiry model : - ' + err.message)
+        callback( err.message );
+    })
+
 }
