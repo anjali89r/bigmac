@@ -2976,13 +2976,16 @@ $('.enq_desc_lnk').on('click', function (e) {
 	e.preventDefault();
 	$('#questionnairemodel').modal('show');
     var txt=$(".hdn_desc").text();	
+	if (txt=='') {
+		txt='User did not submit the case details'
+	}
 	$('#questionnairemodel').find(".mdlbody").text((txt));
 })
 $('.enq_quest_lnk').on('click', function (e) {	
 	e.preventDefault();
 	var txt=$(".hdn_qstn").text();
 	if (txt=='') {
-		txt='User is yet to submit enquiry'
+		txt='User is yet to submit questionnaire'
 	}
 	$('#questionnairemodel').modal('show');
     $('#questionnairemodel').find(".mdlbody").text((txt));	

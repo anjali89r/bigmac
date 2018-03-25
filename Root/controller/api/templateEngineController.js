@@ -11,6 +11,7 @@ var holidayData = require('./holidayPackageController.js');
 var gridFS = require('./gridFSController.js');
 var mustache = require('mustache')
 var newsSectiondata = require('./newsSectionController.js');
+var enquiry = require('./userEnquiryController.js');
 
 
 /*This function is a demo function of the mustache template using hardcoded values.do not delete it*/
