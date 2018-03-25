@@ -65,13 +65,18 @@ module.exports = function (app) {
 
     /************************API to operate on user enquiry schema*********************************************************************************************/
     /*  APi to submit user enquiry  */
-    app.post('/api/v1/submit/enquiry/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, enquiryInfo.submitUserEnquiry);
+    app.post('/api/v1/submit/enquiry/:enquiryID/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, enquiryInfo.submitUserEnquiry);
      /*  APi to return response for user enquiry  */
     app.post('/api/v1/submit/response/:userEmail/:enquiryID/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, enquiryInfo.sendEnquiryResponse  );
      /*  APi to get list of enquiries where response is due  */
     app.get('/api/v1/get/enquiry/dueresponse/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, enquiryInfo.getPendingEnquiryResponse);
-    /*  APi to sent email upon user submitting ques tionnaire */
+    /*  APi to sent email upon user submitting questionnaire */
     app.post('/api/v1/post/questionnaire', enquiryInfo.submitUserQuestionnaire);
+	/*  API to display all pending enquiry details in webform for customer care */
+    app.get('/api/v1/get/pendingenquiries', enquiryInfo.getOutstandingEnquiryDetails);
+    /*  API to download files corresponding to an enquiry */
+    app.post('/api/v1/get/medicaldocs/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken,cloudcontroller.downloadcloudFiles)
+
 
     /*********************************************************************************************************************************************************/
     
@@ -166,8 +171,17 @@ module.exports = function (app) {
     app.post('/treatments/:department', templateEngine.getDepartmentwiseTreatmentDescription);
     /* API to render the treatment search page with hospital details */
     app.get('/search/:treatmentname',templateEngine.searchhospitalsbytreatment);
+	/* API to render the user_enquiry_details page with enquiry details */
+    app.get('/getpendingenquiry', templateEngine.getPendingEnquiriesPage);
 
     /*******************************************************************************************************************************************************************/
+	/*upload files to aws s3 using multer s3 api*/
+    app.post('/cloud/upload',cloudcontroller.uploadfile)
+	/*Compress and upload files to aws s3 using multer api*/
+	app.post('/cloud/zip/upload/:enqid',cloudcontroller.ZipAndUploadToS3WithMulter)
+	
+	/*...................................................................................................................................................................*/
+	
     /*  APi to post our services section  */
     app.post('/api/v1/post/ourservices/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, ourServicesInfo.addServicedetails);
     /*  APi to get our services details  */
@@ -197,9 +211,6 @@ module.exports = function (app) {
     app.get('/api/v1/getsecuredecryptedText/:txt', security.secureDecryptedText);//this is more secure as the encryption mechanism chnages on every server restart
     app.get('/api/v1/getnonsecureencryptedText/:txt', security.nonsecureEncryptedText);
     app.get('/api/v1/getnonsecuredecryptedText/:txt', security.nonsecuredecryptedText);      
-
-
-    // file upload
-    app.post('/cloud/upload',cloudcontroller.uploadfile)
+	
   };
 

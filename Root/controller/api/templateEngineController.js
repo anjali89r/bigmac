@@ -690,4 +690,45 @@ module.exports.searchhospitalsbytreatment = function(req,res)
             return res.redirect('/404');
         });
 }
+/*    ************Start : get enquiry details page*****************     */
+module.exports.getPendingEnquiriesPage = function (req, res) {
+    
+    new Promise(function (resolve, reject) {
+        //get pending enquiries 
+        enquiry.getPendingEnquiryDetails(function (result) {
+            resolve(result)
+        })
+
+    }).then(function (result) {       
+            var data = {
+                "enquirylist": result,  
+                "enquirycount": Object.keys(result).length,
+                index: function () {
+                    return (data.enquirylist[0].enquiry.indexOf(this)) + 1;
+                },
+                options: [
+                    { val: 1, txt: 'Enquiry Received' },
+                    { val: 2, txt: 'Response Sent' },
+                    { val: 3, txt: 'Followup Needed' },
+                    { val: 4, txt: 'In Progress' },
+                    { val: 5, txt: 'Undergoing Treatment' },
+                    { val: 6, txt: 'Request Cancelled' },
+                    { val: 7, txt: 'Closed' }
+                ],     
+                selected: function () {
+                    return function (text, render) {
+                        if (this.txt == render(text)) {                            
+                            return "selected";
+                        } else {
+                            return "";
+                        }
+                    }
+                }
+            };
+            res.render('user_enquiry_details', data);       
+    }).catch(function (err) {
+        console.log(err.message);
+        return res.redirect('/404')
+    });
+}
 

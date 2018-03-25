@@ -38,7 +38,10 @@ var userEenquirySchema = new Schema({
             caseDescription: { type: String, required: false, unique: false, trim: true },
             attachmentFlag: { type: String, required: false, enum: ['Y', 'N'], default: 'N' },
             attachmentName: { type: String, required: false },
-            enquiryCode: { type: Number, required: true, default: parseInt(genericUtil.getUniqueNumber())},
+            enquiryCode: { type: String, required: true },
+            questionnaire: { type: String, required: false },
+            status: {
+                type: String, required: true, enum: ['Enquiry Received', 'Assigned To CA', 'Response Sent', 'Awaiting customer response', 'Followup Needed', 'In Progress', 'Undergoing Treatment', 'Returned to home', 'Not interested', 'Closed'], default: 'Enquiry Received' },
             response: [{
                 mediNovitaResponse: { type: String, required: false, unique: false, trim: true },
                 respondedBy: { type: String, required: false, unique: false, trim: true },

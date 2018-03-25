@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>User Enquiry</title>
+        <meta name="description" content="User Enquiry">
+
+        <!--[if IE]> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <![endif]-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Google Fonts -->
+        <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700%7COpen+Sans:300,300i,400,400i,600,600i,700,800" rel="stylesheet">
+
+        <link rel="stylesheet" href="assets/css/plugins.min.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+        
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="assets/images/icons/favicon.png">
+
+        <!-- Modernizr -->
+        <script src="assets/js/modernizr.js"></script>
+		<link rel="stylesheet" type="text/css" href="/assets/css/font-awesome/css/font-awesome.min.css" />
+		<script src="/assets/js/jquery.min.js"></script>
+		<script src="/assets/js/pages/pagination.js"></script>
+        <link rel="stylesheet" type="text/css" href="/assets/css/homepages/bootstrap-custom.css" />	
+		 <script src="/assets/js/pages/userdefined.js"></script>
+         <script src="/assets/js/jquery-ui.min.js"></script>
+
+        <script>
+			$(function () {
+				load({{enquirycount}});
+			});
+		</script>		
+</head>
+		
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="main">
+                <div class="page-header larger parallax custom mb0" style="background-image:url(/assets/images/header.jpg)">
+                    <div class="container">
+                        <h1>User Enquiry</h1>
+                        <ol class="breadcrumb">
+                            <li><a href="index.html">Home</a></li>                           
+                            <li class="active">User Enquiry</li>
+                        </ol>
+                    </div><!-- End .container -->
+                </div><!-- End .page-header -->
+                <div class="container">
+                    
+					<div class="row">
+                        <div class="col-sm-12">
+                            <h2>&nbsp;</h2>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>User Name</th>
+                                            <th>Email Id</th>
+                                            <th>Contact Number</th>
+											<th>Description</th>
+                                            <th>Questionnaire</th>											
+											<th>Status</th>
+											<th>Attachment</th>	
+                                            <th>View / Edit</th>
+											<th style="display:none;">Hidden</th>
+											<th style="display:none;">Hidden</th>
+											
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+									    {{#enquirylist}} 
+										{{#enquiry}} 
+                                        <tr>
+                                            <td>{{index}}</td>
+                                            <td>{{userFullName}}</td>
+                                            <td>{{emailID}}</td>
+                                            <td>{{primaryPhonenumber}}</td>
+											<td style="text-align: center;">
+                                                <a class= "enq_desc_lnk" id={{enquiryCode}}>View</a>											
+											</td>
+											<td style="text-align: center;">
+                                                <a class= "enq_quest_lnk" id={{enquiryCode}}>View</a>											
+											</td>
+                                            <td>											
+												<select class="form-control input-sm">
+                                                      {{#options}} 
+													      <option value="{{val}}" {{#selected}}{{status}}{{/selected}} >{{txt}}</option>
+												       {{/options}}												
+												</select>
+											</td>
+                                            <td><a href="#" id="meddoc" value="{{attachmentName}}" class="btn btn-sm btn-custom" download>Download</a></td>
+											<td><a href="#" class="btn btn-sm btn-custom">&nbsp;&nbsp;Save&nbsp;&nbsp;</a></td>
+											<td style="display:none;" class ="hdn_qstn">{{questionnaire}}</td>
+											<td style="display:none;" class ="hdn_desc">{{caseDescription}}</td>
+                                        </tr>
+										 {{/enquiry}}
+                                         {{/enquirylist}}                              
+                                    </tbody>
+                                </table>
+                            </div><!-- End .table-responsive -->
+							<!-- Pagination container -->
+                            <nav class="pagination-container" id="tablePaging">
+                                <label>Showing: 1-4 of 16</label>
+                            </nav>
+                        </div><!-- End .col-sm-12 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+
+                <div class="mb80"></div><!-- margin -->
+            </div><!-- End .main -->
+            
+			<footer class="footer">
+                <div class="container">
+                    <div class="row">
+                    </div>
+				</div>
+		    </footer>
+			
+        </div><!-- End #wrapper -->
+        <a id="scroll-top" href="#top" title="Scroll top"><i class="fa fa-angle-up"></i></a>
+
+        <!-- End -->
+       <!--  <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDwHqErJP9xLul8Q3e7DqIRgDopNqXwOnk"></script> -->
+	   
+	     <div class="modal fade" id="questionnairemodel" role="dialog">
+				<div class="modal-dialog">
+				  <!-- Modal content-->
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <button type="button" class="close" data-dismiss="modal">&times;</button>
+					  <h4 class="modal-title">View</h4>
+					</div>
+					<div class="modal-body">
+					  <p class="mdlbody">Thank you for your inputs.Our case manager will contact you within 48hrs.</p>
+					</div>
+					<div class="modal-footer">
+					  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				  </div>
+
+				</div>
+			  </div>
+			</div>
+			
+        <script src="assets/js/plugins.min.js"></script>        
+        <script src="assets/customjs/chat.js"></script>
+        <script src="assets/js/main.js"></script>
+    </body>
+</html>
