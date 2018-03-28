@@ -287,3 +287,15 @@
 .switch-square.switch-bootstrap + .lable::after {
 	border-radius: 2px;
 } 
+
+tbody {
+  counter-reset: rowNumber;
+}
+
+table tr {
+  counter-increment: rowNumber;
+}
+
+table tbody tr td:first-child::before {
+  content: counter(rowNumber);  
+}

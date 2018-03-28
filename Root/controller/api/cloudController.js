@@ -45,18 +45,13 @@ module.exports.uploadfile = function (req, res,next) {
 	
 /*  Function to download all files stored in S3 */
 module.exports.downloadcloudFiles=function(req,res) {
-
-   // var filenames = "1520110677543_Image4.jpg,1520110678603_Image5.jpg"   
-    var filenames = req.body.fileNames
-
-    var str_array = filenames.split(',');
-    
-    for (var i = 0; i < str_array.length; i++) {
-
-        downloadFileFromS3(str_array[i])
-
-    }
-    res.end("Files have been downloaded successfully")
+      
+    var filename = req.body.fileName
+    getPreSignedUrlS3(filename, function (url) {        
+        res.end(JSON.stringify({
+            URL: url })	)
+    })
+       
 }
 
 /*  Function to download single files stored in S3 */
@@ -101,21 +96,15 @@ function getPreSignedUrlS3(filename,callback) {
 
     var S3_BUCKET = 'medinovitastorage';
 
-    var s3 = new AWS.S3()
-    params = { Bucket: S3_BUCKET, Key: filename, Expires: 20 }
-
-    AWS.config.update({
-        accessKeyId: process.env.ACCESSKEY,
-        secretAccessKey: process.env.SECRETKEY,
-        region: process.env.REGION
-    });
-
+    params = { Bucket: S3_BUCKET, Key: filename, Expires: 60 }
+   
     s3.getSignedUrl('getObject', params, function (err, url) {
 
         if (err) {
             logger.error("Unable to get presigned url for file " + filename + " due to " + err.message)
             callback(null)
         } else {
+            logger.info("Presigned url fetch was successful")
             callback(url);
         }
     });

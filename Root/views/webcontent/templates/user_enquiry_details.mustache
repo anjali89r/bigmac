@@ -58,7 +58,7 @@
                                             <th>#</th>
                                             <th>User Name</th>
                                             <th>Email Id</th>
-                                            <th>Contact Number</th>
+                                            <th>Contact</th>
 											<th>Description</th>
                                             <th>Questionnaire</th>											
 											<th>Status</th>
@@ -73,10 +73,10 @@
 									    {{#enquirylist}} 
 										{{#enquiry}} 
                                         <tr>
-                                            <td>{{index}}</td>
+                                            <td></td>
                                             <td>{{userFullName}}</td>
                                             <td>{{emailID}}</td>
-                                            <td>{{primaryPhonenumber}}</td>
+                                            <td>{{isdCode}}-{{primaryPhonenumber}}</td>
 											<td style="text-align: center;">
                                                 <a class= "enq_desc_lnk" id={{enquiryCode}}>View</a>											
 											</td>
@@ -91,7 +91,7 @@
 												</select>
 											</td>
                                             <td><a href="#" id="meddoc" value="{{attachmentName}}" class="btn btn-sm btn-custom" download>Download</a></td>
-											<td><a href="#" class="btn btn-sm btn-custom">&nbsp;&nbsp;Save&nbsp;&nbsp;</a></td>
+											<td><a href="#" value={{enquiryCode}} id="enqsave" class="btn btn-sm btn-custom">&nbsp;&nbsp;Save&nbsp;&nbsp;</a></td>
 											<td style="display:none;" class ="hdn_qstn">{{questionnaire}}</td>
 											<td style="display:none;" class ="hdn_desc">{{caseDescription}}</td>
                                         </tr>

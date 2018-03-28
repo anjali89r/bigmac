@@ -44,6 +44,7 @@ module.exports.submitUserEnquiry = function (req, res) {
                         commuMedium: req.body.commuMedium,
                         caseDescription: req.body.caseDescription,
                         enquiryCode: enqid,
+                       // status: req.body.status,
                         attachmentFlag: req.body.attachment,
                         attachmentName: req.body.attachmentName,
                         response: []
@@ -63,6 +64,7 @@ module.exports.submitUserEnquiry = function (req, res) {
                                 commuMedium: req.body.commuMedium,
                                 caseDescription: req.body.caseDescription,
                                 enquiryCode: enqid,
+                                status: req.body.status,
                                 attachmentFlag: req.body.attachment,
                                 attachmentName: req.body.attachmentName,
                                 response: []
@@ -312,9 +314,9 @@ function getPendingEnquiryDetails(callback) {
                 "$match": {
                     "enquiry.status": { '$ne': 'Closed' }                    
                 }
-            }, {
+            }, { $sort: { '_id':-1} }, {
                 "$project": {
-                    "_id": 0, "emailID": 1, "enquiry.userFullName": 1, "enquiry.enquiryCode": 1, "enquiry.attachmentName": 1, "enquiry.primaryPhonenumber": 1,"enquiry.caseDescription" :1, "enquiry.questionnaire": 1, "enquiry.status": 1, "enquiry.attachmentName": 1
+                    "_id": 0, "emailID": 1, "enquiry.userFullName": 1, "enquiry.enquiryCode": 1, "enquiry.attachmentName": 1, "enquiry.isdCode":1, "enquiry.primaryPhonenumber": 1,"enquiry.caseDescription" :1, "enquiry.questionnaire": 1, "enquiry.status": 1, "enquiry.attachmentName": 1
                 }
             }
 
@@ -339,4 +341,51 @@ function getPendingEnquiryDetails(callback) {
         callback( err.message );
     })
 
+}
+/*  update enquiry status from GUI  */  
+module.exports.updateEnquiryStatus= function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn('Response already sent.Hence skipping the function call updateEnquiryStatus')
+        return;
+    }
+
+    var userEmailID = req.body.userEmail;
+    var enquiryID = req.body.enquiryID;
+    var status = req.body.enqstatus;
+
+    console.log(enquiryID)
+
+    userEnquiryModel.findOneAndUpdate({ emailID: userEmailID, "enquiry": { $elemMatch: { "enquiryCode": enquiryID } } },
+        {
+            /*"$push":  {
+                enquiry: {                    
+                    status: status,                    
+                }
+            }*/
+            "$set": {
+                "enquiry.$.status": status
+            }
+        },
+        { new: true }, function (err, doc) {
+            if (err) {
+                logger.error('Error while updating enquiry status for enquiry with id : - ' + enquiryID + " : " + err.message);
+                res.end(
+                    'Error while updating enquiry status for enquiry with id : - ' + enquiryID + " : " + err.message
+                );
+            } else if (doc === null) {
+                logger.error('Unable to update enquiry status for enquiry with id : - ' + enquiryID);
+                res.end('Unable to update enquiry status for enquiry with id : - ' + enquiryID
+                );
+            } else {
+                logger.info('sucessfully updated status to ' + status);
+                
+                res.end(JSON.stringify({
+                    Data: "Status got updated successfully to " + status
+                }))
+
+            }
+            
+        });
+    
 }

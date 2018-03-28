@@ -1,7 +1,7 @@
 var basicKey = 'bGliaW46bGliaW4=';
 var xAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVG9rZW5Ub0F1dGhlbnRpY2F0ZU1lZGlub3ZpdGFVc2VyIiwiaWF0IjoxNTA4MDQ0OTMwfQ.cZ3pCte1guE8KQkjd1KfY_bLJ-gOatJm2xlwyiLGAl4';
-var serverName = 'https://www.medinovita.in/';
-//var serverName = 'http://localhost:1337/';
+//var serverName = 'https://www.medinovita.in/';
+var serverName = 'http://localhost:1337/';
 var GLOBAL_VARIABLES = {
 	Language: 'en',
 	Currency: 'dollar'
@@ -2990,12 +2990,13 @@ $('.enq_quest_lnk').on('click', function (e) {
 	$('#questionnairemodel').modal('show');
     $('#questionnairemodel').find(".mdlbody").text((txt));	
 })
-
+/* To download files from S3 on button click in getpendingenquiry page */
 $('#meddoc').on('click', function (e) {	
 	e.preventDefault();	
 	$.ajax({
-			url: serverName + 'api/v1/get/medicaldocs/meditrip',
-			type: 'POST',			
+			url: serverName + 'api/cloud/download/medicaldocs/meditrip',
+			type: 'POST',
+            async: false, //add this			
 			headers: {
 				'Content-Type': 'application/json',
 				Authorization: 'Basic ' + basicKey,
@@ -3006,13 +3007,14 @@ $('#meddoc').on('click', function (e) {
 				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
 			},
 			data: JSON.stringify({
-					fileNames: $(this).attr("value")					
+					fileName: $(this).attr("value")					
 			}),	
             dataType: 'json',			
-			success: function (response) {				
+			success: function (response) {				               			
+				window.location = response.URL;	//start download automatically	
 			},
-			error: function (exception) {
-				console.log(exception);
+			error: function (exception) {				
+				console.log(exception.message);
 			}
 		})
 	
@@ -3031,7 +3033,49 @@ function getUniqueNumber(){
 		date.getMilliseconds()
 	];
 
-	var id = components.join("") + Math.random().toString().replace(".","");
+	var id = components.join("") //+ Math.random().toString().replace(".","");
 	
 	return id
 }
+
+/* To save enquiry status on button click in getpendingenquiry page */
+$('#enqsave').on('click', function (e) {
+	
+    /*var select = $(this).closest("tr").find("select.input-sm")[0];
+    var textContent = select.selectedOptions[0].textContent;    
+    console.log("value: ", select.value);
+    console.log("textContent: ", textContent); */
+	
+	e.preventDefault();	
+	$.ajax({
+			url: serverName + 'api/update/enqstatus/meditrip',
+			type: 'POST',
+            async: false, //add this			
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Basic ' + basicKey,
+				'x-access-token': xAccessToken
+
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+			},
+			data: JSON.stringify({
+					enquiryID: $(this).attr("value"),
+					//var	select = $(this).closest("tr").find("select.input-sm")[0],        					
+                    enqstatus: $(this).closest("tr").find("select.input-sm")[0].selectedOptions[0].textContent,
+                    userEmail:$(this).closest('tr').find("td:eq(2)").text()				
+			}),	
+            dataType: 'json',			
+			success: function (response) {
+				console.log('success');
+				$('#questionnairemodel').find(".mdlbody").text(response.Data);
+                $('#questionnairemodel').modal('show');                			
+			},
+			error: function (exception) {				
+				console.log("error");
+				console.log(exception);
+			}
+		})
+	
+})
