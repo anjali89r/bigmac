@@ -6,8 +6,7 @@ load = function(procedurecount) {
 			console.log('changed to ' + ps);
 		},
 		onPageChange: function (paging) {
-			//custom paging logic here
-			console.log(paging);
+			//custom paging logic here			
 			var start = paging.pageSize * (paging.currentPage - 1),
 				end = start + paging.pageSize,
 				$rows = $('.product').find('.row');

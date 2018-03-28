@@ -76,8 +76,8 @@ module.exports = function (app) {
     app.get('/api/v1/get/pendingenquiries', enquiryInfo.getOutstandingEnquiryDetails);
     /*  API to download files corresponding to an enquiry */
     app.post('/api/v1/get/medicaldocs/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken,cloudcontroller.downloadcloudFiles)
-
-
+    /*  API to upload the status of enquiry */
+    app.post('/api/update/enqstatus/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, enquiryInfo.updateEnquiryStatus)
     /*********************************************************************************************************************************************************/
     
     /************************API to operate on office address schema********************************************************************************************/
@@ -178,7 +178,9 @@ module.exports = function (app) {
 	/*upload files to aws s3 using multer s3 api*/
     app.post('/cloud/upload',cloudcontroller.uploadfile)
 	/*Compress and upload files to aws s3 using multer api*/
-	app.post('/cloud/zip/upload/:enqid',cloudcontroller.ZipAndUploadToS3WithMulter)
+    app.post('/cloud/zip/upload/:enqid', cloudcontroller.ZipAndUploadToS3WithMulter)
+    /*download files uploaded to aws s3*/
+    app.post('/api/cloud/download/medicaldocs/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, cloudcontroller.downloadcloudFiles)
 	
 	/*...................................................................................................................................................................*/
 	

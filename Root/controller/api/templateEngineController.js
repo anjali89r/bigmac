@@ -696,7 +696,7 @@ module.exports.getPendingEnquiriesPage = function (req, res) {
     
     new Promise(function (resolve, reject) {
         //get pending enquiries 
-        enquiry.getPendingEnquiryDetails(function (result) {
+        enquiry.getPendingEnquiryDetails(function (result) {           
             resolve(result)
         })
 
