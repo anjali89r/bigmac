@@ -96,7 +96,7 @@ function getPreSignedUrlS3(filename,callback) {
 
     var S3_BUCKET = 'medinovitastorage';
 
-    params = { Bucket: S3_BUCKET, Key: filename, Expires: 60 }
+    params = { Bucket: S3_BUCKET, Key: filename, Expires: 500 }
    
     s3.getSignedUrl('getObject', params, function (err, url) {
 
