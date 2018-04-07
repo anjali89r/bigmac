@@ -501,7 +501,7 @@ function getHospitalStayDuration (treatmentName, callback) {
     treatmentDescModel.aggregate([
         {
             "$match": {
-                "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.procedureName": treatmentName }]
+                "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.displayName": treatmentName }] 
                 // "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.procedureName": treatmentName }, { "treatmentList.activeFlag": "Y" }]
             }
         }, { "$unwind": "$treatmentList" }, { $match: { "treatmentList.activeFlag": 'Y' } },

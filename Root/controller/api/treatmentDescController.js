@@ -26,7 +26,7 @@ module.exports.addtreatmentDescription = function (req, res) {
     new Promise(function (resolve, reject) {
         //check if procedure name already exists under a different department
         treatmentDescModel.findOne({
-            "treatmentList": { $elemMatch: { "procedureName": req.body["procedureName"] } }
+            "treatmentList": { $elemMatch: { "displayName": req.body["procedureName"] } }
         }, { department: 1, _id: 0 }, function (err, doc) {
             if (doc != null) {                
                 if (doc.department != req.body["department"]) {
@@ -38,7 +38,7 @@ module.exports.addtreatmentDescription = function (req, res) {
         //check if treatment and procedure details are already stored in table
         treatmentDescModel.findOne({
             "department": req.body["department"]
-        }, {"treatmentList": { $elemMatch: { "procedureName": req.body["procedureName"] } }
+        }, {"treatmentList": { $elemMatch: { "displayName": req.body["procedureName"] } }
         }, function (err, doc) {
             if (doc !=null && doc.department != null) {
                 logger.warn("Procedure name " + req.body['procedureName'] + " already exists in database");
@@ -79,7 +79,8 @@ module.exports.addtreatmentDescription = function (req, res) {
                 treatmentSchema.serviceActiveFlag = req.body["serviceActiveFlag"],
                 treatmentSchema.departmentImagepath = req.body["departmentImagepath"],
                 treatmentSchema.treatmentList = [{
-                    procedureName: req.body['procedureName'],
+                    //procedureName: req.body['procedureName'],
+                    procedureName: req.body['displayName'].replace(/\s+/g, '_'),
                     procedureId: procedureId,
                     displayName: req.body['displayName'],
                     treatmentDescription: req.body['treatmentDescription'],
@@ -111,7 +112,8 @@ module.exports.addtreatmentDescription = function (req, res) {
                 {
                     "$push": {
                         "treatmentList": {
-                            "procedureName": req.body['procedureName'],
+                            //"procedureName": req.body['procedureName'],
+                            "procedureName": req.body['displayName'].replace(/\s+/g, '_'),
                             "procedureId": procedureId,
                             "displayName": req.body['displayName'],
                             "treatmentDescription": req.body['treatmentDescription'],
@@ -131,12 +133,12 @@ module.exports.addtreatmentDescription = function (req, res) {
                     if (err) {
                         logger.error("Error while updating record : - " + err.message);
                         return res.status(409).json({
-                            "Message": "Error while updating new treatment " + req.body['procedureName'] + " in treatmentOffered_description collection"
+                            "Message": "Error while updating new treatment " + req.body['displayName'] + " in treatmentOffered_description collection"
                         });
                     } else if (doc === null) {
                         logger.error("Error while updating record : - unable to update treatmentOffered_description database");
                         return res.status(409).json({
-                            "Message": "Error while adding new record for " + req.body['procedureName'] + err.message
+                            "Message": "Error while adding new record for " + req.body['displayName'] + err.message
                         });
                     } else {
                         return res.json({ "Message": "Data got updated successfully in treatmentOffered_description collection" });
@@ -219,7 +221,7 @@ module.exports.isTreatmentExists = function (procedureName, callback) {
     
     var dict = [];
 
-    treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "procedureName": procedureName } } }, {
+    treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "displayName": procedureName } } }, {
         "departmentId": 1, "treatmentList.procedureId": 1,"_id": 0
     }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
         if (err) {
@@ -239,7 +241,7 @@ module.exports.isTreatmentExists = function (procedureName, callback) {
 /* **************Verify if aparticular procedure is already present ***************** */
 module.exports.verifyProcedureExistence = function (procedureName, callback) {
 
-    treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "procedureName": procedureName } } }, { 'treatmentList.$': 1 },
+    treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "displayName": procedureName } } }, { 'treatmentList.$': 1 },
         function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
         if (err) {            
             callback("false");
@@ -357,7 +359,7 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
             //loop through procedures in department
             for (var j = 0; j < procedureList.length; j++) {
                 var procedure = procedureList[j];
-                var procedureDisp = procedure.procedureName
+                var procedureDisp = procedure.displayName
                 var treatmentDescription = procedure.shortDescription               
                 /*promises.push(cost.getAvarageCostAsInt(procedureDisp).then(function (data) {
                     console.log(procedureName + ": " + JSON.stringify(data))
@@ -390,7 +392,7 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
                 //loop through procedures in department
                 for (var j = 0; j < procedureList.length; j++) {
                     var procedure = procedureList[j];
-                    var procedureDisp = procedure.procedureName
+                    var procedureDisp = procedure.displayName
                     //to get unique procedure names
                     if (!(procedureDisp in proceduredict)) {
                         proceduredict[procedureDisp] = ''
@@ -532,7 +534,7 @@ module.exports.getProcedureDetails = function getProcedureDetails(procedureName,
     treatmentDescModel.aggregate([
         {
             "$match": {
-                "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.procedureName": procedureName }, { "treatmentList.activeFlag": "Y" }]
+                "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.displayName": procedureName }, { "treatmentList.activeFlag": "Y" }]
             }
         },
         {
@@ -572,7 +574,7 @@ function getUniqueProcedureNames(callback) {
         { $group: { _id: null, treatmentNames: { $addToSet: "$treatmentList" } } }, //_id:null will return everything from array       
         {
             "$project": {
-                "_id": 0, "treatmentNames.procedureName": 1 //"treatmentNames":1 will return everything from the table
+                "_id": 0, "treatmentNames.displayName": 1 //"treatmentNames":1 will return everything from the table
             }
         }
 

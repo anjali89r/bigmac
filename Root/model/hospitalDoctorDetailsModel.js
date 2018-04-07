@@ -9,6 +9,7 @@ const collection = 'hospital_doctor_details';
 var hospitalDoctorSchema = new Schema({
 
     hospitalName: { type: String, required: false, trim: true },
+    hospitaldisplayname: { type: String, required: false, trim: true },
     hospitalID: { type: Number, required: false, unique: true, dropDups: true }, 
     serviceActiveFlag: { type: String, required: false, enum: ['Y', 'N'], default: 'Y'  },//new
     hospitalimage: { type: String, required: false, trim: true, default: 'medinovita/blankHospital.jpg' },   // newly added for hospital image in webpage
@@ -53,10 +54,10 @@ var hospitalDoctorSchema = new Schema({
         activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },//new
         departmentId: { type: Number},
         name: { type: String, required: true, trim: true },
-        treatmentdisplayname: { type: String, required: false, trim: true },
+        treatmentdisplayname: { type: String, required: false, trim: true },//for storing values with _
         costUpperBound: { type: Number, required: true },
         costLowerBound: { type: Number, required: true },  
-        currency: { type: String, required: true, enum: ['INR', '$'] }, //new field added on 26/11/17
+        currency: { type: String, required: true, enum: ['INR'] }, //new field added on 26/11/17
         departmentName: { type: String, required: true, trim: true },
         /*discountRatePercent: { type: Number, required: true,},
         discountStartDate: { type: Date, required: true },
@@ -69,8 +70,11 @@ var hospitalDoctorSchema = new Schema({
                 
         doctor: [{
 
-            doctorId: { type: Number},
-            doctorName: { type: String, required: true, trim: true },
+            doctorId: { type: Number },
+            registrationNumber: { type: String, required: true, trim: true, unique: true },
+            registrationAuthority: { type: String, required: true, trim: true },
+            doctorShortName: { type: String, required: false, trim: true },
+            doctorName: { type: String, required: true, trim: true },            
             doctorDescription: { type: String, required: true, trim: true },
             activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },
             speciality: [{
@@ -103,12 +107,19 @@ hospitalDoctorSchema.pre('save', function(next) {
   // console.log(hospdisplayname)
     this.hospitaldisplayname = hospdisplayname.replace(/\s+/g, '-').toLowerCase();
   // console.log(this.hospitaldisplayname)
-    this.Treatment.forEach(function(el)
+    this.Treatment.doctor.forEach(function(el)
     {
         var treatmentdisplayname=el.name;
   
         el.treatmentdisplayname = treatmentdisplayname.replace(/\s+/g, '-').toLowerCase();
     }
+    )
+
+    this.Treatment.forEach(function (el) {
+            var doctorShortName = el.doctorName;
+            doctorShortName = doctorShortName.replace(/\s+/g, '-').toLowerCase();
+            el.doctorShortName = doctorShortName.replace(/\./g, '-').toLowerCase(); 
+        }
     )
     next();
   });

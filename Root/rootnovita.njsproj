@@ -96,6 +96,9 @@
     <Compile Include="controller\api\costController.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="controller\api\doctorDataController.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="controller\api\emailController.js">
       <SubType>Code</SubType>
     </Compile>
@@ -145,6 +148,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="model\costComparisonModel.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="model\doctorDataModel.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="model\eVisacountryModel.js" />

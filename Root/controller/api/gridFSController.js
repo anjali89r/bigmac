@@ -25,7 +25,7 @@ function getFlatFileContent(filePath, next) {
         s3.getObject(params, function(err, data) {
             if (err)
             {
-                logger.error("Error while reading the file - " + err.stack.trim())
+                logger.error("Error while reading the file from cloud- " + err.stack.trim())
                 next("Error while reading the file")
 
             } 
