@@ -3,6 +3,7 @@ var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/hospitalDoctorDetailsModel.js');
 var treatmentController = require('./treatmentDescController.js');
+var docDataController = require('./doctorDataController.js');
 var hospitalModel = mongoose.model('hospital_doctor_details');
 var counterSchema = require('../../model/identityCounterModel.js');
 
@@ -25,6 +26,14 @@ module.exports.createHospitalRecord = function (req, res) {
             if (flag == 'false') {
                 return reject(res.status(409).json({
                     "Message": "Please add procedure " + req.body["procedureName"] + " first to treatments description table using /api/v1/post/treatmentdescription/:apiTokenName" }));
+            }
+        })
+
+        docDataController.isDoctorExists(req.body["registrationNumber"], req.body["registrationAuthority"], function (flag) {
+            if (flag == 'false') {
+                return reject(res.status(409).json({
+                    "Message": "Please add doctor with registreation number " + req.body["registrationNumber"] + " first to Doctor Data table using /api/v1/post/docdata/:apiTokenName"
+                }));
             }
         })
 
@@ -137,6 +146,9 @@ module.exports.createHospitalRecord = function (req, res) {
             departmentName: req.body["departmentName"],
             doctor: [{
                 doctorId: doctorID,
+                registrationNumber:req.body["registrationNumber"],
+                registrationAuthority: req.body["registrationAuthority"],
+                doctorShortName: req.body["doctorShortName"],
                 doctorName: req.body["doctorName"],
                 doctorDescription: req.body["doctorDescription"],
                 activeFlag: req.body["isDoctorActive"],//new
@@ -402,6 +414,9 @@ module.exports.addProcedureDetails = function (req, res) {
                         "$push": {                            
                             "Treatment.$.doctor": {
                                 "doctorId": doctorID,
+                                "registrationNumber": req.body["registrationNumber"],
+                                "registrationAuthority": req.body["registrationAuthority"],
+                                "doctorShortName": req.body["doctorShortName"],
                                 "doctorDescription": req.body["doctorDescription"],
                                 "activeFlag": req.body["isDoctorActive"],//new
                                 "doctorName": req.body["doctorName"],
@@ -563,6 +578,9 @@ module.exports.addDoctorDetails = function (req, res) {
                     "$push": {
                         "Treatment.$.doctor": {
                             "doctorId": doctorID,
+                            "registrationNumber": req.body["registrationNumber"],
+                            "registrationAuthority": req.body["registrationAuthority"],
+                            "doctorShortName": req.body["doctorShortName"],
                             "doctorName": req.body["doctorName"],
                             "doctorDescription": req.body["doctorDescription"],
                             "activeFlag": req.body["isDoctorActive"],//new
@@ -706,6 +724,8 @@ function getTopDoctors(procedure, next) {
             $project: {
                 "_id": 0,
                 "docname": "$Treatment.doctor.doctorName",
+                "docregistrationnumber":"$Treatment.doctor.registrationNumber",
+                "docregistrationauthority": "$Treatment.doctor.registrationAuthority",
                 "docdescription": "$Treatment.doctor.doctorDescription",
                 "docspeciality": "$Treatment.doctor.speciality.specialityName",
                 "docpicdir": "$Treatment.doctor.profilepicdir",

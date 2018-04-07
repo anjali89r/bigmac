@@ -2267,7 +2267,7 @@ function costCallback(data) {
 			response[0].treatmentNames.forEach(function (item, index) {
 				//$('#treatmentCostDropdown').append("<li><a href = '#'>"+item["procedureName"]+"</a></li>")
 
-				var selectOption = $('<option>' + item.procedureName + '</option>')
+				var selectOption = $('<option>' + item.displayName + '</option>')
 				$('.treatment-select #costSelectTreatment').append(selectOption);
 
 				// $('.treatment-select #costSelectTreatment').append('<option class= costtreatmentselect data-tokens="'+ item["procedureName"]+'">' + item["procedureName"] +'</option>')

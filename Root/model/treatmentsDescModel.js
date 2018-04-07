@@ -13,7 +13,7 @@ var treatmentDescriptionSchema = new Schema({
     departmentImagepath: { type: String, required: false, trim: true },
     treatmentList: [{
         procedureId: { type: Number, required: false, trim: true },
-        procedureName: { type: String, required: true, unique: true, trim: true },
+        procedureName: { type: String, required: false, unique: true, trim: true },
         displayName: { type: String, required: true, unique: true, trim: true },
         treatmentDescription: { type: String, required: true, trim: true },       
         shortDescription: { type: String, required: true, trim: true },        
@@ -26,6 +26,13 @@ var treatmentDescriptionSchema = new Schema({
         procedureImagepath: { type: String, required: false, trim: true },
         activeFlag: { type: String, required: true, trim: true, enum: ['Y', 'N'] },        
     }]
+});
+
+treatmentDescriptionSchema.pre('save', function (next) {
+    var procedureName = this.displayName;
+    // console.log(hospdisplayname)
+    this.procedureName = procedureName.replace(/\s+/g, '_')   
+    next();
 });
 
 //create collection.

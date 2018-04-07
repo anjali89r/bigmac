@@ -212,7 +212,7 @@ module.exports.gettreatmentEstimate = function (req, res) {
     new Promise(function (resolve, reject) {
         //get the path of flat file with description
         treatmentDesc.getProcedureDetails(procedureName, function (result) {
-            var relFilePath = result[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
+            var relFilePath = result[0].treatmentList[0].shortDescription // Procedure/Orthopedic/Hip Resurfacing.txt
             resolve(relFilePath)
         })
 
@@ -220,6 +220,7 @@ module.exports.gettreatmentEstimate = function (req, res) {
 
        // var procedureFileDir = config.getProjectSettings('DOCDIR', 'PROCEDUREDIR', false)
         //var filePath = procedureFileDir + relFilePath
+        
         var filePath =  relFilePath
         new Promise(function (resolve, reject) {
             gridFS.getFlatFileContent(filePath, function (content) {
