@@ -113,10 +113,11 @@ module.exports.createHospitalRecord = function (req, res) {
     //function to set data in db
     function setData(hospitalID, doctorID, departmentID, procedureID) {
 
-        /*Update treatments offered collection */
-      
+        /*Update treatments offered collection */        
         hospitalSchema.hospitalID = hospitalID
+        hospitalSchema.hospitalimage = req.body['hospitalimage'];
         hospitalSchema.hospitalName = req.body['hospitalname'];
+        //hospitalSchema.hospitaldisplayname = req.body['hospitaldisplayname'];
         hospitalSchema.hospitalDescription = req.body['hospitalDescription'];
         hospitalSchema.serviceActiveFlag = req.body['serviceActiveFlag'];//new
         hospitalSchema.hospitalContact.website = req.body['hospitalcontact_website'];
@@ -128,6 +129,7 @@ module.exports.createHospitalRecord = function (req, res) {
         hospitalSchema.hospitalContact.addressLine2 = req.body['hospitalcontact_addressline2'];
         hospitalSchema.hospitalContact.City = req.body['hospitalcontact_city'];
         hospitalSchema.hospitalContact.PostalCode = parseInt(req.body['hospitalcontact_postalcode']);
+        hospitalSchema.hospitalContact.State = req.body['hospitalcontact_State']; 
         hospitalSchema.hospitalContact.country = req.body['hospitalcontact_country'];      
         hospitalSchema.Accreditation = [{
             agency: req.body['accreditation_agency'],           
