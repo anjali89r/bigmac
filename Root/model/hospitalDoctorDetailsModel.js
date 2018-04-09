@@ -8,25 +8,24 @@ const collection = 'hospital_doctor_details';
 
 var hospitalDoctorSchema = new Schema({
 
-    hospitalName: { type: String, required: false, trim: true },
-    hospitaldisplayname: { type: String, required: false, trim: true },
+    hospitalName: { type: String, required: true, trim: true },    
     hospitalID: { type: Number, required: false, unique: true, dropDups: true }, 
-    serviceActiveFlag: { type: String, required: false, enum: ['Y', 'N'], default: 'Y'  },//new
-    hospitalimage: { type: String, required: false, trim: true, default: 'medinovita/blankHospital.jpg' },   // newly added for hospital image in webpage
-    hospitalDescription: { type: String, required: false, trim: true},   // newly added for hospital description
+    serviceActiveFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y'  },//new
+    hospitalimage: { type: String, required: true, trim: true, default: 'medinovita/blankHospital.jpg' },   // newly added for hospital image in webpage
+    hospitalDescription: { type: String, required: true, trim: true},   // newly added for hospital description
     hospitaldisplayname: { type: String, required: false, trim: true },
     hospitalContact: {
-        website: { type: String, required: false, trim: true },
-        contactPersonname: { type: String, required: false, trim: true },
-        emailId: { type: String, required: false, trim: true },//new
-        primaryPhoneNumber: { type: Number, required: false }, //new
+        website: { type: String, required: true, trim: true },
+        contactPersonname: { type: String, required: true, trim: true },
+        emailId: { type: String, required: true, trim: true },//new
+        primaryPhoneNumber: { type: Number, required: true }, //new
         secondaryPhoneNumber: { type: String, required: false }, //new
-        addressLine1: { type: String, required: false, trim: true },
+        addressLine1: { type: String, required: true, trim: true },
         addressLine2: { type: String, required: false, trim: true },
-        City: { type: String, required: false, trim: true },
         State: { type: String, required: false, trim: true },   // added for displaying state in webpage
-        PostalCode: { type: Number, required: false, trim: true },
-        country: { type: String, required: false, trim: true },
+        City: { type: String, required: true, trim: true },       
+        PostalCode: { type: Number, required: true, trim: true },
+        country: { type: String, required: true, trim: true },
         Landmark: { type: String, required: false, trim: true },
     },
 
@@ -36,7 +35,7 @@ var hospitalDoctorSchema = new Schema({
 
     hospitalRating: {
         userRating: [{
-                    type: Number, required: false, 
+                    type: Number, required: true, 
                     min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
                     max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
                     default: 4
@@ -107,20 +106,20 @@ hospitalDoctorSchema.pre('save', function(next) {
   // console.log(hospdisplayname)
     this.hospitaldisplayname = hospdisplayname.replace(/\s+/g, '-').toLowerCase();
   // console.log(this.hospitaldisplayname)
-    this.Treatment.doctor.forEach(function(el)
-    {
-        var treatmentdisplayname=el.name;
-  
-        el.treatmentdisplayname = treatmentdisplayname.replace(/\s+/g, '-').toLowerCase();
-    }
-    )
 
-    this.Treatment.forEach(function (el) {
-            var doctorShortName = el.doctorName;
-            doctorShortName = doctorShortName.replace(/\s+/g, '-').toLowerCase();
-            el.doctorShortName = doctorShortName.replace(/\./g, '-').toLowerCase(); 
+    this.Treatment.forEach(function(el)
+        {
+            var treatmentdisplayname=el.name;
+            el.treatmentdisplayname = treatmentdisplayname.replace(/\s+/g, '-').toLowerCase
+
+            el.doctor.forEach(function (el) {
+                var doctorShortName = el.doctorName;
+                doctorShortName = doctorShortName.replace(/\s+/g, '-').toLowerCase();
+                el.doctorShortName = doctorShortName.replace(/\./g, '-').toLowerCase();
+            })
+            
         }
-    )
+    )   
     next();
   });
 
