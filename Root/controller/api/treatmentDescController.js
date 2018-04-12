@@ -530,7 +530,7 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
 module.exports.getProcedureDetails = function getProcedureDetails(procedureName, callback) {
 
     var treatmentDescSchema = new treatmentDescModel();
-
+//   console.log("I'm here",procedureName)
     treatmentDescModel.aggregate([
         {
             "$match": {

@@ -1,7 +1,7 @@
 ﻿var mongoose = require('mongoose');
 require('mongoose-double')(mongoose);
 require('mongoose-integer')(mongoose);
-var autoIncrement = require('mongoose-auto-increment');
+var autoIncrement = require('mongoose-plugin-autoinc');
 
 require('./hospitalDoctorDetailsModel.js');
 var hopitalDoctorModel = mongoose.model('hospital_doctor_details');

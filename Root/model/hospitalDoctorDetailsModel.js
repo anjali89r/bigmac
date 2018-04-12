@@ -1,5 +1,5 @@
 ﻿var mongoose = require('mongoose');
-var autoIncrement = require('mongoose-auto-increment');
+var autoIncrement = require('mongoose-plugin-autoinc');
 var counterSchema = require('./identityCounterModel.js');
 var genericUtil = require('../controller/utilities/generic.js');
 var Schema = mongoose.Schema;
@@ -110,7 +110,7 @@ hospitalDoctorSchema.pre('save', function(next) {
     this.Treatment.forEach(function(el)
         {
             var treatmentdisplayname=el.name;
-            el.treatmentdisplayname = treatmentdisplayname.replace(/\s+/g, '-').toLowerCase
+            el.treatmentdisplayname = treatmentdisplayname.replace(/\s+/g, '-').toLowerCase();
 
             el.doctor.forEach(function (el) {
                 var doctorShortName = el.doctorName;
