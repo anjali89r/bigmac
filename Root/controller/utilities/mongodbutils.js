@@ -19,7 +19,7 @@ module.exports.getMogoDbCon = function () {
             var db = mongoose.connection;
 
             db.on('error', function () {
-                logger.error("Error connecting to DB ")
+                //logger.error("Error connecting to DB ")
                 throw new Error('unable to connect to database');
                 reject(null)
             });

@@ -1,8 +1,8 @@
 ﻿var mongoose = require('mongoose');
-var autoIncrement = require('mongoose-auto-increment');
+var autoIncrement = require('mongoose-plugin-autoinc');
 require('mongoose-double')(mongoose);
 require('mongoose-integer')(mongoose);
-var autoIncrement = require('mongoose-auto-increment');
+
 var genericUtil = require('../controller/utilities/generic.js');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
@@ -27,7 +27,7 @@ var userDetailsSchema = new Schema({
     },
     loginPassword: { type: String, required: true, trim: true },
     //userID: { type: String, lowercase: true, required: true, unique: true, trim: true, dropDups: true, default: genericUtil.getUUId },
-    userID: { type: Number, required: true, unique: true, dropDups: true, default:0},
+    userID: { type: Number, required: false, unique: true, dropDups: true, default:0},
 
     isdCode: {
         type: Number, required: true,
@@ -109,7 +109,7 @@ var userDetailsSchema = new Schema({
     updated_at: { type: Date, required: true, default: Date.now }
 });
 
-autoIncrement.initialize(mongoose.connection);
+//autoIncrement.initialize(mongoose.connection);
 userDetailsSchema.plugin(autoIncrement.plugin, {
     model: collection,
     field: 'userID',

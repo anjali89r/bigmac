@@ -1,8 +1,8 @@
 ﻿var mongoose = require('mongoose');
-var autoIncrement = require('mongoose-auto-increment');
+var autoIncrement = require('mongoose-plugin-autoinc');
 require('mongoose-double')(mongoose);
 require('mongoose-integer')(mongoose);
-var autoIncrement = require('mongoose-auto-increment');
+//var autoIncrement = require('mongoose-plugin-autoinc');
 var genericUtil = require('../controller/utilities/generic.js');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;

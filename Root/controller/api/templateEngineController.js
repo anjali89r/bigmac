@@ -556,7 +556,7 @@ module.exports.searchhospitalsbytreatment = function(req,res)
     //console.log(treatmentdisplayname);  
     var data = {
         "treatmentname": treatmentdisplayname,
-        "title": treatmentdisplayname + ' | low cost medical treatment abroad',
+        "title": treatmentdisplayname + ' | Medical treatments in India | Medinovita',
         "treatmenturlname":treatmentdisplayname,
         "hospitaldetails": [],
         "treatmentDescription": "",
@@ -641,6 +641,7 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                   // console.log("i'm here ",treatmentname);
             new Promise(function (resolve, reject) {
                 //get the path of flat file with description
+                console.log(treatmentname)
                 treatmentDesc.getProcedureDetails(treatmentname, function (procedureresult) {
                     var relFilePath = procedureresult[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
                     resolve(relFilePath)

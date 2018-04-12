@@ -1,5 +1,5 @@
 ﻿const mongoose = require('mongoose');
-const autoIncrement = require('mongoose-auto-increment');
+const autoIncrement = require('mongoose-plugin-autoinc');
 
 const genericUtil = require('../controller/utilities/generic.js');
 const Schema = mongoose.Schema;
