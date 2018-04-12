@@ -27,7 +27,7 @@ var userDetailsSchema = new Schema({
     },
     loginPassword: { type: String, required: true, trim: true },
     //userID: { type: String, lowercase: true, required: true, unique: true, trim: true, dropDups: true, default: genericUtil.getUUId },
-    userID: { type: Number, required: false, unique: true, dropDups: true, default:0},
+    userID: { type: Number, required: true, unique: true, dropDups: true, default:0},
 
     isdCode: {
         type: Number, required: true,
