@@ -29,9 +29,9 @@ var treatmentDescriptionSchema = new Schema({
 });
 
 treatmentDescriptionSchema.pre('save', function (next) {
-    var procedureName = this.displayName;
-    // console.log(hospdisplayname)
-    this.procedureName = procedureName.replace(/\s+/g, '_')   
+    var procedureName = this.treatmentList[0].displayName
+     //console.log(procedureName)
+    this.procedureName = procedureName.replace(/\s+/g, '-').toLowerCase()   
     next();
 });
 

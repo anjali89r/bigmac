@@ -22,7 +22,7 @@ module.exports.addtreatmentDescription = function (req, res) {
     var saveFlag=false
 
     var treatmentSchema = new treatmentDescModel();
-
+//console.log(req.body['displayName'])
     new Promise(function (resolve, reject) {
         //check if procedure name already exists under a different department
         treatmentDescModel.findOne({
@@ -52,6 +52,7 @@ module.exports.addtreatmentDescription = function (req, res) {
                         var appIds = 0
                         getId("false", "true", function (id) {
                             appIds = id;
+                            console.log(appIds)
                             resolve("true|false|" + appIds);
                         })                               
                     } else {
@@ -72,15 +73,18 @@ module.exports.addtreatmentDescription = function (req, res) {
         var departmentId = parseInt(flag.split(/\|/)[2])
         var procedureId = parseInt(flag.split(/\|/)[3])
         //If department and treatments are not in db
+  //      console.log(departmentFound)
         if (departmentFound == 'false' && treatmentFound == 'false') {
             treatmentSchema.department = req.body["department"],
                 treatmentSchema.departmentId = departmentId,
                 treatmentSchema.departmentDescription = req.body["departmentDescription"],
                 treatmentSchema.serviceActiveFlag = req.body["serviceActiveFlag"],
                 treatmentSchema.departmentImagepath = req.body["departmentImagepath"],
+               // console.log("hello1",req.body['displayName'].replace(/\s+/g, '-').toLowerCase());
                 treatmentSchema.treatmentList = [{
                     //procedureName: req.body['procedureName'],
-                    procedureName: req.body['displayName'].replace(/\s+/g, '_'),
+                    
+                    procedureName: req.body['displayName'].replace(/\s+/g, '-').toLowerCase(),
                     procedureId: procedureId,
                     displayName: req.body['displayName'],
                     treatmentDescription: req.body['treatmentDescription'],
@@ -94,10 +98,11 @@ module.exports.addtreatmentDescription = function (req, res) {
                     procedureImagepath: req.body["procedureImagepath"],
                     activeFlag: req.body["activeFlag"]
                 }]
-
+                //console.log("hello2");
                 treatmentSchema.save(function (error) {
                     if (error) {
                         logger.error("Error while inserting record in treatment details collection: - " + error.message)
+                       // console.log("hello4");
                         return res.status(500).json({ "Message": error.message.trim() });
                     }
                     else {
@@ -106,6 +111,7 @@ module.exports.addtreatmentDescription = function (req, res) {
                 })
             
         } else if (departmentFound == 'true' && treatmentFound == 'false') {//update new field
+    //        console.log("hello3");
             treatmentDescModel.findOneAndUpdate({
                 "department": req.body["department"]
             },
@@ -113,7 +119,7 @@ module.exports.addtreatmentDescription = function (req, res) {
                     "$push": {
                         "treatmentList": {
                             //"procedureName": req.body['procedureName'],
-                            "procedureName": req.body['displayName'].replace(/\s+/g, '_'),
+                            "procedureName": req.body['displayName'].replace(/\s+/g, '-').toLowerCase(),
                             "procedureId": procedureId,
                             "displayName": req.body['displayName'],
                             "treatmentDescription": req.body['treatmentDescription'],

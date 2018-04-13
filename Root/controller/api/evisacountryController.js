@@ -78,6 +78,8 @@ module.exports.addorUpdateEvisaFee = function (req, res) {
                 id: req.body['id'],
                 country: req.body['country'],
                 fee: req.body['fee'],
+                dial_code: req.body['dial_code'],
+                code: req.body['code'],
                 disabled: req.body["disabled"]
             }]
 
@@ -102,6 +104,8 @@ module.exports.addorUpdateEvisaFee = function (req, res) {
                             "id": req.body['id'],
                             "country": req.body['country'],
                             "fee": req.body['fee'],
+                            "dial_code": req.body['dial_code'],
+                            "code": req.body['code'],
                             "disabled": req.body["disabled"]
                         }
                     }
