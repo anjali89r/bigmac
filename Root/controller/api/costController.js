@@ -36,10 +36,8 @@ var evisaCost = require('./evisacountryController.js');
 6./api/v1/post/treatmentdescription/:apiTokenName -Add procedure details to table,especially hospital stay for a treatment
 7.                                                - Cost of Visa
 8.                                                - Cost of flight ticket to India
+10./api/v1/post/currency/convertion/rate/:apiTokenName - Add currency conversion rate
 /**************************************************************************************************/
-
-var dollerRate = 65;
-
 /* wrapper function for external usage */
 module.exports.getTreatmentRoughEstimate_API = function (req, res) {
     getTreatmentRoughEstimate(req, res, function (data) {
@@ -258,13 +256,10 @@ var getAvarageCost = function (procedureName) {
                 var actualcost = 0   
                     for (i = 0; i <result.length; i++) {
                         var cost = result[i].Treatment.costLowerBound
-                        var currency = result[i].Treatment.currency
-                        if (currency = "INR") { //currency conversion logic
-                            cost = cost / dollerRate
-                        }                      
+                        var currency = result[i].Treatment.currency                                            
                         actualcost = actualcost + cost                        
                     }
-                    var avarageCost = Math.round(actualcost / result.length)                 
+                    var avarageCost = Math.round(actualcost / result.length)                  
                     resolve(JSON.parse(JSON.stringify([{ "avarageTreatmentCost": avarageCost }])))             
             }
         })
@@ -349,7 +344,7 @@ var getHolidayPackageCost = function (req, res) {
             {
                 "$project": {
                     "_id": 0,                    
-                    "totalPackageCost": { 
+                   /* "totalPackageCost": { 
                         "$cond": {
                             "if": {
                                 "$eq": ["$currency", 'INR']
@@ -358,7 +353,11 @@ var getHolidayPackageCost = function (req, res) {
                                 $ceil: { $divide: [{ $multiply: ["$packageCost", numPassengers] }, dollerRate] }},
                             "else": { $ceil: { $multiply: ["$packageCost", numPassengers] } },
                         }
-                    } 
+                    } */
+
+                    "totalPackageCost": {
+                        $ceil: { $multiply: ["$packageCost", numPassengers] }
+                    }
                 }
             }
         ], function (err, result) {
@@ -369,7 +368,7 @@ var getHolidayPackageCost = function (req, res) {
                 logger.info("There are no active holiday packages with name " + holidayPackage + " present in database");
                 resolve(JSON.parse(JSON.stringify([{ "totalPackageCost": 0 }])));
             }
-            else {                
+            else {                  
                 resolve(JSON.parse(JSON.stringify(result)))
             }
         })
@@ -423,6 +422,18 @@ var getAccomodationCost = function (req, res) {
                     "$project": {
                         "_id": 0,
                         "dailyAccomodationCost": {
+                            $sum: [
+                                { $multiply: [{ "$avg": "$cost.doubleBedRoomCost" }, numDoubleBedRoomsTobeBooked] },
+                                { $multiply: [{ "$avg": "$cost.singleBedRoomCost" }, numSingleBedRoomsTobeBooked] }
+                            ]
+                        },
+                        "totalAccomodationCost": {
+                            $sum: [
+                                { $multiply: [{ "$avg": "$cost.doubleBedRoomCost" }, numDoubleBedRoomsTobeBooked * duration] },
+                                { $multiply: [{ "$avg": "$cost.singleBedRoomCost" }, numSingleBedRoomsTobeBooked * duration] }
+                            ]
+                        }
+                       /* "dailyAccomodationCost": {
                             "$cond": {
                                 "if": {
                                     "$eq": ["$cost.currency", 'INR']
@@ -470,9 +481,8 @@ var getAccomodationCost = function (req, res) {
                                     ]
                                 }
                             }
-                        }
-                    },
-                                            
+                         } */
+                    },                          
                 },
             ], function (err, result) {
 
@@ -483,7 +493,7 @@ var getAccomodationCost = function (req, res) {
                     logger.info("There are no active hotel details present in database");
                     resolve(JSON.parse(JSON.stringify([{ "totalAccomodationCost": 0 }])));
                 }
-                else {
+                else {                    
                     resolve(JSON.parse(JSON.stringify(result)))
                 }
             })
@@ -567,6 +577,16 @@ var getLocalTransportCost = function (req, res) {
                     "$project": {
                         "_id": 0,
                         "dailyTransportationCost": {
+                            $sum: [
+                                { $multiply: [{ "$avg": "$vehicle.chargePerKiloMeter" }, (distanceToHospital * 2 * 2)] },
+                            ]
+                        },
+                        "totalTransportationCost": {
+                            $sum: [
+                                { $multiply: [{ "$avg": "$vehicle.chargePerKiloMeter" }, (distanceToHospital * 2 * 2) * duration] },
+                            ]
+                        }
+                       /* "dailyTransportationCost": {
                             "$cond": {
                                 "if": {
                                     "$eq": ["$vehicle.currency", 'INR']
@@ -608,8 +628,8 @@ var getLocalTransportCost = function (req, res) {
                                     ]
                                 }
                             }
-                        }
-                    }
+                        } */
+                    },                    
                 }
             ], function (err, result) {
 

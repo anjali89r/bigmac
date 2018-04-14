@@ -1,7 +1,9 @@
 var basicKey = 'bGliaW46bGliaW4=';
 var xAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVG9rZW5Ub0F1dGhlbnRpY2F0ZU1lZGlub3ZpdGFVc2VyIiwiaWF0IjoxNTA4MDQ0OTMwfQ.cZ3pCte1guE8KQkjd1KfY_bLJ-gOatJm2xlwyiLGAl4';
-var serverName = 'https://www.medinovita.in/';
-//var serverName = 'http://localhost:3000/';
+
+//var serverName = 'https://www.medinovita.in/';
+var serverName = 'http://localhost:1337/';
+
 var GLOBAL_VARIABLES = {
 	Language: 'en',
 	Currency: 'dollar'
@@ -2438,10 +2440,12 @@ function costCallback(data) {
 		var holidayPackage = $('#holidayPackageDropdown').val();
 
 		var countryName = $('#costcountry').val();
+		
+		var currency='Dollar'
 
 
 		$.ajax({
-			url: serverName + 'api/v1/get/cost/meditrip?procedurename=' + procedurName + '&bystandercount=' + bystandercount + '&holidaypackage=' + holidayPackage + '&hotelrate=3 star&vehicletype=sedan&countryName=' + countryName,
+			url: serverName + 'api/v1/get/cost/meditrip?procedurename=' + procedurName + '&bystandercount=' + bystandercount + '&holidaypackage=' + holidayPackage + '&hotelrate=3 star&vehicletype=sedan&countryName=' + countryName + '&currency=' + currency,
 			type: 'GET',
 			headers: {
 				'Content-Type': 'application/json',

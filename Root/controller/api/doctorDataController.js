@@ -49,7 +49,7 @@ module.exports.addDoctorData = function (req, res) {
     }).then(function () {
         doctorSchema.save(function (error, data) {
             if (error) {
-                logger.error("Error while inserting record in doctor daabase: - " + error);
+                logger.error("Error while inserting record in doctor database: - " + error);
                 return res.json({ "Message": error.message });
             }
             else {
