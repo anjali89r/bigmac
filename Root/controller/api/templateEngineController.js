@@ -12,6 +12,7 @@ var gridFS = require('./gridFSController.js');
 var mustache = require('mustache')
 var newsSectiondata = require('./newsSectionController.js');
 var enquiry = require('./userEnquiryController.js');
+var currency = require('./currencyController.js');
 
 
 /*This function is a demo function of the mustache template using hardcoded values.do not delete it*/
@@ -208,12 +209,13 @@ module.exports.getProcedureDescription = function (req, res) {
 module.exports.gettreatmentEstimate = function (req, res) {
 
     var procedureName = req.query.procedurename
+    var userCurrency = req.query.currency
 
     new Promise(function (resolve, reject) {
         //get the path of flat file with description
         treatmentDesc.getProcedureDetails(procedureName, function (result) {
-            var relFilePath = result[0].treatmentList[0].shortDescription // Procedure/Orthopedic/Hip Resurfacing.txt
-            resolve(relFilePath)
+            var relFilePath = result[0].treatmentList[0].shortDescription // Procedure/Orthopedic/Hip Resurfacing.txt           
+            resolve(relFilePath)            
         })
 
     }).then(function (relFilePath) {
@@ -234,8 +236,14 @@ module.exports.gettreatmentEstimate = function (req, res) {
         }).then(function (content) {
             /* get treatment cost */
 
-            var totalCostPromise = new Promise(function (resolve, reject) {
-                treatmentEstimate.getTreatmentRoughEstimate(req, res, function (estimate) {
+            var conversionRatePromise = new Promise(function (resolve, reject) {
+                currency.getConversionRate(userCurrency, function (conversionrate) {                    
+                    resolve(conversionrate)
+                })
+            })
+
+            var totalCostPromise = new Promise(function (resolve, reject) {               
+                treatmentEstimate.getTreatmentRoughEstimate(req, res, function (estimate) {                    
                     resolve(estimate)
                 })
             })
@@ -258,21 +266,24 @@ module.exports.gettreatmentEstimate = function (req, res) {
                 })
             })
 
-            Promise.all([totalCostPromise, hospitalStayPromise, topHospitalPromise, topDocPromise])
-                .then(([estimate, hospitalStay, topHospitals, topDoctors]) => {
+            Promise.all([totalCostPromise, hospitalStayPromise, topHospitalPromise, topDocPromise, conversionRatePromise])
+                .then(([estimate, hospitalStay, topHospitals, topDoctors, conversionrate]) => {
                     
                    var tophospitaldata = topHospitals
                    var topdocdata = topDoctors
-              
-                   var overallTripCost=estimate.totalExpense.mediTourEstimate
-                   var holidayPackageCost = estimate.holidayCost[0].totalPackageCost
-                   var localCommuteCost = estimate.localTransportCost[0].totalTransportationCost
-                   var accomodationCost = estimate.accomodationExpense[0].totalAccomodationCost
-                   var evisaFee = estimate.visaFee[0].fee
-                   var costOfProcedure = estimate.ProcedureAvarageCost[0].avarageTreatmentCost 
+
+                   var currencyConversionRate = conversionrate[0].conversionrate
+                   var currencySymbol = conversionrate[0].symbol                                      
+                   var overallTripCost = currencySymbol + (estimate.totalExpense.mediTourEstimate) * currencyConversionRate
+                   var holidayPackageCost = currencySymbol +(estimate.holidayCost[0].totalPackageCost) * currencyConversionRate
+                   var localCommuteCost = currencySymbol + (estimate.localTransportCost[0].totalTransportationCost ) * currencyConversionRate
+                   var accomodationCost = currencySymbol + (estimate.accomodationExpense[0].totalAccomodationCost) * currencyConversionRate
+                   var evisaFee = currencySymbol + estimate.visaFee[0].fee
+                   var costOfProcedure = currencySymbol + (estimate.ProcedureAvarageCost[0].avarageTreatmentCost) * currencyConversionRate
                    var maxHospitalization = hospitalStay[0].treatmentList.maxHospitalization
                    maxHospitalization = Math.round(maxHospitalization + (.40 * maxHospitalization)) //add 40% buffer                   
-                   var treatmentDuration = hospitalStay[0].treatmentList.minHospitalization + " to " + maxHospitalization  + " days"         
+                   var treatmentDuration = hospitalStay[0].treatmentList.minHospitalization + " to " + maxHospitalization + " days"         
+                   
                    var data = {
                         "totalCost": overallTripCost,
                         "holidayPkgCost": holidayPackageCost,

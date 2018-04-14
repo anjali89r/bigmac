@@ -74,23 +74,58 @@ module.exports.addorUpdateEvisaFee = function (req, res) {
 
         //add new record
         if (flag == true) {
-            evisacountrySchema.countrylist = [{
-                id: req.body['id'],
-                country: req.body['country'],
-                fee: req.body['fee'],
-                dial_code: req.body['dial_code'],
-                code: req.body['code'],
-                disabled: req.body["disabled"]
-            }]
+            evisacountry.find({
+                "countrylist.country": { "$exists": true }
+            }, function (err, docs) {
 
-            evisacountrySchema.save(function (error) {
-                if (error) {
-                    logger.error("Error while inserting record in evisa country collection: - " + error.message)
-                    return res.status(500).json({ "Message": error.message.trim() });
+                if (err) {
+                    return res.status(201).json({ "Message": "Error while inserting documents to evisa country model" });
+                } else if (typeof docs != "undefined" && docs != null && docs.length != null && docs.length > 0) {
+                    //update items to existing array
+                    evisacountry.update({
+                    }, {
+                            $push: {
+                                "countrylist": {
+                                    id: req.body['id'],
+                                    country: req.body['country'],
+                                    fee: req.body['fee'],
+                                    dial_code: req.body['dial_code'],
+                                    code: req.body['code'],
+                                    disabled: req.body["disabled"]
+                                }
+                            }
+                        }, function (err, doc) {
+                            if (err) {
+                                return res.status(201).json({ "Message": "Error while inserting documents to evisa country table" });
+                                logger.error("Error while inserting documents to evisa country model - " + err.message)
+                            } else {
+                                logger.info("Successfully added " + req.body['country'] + " in to evisa country model")
+                                return res.status(200).json({ "Message": "Successfully added " + req.body['country'] + " in to evisa country model" });
+                            }
+
+                        })
+
+                } else {
+                    evisacountrySchema.countrylist = [{
+                        id: req.body['id'],
+                        country: req.body['country'],
+                        fee: req.body['fee'],
+                        dial_code: req.body['dial_code'],
+                        code: req.body['code'],
+                        disabled: req.body["disabled"]
+                    }]
+
+                    evisacountrySchema.save(function (error) {
+                        if (error) {
+                            logger.error("Error while inserting record in evisa country collection: - " + error.message)
+                            return res.status(201).status(500).json({ "Message": error.message.trim() });
+                        }
+                        else {
+                            return res.status(200).json({ "Message": "Data got inserted successfully in evisacountries collection" });
+                        }
+                    })
                 }
-                else {
-                    return res.json({ "Message": "Data got inserted successfully in evisacountries collection" });
-                }
+
             })
 
         } else {//update fee
