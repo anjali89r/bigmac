@@ -24,7 +24,7 @@ module.exports.createHolidayPackage = function (req, res) {
         }, function (err, doc) {
             if (doc != null) {
                 logger.warn("Holiday package " + req.body['packageShortName'] + " already exists in database");
-                return reject(res.status(409).json({ "Message": "Holiday package " + req.body['packageShortName']  + " already exists in database" }));
+                return reject(res.status(400).json({ "Message": "Holiday package " + req.body['packageShortName']  + " already exists in database" }));
             } else {
                 counterSchema.getNext('holidayPackageId', collection, function (id) {
                     holidayPackageId = id;
@@ -53,13 +53,13 @@ module.exports.createHolidayPackage = function (req, res) {
                 return res.status(500).json({ "Message": error.message.trim() });
             }
             else {
-                return res.json({ "Message": "Data got inserted successfully in holiday collection" });
+                return res.status(201).json({ "Message": "Data got inserted successfully in holiday collection" });
             }
         })
 
     })
     .catch(function (err) {
-        return res.json({ "Message": err.message });
+        return res.status(500).json({ "Message": err.message });
     });
 
 }
@@ -78,7 +78,7 @@ module.exports.updateHolidayPackage = function (req, res) {
 
         if ((req.body['packageShortName'] == null) || (req.body['tourOperator'] == null)) {
             logger.error("Package short name or tour operator name is missing in the request");
-            return reject(res.status(409).json({ "Message": "Holiday package name or operator name is missing" }));
+            return reject(res.status(400).json({ "Message": "Holiday package name or operator name is missing" }));
         }
 
         holidayModel.findOneAndUpdate({ "packageShortName": req.body['packageShortName'], "tourOperator": req.body['tourOperator'] },
@@ -112,9 +112,9 @@ module.exports.updateHolidayPackage = function (req, res) {
             });
 
     }).then(function () {
-        return res.json({ "Message": "Holiday data got updated successfully" });
+        return res.status(202).json({ "Message": "Holiday data got updated successfully" });
     }).catch(function (err) {
-        return res.json({ "Message": err.message });
+        return res.status(500).json({ "Message": err.message });
     });
 }
 

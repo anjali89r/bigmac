@@ -99,15 +99,15 @@ module.exports.createHospitalRecord = function (req, res) {
             hospitalSchema.save(function (error, data) {
                 if (error) {
                     logger.error("Error while inserting record : - " + error);
-                    return res.json({ "Message": error.message});
+                    return res.status(500).json({ "Message": error.message});
                 }
                 else {
-                    return res.json({ "Message": "Data got inserted successfully" });
+                    return res.status(201).json({ "Message": "Data got inserted successfully" });
                 }
             });
         })
         .catch(function (err) {
-            return res.json({ "Message": err.message });
+            return res.status(500).json({ "Message": err.message });
         });
 
     //function to set data in db
@@ -213,9 +213,9 @@ module.exports.updateHospitalNameNContactDetails = function (req, res) {
                     return res.status(500).json({ "Message": err.message });
                 } else if (doc === null) {
                     logger.error("Error while updating record : - Hospital not found in database");
-                    return res.status(408).json({ "Message": "Hospital not found in database" });
+                    return res.status(400).json({ "Message": "Hospital not found in database" });
                 }
-                res.status(200).json({ "Message": "Hopsital details for " + hospitalName + " have been updated successfully" });
+                res.status(202).json({ "Message": "Hopsital details for " + hospitalName + " have been updated successfully" });
             });
         }
     })
@@ -252,7 +252,7 @@ module.exports.addProcedureDetails = function (req, res) {
     //check if api call is passing all relavent informations
     if (hospitalName === null || hospitalCity === null || hospitalCountry === null) {
         logger.error("Error while updating hospital record : - hospitalName, hospitalCity and hospitalCountry cannot be null");
-        return res.status(500).json({ "Message": "Hospital Name, Hospital City and Hospital Country cannot be null" });
+        return res.status(400).json({ "Message": "Hospital Name, Hospital City and Hospital Country cannot be null" });
     }
     
     //create doctor promise
@@ -335,7 +335,7 @@ module.exports.addProcedureDetails = function (req, res) {
                     if (doc !== null) {
                         doctorFound = true
                         logger.info("Doctor " + doctorName + " offering " + procedureName + " already exists in " + hospitalName + " database");
-                        return reject(res.status(409).json({
+                        return reject(res.status(400).json({
                             "Message": "Doctor " + doctorName + " offering " + procedureName + " already exists in " + hospitalName + " database" 
                         }));                        
                     }
@@ -344,7 +344,7 @@ module.exports.addProcedureDetails = function (req, res) {
 
             if (treatmentFound == true && doctorFound == true) {
                 logger.error("Procedure " + procedureName + " and doctor details are already exists in " + hospitalName + " database")
-                return reject(res.status(409).json({ "Message": "Procedure " + procedureName + " and doctor details are already exists in " + hospitalName + " database" }));
+                return reject(res.status(400).json({ "Message": "Procedure " + procedureName + " and doctor details are already exists in " + hospitalName + " database" }));
             }
             const searchResult = treatmentFound + "|" + doctorFound            
             resolve(searchResult);
@@ -479,7 +479,7 @@ module.exports.addProcedureDetails = function (req, res) {
             }
         }).
         then(function () {          
-            return res.json({ "Message": "Data got updated successfully" });
+            return res.status(201).json({ "Message": "Data got updated successfully" });
         })
         .catch(function (err) {
             return res.json({ "Message": err.message });
@@ -507,7 +507,7 @@ module.exports.addDoctorDetails = function (req, res) {
     //check if api call is passing all relavent informations
     if (hospitalName === null || hospitalCity === null || hospitalCountry === null) {
         logger.error("Error while updating hospital record : - hospitalName, hospitalCity and hospitalCountry cannot be null");
-        return res.status(500).json({ "Message": "Hospital Name, Hospital City and Hospital Country cannot be null" });
+        return res.status(400).json({ "Message": "Hospital Name, Hospital City and Hospital Country cannot be null" });
     }
 
     //create doctor promise
@@ -525,9 +525,9 @@ module.exports.addDoctorDetails = function (req, res) {
         }, function (err, doc) {
             if (doc == null) {
                 logger.error("Hospital " + hospitalName + "does not exists in database");
-                return reject(res.status(409).json({ "Message": "Hospital " + hospitalName + "does not exists in database" }));
+                return reject(res.status(400).json({ "Message": "Hospital " + hospitalName + "does not exists in database" }));
             }
-            resolve();
+            resolve()
         })
     );
 
@@ -541,7 +541,7 @@ module.exports.addDoctorDetails = function (req, res) {
         }, function (err, doc) {
             if (doc == null) {
                 logger.error("Procedure " + procedureName + " does not exists in " + hospitalName + " database");
-                return reject(res.status(409).json({ "Message": "Procedure " + procedureName + "does not exists in " + hospitalName + " database" }));
+                return reject(res.status(400).json({ "Message": "Procedure " + procedureName + "does not exists in " + hospitalName + " database" }));
             }
             resolve();
         })
@@ -560,7 +560,7 @@ module.exports.addDoctorDetails = function (req, res) {
         }, function (err, doc) {
             if (doc !== null) {
                 logger.error("Doctor " + doctorName + " offering " + procedureName + "already exists in " + hospitalName + " database");
-                return reject(res.status(409).json({
+                return reject(res.status(400).json({
                     "Message": "Doctor " + doctorName + " offering " + procedureName + "already exists in " + hospitalName + " database"
                 }));
             }
@@ -606,16 +606,16 @@ module.exports.addDoctorDetails = function (req, res) {
                     return res.status(500).json({ "Message": err.message });
                 } else if (doc === null) {
                     logger.error("Error while updating record : - Hospital not found in database");
-                    return res.status(408).json({ "Message": "Hospital not found in database" });
+                    return res.status(400).json({ "Message": "Hospital not found in database" });
                 }
                 logger.info("Doctor " + doctorName + " offering " + procedureName + " is added to " + hospitalName + " database" )
-                res.status(200).json({ "Message": "Doctor " + doctorName + " offering " + procedureName + " is added to " + hospitalName + " database" });
+                res.status(201).json({ "Message": "Doctor " + doctorName + " offering " + procedureName + " is added to " + hospitalName + " database" });
 
             });
 
         })
         .catch(function (err) {
-            return res.json({ "Message": err.message });
+            return res.status(500).json({ "Message": err.message });
         });
 
 }  

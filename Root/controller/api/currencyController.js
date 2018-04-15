@@ -60,7 +60,7 @@ module.exports.addorUpdateCurrencydata = function (req, res) {
             }, function (err, docs) {
                 
                 if (err) {
-                    return res.status(201).json({ "Message": "Error while inserting documents to currency model" });
+                    return res.status(500).json({ "Message": "Error while inserting documents to currency model" });
                 } else if (typeof docs != "undefined" && docs != null && docs.length != null && docs.length > 0) {
                     //update items to existing array
                     currencyModel.update({                       
@@ -74,11 +74,11 @@ module.exports.addorUpdateCurrencydata = function (req, res) {
                             }
                         }, function (err, doc) {
                             if (err) {
-                                return res.status(201).json({ "Message": "Error while inserting documents to currency model" });
+                                return res.status(500).json({ "Message": "Error while inserting documents to currency model" });
                                 logger.error("Error while inserting documents to currency model - " + err.message)
                             } else {
                                 logger.info("Successfully added " + req.body['currency'] + " in to currency model")
-                                return res.status(200).json({ "Message": "Successfully added " + req.body['currency'] + " in to currency model"});
+                                return res.status(202).json({ "Message": "Successfully added " + req.body['currency'] + " in to currency model"});
                             }
 
                         })
@@ -93,10 +93,10 @@ module.exports.addorUpdateCurrencydata = function (req, res) {
                         currencySchema.save(function (error) {
                             if (error) {
                                 logger.error("Error while inserting record in currency data collection: - " + error.message)
-                                return res.status(201).json({ "Message": error.message.trim() });
+                                return res.status(500).json({ "Message": error.message.trim() });
                             }
                             else {
-                                return res.json({ "Message": "Data got inserted successfully in currency data collection" });
+                                return res.status(201).json({ "Message": "Data got inserted successfully in currency data collection" });
                             }
                         })
                 }
@@ -129,13 +129,13 @@ module.exports.addorUpdateCurrencydata = function (req, res) {
                             "Message": "Error while updating currency record for " + req.body['currency'] + err.message
                         });
                     } else {
-                        return res.json({ "Message": "Data got updated successfully in currency conversion collection" });
+                        return res.status(201).json({ "Message": "Data got updated successfully in currency conversion collection" });
                     }
                 });
         }
 
     }).catch(function (err) {
-        return res.json({ "Message": err.message });
+        return res.status(500).json({ "Message": err.message });
     });
 
 }
