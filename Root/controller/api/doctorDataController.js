@@ -50,10 +50,10 @@ module.exports.addDoctorData = function (req, res) {
         doctorSchema.save(function (error, data) {
             if (error) {
                 logger.error("Error while inserting record in doctor database: - " + error);
-                return res.json({ "Message": error.message });
+                return res.status(500).json({ "Message": error.message });
             }
             else {
-                return res.json({ "Message": "Data got inserted successfully in doctor table" });
+                return res.status(201).json({ "Message": "Data got inserted successfully in doctor table" });
             }
         });
 

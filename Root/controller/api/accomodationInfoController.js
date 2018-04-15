@@ -76,13 +76,13 @@ module.exports.addAccomodationVendorDtls = function (req, res) {
                 return res.status(500).json({ "Message": error.message.trim() });
             }
             else {
-                return res.json({ "Message": "Data got inserted successfully in hotel_details collection" });
+                return res.status(201).json({ "Message": "Data got inserted successfully in hotel_details collection" });
             }
         })
 
     })
     .catch(function (err) {
-        return res.json({ "Message": err.message });
+        return res.status(500).json({ "Message": err.message });
     });
 }
 
@@ -143,7 +143,7 @@ module.exports.updateAccomodationVendorDtls = function (req, res) {
             } else {
                 //save document
                 doc.save()
-                return res.json({ "Message": "Data got updated successfully in hotel_details collection" });                
+                return res.status(202).json({ "Message": "Data got updated successfully in hotel_details collection" });                
             }
 
         });

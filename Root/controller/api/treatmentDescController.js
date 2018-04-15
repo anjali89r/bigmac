@@ -42,7 +42,7 @@ module.exports.addtreatmentDescription = function (req, res) {
         }, function (err, doc) {
             if (doc !=null && doc.department != null) {
                 logger.warn("Procedure name " + req.body['procedureName'] + " already exists in database");
-                return reject(res.status(200).json({ "Message": "Procedure name " + req.body['procedureName'] + " already exists in database" }));
+                return reject(res.status(409).json({ "Message": "Procedure name " + req.body['procedureName'] + " already exists in database" }));
             } else {//check if department is already added to collection
                 treatmentDescModel.findOne({
                     "department": req.body["department"]
@@ -106,7 +106,7 @@ module.exports.addtreatmentDescription = function (req, res) {
                         return res.status(500).json({ "Message": error.message.trim() });
                     }
                     else {
-                        return res.json({ "Message": "Data got inserted successfully in treatmentOffered_description collection" });
+                        return res.status(201).json({ "Message": "Data got inserted successfully in treatmentOffered_description collection" });
                     }
                 })
             
@@ -147,13 +147,13 @@ module.exports.addtreatmentDescription = function (req, res) {
                             "Message": "Error while adding new record for " + req.body['displayName'] + err.message
                         });
                     } else {
-                        return res.json({ "Message": "Data got updated successfully in treatmentOffered_description collection" });
+                        return res.status(201).json({ "Message": "Data got updated successfully in treatmentOffered_description collection" });
                     }                    
                 });
             }
 
     }).catch(function (err) {
-        return res.json({ "Message": err.message });
+        return res.status(500).json({ "Message": err.message });
     });
 }
 /* API to get treatment details */

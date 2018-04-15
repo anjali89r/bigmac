@@ -96,11 +96,11 @@ module.exports.addorUpdateEvisaFee = function (req, res) {
                             }
                         }, function (err, doc) {
                             if (err) {
-                                return res.status(201).json({ "Message": "Error while inserting documents to evisa country table" });
+                                return res.status(500).json({ "Message": "Error while inserting documents to evisa country table" });
                                 logger.error("Error while inserting documents to evisa country model - " + err.message)
                             } else {
                                 logger.info("Successfully added " + req.body['country'] + " in to evisa country model")
-                                return res.status(200).json({ "Message": "Successfully added " + req.body['country'] + " in to evisa country model" });
+                                return res.status(202).json({ "Message": "Successfully added " + req.body['country'] + " in to evisa country model" });
                             }
 
                         })
@@ -118,10 +118,10 @@ module.exports.addorUpdateEvisaFee = function (req, res) {
                     evisacountrySchema.save(function (error) {
                         if (error) {
                             logger.error("Error while inserting record in evisa country collection: - " + error.message)
-                            return res.status(201).status(500).json({ "Message": error.message.trim() });
+                            return res.status(500).json({ "Message": error.message.trim() });
                         }
                         else {
-                            return res.status(200).json({ "Message": "Data got inserted successfully in evisacountries collection" });
+                            return res.status(201).json({ "Message": "Data got inserted successfully in evisacountries collection" });
                         }
                     })
                 }
@@ -157,7 +157,7 @@ module.exports.addorUpdateEvisaFee = function (req, res) {
                             "Message": "Error while adding new fee record for " + req.body['country'] + err.message
                         });
                     } else {
-                        return res.json({ "Message": "Data got updated successfully in evisacountries collection" });
+                        return res.status(201).json({ "Message": "Data got updated successfully in evisacountries collection" });
                     }
                 });
         }

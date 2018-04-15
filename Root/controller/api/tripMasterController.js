@@ -153,7 +153,7 @@ module.exports.inserttripDetails = function (req, res) {
                 logger.error("Error while inserting record : - " + err)
                 return res.json({ "err": err.message.split(":")[2].trim() });
             }
-            return res.send("Data got inserted");
+            return res.status(201).send("Data got inserted");
         });
         
 };

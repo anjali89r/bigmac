@@ -62,7 +62,7 @@ module.exports.getOfficeLocations = function (req, res) {
             return res.status(500).json({ "Message": err.message.trim() });
         } else if (result == null) {
             logger.info("There are no office address present in database");
-            return res.status(200).json({ "Message": err.message.trim() });
+            return res.status(404).json({ "Message": err.message.trim() });
         }
         else {
             return res.json(result);
@@ -87,7 +87,7 @@ module.exports.addOfficeLocations = function (req, res) {
             /* Initial Validation */
             if (req.body["country"] == null || req.body["city"] == null || req.body["addressLine1"] == null || req.body["postCode"] == null) {
                 logger.error("Mandatory fields are not supplied from GUI to update locations details");
-                return reject(res.status(409).json({
+                return reject(res.status(400).json({
                     "Message": "Mandatory fields are missing in the request"
                 }));
             }
@@ -117,7 +117,7 @@ module.exports.addOfficeLocations = function (req, res) {
                         return res.status(500).json({ "Message": error.message.trim() });
                     } else {
                         resolve()
-                        return res.json({ "Message": "Office location got inserted successfully" });
+                        return res.status(201).json({ "Message": "Office location got inserted successfully" });
                     }
                    
                 })
@@ -158,7 +158,7 @@ module.exports.addOfficeLocations = function (req, res) {
                             }));
                         } else {
                             resolve();
-                            return res.json({ "Message": "Office location got updated successfully" });
+                            return res.status(201).json({ "Message": "Office location got updated successfully" });
                         }                       
                     });
             } else {//if (countryFound == true && cityFound == true)
@@ -194,7 +194,7 @@ module.exports.addOfficeLocations = function (req, res) {
                             }));
                         } else {
                             resolve();
-                            return res.json({ "Message": "Office location got updated successfully" });
+                            return res.status(201).json({ "Message": "Office location got updated successfully" });
                         }                       
                     });
             }

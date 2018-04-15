@@ -38,7 +38,7 @@ module.exports.uploadfile = function (req, res,next) {
             res.status(500).end("Error in uploading files"); 
         }    
         // Everything went fine
-        res.status(200).end("File is uploaded");
+        res.status(202).end("File is uploaded");
       })
     
     }
@@ -48,7 +48,7 @@ module.exports.downloadcloudFiles=function(req,res) {
       
     var filename = req.body.fileName
     getPreSignedUrlS3(filename, function (url) {        
-        res.end(JSON.stringify({
+        res.status(202).end(JSON.stringify({
             URL: url })	)
     })
        
@@ -116,7 +116,7 @@ module.exports.ZipAndUploadToS3WithMulter = function (req, res, next) {
    uploadservice(req, res, function (err) {
        if (err) {           
            logger.error("error - " + err)
-           res.status(200).end("File upload is failure due to - " + err); 
+           res.status(500).end("File upload is failure due to - " + err); 
        } else { 
            var files = req.files                    
             var JSZip = require("jszip");
@@ -139,10 +139,10 @@ module.exports.ZipAndUploadToS3WithMulter = function (req, res, next) {
                }, function (error, response) {
                    if (error) {
                        logger.error("error while uploading files to S3 using multer -  " + error)
-                       res.status(200).end("AWS File upload failed"); 
+                       res.status(408).end("AWS File upload failed"); 
                    } else {
                        logger.info("AWS file upload is success")
-                       res.status(200).end("File is uploaded successfully"); 
+                       res.status(201).end("File is uploaded successfully"); 
                    } 
                });
            }) 

@@ -71,13 +71,13 @@ module.exports.addLocalTransportVendorDtls = function (req, res) {
                 return res.status(500).json({ "Message": error.message.trim() });
             }
             else {
-                return res.json({ "Message": "Data got inserted successfully in local_transport_details collection" });
+                return res.status(201).json({ "Message": "Data got inserted successfully in local_transport_details collection" });
             }
         })
 
     })
     .catch(function (err) {
-        return res.json({ "Message": err.message });
+        return res.status(500).json({ "Message": err.message });
     });
 }
 
@@ -122,7 +122,7 @@ module.exports.updateLocalTransportVendorDtls = function (req, res) {
             }) */
 
         }).catch(function (err) {
-           return res.json({ "Message": err.message });
+           return res.status(500).json({ "Message": err.message });
     });
 }
 
@@ -203,7 +203,7 @@ var updateJustVehicleDetailsOnly = function (req, res) {
                 } else {
                     //save document
                     doc.save()
-                    return resolve(res.status(200).json({
+                    return resolve(res.status(202).json({
                         "Message": "Data got updated successfully in transport details collection"
                     }));
 
@@ -258,7 +258,7 @@ var addJustNewVehicleDetailsOnly = function (req, res) {
                      //save document
                      doc.save()
 
-                     return resolve(res.status(200).json({
+                     return resolve(res.status(201).json({
                          "Message": "Data got updated successfully in transport details collection"
                      }));
                  }                        
@@ -298,7 +298,7 @@ var updateJustServiceDetailsOnly = function (req, res) {
                     //save document
                     doc.save()
 
-                    return resolve(res.status(200).json({
+                    return resolve(res.status(202).json({
                         "Message": "Data got updated successfully in transport details collection"
                     }));     
                 }                
@@ -371,7 +371,7 @@ module.exports.getActiveTransportVendorDtls = function (req, res) {
             return res.status(500).json({ "Message": err.message.trim() });
         } else if (!result.length) {
             logger.info("There are no active transportation vendors present in database");
-            return res.status(200).json({ "Message": "There are no active transportation vendors present in database" });
+            return res.status(400).json({ "Message": "There are no active transportation vendors present in database" });
         }
         else {
             return res.status(200).json(result);

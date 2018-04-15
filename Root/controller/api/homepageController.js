@@ -38,7 +38,7 @@ module.exports.addHomepagedetails = function (req, res) {
                     return res.status(500).json({ "Message": error.message.trim() });
                 }
                 else {
-                    return res.json({ "Message": "Home page details are updated to DB" });
+                    return res.status(201).json({ "Message": "Home page details are updated to DB" });
                 }
             })
         })
