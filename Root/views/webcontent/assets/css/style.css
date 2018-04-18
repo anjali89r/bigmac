@@ -2796,8 +2796,8 @@ label.error {
   padding: 25px 17px;
   text-align: center;
   transition: all 0.4s;
-  width:25%;
-  height:200px;
+  /* width:25%;
+  height:200px; */
 }
 
 .service.service-box.service-icon-top {
@@ -14438,32 +14438,14 @@ div.margin20{
     padding-left: 19px;
     padding-top: 17px;
     padding-bottom:15px;
-    margin-bottom:70px;
+    /* margin-bottom:70px; */
   }
 }
-@media (min-width: 992px) and (max-width:1199px){
-  .hospital-select{
-    margin-left: 159px;
-  }
-  .searchhosp{
-    margin-left: 388px;
-    margin-top: 10px;
-  }
-}
-@media (min-width:1200px){
-  .hospital-select{
-    margin-left: 233px;
-  }
-  .searchhosp{
-    margin-left: 515px;
-    margin-top: 10px;
 
-  }
-}
 @media (max-width: 991px){
 
   .hosp-header{
-    margin-bottom: 50px;
+    /* margin-bottom: 50px; */
     padding-bottom: 7px;
   }
   .test{
@@ -14473,35 +14455,9 @@ div.margin20{
     margin-bottom: 30px;
   }
 }
-@media (max-width: 645px){
-  .hospital-select{
-    margin-left: 0px;
-  }
-  .hospital-select-city{
-    margin-left: 0px;
-    margin-top:6px;
-  }
-  .searchhosp{
-    margin-left: 0px;
-    margin-top: 6px;
 
-  }
-}
 
-@media (min-width: 646px) and (max-width:991px){
-  .hospital-select{
-    margin-left: 187px;
-  }
-  .hospital-select-city{
-    margin-left: 187px;
-    margin-top:6px;
-  }
-  .searchhosp{
-    margin-left: 235px;
-    margin-top: 6px;
 
-  }
-}
 
 
 /*header.html */
@@ -14776,4 +14732,9 @@ table{
   background-color: #f9f9f9;
   padding: 13px;
   box-shadow: 2px 2px 2px 2px #ccc;
+}
+
+/* ourservices.html */
+.style-check{
+  color: orange;
 }

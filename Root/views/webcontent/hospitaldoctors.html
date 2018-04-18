@@ -74,8 +74,8 @@
 
 
                  <!-- REVOLUTION JS FILES -->
-                 <script type="text/javascript" src="/assets/js/jquery.themepunch.tools.min.js"></script>
-                 <script type="text/javascript" src="/assets/js/jquery.themepunch.revolution.min.js"></script>
+                 <!-- <script type="text/javascript" src="/assets/js/jquery.themepunch.tools.min.js"></script>
+                 <script type="text/javascript" src="/assets/js/jquery.themepunch.revolution.min.js"></script> -->
                  <script src="/assets/js/jquery-ui.min.js"></script>
 
                  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.js"></script>
@@ -83,7 +83,7 @@
     </head>
     <body>
 
-        <script id="tpl-alert" type="text/x-handlebars-template">
+        <!-- <script id="tpl-alert" type="text/x-handlebars-template">
             <div class="overlay">
               <div class="window-message-container type-alert">
                 <div class="window-message-container__text">{{message}}</div>
@@ -93,7 +93,7 @@
                 <a href="#" class="alert-close img-replace">Close</a>
               </div>
             </div>
-          </script>
+          </script> -->
     <!-- Google Tag Manager (noscript) added by libin-->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KVPCCNV"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -119,74 +119,125 @@
                   </ol>
                 </div><!-- End .container -->
               </div><!-- End .page-header -->
-              <div class="container-fluid" >
-                <div class="hospitals-style" style="font-size:14px; line-height:1.5em;padding-top:30px;">
-                  <div class="container">
-                    <div class="row hosp-header" style="background-color: #f9f9f9;margin-right:auto;margin-left:auto;border-radius:10px; box-shadow: 2px 2px 6px #aaaaaa; border:1px solid #ccc;">
-                      <div class="col-md-4 hospital-select">
+              <!-- SELECT -->
+              <!-- <div class="container">
+                <div class="row hosp-header">
+                  <div class="col-md-4 hospital-select">
 
-                          <div class="inspire"><span style="font-weight:600">Treatment</span></div><div class="treatment-select">
-                          <select id="selectTreatment" class="selectpicker " data-live-search="true" data-width="auto"  data-dropup-auto="false" standard title="Select Treatment...">
-
-
-                          </select>
-                          <script type="text/javascript">$('#selectTreatment').selectpicker('render');</script>
-                        </div>
-                      </div>
-                      <div class="col-md-4 hospital-select-city">
-
-                          <div class="inspire"><span style="font-weight:600">City</span></div><div class="treatment-select">
-                          <select id="selectCity" class="selectpicker " data-live-search="true" data-width="auto"  data-dropup-auto="false" standard title="Select City...">
+                      <div class="inspire"><span style="font-weight:600">Treatment</span></div><div class="treatment-select">
+                      <select id="selectTreatment" class="selectpicker " data-live-search="true" data-width="auto"  data-dropup-auto="false" standard title="Select Treatment...">
 
 
-
-                          </select>
-                          <script type="text/javascript">$('#selectCity').selectpicker('render');</script>
-                        </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4 searchhosp">
-                          <button type="button" class="btn  btn-success btn-lg btn-rounded">Search</button>
-                      </div>
+                      </select>
+                      <script type="text/javascript">$('#selectTreatment').selectpicker('render');</script>
                     </div>
-                    <!-- test1moustache************************************-->
-                   <!-- shortcut -->
-                   <div class="container hosp-main">
-                    <!-- <div class="tobehidden">
-
-                    </div> -->
-
-                   </div>
-
-                   <!-- end of shortcut -->
-
                   </div>
+                  <div class="col-md-4 hospital-select-city">
 
+                      <div class="inspire"><span style="font-weight:600">City</span></div><div class="treatment-select">
+                      <select id="selectCity" class="selectpicker " data-live-search="true" data-width="auto"  data-dropup-auto="false" standard title="Select City...">
+
+
+
+                      </select>
+                      <script type="text/javascript">$('#selectCity').selectpicker('render');</script>
+                    </div>
+                    </div>
                   </div>
-                  <div class="pagination" ></div>
-
-                </div>
-            </div>
-
-
-            <div class="medinovitaFooter"></div>
-        </div><!-- End #wrapper -->
-        <div class="medinovitaModals"></div>
-        </div><!-- End #wrapper -->
-
-                    <!-- Latest compiled and minified JavaScript -->
-
-    <script type="text/javascript" src="/assets/js/simplePagination.js"></script>
+                  <div class="col-md-4 searchhosp">
+                      <button type="button" class="btn  btn-success btn-lg btn-rounded">Search</button>
+                  </div>
+                </div> -->
+                 <!-- SELECT -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9 hosp-main" style="margin-top:35px;">
 
 
-    <script src="/assets/customjs/chat.js"></script>
-    <!-- <script type="text/javascript" src="/assets/js/mustache.js"></script> -->
-    <script src="/assets/js/main.js"></script>
 
 
+
+
+
+
+
+                            <nav class="pagination-container">
+                                <label>Showing: 1-4 of 16</label>
+                                <ul class="pagination">
+                                    <li class="active"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li>
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true"><i class="fa fa-angle-right"></i></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div><!-- End .col-md-9 -->
+
+                        <aside class="col-md-3 sidebar shop-sidebar">
+
+                            <div class="widget">
+                                <div class="filter-group-widget">
+                                    <div class="panel-group" role="tablist" aria-multiselectable="true">
+                                        <div class="panel panel-custom">
+                                            <div class="panel-heading" role="tab" id="treatmentFilter-header">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" href="#treatmentFilter" aria-expanded="true" aria-controls="treatmentFilter">
+                                                        Treatment Filter
+                                                        <span class="panel-icon"></span>
+                                                    </a>
+                                                </h4>
+                                            </div><!-- End .panel-heading -->
+                                            <div id="treatmentFilter" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="treatmentFilter-header">
+                                                <div class="hospital-selectTreatment panel-body">
+                                                    <ul class="filter-treatment-list" id="selectTreatment">
+
+                                                    </ul>
+                                                </div><!-- End .panel-body -->
+                                            </div><!-- End .panel-collapse -->
+                                        </div><!-- End .panel -->
+
+                                        <div class="panel panel-custom">
+                                            <div class="panel-heading" role="tab" id="cityFilter-header">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" href="#cityFilter" aria-expanded="true" aria-controls="cityFilter">
+                                                        City Filter
+                                                        <span class="panel-icon"></span>
+                                                    </a>
+                                                </h4>
+                                            </div><!-- End .panel-heading -->
+                                            <div id="cityFilter" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="cityFilter-header">
+                                                <div class="hospital-select-city panel-body">
+                                                    <ul class="filter-city-list" id="selectCity">
+
+                                                    </ul>
+                                                </div><!-- End .panel-body -->
+                                            </div><!-- End .panel-collapse -->
+                                        </div><!-- End .panel -->
+                                    </div>
+                                    <div class="detail-treatment">
+                                        <button type="submit">Submit</button>
+                                    </div>
+                                </div>
+                            </div><!-- End .widget -->
+                        </aside>
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .main -->
+
+
+
+         <div class="medinovitaFooter"></div>
+    </div><!-- End #wrapper -->
+    <div class="medinovitaModals"></div>
+  </div><!-- End #wrapper -->
+
+        <!-- End -->
+        <!-- <script src="assets/js/plugins.min.js"></script> -->
+        <script src="/assets/js/main.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     </body>
-    </html>
-
-
-
-
+</html>
