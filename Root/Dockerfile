@@ -4,7 +4,9 @@ WORKDIR /usr/src/app
 COPY package.json .
 RUN npm install --production
 COPY . .
+RUN mkdir ./log
 RUN chown -R node:node /usr/src/app/log
 RUN chmod 755 /usr/src/app/log
 USER node
+VOLUME /log
 CMD ["node","app.js"]

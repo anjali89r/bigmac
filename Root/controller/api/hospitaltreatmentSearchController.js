@@ -375,7 +375,7 @@ function gethospitalrecordsfortreatmentname(treatmentdisplayname,city,accreditat
   
 
     new Promise(function (resolve, reject) {
-       // console.log("treament name is ",treatmentdisplayname)
+        //console.log("treament name is ",treatmentdisplayname)
 
        if ((city==null || undefined) && (accreditation==null || undefined))
        {

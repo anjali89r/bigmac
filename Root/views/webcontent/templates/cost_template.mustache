@@ -20,12 +20,12 @@
             <tbody id="costRow">
                <tr class="info" >
                   <td>{{treatmentduration}}</td>
-                  <td>${{costOfProcedure}}</td>
-                  <td>${{accomodationCost}}</td>
-                  <td>${{localCommuteCost}}</td>
-                  <td>${{visaFee}}</td>
-                  <td>${{holidayPkgCost}}</td>
-                  <td>${{totalCost}}</td>
+                  <td>{{costOfProcedure}}</td>
+                  <td>{{accomodationCost}}</td>
+                  <td>{{localCommuteCost}}</td>
+                  <td>{{visaFee}}</td>
+                  <td>{{holidayPkgCost}}</td>
+                  <td>{{totalCost}}</td>
                </tr>
             </tbody>
          </table>
@@ -49,7 +49,7 @@
                   <img src="{{{hospitalimage}}}" class="img-thumbnail transperentboarder" alt="Responsive image">
                 </div>
                 <div>
-                  <a href="#" title="Click View Details">
+                  <a href="/hospitals/{{hospitalName}}" title="Click View Details">
                         <h5 class="text-primary">
                           {{hospitalName}},
                             <p>{{hospitalcity}},{{hospitalcountry}}</p>
@@ -93,7 +93,8 @@
 <!-- Row ,Hospital & Doctor  main container -->
 <p></p>
 <p></p>
-<!-- <div class="container contact-div" style="margin-bottom:20px; background-image:url(/assets/images/medinovita/contactusbanner.png)">
+
+<!-- <div class="container contact-div" style="margin-bottom:20px; background-image:url(//res.cloudinary.com/ddglp4e0g/image/upload/v1510441826/novita/header_oucn1m.jpg)">
   <a href="#"  title="Click to submit enquiry">
       <button class="btn btn-success"> Contact Us</button>
 

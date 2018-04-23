@@ -3,6 +3,7 @@ var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/hospitalDoctorDetailsModel.js');
 var treatmentController = require('./treatmentDescController.js');
+var docDataController = require('./doctorDataController.js');
 var hospitalModel = mongoose.model('hospital_doctor_details');
 var counterSchema = require('../../model/identityCounterModel.js');
 
@@ -25,6 +26,14 @@ module.exports.createHospitalRecord = function (req, res) {
             if (flag == 'false') {
                 return reject(res.status(409).json({
                     "Message": "Please add procedure " + req.body["procedureName"] + " first to treatments description table using /api/v1/post/treatmentdescription/:apiTokenName" }));
+            }
+        })
+
+        docDataController.isDoctorExists(req.body["registrationNumber"], req.body["registrationAuthority"], function (flag) {
+            if (flag == 'false') {
+                return reject(res.status(409).json({
+                    "Message": "Please add doctor with registreation number " + req.body["registrationNumber"] + " first to Doctor Data table using /api/v1/post/docdata/:apiTokenName"
+                }));
             }
         })
 
@@ -90,24 +99,25 @@ module.exports.createHospitalRecord = function (req, res) {
             hospitalSchema.save(function (error, data) {
                 if (error) {
                     logger.error("Error while inserting record : - " + error);
-                    return res.json({ "Message": error.message});
+                    return res.status(500).json({ "Message": error.message});
                 }
                 else {
-                    return res.json({ "Message": "Data got inserted successfully" });
+                    return res.status(201).json({ "Message": "Data got inserted successfully" });
                 }
             });
         })
         .catch(function (err) {
-            return res.json({ "Message": err.message });
+            return res.status(500).json({ "Message": err.message });
         });
 
     //function to set data in db
     function setData(hospitalID, doctorID, departmentID, procedureID) {
 
-        /*Update treatments offered collection */
-      
+        /*Update treatments offered collection */        
         hospitalSchema.hospitalID = hospitalID
+        hospitalSchema.hospitalimage = req.body['hospitalimage'];
         hospitalSchema.hospitalName = req.body['hospitalname'];
+        //hospitalSchema.hospitaldisplayname = req.body['hospitaldisplayname'];
         hospitalSchema.hospitalDescription = req.body['hospitalDescription'];
         hospitalSchema.serviceActiveFlag = req.body['serviceActiveFlag'];//new
         hospitalSchema.hospitalContact.website = req.body['hospitalcontact_website'];
@@ -119,6 +129,7 @@ module.exports.createHospitalRecord = function (req, res) {
         hospitalSchema.hospitalContact.addressLine2 = req.body['hospitalcontact_addressline2'];
         hospitalSchema.hospitalContact.City = req.body['hospitalcontact_city'];
         hospitalSchema.hospitalContact.PostalCode = parseInt(req.body['hospitalcontact_postalcode']);
+        hospitalSchema.hospitalContact.State = req.body['hospitalcontact_State']; 
         hospitalSchema.hospitalContact.country = req.body['hospitalcontact_country'];      
         hospitalSchema.Accreditation = [{
             agency: req.body['accreditation_agency'],           
@@ -137,6 +148,9 @@ module.exports.createHospitalRecord = function (req, res) {
             departmentName: req.body["departmentName"],
             doctor: [{
                 doctorId: doctorID,
+                registrationNumber:req.body["registrationNumber"],
+                registrationAuthority: req.body["registrationAuthority"],
+                doctorShortName: req.body["doctorShortName"],
                 doctorName: req.body["doctorName"],
                 doctorDescription: req.body["doctorDescription"],
                 activeFlag: req.body["isDoctorActive"],//new
@@ -199,9 +213,9 @@ module.exports.updateHospitalNameNContactDetails = function (req, res) {
                     return res.status(500).json({ "Message": err.message });
                 } else if (doc === null) {
                     logger.error("Error while updating record : - Hospital not found in database");
-                    return res.status(408).json({ "Message": "Hospital not found in database" });
+                    return res.status(400).json({ "Message": "Hospital not found in database" });
                 }
-                res.status(200).json({ "Message": "Hopsital details for " + hospitalName + " have been updated successfully" });
+                res.status(202).json({ "Message": "Hopsital details for " + hospitalName + " have been updated successfully" });
             });
         }
     })
@@ -238,7 +252,7 @@ module.exports.addProcedureDetails = function (req, res) {
     //check if api call is passing all relavent informations
     if (hospitalName === null || hospitalCity === null || hospitalCountry === null) {
         logger.error("Error while updating hospital record : - hospitalName, hospitalCity and hospitalCountry cannot be null");
-        return res.status(500).json({ "Message": "Hospital Name, Hospital City and Hospital Country cannot be null" });
+        return res.status(400).json({ "Message": "Hospital Name, Hospital City and Hospital Country cannot be null" });
     }
     
     //create doctor promise
@@ -321,7 +335,7 @@ module.exports.addProcedureDetails = function (req, res) {
                     if (doc !== null) {
                         doctorFound = true
                         logger.info("Doctor " + doctorName + " offering " + procedureName + " already exists in " + hospitalName + " database");
-                        return reject(res.status(409).json({
+                        return reject(res.status(400).json({
                             "Message": "Doctor " + doctorName + " offering " + procedureName + " already exists in " + hospitalName + " database" 
                         }));                        
                     }
@@ -330,7 +344,7 @@ module.exports.addProcedureDetails = function (req, res) {
 
             if (treatmentFound == true && doctorFound == true) {
                 logger.error("Procedure " + procedureName + " and doctor details are already exists in " + hospitalName + " database")
-                return reject(res.status(409).json({ "Message": "Procedure " + procedureName + " and doctor details are already exists in " + hospitalName + " database" }));
+                return reject(res.status(400).json({ "Message": "Procedure " + procedureName + " and doctor details are already exists in " + hospitalName + " database" }));
             }
             const searchResult = treatmentFound + "|" + doctorFound            
             resolve(searchResult);
@@ -402,6 +416,9 @@ module.exports.addProcedureDetails = function (req, res) {
                         "$push": {                            
                             "Treatment.$.doctor": {
                                 "doctorId": doctorID,
+                                "registrationNumber": req.body["registrationNumber"],
+                                "registrationAuthority": req.body["registrationAuthority"],
+                                "doctorShortName": req.body["doctorShortName"],
                                 "doctorDescription": req.body["doctorDescription"],
                                 "activeFlag": req.body["isDoctorActive"],//new
                                 "doctorName": req.body["doctorName"],
@@ -462,7 +479,7 @@ module.exports.addProcedureDetails = function (req, res) {
             }
         }).
         then(function () {          
-            return res.json({ "Message": "Data got updated successfully" });
+            return res.status(201).json({ "Message": "Data got updated successfully" });
         })
         .catch(function (err) {
             return res.json({ "Message": err.message });
@@ -490,7 +507,7 @@ module.exports.addDoctorDetails = function (req, res) {
     //check if api call is passing all relavent informations
     if (hospitalName === null || hospitalCity === null || hospitalCountry === null) {
         logger.error("Error while updating hospital record : - hospitalName, hospitalCity and hospitalCountry cannot be null");
-        return res.status(500).json({ "Message": "Hospital Name, Hospital City and Hospital Country cannot be null" });
+        return res.status(400).json({ "Message": "Hospital Name, Hospital City and Hospital Country cannot be null" });
     }
 
     //create doctor promise
@@ -508,9 +525,9 @@ module.exports.addDoctorDetails = function (req, res) {
         }, function (err, doc) {
             if (doc == null) {
                 logger.error("Hospital " + hospitalName + "does not exists in database");
-                return reject(res.status(409).json({ "Message": "Hospital " + hospitalName + "does not exists in database" }));
+                return reject(res.status(400).json({ "Message": "Hospital " + hospitalName + "does not exists in database" }));
             }
-            resolve();
+            resolve()
         })
     );
 
@@ -524,7 +541,7 @@ module.exports.addDoctorDetails = function (req, res) {
         }, function (err, doc) {
             if (doc == null) {
                 logger.error("Procedure " + procedureName + " does not exists in " + hospitalName + " database");
-                return reject(res.status(409).json({ "Message": "Procedure " + procedureName + "does not exists in " + hospitalName + " database" }));
+                return reject(res.status(400).json({ "Message": "Procedure " + procedureName + "does not exists in " + hospitalName + " database" }));
             }
             resolve();
         })
@@ -543,7 +560,7 @@ module.exports.addDoctorDetails = function (req, res) {
         }, function (err, doc) {
             if (doc !== null) {
                 logger.error("Doctor " + doctorName + " offering " + procedureName + "already exists in " + hospitalName + " database");
-                return reject(res.status(409).json({
+                return reject(res.status(400).json({
                     "Message": "Doctor " + doctorName + " offering " + procedureName + "already exists in " + hospitalName + " database"
                 }));
             }
@@ -563,6 +580,9 @@ module.exports.addDoctorDetails = function (req, res) {
                     "$push": {
                         "Treatment.$.doctor": {
                             "doctorId": doctorID,
+                            "registrationNumber": req.body["registrationNumber"],
+                            "registrationAuthority": req.body["registrationAuthority"],
+                            "doctorShortName": req.body["doctorShortName"],
                             "doctorName": req.body["doctorName"],
                             "doctorDescription": req.body["doctorDescription"],
                             "activeFlag": req.body["isDoctorActive"],//new
@@ -586,16 +606,16 @@ module.exports.addDoctorDetails = function (req, res) {
                     return res.status(500).json({ "Message": err.message });
                 } else if (doc === null) {
                     logger.error("Error while updating record : - Hospital not found in database");
-                    return res.status(408).json({ "Message": "Hospital not found in database" });
+                    return res.status(400).json({ "Message": "Hospital not found in database" });
                 }
                 logger.info("Doctor " + doctorName + " offering " + procedureName + " is added to " + hospitalName + " database" )
-                res.status(200).json({ "Message": "Doctor " + doctorName + " offering " + procedureName + " is added to " + hospitalName + " database" });
+                res.status(201).json({ "Message": "Doctor " + doctorName + " offering " + procedureName + " is added to " + hospitalName + " database" });
 
             });
 
         })
         .catch(function (err) {
-            return res.json({ "Message": err.message });
+            return res.status(500).json({ "Message": err.message });
         });
 
 }  
@@ -706,6 +726,8 @@ function getTopDoctors(procedure, next) {
             $project: {
                 "_id": 0,
                 "docname": "$Treatment.doctor.doctorName",
+                "docregistrationnumber":"$Treatment.doctor.registrationNumber",
+                "docregistrationauthority": "$Treatment.doctor.registrationAuthority",
                 "docdescription": "$Treatment.doctor.doctorDescription",
                 "docspeciality": "$Treatment.doctor.speciality.specialityName",
                 "docpicdir": "$Treatment.doctor.profilepicdir",

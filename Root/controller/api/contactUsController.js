@@ -75,11 +75,11 @@ module.exports.submitContact = function (req, res) {
                     return res.status(500).json({ "Message": error.message.trim() });
                 }
                 else {
-                    return res.json({ "Message": "Thank you for contacting,we will get back to you soon" });
+                    return res.status(201).json({ "Message": "Thank you for contacting,we will get back to you soon" });
                 }
             })
         } else {        
-            return res.json({ "Message": "Thank you for contacting,we will get back to you soon" });
+            return res.status(201).json({ "Message": "Thank you for contacting,we will get back to you soon" });
         }
     })
     .catch(function (err) {

@@ -1,7 +1,7 @@
 ﻿var mongoose = require('mongoose');
 require('mongoose-double')(mongoose);
 require('mongoose-integer')(mongoose);
-var autoIncrement = require('mongoose-auto-increment');
+var autoIncrement = require('mongoose-plugin-autoinc');
 var counterSchema = require('./identityCounterModel.js');
 var genericUtil = require('../controller/utilities/generic.js');
 var Schema = mongoose.Schema;

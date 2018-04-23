@@ -94,7 +94,7 @@ module.exports.addnewsSection = function (req, res) {
                     return res.status(500).json({ "Message": error.message.trim() });
                 }
                 else {
-                    return res.json({ "Message": "New Sections are updated to DB" });
+                    return res.status(201).json({ "Message": "New Sections are updated to DB" });
                 }
             })
         })

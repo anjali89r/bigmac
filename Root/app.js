@@ -60,7 +60,7 @@ app.use((req, res, next) => {
 require('./routes/route.js')(app);//define express router for api calls
 
 //setup server
-var port = process.env.PORT || 80  //port
+var port = process.env.PORT || 3000  //port
 
 //app.use(express.static('./views/webcontent/', { index: 'index.html' }))//define home page
 app.use(serveStatic(__dirname + '/views/webcontent/', {

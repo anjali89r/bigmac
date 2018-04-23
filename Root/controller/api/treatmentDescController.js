@@ -22,11 +22,11 @@ module.exports.addtreatmentDescription = function (req, res) {
     var saveFlag=false
 
     var treatmentSchema = new treatmentDescModel();
-
+//console.log(req.body['displayName'])
     new Promise(function (resolve, reject) {
         //check if procedure name already exists under a different department
         treatmentDescModel.findOne({
-            "treatmentList": { $elemMatch: { "procedureName": req.body["procedureName"] } }
+            "treatmentList": { $elemMatch: { "displayName": req.body["procedureName"] } }
         }, { department: 1, _id: 0 }, function (err, doc) {
             if (doc != null) {                
                 if (doc.department != req.body["department"]) {
@@ -38,11 +38,11 @@ module.exports.addtreatmentDescription = function (req, res) {
         //check if treatment and procedure details are already stored in table
         treatmentDescModel.findOne({
             "department": req.body["department"]
-        }, {"treatmentList": { $elemMatch: { "procedureName": req.body["procedureName"] } }
+        }, {"treatmentList": { $elemMatch: { "displayName": req.body["procedureName"] } }
         }, function (err, doc) {
             if (doc !=null && doc.department != null) {
                 logger.warn("Procedure name " + req.body['procedureName'] + " already exists in database");
-                return reject(res.status(200).json({ "Message": "Procedure name " + req.body['procedureName'] + " already exists in database" }));
+                return reject(res.status(409).json({ "Message": "Procedure name " + req.body['procedureName'] + " already exists in database" }));
             } else {//check if department is already added to collection
                 treatmentDescModel.findOne({
                     "department": req.body["department"]
@@ -52,6 +52,7 @@ module.exports.addtreatmentDescription = function (req, res) {
                         var appIds = 0
                         getId("false", "true", function (id) {
                             appIds = id;
+                            console.log(appIds)
                             resolve("true|false|" + appIds);
                         })                               
                     } else {
@@ -72,14 +73,18 @@ module.exports.addtreatmentDescription = function (req, res) {
         var departmentId = parseInt(flag.split(/\|/)[2])
         var procedureId = parseInt(flag.split(/\|/)[3])
         //If department and treatments are not in db
+  //      console.log(departmentFound)
         if (departmentFound == 'false' && treatmentFound == 'false') {
             treatmentSchema.department = req.body["department"],
                 treatmentSchema.departmentId = departmentId,
                 treatmentSchema.departmentDescription = req.body["departmentDescription"],
                 treatmentSchema.serviceActiveFlag = req.body["serviceActiveFlag"],
                 treatmentSchema.departmentImagepath = req.body["departmentImagepath"],
+               // console.log("hello1",req.body['displayName'].replace(/\s+/g, '-').toLowerCase());
                 treatmentSchema.treatmentList = [{
-                    procedureName: req.body['procedureName'],
+                    //procedureName: req.body['procedureName'],
+                    
+                    procedureName: req.body['displayName'].replace(/\s+/g, '-').toLowerCase(),
                     procedureId: procedureId,
                     displayName: req.body['displayName'],
                     treatmentDescription: req.body['treatmentDescription'],
@@ -93,25 +98,28 @@ module.exports.addtreatmentDescription = function (req, res) {
                     procedureImagepath: req.body["procedureImagepath"],
                     activeFlag: req.body["activeFlag"]
                 }]
-
+                //console.log("hello2");
                 treatmentSchema.save(function (error) {
                     if (error) {
                         logger.error("Error while inserting record in treatment details collection: - " + error.message)
+                       // console.log("hello4");
                         return res.status(500).json({ "Message": error.message.trim() });
                     }
                     else {
-                        return res.json({ "Message": "Data got inserted successfully in treatmentOffered_description collection" });
+                        return res.status(201).json({ "Message": "Data got inserted successfully in treatmentOffered_description collection" });
                     }
                 })
             
         } else if (departmentFound == 'true' && treatmentFound == 'false') {//update new field
+    //        console.log("hello3");
             treatmentDescModel.findOneAndUpdate({
                 "department": req.body["department"]
             },
                 {
                     "$push": {
                         "treatmentList": {
-                            "procedureName": req.body['procedureName'],
+                            //"procedureName": req.body['procedureName'],
+                            "procedureName": req.body['displayName'].replace(/\s+/g, '-').toLowerCase(),
                             "procedureId": procedureId,
                             "displayName": req.body['displayName'],
                             "treatmentDescription": req.body['treatmentDescription'],
@@ -131,21 +139,21 @@ module.exports.addtreatmentDescription = function (req, res) {
                     if (err) {
                         logger.error("Error while updating record : - " + err.message);
                         return res.status(409).json({
-                            "Message": "Error while updating new treatment " + req.body['procedureName'] + " in treatmentOffered_description collection"
+                            "Message": "Error while updating new treatment " + req.body['displayName'] + " in treatmentOffered_description collection"
                         });
                     } else if (doc === null) {
                         logger.error("Error while updating record : - unable to update treatmentOffered_description database");
                         return res.status(409).json({
-                            "Message": "Error while adding new record for " + req.body['procedureName'] + err.message
+                            "Message": "Error while adding new record for " + req.body['displayName'] + err.message
                         });
                     } else {
-                        return res.json({ "Message": "Data got updated successfully in treatmentOffered_description collection" });
+                        return res.status(201).json({ "Message": "Data got updated successfully in treatmentOffered_description collection" });
                     }                    
                 });
             }
 
     }).catch(function (err) {
-        return res.json({ "Message": err.message });
+        return res.status(500).json({ "Message": err.message });
     });
 }
 /* API to get treatment details */
@@ -219,7 +227,7 @@ module.exports.isTreatmentExists = function (procedureName, callback) {
     
     var dict = [];
 
-    treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "procedureName": procedureName } } }, {
+    treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "displayName": procedureName } } }, {
         "departmentId": 1, "treatmentList.procedureId": 1,"_id": 0
     }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
         if (err) {
@@ -239,7 +247,7 @@ module.exports.isTreatmentExists = function (procedureName, callback) {
 /* **************Verify if aparticular procedure is already present ***************** */
 module.exports.verifyProcedureExistence = function (procedureName, callback) {
 
-    treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "procedureName": procedureName } } }, { 'treatmentList.$': 1 },
+    treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "displayName": procedureName } } }, { 'treatmentList.$': 1 },
         function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
         if (err) {            
             callback("false");
@@ -357,7 +365,7 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
             //loop through procedures in department
             for (var j = 0; j < procedureList.length; j++) {
                 var procedure = procedureList[j];
-                var procedureDisp = procedure.procedureName
+                var procedureDisp = procedure.displayName
                 var treatmentDescription = procedure.shortDescription               
                 /*promises.push(cost.getAvarageCostAsInt(procedureDisp).then(function (data) {
                     console.log(procedureName + ": " + JSON.stringify(data))
@@ -390,7 +398,7 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
                 //loop through procedures in department
                 for (var j = 0; j < procedureList.length; j++) {
                     var procedure = procedureList[j];
-                    var procedureDisp = procedure.procedureName
+                    var procedureDisp = procedure.displayName
                     //to get unique procedure names
                     if (!(procedureDisp in proceduredict)) {
                         proceduredict[procedureDisp] = ''
@@ -528,11 +536,11 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
 module.exports.getProcedureDetails = function getProcedureDetails(procedureName, callback) {
 
     var treatmentDescSchema = new treatmentDescModel();
-
+//   console.log("I'm here",procedureName)
     treatmentDescModel.aggregate([
         {
             "$match": {
-                "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.procedureName": procedureName }, { "treatmentList.activeFlag": "Y" }]
+                "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.displayName": procedureName }, { "treatmentList.activeFlag": "Y" }]
             }
         },
         {
@@ -572,7 +580,7 @@ function getUniqueProcedureNames(callback) {
         { $group: { _id: null, treatmentNames: { $addToSet: "$treatmentList" } } }, //_id:null will return everything from array       
         {
             "$project": {
-                "_id": 0, "treatmentNames.procedureName": 1 //"treatmentNames":1 will return everything from the table
+                "_id": 0, "treatmentNames.displayName": 1 //"treatmentNames":1 will return everything from the table
             }
         }
 

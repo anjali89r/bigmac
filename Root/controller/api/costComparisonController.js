@@ -36,7 +36,7 @@ module.exports.addGlobalTreatmentCost = function (req, res) {
             }, function (err, doc) {               
                 if (doc !== null && doc.procedureName != null) {                    
                     logger.warn("Procedure cost for " + req.body['procedure'] + " in country " + req.body["country"] + " already exists in database");
-                    return reject(res.status(200).json({ "Message": "Procedure cost for " + req.body['procedure'] + " in country " + req.body["country"] + " already exists in database" }));                    
+                    return reject(res.status(409).json({ "Message": "Procedure cost for " + req.body['procedure'] + " in country " + req.body["country"] + " already exists in database" }));                    
                 } else {//check if procedure is already added to collection
                     costComparisonModel.findOne({
                         "procedureName": req.body["procedure"]
@@ -67,7 +67,7 @@ module.exports.addGlobalTreatmentCost = function (req, res) {
                         return res.status(500).json({ "Message": error.message.trim() });
                     }
                     else {
-                        return res.json({ "Message": "Data got inserted successfully in treatment_cost_comparison collection" });
+                        return res.status(201).json({ "Message": "Data got inserted successfully in treatment_cost_comparison collection" });
                     }
                 })
 
@@ -97,17 +97,17 @@ module.exports.addGlobalTreatmentCost = function (req, res) {
                                 "Message": "Error while adding new cost record for " + req.body['procedure'] + err.message
                             });
                         } else {
-                            return res.json({ "Message": "Data got updated successfully in treatment_cost_comparison collection" });
+                            return res.status(201).json({ "Message": "Data got updated successfully in treatment_cost_comparison collection" });
                         }
                     });
             }
 
         }).catch(function (err) {
-            return res.json({ "Message": err.message });
+            return res.status(500).json({ "Message": err.message });
             });
 
     }).catch(function (err) {
-        return res.json({ "Message": err.message });
+        return res.status(500).json({ "Message": err.message });
     });
 }
 

@@ -74,12 +74,12 @@ module.exports.submitUserEnquiry = function (req, res) {
                     { new: true }, function (err, doc) {
                         if (err) {
                             logger.error('Error while updating record : - ' + err.message);
-                            return reject(res.status(409).json({
+                            return reject(res.status(500).json({
                                 Message: 'Error while saving enquiry for user ' + req.body.emailID + ' in user enquiry collection'
                             }));
                         } else if (doc === null) {
                             logger.error('Error while updating record : - unable to update database');
-                            return reject(res.status(409).json({
+                            return reject(res.status(500).json({
                                 Message: 'Error while saving enquiry for user ' + req.body.emailID + ' due to ' + err.message
                             }));
                         }
@@ -96,7 +96,7 @@ module.exports.submitUserEnquiry = function (req, res) {
                     return res.status(500).json({ Message: error.message.trim() });
                 }
                 else {
-                    return res.json({ Message: 'Data got inserted successfully' });
+                    return res.status(201).json({ Message: 'Data got inserted successfully' });
                 }
             })
         }
@@ -155,12 +155,12 @@ module.exports.sendEnquiryResponse = function (req, res) {
             { returnOriginal: false, upsert: true }, function (err, doc) {
                 if (err) {
                     logger.error('Error while updating record : - ' + err.message);
-                    return res.status(409).json({
+                    return res.status(500).json({
                         Message: 'Error while saving response for user ' + userEmailID + ' enquiry in user enquiry collection'
                     });
                 } else if (doc === null) {
                     logger.error('Error while updating record : - unable to update database');
-                    return res.status(409).json({
+                    return res.status(500).json({
                         Message: 'Error while saving response for user ' + userEmailID + ' enquiry in user enquiry collection ' + err.message
                     });
                 }
@@ -173,7 +173,7 @@ module.exports.sendEnquiryResponse = function (req, res) {
                 return res.status(500).json({ Message: error.message.trim() });
             }
             else {
-                return res.json({ Message: 'Data got inserted successfully' });
+                return res.status(201).json({ Message: 'Data got inserted successfully' });
             }
         })
 
@@ -285,7 +285,7 @@ module.exports.submitUserQuestionnaire = function (req, res) {
 
     }).then(function (emailBody) {        
         autoMail.sendEmail(sendTO, subject, emailBody, false, function (callback) { }) 
-        return res.status(200).end('Email has been sent successfully');
+        return res.status(201).end('Email has been sent successfully');
     })
     .catch(function (err) {
         logger.error('Error while senting email : - ' + err.message)
@@ -370,17 +370,17 @@ module.exports.updateEnquiryStatus= function (req, res) {
         { new: true }, function (err, doc) {
             if (err) {
                 logger.error('Error while updating enquiry status for enquiry with id : - ' + enquiryID + " : " + err.message);
-                res.end(
+                res.status(500).end(
                     'Error while updating enquiry status for enquiry with id : - ' + enquiryID + " : " + err.message
                 );
             } else if (doc === null) {
                 logger.error('Unable to update enquiry status for enquiry with id : - ' + enquiryID);
-                res.end('Unable to update enquiry status for enquiry with id : - ' + enquiryID
+                res.status(500).end('Unable to update enquiry status for enquiry with id : - ' + enquiryID
                 );
             } else {
                 logger.info('sucessfully updated status to ' + status);
                 
-                res.end(JSON.stringify({
+                res.status(202).end(JSON.stringify({
                     Data: "Status got updated successfully to " + status
                 }))
 

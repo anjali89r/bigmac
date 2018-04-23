@@ -57,7 +57,7 @@ module.exports.createUserInfo = function (req, res) {
                     return res.status(500).json({ "Message": error.message.split(":")[2].trim() });
                 }
                 else {
-                    return res.json({ "Message": "Data got inserted successfully" });
+                    return res.status(201).json({ "Message": "Data got inserted successfully" });
                 }
             })
         })
@@ -95,7 +95,7 @@ module.exports.updateUserInfo = function (req, res) {
             logger.error("Error while updating record : - " + err.message)
             return res.status(500).json({ "Message": err.message });
         }
-        res.status(200).json({ "Message": "User details for user " + userEmailId + " have been updated successfully"});
+        res.status(202).json({ "Message": "User details for user " + userEmailId + " have been updated successfully"});
         
     });
 

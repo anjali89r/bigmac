@@ -21,7 +21,10 @@ var contactusInfo = require('../controller/api/contactUsController.js');
 var gridFS = require('../controller/api/gridFSController.js');
 var costComparison = require('../controller/api/costComparisonController.js');
 var templateEngine = require('../controller/api/templateEngineController.js');
-var cloudcontroller= require('../controller/api/cloudController.js');
+var cloudcontroller = require('../controller/api/cloudController.js');
+var doctorcontroller = require('../controller/api/doctorDataController.js');
+var currencyconversion = require('../controller/api/currencyController.js');
+
 
 module.exports = function (app) {
 
@@ -120,6 +123,14 @@ module.exports = function (app) {
     //app.get('/api/v1/get/treatmentcost/:procedurename/:bystandercount/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentEstimate.getTreatmentRoughEstimate);
     app.get('/api/v1/get/treatmentcost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentEstimate.getTreatmentRoughEstimate_API);
     /********************************************************************************************************************************************************/
+
+    /************************API to work on doctor data details schema****************************************************************************************************/
+    app.post('/api/v1/post/docdata/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, doctorcontroller.addDoctorData);    
+     /********************************************************************************************************************************************************/
+
+    /************************ API to work on currency schema ****************************************************************************************************/
+    app.post('/api/v1/post/currency/convertion/rate/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, currencyconversion.addorUpdateCurrencydata);
+     /********************************************************************************************************************************************************/
 
     /************************API to work on global treatment cost comparison schema****************************************************************************************************/
     app.post('/api/v1/post/globaltreatmentcost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, costComparison.addGlobalTreatmentCost);
