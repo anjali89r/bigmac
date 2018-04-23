@@ -1,8 +1,8 @@
 var basicKey = 'bGliaW46bGliaW4=';
 var xAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVG9rZW5Ub0F1dGhlbnRpY2F0ZU1lZGlub3ZpdGFVc2VyIiwiaWF0IjoxNTA4MDQ0OTMwfQ.cZ3pCte1guE8KQkjd1KfY_bLJ-gOatJm2xlwyiLGAl4';
 
-//var serverName = 'https://www.medinovita.in/';
-var serverName = 'http://localhost:1337/';
+var serverName = 'https://www.medinovita.in/';
+//var serverName = 'http://localhost:1337/';
 
 var GLOBAL_VARIABLES = {
 	Language: 'en',
@@ -219,7 +219,7 @@ var whyIndia = '';
 				}
 				//give focus to submit button
 				$(this).find("#filesubmit").focus();
-				//upload files to aws		
+				//upload files to aws
 				$.ajax({
 					url: serverName+ 'cloud/zip/upload/'+uniqueNumber,
 					data: formFileData,
@@ -229,13 +229,13 @@ var whyIndia = '';
 					cache: false,
 					async: false, //add this
 					success: function(response) {
-						$(this).find("#uploadmsg").text("File upload is success");			
+						$(this).find("#uploadmsg").text("File upload is success");
 					},
 					error: function(exception) {
                         $(this).find("#uploadmsg").text("File upload is failed");
-						console.log("exception -" + exception)						
+						console.log("exception -" + exception)
 					},
-				});				
+				});
 				$(this).find("#files").val('')
 				$(this).find("#uploadmsg").css('color', 'green');
 				$(this).find("#uploadmsg").text(("Files have been uploaded successfully"));
@@ -380,7 +380,10 @@ var whyIndia = '';
 					selectBox.add(option);
 					//console.log(option);
 				});
-
+				var otherOption = document.createElement('option');
+				otherOption.text = 'Other';
+				otherOption.value = 'Other';
+				selectBox.add(otherOption);
 				treatmentList.forEach(function (item, index) {
 					$('#getQuoteTreatment').append('<option class="' + item + '"' + 'data-tokens="' + item + '">' + item + '</option>')
 				})
@@ -417,7 +420,9 @@ var whyIndia = '';
 			searchTreatmentCallback();
 		}
 		// hospitaldoctors**************
+
 		if (window.location.href.indexOf('hospitaldoctors') > -1) {
+
 			hospitalPageHtml();
 			hospitalPageCallback('all', '');
 		}
@@ -2647,15 +2652,17 @@ function hospitalPageHtml() {
 		success: function (response) {
 			var treatmentList = response;
 			//Populate Treatment Dropdown
-			//console.log('treatment :' + response)
+
 			treatmentList.forEach(function (item) {
-				var selectOption = $('<option>' + item + '</option>')
-				$('.hospital-select #selectTreatment').append(selectOption);
+				//var selectOption = $('<option>' + item + '</option>');
+				// var selectOption = $(' <li><a href="#"><i class="fa fa-angle-right"></i>' + item + '</a></li>');
+				var selectOption = $('<li><input type="radio" value="' + item + '"name="treatment-group">' + ' ' + item + '</li>')
+				$('.hospital-selectTreatment #selectTreatment').append(selectOption);
 			})
 
 
-			$('#selectTreatment').selectpicker('render');
-			$('#selectTreatment').selectpicker('refresh');
+			// $('#selectTreatment').selectpicker('render');
+			// $('#selectTreatment').selectpicker('refresh');
 		},
 		error: function (exception) {
 			console.log(exception);
@@ -2679,33 +2686,75 @@ function hospitalPageHtml() {
 			//Populate citry name Dropdown
 			//console.log('city :' + response)
 			citylist.forEach(function (item) {
-				var selectOption = $('<option>' + item + '</option>')
+				//var selectOption = $('<option>' + item + '</option>')
+				var selectOption = $('<li><input type="radio" value="' + item + '"name="city-group">' + ' ' + item + '</li>')
 				$('.hospital-select-city #selectCity').append(selectOption);
 			})
 
-			$('#selectCity').selectpicker('render');
-			$('#selectCity').selectpicker('refresh');
+			// $('#selectCity').selectpicker('render');
+			// $('#selectCity').selectpicker('refresh');
 		},
 		error: function (exception) {
 			console.log(exception);
 		}
 	});
 
-	$('.searchhosp button').on('click', function () {
+	// $('.searchhosp button').on('click', function () {
 
-		var treatmentSel = $('#selectTreatment').val();
-		//console.log("selected treat: "+treatmentSel)
-		var citySel = $('#selectCity').val();
-		//console.log("selected city: "+citySel);
+	// 	var treatmentSel = $('#selectTreatment').val();
+
+	// 	var citySel = $('#selectCity').val();
+
+	// 	if (treatmentSel == '' || citySel == '') {
+
+	// 	} else {
+	// 		hospitalPageCallback(treatmentSel, citySel);
+	// 	}
+
+	// })
+
+	$('.detail-treatment button').on('click', function () {
+console.log('inside button')
+		//var treatmentSel = document.querySelector('input[name="treatment-group"]:checked').value;
+		var treatmentSel = $('input[type="radio"][name="treatment-group"]:checked').val();
+		var citySel = $('input[type="radio"][name="city-group"]:checked').val();
+		//var citySel = document.querySelector('input[name="city-group"]:checked').value;
+		console.log('treatmentSel: ' + treatmentSel)
+		console.log('citySel: ', citySel)
 		if (treatmentSel == '' || citySel == '') {
-			//console.log('un selected!');
-			//alert('select city')
+			console.log('hehe');
 		} else {
+			console.log('SUEPRRRRR');
 			hospitalPageCallback(treatmentSel, citySel);
 		}
 
 	})
 
+	// $('.detail-treatment button').on('click', function () {
+	// 	var $radios = $('input[name="treatment-group"]');
+	// 	$radios.change(function() {
+	// 		var $checked = $radios.filter(function() {
+	// 		  return $(this).prop('checked');
+	// 		});
+	// 		// Output the value of the checked radio
+	// 		console.log("checked: ", $checked.val());
+	// 	 });
+	// });
+	// if (document.querySelector('input[name="treatment-group"].checked') && document.querySelector('input[name="city-group"].checked')){
+		// var treatmentSel = document.querySelector('input[name="treatment-group"]:checked').value;
+		// var citySel = document.querySelector('input[name="city-group"]:checked').value;
+		// console.log('tretmentSel, citySel'+ treatmentSel + treatmentSel )
+		// hospitalPageCallback(treatmentSel, citySel);
+	// }
+	// else {
+	// 	console.log('no one selected me')
+	// }
+// 	$('input[name="treatment-group"], input[name="city-group').on('click', function(e) {
+// 		console.log("kooiii why are u not here")
+// 		var treatmentSel = document.querySelector('input[name="treatment-group"]:checked').value;
+// 		var citySel = document.querySelector('input[name="city-group"]:checked').value;
+// 		hospitalPageCallback(treatmentSel, citySel);
+//   });
 
 }
 
@@ -2732,60 +2781,98 @@ function hospitalPageCallback(treatmentName, city) {
 		},
 
 		success: function (response) {
-			//console.log(" response: " + response);
+			console.log(" response IN HERE: " + response);
 			//$('.tobehidden').hide();
-			//	console.log("hello");
+			console.log("hello");
 			var mainDiv = $('.hosp-main');
 			if (response == '') {
 				//console.log("no response");
 				mainDiv.html('<div style="text-align:center;font-weight:bold;font-size:1.4em;">No hospital records in the selected city</div>');
-				$('.pagination').hide();
+				//$('.pagination').hide();
 			} else {
 				$('.pagination').show();
 				mainDiv.html('');
+				// $.each(response, function (index, hospital) {
+
+				// 	var myHtml = '';
+
+				// 	var rowDiv = $('.hosp-row');
+
+				// 	if (hospital.Treatment.length > 3) {
+				// 		var treatmentArr = hospital.Treatment.slice(0, 3);
+				// 		$.each(treatmentArr, function (index, item) {
+				// 			if (index !== treatmentArr.length - 1) {
+				// 				myHtml += item.name + ', ';
+				// 			} else {
+				// 				myHtml += item.name;
+				// 			}
+				// 		})
+				// 	} else {
+				// 		$.each(hospital.Treatment, function (index, treatment) {
+
+
+				// 			if (index !== hospital.Treatment.length - 1) {
+				// 				myHtml += treatment.name + ', ';
+				// 			} else {
+				// 				myHtml += treatment.name;
+				// 			}
+
+				// 		})
+
+				// 	}
+				// 	var modifiedhosname = hospital.hospitalName.replace(/\s+/g, '-').toLowerCase();
+				// 	if (index % 2 === 0) {
+				// 		var htmlStr = $('<div class="row is-flex hosp-row" style="margin-bottom:30px"><div class="col-md-5 test even hosp-' + index + '"' + 'style="background-color:#f9f9f9; padding:28px"><p class="test1"><img src=' + hospital.hospitalimage + '><a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right">Contact</button></a><a href="/hospitals/' + modifiedhosname + '"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a><br><i class="fa fa-map-marker"  aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '<br><span>Specialities: ' + myHtml + '</span></p><div class="margin20"> <a href="/hospitals/' + hospital.hospitalName + '"style="float:right;font-weight:bold">Learn More...</a></div></div></div>')
+
+				// 		mainDiv.append(htmlStr);
+				// 	} else {
+				// 		var htmlStrr = $('<div class="col-md-5 col-md-offset-1 test odd hosp-' + index + '"' + 'style="background-color:#f9f9f9; padding:28px"><p class="test1"><img src=' + hospital.hospitalimage + '><a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right">Contact</button></a><a href="/hospitals/' + modifiedhosname + '"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a><br><i class="fa fa-map-marker color=blue" aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '<br><span>Specialities: ' + myHtml + '</span></p><div class="margin20"> <a href="/hospitals/' + hospital.hospitalName + '" style="float:right;font-weight:bold">Learn More...</a></div></div>')
+
+				// 		rowDiv.last().append(htmlStrr);
+				// 	}
+
+				// })
+				// simple form
+
 				$.each(response, function (index, hospital) {
 
 					var myHtml = '';
 
-					var rowDiv = $('.hosp-row');
+					//var rowDiv = $('.hosp-row');
 
 					if (hospital.Treatment.length > 3) {
-						var treatmentArr = hospital.Treatment.slice(0, 3);
-						$.each(treatmentArr, function (index, item) {
-							if (index !== treatmentArr.length - 1) {
-								myHtml += item.name + ', ';
-							} else {
-								myHtml += item.name;
-							}
-						})
+					  var treatmentArr = hospital.Treatment.slice(0, 3);
+					  $.each(treatmentArr, function (index, item) {
+						 if (index !== treatmentArr.length - 1) {
+							myHtml += item.name + ', ';
+						 } else {
+							myHtml += item.name;
+						 }
+					  })
 					} else {
-						$.each(hospital.Treatment, function (index, treatment) {
+					  $.each(hospital.Treatment, function (index, treatment) {
 
 
-							if (index !== hospital.Treatment.length - 1) {
-								myHtml += treatment.name + ', ';
-							} else {
-								myHtml += treatment.name;
-							}
+						 if (index !== hospital.Treatment.length - 1) {
+							myHtml += treatment.name + ', ';
+						 } else {
+							myHtml += treatment.name;
+						 }
 
-						})
+					  })
 
 					}
 					var modifiedhosname = hospital.hospitalName.replace(/\s+/g, '-').toLowerCase();
-					if (index % 2 === 0) {
-						var htmlStr = $('<div class="row is-flex hosp-row" style="margin-bottom:30px"><div class="col-md-5 test even hosp-' + index + '"' + 'style="background-color:#f9f9f9; padding:28px"><p class="test1"><img src=' + hospital.hospitalimage + '><a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right">Contact</button></a><a href="/hospitals/' + modifiedhosname + '"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a><br><i class="fa fa-map-marker"  aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '<br><span>Specialities: ' + myHtml + '</span></p><div class="margin20"> <a href="/hospitals/' + hospital.hospitalName + '"style="float:right;font-weight:bold">Learn More...</a></div></div></div>')
+					// var htmlStr = $('<div class="product product-list hosp-'+index+'"><div class="row"><div class="col-md-4 col-sm-5"><div class="product-top"><figure><img src='+ hospital.hospitalimage +'></figure></div></div><div class="col-md-8 col-sm-7"><a href="/hospitals/'+ modifiedhosname +'"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a><br><i class="fa fa-map-marker"  aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '<br><span>Specialities: ' + myHtml + '</span></p><div class="margin20"> <a href="/hospitals/' + hospital.hospitalName + '"style="float:right;font-weight:bold">Learn More...</a></div></div></div></div></div></div>')
 
-						mainDiv.append(htmlStr);
-					} else {
-						var htmlStrr = $('<div class="col-md-5 col-md-offset-1 test odd hosp-' + index + '"' + 'style="background-color:#f9f9f9; padding:28px"><p class="test1"><img src=' + hospital.hospitalimage + '><a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right">Contact</button></a><a href="/hospitals/' + modifiedhosname + '"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a><br><i class="fa fa-map-marker color=blue" aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '<br><span>Specialities: ' + myHtml + '</span></p><div class="margin20"> <a href="/hospitals/' + hospital.hospitalName + '" style="float:right;font-weight:bold">Learn More...</a></div></div>')
+					var htmlStr = $('<div class="product product-list hosp-'+index+'"><div class="row"><div class="col-md-4 col-sm-5"><div class="product-top"><figure><img src='+ hospital.hospitalimage +'></figure></div></div><div class="col-md-8 col-sm-7"><h3><a href="/hospitals/'+ modifiedhosname +'"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a></h3><div class="location-sp" style="font-size:16px;"><div><i class="fa fa-map-marker"  aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '</div><div>Specialities: ' + myHtml + '</div></div><div style="font-size:14px;"> <a href="/hospitals/' + hospital.hospitalName + '"style="font-weight:bold">Learn More...</a></div></div></div></div></div></div>')
+					  mainDiv.append(htmlStr);
 
-						rowDiv.last().append(htmlStrr);
-					}
 
-				})
-				//console.log("hello " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()+ ":" +today.getMilliseconds())
+				 })
 				// *****************pagination***********************
-				var items = $('.hosp-main .row');
+				//var items = $('.hosp-main .row');
+				var items = $('.hosp-main .product');
 				//console.log("items: ", items)
 				var numItems = items.length;
 				var perPage = 5;
@@ -2895,32 +2982,32 @@ function setExpandCollpaseAccordion() {
 
 }
 
-$('#questionnaire-form').on('submit', function (e) {	
+$('#questionnaire-form').on('submit', function (e) {
 	e.preventDefault();
 	var uniqueNumber=getUniqueNumber();
     $.ajax({
 			url: serverName+ 'api/v1/post/questionnaire',
 			data: $("#questionnaire-form").serialize(),
-			type: 'POST',			
-			success: function(response) {				
+			type: 'POST',
+			success: function(response) {
 				$('#messageModal').modal('show');
-				document.getElementById("questionnaire-form").reset();				
+				document.getElementById("questionnaire-form").reset();
 		        $(this).find("#uploadmsg").css('color', 'green');
 				$(this).find("#uploadmsg").text("Submitted form successfully");
 			},
-			error: function(exception) {			
+			error: function(exception) {
 		        $(this).find("#uploadmsg").css('color', 'red');
-				$(this).find("#uploadmsg").text("Failed to submit the questionannire");								
+				$(this).find("#uploadmsg").text("Failed to submit the questionannire");
 			},
 		});
-		
+
 		var attachmentFlag="N";
 		var attachmentNames='';
 
 		var files = $('#files').get(0).files;
 		var fileSize=(files.length)
 		var formFileData = new FormData();
-		
+
 		if (fileSize >= 1) {
 			var validExt = ".png,.jpeg,.jpg,.pdf,.doc,.docx";
 			attachmentFlag="Y"
@@ -2952,7 +3039,7 @@ $('#questionnaire-form').on('submit', function (e) {
 		}
 		//give focus to submit button
 		$(this).find("#filesubmit").focus();
-				
+
 		$.ajax({
 			url: serverName+ 'cloud/zip/upload/'+uniqueNumber,
 			data: formFileData,
@@ -2962,7 +3049,7 @@ $('#questionnaire-form').on('submit', function (e) {
 			async: false, //add this
 			success: function(response) {
 				$(this).find("#files").val('')
-				console.log("File upload success")				
+				console.log("File upload success")
 			},
 			error: function(exception) {
 				$(this).find("#uploadmsg").text("File upload is failed");
@@ -2976,31 +3063,31 @@ $('#questionnaire-form').on('submit', function (e) {
 	}
 })
 //Added by Libin to populate the model when user click on a link in enquiries page
-$('.enq_desc_lnk').on('click', function (e) {	
+$('.enq_desc_lnk').on('click', function (e) {
 	e.preventDefault();
 	$('#questionnairemodel').modal('show');
-    var txt=$(".hdn_desc").text();	
+    var txt=$(".hdn_desc").text();
 	if (txt=='') {
 		txt='User did not submit the case details'
 	}
 	$('#questionnairemodel').find(".mdlbody").text((txt));
 })
-$('.enq_quest_lnk').on('click', function (e) {	
+$('.enq_quest_lnk').on('click', function (e) {
 	e.preventDefault();
 	var txt=$(".hdn_qstn").text();
 	if (txt=='') {
 		txt='User is yet to submit questionnaire'
 	}
 	$('#questionnairemodel').modal('show');
-    $('#questionnairemodel').find(".mdlbody").text((txt));	
+    $('#questionnairemodel').find(".mdlbody").text((txt));
 })
 /* To download files from S3 on button click in getpendingenquiry page */
-$('#meddoc').on('click', function (e) {	
-	e.preventDefault();	
+$('#meddoc').on('click', function (e) {
+	e.preventDefault();
 	$.ajax({
 			url: serverName + 'api/cloud/download/medicaldocs/meditrip',
 			type: 'POST',
-            async: false, //add this			
+            async: false, //add this
 			headers: {
 				'Content-Type': 'application/json',
 				Authorization: 'Basic ' + basicKey,
@@ -3011,21 +3098,21 @@ $('#meddoc').on('click', function (e) {
 				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
 			},
 			data: JSON.stringify({
-					fileName: $(this).attr("value")					
-			}),	
-            dataType: 'json',			
-			success: function (response) {				               			
-				window.location = response.URL;	//start download automatically	
+					fileName: $(this).attr("value")
+			}),
+            dataType: 'json',
+			success: function (response) {
+				window.location = response.URL;	//start download automatically
 			},
-			error: function (exception) {				
+			error: function (exception) {
 				console.log(exception.message);
 			}
 		})
-	
+
 })
 
 function getUniqueNumber(){
-	
+
 	var date = new Date();
 	var components = [
 		date.getYear(),
@@ -3038,23 +3125,23 @@ function getUniqueNumber(){
 	];
 
 	var id = components.join("") //+ Math.random().toString().replace(".","");
-	
+
 	return id
 }
 
 /* To save enquiry status on button click in getpendingenquiry page */
 $('#enqsave').on('click', function (e) {
-	
+
     /*var select = $(this).closest("tr").find("select.input-sm")[0];
-    var textContent = select.selectedOptions[0].textContent;    
+    var textContent = select.selectedOptions[0].textContent;
     console.log("value: ", select.value);
     console.log("textContent: ", textContent); */
-	
-	e.preventDefault();	
+
+	e.preventDefault();
 	$.ajax({
 			url: serverName + 'api/update/enqstatus/meditrip',
 			type: 'POST',
-            async: false, //add this			
+            async: false, //add this
 			headers: {
 				'Content-Type': 'application/json',
 				Authorization: 'Basic ' + basicKey,
@@ -3066,20 +3153,20 @@ $('#enqsave').on('click', function (e) {
 			},
 			data: JSON.stringify({
 					enquiryID: $(this).attr("value"),
-					//var	select = $(this).closest("tr").find("select.input-sm")[0],        					
+					//var	select = $(this).closest("tr").find("select.input-sm")[0],
                     enqstatus: $(this).closest("tr").find("select.input-sm")[0].selectedOptions[0].textContent,
-                    userEmail:$(this).closest('tr').find("td:eq(2)").text()				
-			}),	
-            dataType: 'json',			
+                    userEmail:$(this).closest('tr').find("td:eq(2)").text()
+			}),
+            dataType: 'json',
 			success: function (response) {
 				console.log('success');
 				$('#questionnairemodel').find(".mdlbody").text(response.Data);
-                $('#questionnairemodel').modal('show');                			
+                $('#questionnairemodel').modal('show');
 			},
-			error: function (exception) {				
+			error: function (exception) {
 				console.log("error");
 				console.log(exception);
 			}
 		})
-	
+
 })
