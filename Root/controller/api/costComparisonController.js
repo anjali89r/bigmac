@@ -157,7 +157,7 @@ function getGlobalTreatmentCost(procedure, next) {
             logger.error("Error while reading treatment description from DB");
              next(null)
         } else if (!result.length) {
-            logger.info("There is no treatment description available for the treatment");
+            logger.info("getGlobalTreatmentCost - There is no treatment description available for the treatment");
             next(null)
         }
         else {            

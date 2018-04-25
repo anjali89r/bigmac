@@ -354,7 +354,7 @@ module.exports.updateEnquiryStatus= function (req, res) {
     var enquiryID = req.body.enquiryID;
     var status = req.body.enqstatus;
 
-    console.log(enquiryID)
+    //console.log(enquiryID)
 
     userEnquiryModel.findOneAndUpdate({ emailID: userEmailID, "enquiry": { $elemMatch: { "enquiryCode": enquiryID } } },
         {
