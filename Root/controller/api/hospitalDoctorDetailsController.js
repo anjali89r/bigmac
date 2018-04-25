@@ -1,4 +1,4 @@
-﻿var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 require('../../model/hospitalDoctorDetailsModel.js');
@@ -293,6 +293,22 @@ module.exports.addProcedureDetails = function (req, res) {
         });
 
     });
+    // get display name (code should be modified later as this is not DRY)
+    const procedurePromise = new Promise((resolve, reject) => {
+        /*check if department already exists in treatments offered table */
+        treatmentController.isTreatmentExists(req.body["procedureName"], function (dict) {
+            if (Object.keys(dict).length >= 1) {
+                resolve(dict['treatmentdisplayname']);
+            } else {
+                /* update procedure details in treatments offered schema */
+                counterSchema.getNext('Treatment.$.treatmentdisplayname', collection, function (id) {
+                    treatmentdisplayname = id;
+                    resolve(treatmentdisplayname);
+                })
+            }
+        });
+
+    });
 
     //Create hospital check promise
     const dbHospitalCheckPromise = new Promise((resolve, reject) =>
@@ -366,6 +382,7 @@ module.exports.addProcedureDetails = function (req, res) {
                     {
                         "$push": {
                             "Treatment": {
+                                "treatmentdisplayname": treatmentdisplayname,
                                 "name": req.body["procedureName"],
                                 "activeFlag": req.body["isProcedureActive"],//new
                                 "currency": req.body["currency"],
@@ -451,6 +468,7 @@ module.exports.addProcedureDetails = function (req, res) {
                     {
                         "$push": {
                             "Treatment": {
+                                "treatmentdisplayname": treatmentdisplayname,
                                 "procedureid": procedureID,
                                 "departmentId": departmentID,                               
                                 "name": req.body["procedureName"],
@@ -755,7 +773,7 @@ module.exports.getHospitalBasicDetails = function (hospitalName,next) {
 
     hospitalModel.aggregate([
         {     
-            "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "hospitalName": hospitalName }]}
+            "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "hospitaldisplayname": hospitalName }]}
         },       
         {
             $project: {
