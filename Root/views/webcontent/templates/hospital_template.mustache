@@ -7,7 +7,7 @@
          window.dataLayer = window.dataLayer || [];
          function gtag(){dataLayer.push(arguments);}
          gtag('js', new Date());
-         
+
          gtag('config', 'UA-107905104-1');
       </script>
       <!-- Google Tag Manager added by libin-->
@@ -20,7 +20,7 @@
       <!-- End Google Tag Manager -->
       <meta charset="utf-8">
       <!-- <meta name="description" content="Medinovita"> -->
-      <!--[if IE]> 
+      <!--[if IE]>
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <![endif]-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,7 +36,7 @@
       <!-- Added for glyphicons -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>	 
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <!-- Added for glyphicons -->
       <link rel="stylesheet" href="/assets/css/plugins.min.css">
       <link rel="stylesheet" href="/assets/css/settings.css">
@@ -52,7 +52,7 @@
       <!-- Modernizr -->
       <script src="/assets/js/modernizr.js"></script>
        <!-- <script async src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js'></script>
-      
+
       <script src='https://www.google.com/recaptcha/api.js'></script> -->
       <script src="/assets/js/plugins.min.js"></script>
       <!-- REVOLUTION JS FILES -->
@@ -65,7 +65,7 @@
       <!-- SLIDER REVOLUTION 5.0 EXTENSIONS
          (Load Extensions only on Local File Systems !
          The following part can be removed on Server for On Demand Loading) -->
-      
+
       <!-- script for expand and collapse-->
       <script>
          $(document).ready(function(){
@@ -73,7 +73,7 @@
              $(".collapse.in").each(function(){
              	$(this).siblings(".panel-heading").find(".glyphicon").addClass("glyphicon-minus").removeClass("glyphicon-plus");
              });
-             
+
              // Toggle plus minus icon on show hide of collapse element
              $(".collapse").on('show.bs.collapse', function(){
              	$(this).parent().find(".glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
@@ -84,17 +84,7 @@
       </script>
    </head>
    <body>
-      <script id="tpl-alert" type="text/x-handlebars-template">
-         <div class="overlay">
-           <div class="window-message-container type-alert">
-             <div class="window-message-container__text">{{message}}</div>
-             <ul class="buttons alert">
-               <li><a href="#">Ok</a></li>
-             </ul>
-             <a href="#" class="alert-close img-replace">Close</a>
-           </div>
-         </div>
-      </script>
+      
       <!-- Google Tag Manager (noscript) added by libin-->
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KVPCCNV"
          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -115,120 +105,102 @@
       </div>
       <!-- End .page-header -->
       <!-- Template added by Libin -->
-      <div class="container">
-         <div class="row">
-            <h2  class="text-primary">
-               {{hospital_name}} 
-               <p style="font-size:16px;"> {{hospitalcity}},{{hospitalcountry}} </p>
-            </h2>
-         </div>
-         <div class="row">
-            <div class="col-md-10">
-               <a href="#" title="Click to submit enquiry"> 
+    <div class="container" style="margin-top: 30px;">
+   <div class="row">
+      <div id="clinic-details" class="col-md-9 col-sm-9">
+         <section id="property-detail">
+
+            <div class="row" style="margin-bottom:20px;">
+               <div class="col-md-3">
+                  <a href="#" title="{{{hospital_name}}}">
                <img src="{{{hospitalimage}}}" class="img-thumbnail transperentboarder" alt="Responsive image">
                </a>
+               </div>
+
+               <div class="col-md-6" style="margin-top: 62px;">
+                  <h1 class="title custom">
+              {{hospital_name}} {{hospitalcity}},{{hospitalcountry}}
+            </h1>
+          </div>
+               </div>
             </div>
-         </div>
-         <p class="h5-responsive"></p>
-         <div class="row">
-            <div class="col-md-7">
-			   <!-- HTML description of hospitals-->	
-               {{{hospital_gridFS_data}}}
-               <!-- Collapsible menu to display various procedure details-->	
-               <p class="h5">
-               <h4 class="display-4">Procedures</h4>
-               </p>  
-               <div class="col-md-6">			   
-                  <div class="panel-group" id="accordion">			
-				   {{#department}} <!--array of department names-->
-                     <div class="panel panel-default">
-                        <div class="panel-heading">
-                           <h4 class="panel-title">
-                              <a data-toggle="collapse" data-parent="#accordion" href="#{{department}}"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;{{{department}}}</a>
-                           </h4>
-                        </div>
-                        <div id="{{department}}" class="panel-collapse collapse">
-                           <div class="panel-body">						   
-						      {{#procedureList}} <!--array of procedure names-->
+          <div class="ext-data">
+<!--start of ext data-->
+           {{{hospital_gridFS_data}}}
+<!--end of ext data-->
+          </div>
+          <!--SECTION Procedures-->
+          <section id="clinic-procedures" style="margin-bottom:20px">
+              <header>
+                <h2 style="border-bottom: 1px solid rgba(7,56,85,0.2) !important; padding-bottom:10px;">Procedures</h2>
+              </header>
+
+              <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">{{#department}} <!--array of department names-->
+                <div class="panel panel-custom">
+                  <div class="panel-heading" role="tab" id="clinic-procedure-Filter-header">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" href="#{{department}}" aria-expanded="true" aria-controls="{{department}}"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;{{{department}}}
+                      </a>
+                    </h4>
+                  </div><!-- End .panel-heading -->
+                   <div id="{{department}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="clinic-procedure-Filter-header">
+                     <div class="panel-body">
+                  {{#procedureList}} <!--array of procedure names-->
                               <div class="row">
                                  <div class="col-md-6">
                                     <p><a href="" target="_blank">{{procedureName}}</a></p>
                                  </div>
-                                 <div class="col-md-6">	
-                                    <button type = "button" class = "btn btn-primary">Starts from {{cost}}</button>									
+                                 <div class="col-md-6">
+                                    <button type = "button" class = "btn btn-primary">Starts from {{cost}}</button>
                                  </div>
                               </div>
                               <p></p>
-							  {{/procedureList}} <!--array of procedure names-->							  							 
+                {{/procedureList}} <!--array of procedure names-->
                            </div>
-                        </div>
-                     </div>
-                     {{/department}} <!--Array of department names-->					
-                  </div>
-               </div>
-               <!-- Collapsible menu to display various procedure details-->			
-            </div>
-            <div class="col-md-3">
-               <p class="h5-responsive"></p>
-               <div class="row">
-                  <div class="col-md-8">
-                     <a href="#" title="Click to submit enquiry"> 
-                     <img src="/assets/images/medinovita/contactus.jpg" class="img-fluid img-thumbnail" alt="Responsive image">
-                     </a>
-                  </div>
-               </div>
-               <!-- accreditations -->
-               <p></p>
-               <p></p>
-               <p></p>
-               <div class="row">
-                  <div class="col-md-6 text-left">
-                     <h4 class="display-4">Accreditations</h4>
-                  </div>
-               </div>
-			   {{#Accreditation}} <!--array of accreditations-->
-               <div class="row">
-                  <div class="col-md-6 text-left">
-                     <h3><small>{{agency}}</small></h3>
-                  </div>
-                  <div class="col-md-3">
-                     <img src="/assets/images/medinovita/{{{agency}}}.jpg" class="img-fluid img-thumbnail" alt="Responsive image" />
-                  </div>
-               </div>
-               <p></p>
-			   {{/Accreditation}} <!--array of accreditations-->               			   
-               <!-- accreditations -->
-               <p></p>
-               <p></p>
-               <!-- Top Doctors -->
-               <div class="row">
-                  <div class="col-md-12">
-                     <caption>
-                        <h4 class="display-4">Top Doctors In {{hospital_name}}</h4>
-                     </caption>
-					 {{#topdoctors}} <!--array name hold the cell values-->
-                     <div class="col-md-12">
-                        <div class="col-md-4">				  
-                           <img src="{{{docpicdir}}}" class="img-thumbnail transperentboarder" alt="Responsive image">
-                        </div>
-                        <a href="#" title="Click View Details">
-                           <div class="col-md-8">
-                              <h5 class="text-primary">
-                                 {{docname}}
-                                 <p>{{docspeciality}}</p>
-                              </h5>
-                           </div>
-                        </a>
-                     </div>
-					 {{/topdoctors}} <!--array ends here-->                    
-                  </div>
-               </div>
-               <!-- Top Doctors -->
-               <!-- End .row -->	
-               <!-- End .col-md-8 -->					
-               <div class="row">
-                  <!-- End .row -->
-               </div>
+                   </div>
+                   {{/department}} <!--Array of department names-->
+              </div><!--end of panel-->
+            </section>
+            <!-- END OF SECTION clinic-procedures-->
+         </section> <!--end of property-detail section-->
+      </div><!--end of clinical details div -->
+
+      <div class="col-md-3 col-sm-3">
+          <section id="sidebar-hosp" class="affix" style="width: 262px;position:relative;">
+            <aside id="edit-search" style="margin-bottom:50px;">
+              <header>
+                <h3 style="margin-bottom: 20px; border-bottom:1px solid rgba(0, 0, 0, 0.1);padding-bottom:15px">Contact Clinic</h3>
+
+              </header>
+<div class="contact-doc" style="margin-top: 20px;margin-bottom:20px">
+  <a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-lg">Contact Clinic</button></a>
+</div>
+              <div class="info">
+                <div class="accreditation">
+
+
+                </div>
+
+                <div class="doc-info">
+                  <h4>Top Doctors In {{hospital_name}}</h4>
+
+                  <ul class="thumbs">
+                     {{#topdoctors}}
+                     <li><a href="#"> <img src="{{{docpicdir}}}" width="200" height="150" alt="doc" ><span> {{docname}} - {{docspeciality}}</span></a></li>
+                      {{/topdoctors}}
+                  </ul>
+
+                </div>
+
+              </div>
+
+            </aside>
+
+          </section>
+      </div>
+
+   </div><!--end of main row -->
+</div>
                <!-- End .container -->
                <!-- Template added by Libin -->
                <div class="mb60"></div>
