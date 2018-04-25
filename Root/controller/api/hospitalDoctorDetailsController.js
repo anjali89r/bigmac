@@ -294,7 +294,7 @@ module.exports.addProcedureDetails = function (req, res) {
 
     });
     // get display name (code should be modified later as this is not DRY)
-    const procedurePromise = new Promise((resolve, reject) => {
+    const procedureNamePromise = new Promise((resolve, reject) => {
         /*check if department already exists in treatments offered table */
         treatmentController.isTreatmentExists(req.body["procedureName"], function (dict) {
             if (Object.keys(dict).length >= 1) {
@@ -367,8 +367,8 @@ module.exports.addProcedureDetails = function (req, res) {
             })
     );
 
-    Promise.all([dbHospitalCheckPromise, dbTreatmentCheckPromise, departmentPromise, procedurePromise, doctorPromise])
-        .then(([, searchResult , departmentID, procedureID, doctorID ]) => {
+    Promise.all([dbHospitalCheckPromise, dbTreatmentCheckPromise, departmentPromise, procedurePromise, doctorPromise,procedureNamePromise])
+        .then(([, searchResult , departmentID, procedureID, doctorID,treatmentdisplayname ]) => {
            
             var procedureFound = searchResult.split('|')[0];  
             procedureFound = procedureFound == "true";//convert to boolean
