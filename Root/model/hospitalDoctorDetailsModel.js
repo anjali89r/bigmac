@@ -1,4 +1,4 @@
-﻿var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-plugin-autoinc');
 var counterSchema = require('./identityCounterModel.js');
 var genericUtil = require('../controller/utilities/generic.js');
@@ -29,19 +29,20 @@ var hospitalDoctorSchema = new Schema({
         Landmark: { type: String, required: false, trim: true },
     },
 
+
     Accreditation: [{
-        agency: { type: String, required: true, trim: true, enum: ['NABH', 'NABL', 'JCI'] },         
+        agency: { type: String, required: false, trim: true, enum: ['NABH', 'ISO9001', 'JCI'] },         
     }],
 
     hospitalRating: {
         userRating: [{
-                    type: Number, required: true, 
+                    type: Number, required: false, 
                     min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
                     max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
                     default: 4
         }],
         medinovitaRating: {
-                            type: Number, required: true,
+                            type: Number, required: false,
                             min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
                             max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'], 
                             default: 4
