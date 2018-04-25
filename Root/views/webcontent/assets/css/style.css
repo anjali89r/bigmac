@@ -2796,8 +2796,8 @@ label.error {
   padding: 25px 17px;
   text-align: center;
   transition: all 0.4s;
-  /* width:25%;
-  height:200px; */
+   width:25%;
+  height:200px; 
 }
 
 .service.service-box.service-icon-top {
