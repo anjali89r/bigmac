@@ -710,12 +710,13 @@ function getTopHospitals(procedure, next) {
     ], function (err, result) {
 
         if (err) {
-            logger.error("Error while fetching top hospitals from hospital and doctors table");
+            logger.error("getTopHospitals - Error while fetching top hospitals from hospital and doctors table");
             next(null)
         } else if (!result.length) {
-            logger.error("There is no treatment records available for the treatment " + procedure );
+            logger.error("getTopHospitals - There is no treatment records available for the treatment " + procedure );
             next(null)
         } else {
+           // console.log("tophospitals - " + result)
             next(result)
         }            
     })
@@ -758,12 +759,13 @@ function getTopDoctors(procedure, next) {
     ], function (err, result) {
 
         if (err) {
-            logger.error("Error while fetching top hospitals from hospital and doctors table");
+            logger.error("getTopDoctors - Error while fetching top hospitals from hospital and doctors table");
             next(null)
         } else if (!result.length) {
-            logger.error("There is no treatment records available for the treatment " + procedure);
+            logger.error("getTopDoctors - There is no treatment records available for the treatment " + procedure);
             next(null)
         } else {
+            //console.log("topdoctors - " + result)
             next(result)
         }
     })

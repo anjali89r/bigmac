@@ -137,6 +137,8 @@ module.exports.getProcedureDescription = function (req, res) {
         treatmentDesc.getProcedureDetails(procedureName, function (result) {
             var relFilePath = result[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
             procedureName=result[0].treatmentList[0].displayName 
+         //   console.log(relFilePath)
+           // console.log(procedureName)
             resolve(relFilePath)
         })
 
@@ -150,37 +152,45 @@ module.exports.getProcedureDescription = function (req, res) {
             gridFS.getFlatFileContent(filePath, function (content) {
                // content = fs.readFileSync(filePath, "utf8");
                 if (content.indexOf("Error") > -1) {
-                    return reject(res.status(404).json({ "Message": content }));
+                    return res.redirect('/404');
                 } else {
+                //    console.log("read procedure")
                     resolve(content)
                 }
             })
         }).then(function (content) {         
             /* get treatment cost */
             var costComparePromise = new Promise(function (resolve, reject) {
-                costCompare.getGlobalTreatmentCost(procedureName, function (cost) {
-                    resolve(cost)
+                costCompare.getGlobalTreatmentCost(procedureName, function (costComaprisonData) {
+                 //   console.log("read cost")
+                    resolve(costComaprisonData)
                 })
             })
 
             var topHospialPromise = new Promise(function (resolve, reject) {
                 hospitalData.getTopHospitals(procedureName, function (topHospitals) {
+                   // console.log("read hospitals")
                     resolve(topHospitals)
                 })
             })
 
             var topDocPromise = new Promise(function (resolve, reject) {
                 hospitalData.getTopDoctors(procedureName, function (topDoctors) {
+                  //  console.log("read doctors")
                     resolve(topDoctors)
                 })
             })
-
+           // console.log("waiting")
+            //console.log(costComparePromise)
             Promise.all([costComparePromise, topHospialPromise, topDocPromise])
                 .then(([costComaprisonData, topHospitals, topDoctors]) => {
                     var costComparison = costComaprisonData.countryWise
                     var tophospitaldata = topHospitals
                     var topdocdata = topDoctors
-
+                 //   console.log("all promise")
+                  //  console.log(costComparePromise)
+                   // console.log(topHospialPromise)
+                    //console.log(topDocPromise)
                     var data = {
                         "procedure_name": procedureName,
                         "title": procedureName + ' treatments in India| Afforable & best ' + procedureName + ' treatments',
@@ -660,9 +670,12 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                   // console.log("i'm here ",treatmentname);
             new Promise(function (resolve, reject) {
                 //get the path of flat file with description
-              //  console.log(treatmentname)
-                treatmentDesc.getProcedureDetails(treatmentname, function (procedureresult) {
+               // console.log(treatmentname)
+                treatmentDesc.getProcedureDetails(treatmentdisplayname, function (procedureresult) {
+                 //   console.log(procedureresult)
                     var relFilePath = procedureresult[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
+                   // console.log(relFilePath)
+                    //console.log(procedureresult[0])
                     resolve(relFilePath)
                 })
                
@@ -692,7 +705,7 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                   // console.log(treatmentname)
                   // set treatment name without hypen
                    data.treatmentname=treatmentname;
-                   data.title=treatmentname + " | Best hospitals & doctors";
+                   data.title=treatmentname + "|Best hospitals & doctors in India|Medinovita";
 
                    res.render('searchtreatment_template', data);
                 }).catch(function (err) {
@@ -750,7 +763,8 @@ module.exports.getPendingEnquiriesPage = function (req, res) {
             };
             res.render('user_enquiry_details', data);       
     }).catch(function (err) {
-        console.log(err.message);
+      //  console.log(err.message);
+      logger.error("Error in user enquiry details document")
         return res.redirect('/404')
     });
 }
