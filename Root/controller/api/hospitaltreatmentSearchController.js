@@ -1,4 +1,4 @@
-﻿var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 var Promise = require('promise');
 var fs = require('fs');
 var logger = require('../utilities/logger.js');
@@ -313,7 +313,7 @@ function getHospitalListForaTreatment(procedureName) {
                      }
                  }
              },*/
-            { "$project": { "_id": 0, "hospitalName": 1, "costStartsFrom": "$Treatment.costLowerBound", "procedureName": "$Treatment.name", "currency": "$Treatment.currency", "country": "$hospitalContact.country", "city": "$hospitalContact.City" } }
+            { "$project": { "_id": 0, "hospitalName": 1,"hospitaldisplayname":1, "costStartsFrom": "$Treatment.costLowerBound", "procedureName": "$Treatment.name", "currency": "$Treatment.currency", "country": "$hospitalContact.country", "city": "$hospitalContact.City" } }
         ], function (err, result) {
 
             if (err) {
