@@ -1,4 +1,4 @@
-﻿var fs = require('fs');
+var fs = require('fs');
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 var config = require('../utilities/confutils.js');
@@ -327,6 +327,9 @@ module.exports.getHospitalDescription = function (req, res) {
     }).then(function (result) {
         var basicHospData = result
         var relFilePath = result[0].hospitalDescription //   name of text file
+
+        //change the hospital name to actual name to query other database
+        hospitalName=result[0].hospitalName
       //  var procedureFileDir = config.getProjectSettings('DOCDIR', 'HOSPITALDIR', false)
         //var filePath = procedureFileDir + relFilePath
         var filePath =  relFilePath
@@ -334,7 +337,9 @@ module.exports.getHospitalDescription = function (req, res) {
             gridFS.getFlatFileContent(filePath, function (content) {
                // content = fs.readFileSync(filePath, "utf8");
                 if (content.indexOf("Error") > -1) {
-                    return reject(res.status(404).json({ "Message": content }));
+                    logger.warn(" Error in reading hospitals data from S3  " + hospitalName+ " redirecting to 404");
+                    return res.redirect('/404');
+                    //return reject(res.status(404).json({ "Message": content }));
                 } else {
                     resolve(content)
                 }
@@ -357,10 +362,10 @@ module.exports.getHospitalDescription = function (req, res) {
                 .then(([treatmentList, doctorList]) => { 
                     var idx = 0;
                     var data = {
-                        "hospital_name": hospitalName,
+                        "hospital_name": basicHospData[0].hospitalName,
                         "hospitalcity": basicHospData[0].hospitalcity,
                         "hospitalcountry": basicHospData[0].hospitalcountry,
-                        "title": hospitalName + '|low cost medical treatment abroad',
+                        "title": basicHospData[0].hospitalName + '|Medical treatment in India|Best & Afforable hospitals for medical treatment',
                         "hospital_gridFS_data": content,
                         "hospitalimage": basicHospData[0].hospitalimage,
                         "department": treatmentList,                        
@@ -512,7 +517,9 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
                     content="Description not available"
                 }
                 if (content.indexOf("Error") > -1) {
-                    return reject(res.status(404).json({ "Message": content }));
+                    logger.error("Error retrieving department details from DB : - " + department +  err.message)
+                    return  res.redirect('/404')
+                    //return reject(res.status(404).json({ "Message": content }));
                 } else {
                     resolve(content)
                 }
@@ -521,7 +528,7 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
             /* get list of procedures organized by departments */
             var data = {
                 "department": department,
-                "title": department + ' | low cost medical treatment abroad',
+                "title": department + 'treatments in India|Medical hospitals in India',
                 "departmentDescription": content,
                 "treatmentList": result[0].treatmentList,
                 "procedureCount": result[0].treatmentList.length,
@@ -603,7 +610,7 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                                    nabhimage = true;
                                
                                     break;
-                                case "NABL":
+                                case "ISO9001":
                         
                                       nablimage= true;
                                     
@@ -670,7 +677,8 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                        // procedurecontent = fs.readFileSync(filePath, "utf8");
                         if (procedurecontent.indexOf("Error") > -1) {
                             //console.log(procedurecontent)
-                            return reject(res.status(404).json({ "Message": procedurecontent }));
+                            logger.error("Error retrieving procedure contents : - " + procedurecontent )
+                            return  res.redirect('/404')
                         } else {
                             resolve(procedurecontent)
                         }
