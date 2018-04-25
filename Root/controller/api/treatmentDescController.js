@@ -1,4 +1,4 @@
-﻿var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 var gridFS = require('./gridFSController.js');
@@ -228,7 +228,7 @@ module.exports.isTreatmentExists = function (procedureName, callback) {
     var dict = [];
 
     treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "displayName": procedureName } } }, {
-        "departmentId": 1, "treatmentList.procedureId": 1,"_id": 0
+        "departmentId": 1, "treatmentList.procedureId": 1,"treatmentList.procedureName":1,"_id": 0
     }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
         if (err) {
             logger.error("Error while reading procedure id,department id from treatments description schema : - " + err.message);
@@ -237,6 +237,7 @@ module.exports.isTreatmentExists = function (procedureName, callback) {
             logger.info("Procedure " + procedureName + " already exists in treatments offered collection");
             dict["procedureId"] = doc.treatmentList[0].procedureId; 
             dict["procedureparentDepartmentid"] = doc.departmentId;
+            dict["treatmentdisplayname"]=doc.treatmentList[0].procedureName;
             callback(dict);
         } else {
             callback(dict);
