@@ -14738,3 +14738,27 @@ table{
 .style-check{
   color: orange;
 }
+/*hospital_tempalte.mustache */
+ul.thumbs {
+	margin:0 auto;
+	padding:0;
+	list-style:none;
+	width:500px;
+}
+ul.thumbs li { margin:0 0 20px; }
+ul.thumbs li a, ul.thumbs li a:visited {
+	display:block;
+	text-decoration:none;
+	color:#000;
+}
+ul.thumbs li img, ul.thumbs li span {
+	display:inline-block;
+	vertical-align:middle;
+}
+ul.thumbs li img { border:2px solid #000; }
+ul.thumbs li span {
+	width:280px;
+	margin:0 0 0 8px
+}
+
+/* end hospital_tempalte.mustache */

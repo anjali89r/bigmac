@@ -1,8 +1,8 @@
 var basicKey = 'bGliaW46bGliaW4=';
 var xAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVG9rZW5Ub0F1dGhlbnRpY2F0ZU1lZGlub3ZpdGFVc2VyIiwiaWF0IjoxNTA4MDQ0OTMwfQ.cZ3pCte1guE8KQkjd1KfY_bLJ-gOatJm2xlwyiLGAl4';
 
-var serverName = 'https://www.medinovita.in/';
-//var serverName = 'http://localhost:1337/';
+//var serverName = 'https://www.medinovita.in/';
+var serverName = 'http://localhost:3000/';
 
 var GLOBAL_VARIABLES = {
 	Language: 'en',
@@ -33,8 +33,10 @@ var whyIndia = '';
 // 	}(this)));
 // };
 // END Function replace Native Alert
+
 (function ($) {
 	'use strict';
+
 	$('.medinovitaHeader').load('/assets/pages/header.html', function () {
 		$.ajax({
 			url: serverName + 'api/v1/get/distinctdepartments/meditrip',
@@ -1910,6 +1912,8 @@ var whyIndia = '';
 	});
 
 
+
+
 })(jQuery);
 
 
@@ -2445,7 +2449,7 @@ function costCallback(data) {
 		var holidayPackage = $('#holidayPackageDropdown').val();
 
 		var countryName = $('#costcountry').val();
-		
+
 		var currency='Dollar'
 
 
@@ -2865,7 +2869,7 @@ function hospitalPageCallback(treatmentName, city) {
 					var modifiedhosname = hospital.hospitalName.replace(/\s+/g, '-').toLowerCase();
 					// var htmlStr = $('<div class="product product-list hosp-'+index+'"><div class="row"><div class="col-md-4 col-sm-5"><div class="product-top"><figure><img src='+ hospital.hospitalimage +'></figure></div></div><div class="col-md-8 col-sm-7"><a href="/hospitals/'+ modifiedhosname +'"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a><br><i class="fa fa-map-marker"  aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '<br><span>Specialities: ' + myHtml + '</span></p><div class="margin20"> <a href="/hospitals/' + hospital.hospitalName + '"style="float:right;font-weight:bold">Learn More...</a></div></div></div></div></div></div>')
 
-					var htmlStr = $('<div class="product product-list hosp-'+index+'"><div class="row"><div class="col-md-4 col-sm-5"><div class="product-top"><figure><img src='+ hospital.hospitalimage +'></figure></div></div><div class="col-md-8 col-sm-7"><h3><a href="/hospitals/'+ modifiedhosname +'"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a></h3><div class="location-sp" style="font-size:16px;"><div><i class="fa fa-map-marker"  aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '</div><div>Specialities: ' + myHtml + '</div></div><div style="font-size:14px;"> <a href="/hospitals/' + hospital.hospitalName + '"style="font-weight:bold">Learn More...</a></div></div></div></div></div></div>')
+					var htmlStr = $('<div class="product product-list hosp-'+index+'"><div class="row"><div class="col-md-4 col-sm-5"><div class="product-top"><figure><img src='+ hospital.hospitalimage +'></figure></div></div><div class="col-md-8 col-sm-7"><h3><a href="/hospitals/'+ modifiedhosname +'"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a></h3><div class="location-sp" style="font-size:16px;"><div><i class="fa fa-map-marker"  aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '</div><div>Specialities: ' + myHtml + '</div><a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right">Contact</button></a></div><div style="font-size:14px;"> <a href="/hospitals/' + hospital.hospitalName + '"style="font-weight:bold">Learn More...</a></div></div></div></div></div></div>')
 					  mainDiv.append(htmlStr);
 
 
