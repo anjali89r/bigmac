@@ -136,6 +136,7 @@ module.exports.getProcedureDescription = function (req, res) {
         //get the path of flat file with description
         treatmentDesc.getProcedureDetails(procedureName, function (result) {
             var relFilePath = result[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
+            procedureName=result[0].treatmentList[0].displayName 
             resolve(relFilePath)
         })
 
@@ -182,7 +183,7 @@ module.exports.getProcedureDescription = function (req, res) {
 
                     var data = {
                         "procedure_name": procedureName,
-                        "title": procedureName + ' in India|low cost ' + procedureName+ ' abroad',
+                        "title": procedureName + ' treatments in India| Afforable & best ' + procedureName + ' treatments',
                         "procedure_gridFS_data": content,
                         "tophospitals": tophospitaldata,
                         "costdisprows": costComparison,                       
@@ -528,7 +529,7 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
             /* get list of procedures organized by departments */
             var data = {
                 "department": department,
-                "title": department + 'treatments in India|Medical hospitals in India',
+                "title": department + ' treatments in India|Medical hospitals in India',
                 "departmentDescription": content,
                 "treatmentList": result[0].treatmentList,
                 "procedureCount": result[0].treatmentList.length,
