@@ -283,8 +283,8 @@ module.exports.gettreatmentEstimate = function (req, res) {
             Promise.all([totalCostPromise, hospitalStayPromise, topHospitalPromise, topDocPromise, conversionRatePromise])
                 .then(([estimate, hospitalStay, topHospitals, topDoctors, conversionrate]) => {
                     
-                   var tophospitaldata = topHospitals
-                   var topdocdata = topDoctors
+                   var tophospitaldata = topHospitals.slice(0,5)
+                   var topdocdata = topDoctors.slice(0,3)
 
                    var currencyConversionRate = conversionrate[0].conversionrate
                    var currencySymbol = conversionrate[0].symbol                                      
@@ -309,8 +309,8 @@ module.exports.gettreatmentEstimate = function (req, res) {
                         "procedure_name": procedureName,                        
                         "title": procedureName + ' in India|low cost ' + procedureName + ' abroad',
                         "procedure_gridFS_data": content,
-                        "tophospitals": tophospitaldata,                       
-                        "topdoctors": topdocdata,                       
+                        "tophospitals": tophospitaldata.slice(0,5),                       
+                        "topdoctors": topdocdata.slice(0,3),                       
                     };
                     res.render('cost_template',data);
                 })
@@ -383,7 +383,7 @@ module.exports.getHospitalDescription = function (req, res) {
                         "hospital_gridFS_data": content,
                         "hospitalimage": basicHospData[0].hospitalimage,
                         "department": treatmentList,                        
-                        "topdoctors": doctorList,
+                        "topdoctors": doctorList.slice(0,5),
                         "Accreditation": basicHospData[0].Accreditation
                     };                   
                     res.render('hospital_template',data);
@@ -705,7 +705,7 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                // console.log(procedurecontent)
                // set description content
                    data.treatmentDescription=procedurecontent;
-                  // console.log(treatmentname)
+                  //console.log(procedurecontent)
                   // set treatment name without hypen
                    data.treatmentname=treatmentname;
                    data.title=treatmentname + "|Best hospitals & doctors in India|Medinovita";
