@@ -1,4 +1,4 @@
-﻿var fs = require('fs');
+var fs = require('fs');
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 var config = require('../utilities/confutils.js');
@@ -136,6 +136,9 @@ module.exports.getProcedureDescription = function (req, res) {
         //get the path of flat file with description
         treatmentDesc.getProcedureDetails(procedureName, function (result) {
             var relFilePath = result[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
+            procedureName=result[0].treatmentList[0].displayName 
+         //   console.log(relFilePath)
+           // console.log(procedureName)
             resolve(relFilePath)
         })
 
@@ -149,40 +152,48 @@ module.exports.getProcedureDescription = function (req, res) {
             gridFS.getFlatFileContent(filePath, function (content) {
                // content = fs.readFileSync(filePath, "utf8");
                 if (content.indexOf("Error") > -1) {
-                    return reject(res.status(404).json({ "Message": content }));
+                    return res.redirect('/404');
                 } else {
+                //    console.log("read procedure")
                     resolve(content)
                 }
             })
         }).then(function (content) {         
             /* get treatment cost */
             var costComparePromise = new Promise(function (resolve, reject) {
-                costCompare.getGlobalTreatmentCost(procedureName, function (cost) {
-                    resolve(cost)
+                costCompare.getGlobalTreatmentCost(procedureName, function (costComaprisonData) {
+                 //   console.log("read cost")
+                    resolve(costComaprisonData)
                 })
             })
 
             var topHospialPromise = new Promise(function (resolve, reject) {
                 hospitalData.getTopHospitals(procedureName, function (topHospitals) {
+                   // console.log("read hospitals")
                     resolve(topHospitals)
                 })
             })
 
             var topDocPromise = new Promise(function (resolve, reject) {
                 hospitalData.getTopDoctors(procedureName, function (topDoctors) {
+                  //  console.log("read doctors")
                     resolve(topDoctors)
                 })
             })
-
+           // console.log("waiting")
+            //console.log(costComparePromise)
             Promise.all([costComparePromise, topHospialPromise, topDocPromise])
                 .then(([costComaprisonData, topHospitals, topDoctors]) => {
                     var costComparison = costComaprisonData.countryWise
                     var tophospitaldata = topHospitals
                     var topdocdata = topDoctors
-
+                 //   console.log("all promise")
+                  //  console.log(costComparePromise)
+                   // console.log(topHospialPromise)
+                    //console.log(topDocPromise)
                     var data = {
                         "procedure_name": procedureName,
-                        "title": procedureName + ' in India|low cost ' + procedureName+ ' abroad',
+                        "title": procedureName + ' treatments in India| Afforable & best ' + procedureName + ' treatments',
                         "procedure_gridFS_data": content,
                         "tophospitals": tophospitaldata,
                         "costdisprows": costComparison,                       
@@ -327,6 +338,9 @@ module.exports.getHospitalDescription = function (req, res) {
     }).then(function (result) {
         var basicHospData = result
         var relFilePath = result[0].hospitalDescription //   name of text file
+
+        //change the hospital name to actual name to query other database
+        hospitalName=result[0].hospitalName
       //  var procedureFileDir = config.getProjectSettings('DOCDIR', 'HOSPITALDIR', false)
         //var filePath = procedureFileDir + relFilePath
         var filePath =  relFilePath
@@ -334,7 +348,9 @@ module.exports.getHospitalDescription = function (req, res) {
             gridFS.getFlatFileContent(filePath, function (content) {
                // content = fs.readFileSync(filePath, "utf8");
                 if (content.indexOf("Error") > -1) {
-                    return reject(res.status(404).json({ "Message": content }));
+                    logger.warn(" Error in reading hospitals data from S3  " + hospitalName+ " redirecting to 404");
+                    return res.redirect('/404');
+                    //return reject(res.status(404).json({ "Message": content }));
                 } else {
                     resolve(content)
                 }
@@ -357,10 +373,10 @@ module.exports.getHospitalDescription = function (req, res) {
                 .then(([treatmentList, doctorList]) => { 
                     var idx = 0;
                     var data = {
-                        "hospital_name": hospitalName,
+                        "hospital_name": basicHospData[0].hospitalName,
                         "hospitalcity": basicHospData[0].hospitalcity,
                         "hospitalcountry": basicHospData[0].hospitalcountry,
-                        "title": hospitalName + '|low cost medical treatment abroad',
+                        "title": basicHospData[0].hospitalName + '|Medical treatment in India|Best & Afforable hospitals for medical treatment',
                         "hospital_gridFS_data": content,
                         "hospitalimage": basicHospData[0].hospitalimage,
                         "department": treatmentList,                        
@@ -512,7 +528,9 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
                     content="Description not available"
                 }
                 if (content.indexOf("Error") > -1) {
-                    return reject(res.status(404).json({ "Message": content }));
+                    logger.error("Error retrieving department details from DB : - " + department +  err.message)
+                    return  res.redirect('/404')
+                    //return reject(res.status(404).json({ "Message": content }));
                 } else {
                     resolve(content)
                 }
@@ -521,7 +539,7 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
             /* get list of procedures organized by departments */
             var data = {
                 "department": department,
-                "title": department + ' | low cost medical treatment abroad',
+                "title": department + ' treatments in India|Medical hospitals in India',
                 "departmentDescription": content,
                 "treatmentList": result[0].treatmentList,
                 "procedureCount": result[0].treatmentList.length,
@@ -603,7 +621,7 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                                    nabhimage = true;
                                
                                     break;
-                                case "NABL":
+                                case "ISO9001":
                         
                                       nablimage= true;
                                     
@@ -652,9 +670,12 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                   // console.log("i'm here ",treatmentname);
             new Promise(function (resolve, reject) {
                 //get the path of flat file with description
-              //  console.log(treatmentname)
-                treatmentDesc.getProcedureDetails(treatmentname, function (procedureresult) {
+               // console.log(treatmentname)
+                treatmentDesc.getProcedureDetails(treatmentdisplayname, function (procedureresult) {
+                 //   console.log(procedureresult)
                     var relFilePath = procedureresult[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
+                   // console.log(relFilePath)
+                    //console.log(procedureresult[0])
                     resolve(relFilePath)
                 })
                
@@ -670,7 +691,8 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                        // procedurecontent = fs.readFileSync(filePath, "utf8");
                         if (procedurecontent.indexOf("Error") > -1) {
                             //console.log(procedurecontent)
-                            return reject(res.status(404).json({ "Message": procedurecontent }));
+                            logger.error("Error retrieving procedure contents : - " + procedurecontent )
+                            return  res.redirect('/404')
                         } else {
                             resolve(procedurecontent)
                         }
@@ -683,7 +705,7 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                   // console.log(treatmentname)
                   // set treatment name without hypen
                    data.treatmentname=treatmentname;
-                   data.title=treatmentname + " | Best hospitals & doctors";
+                   data.title=treatmentname + "|Best hospitals & doctors in India|Medinovita";
 
                    res.render('searchtreatment_template', data);
                 }).catch(function (err) {
@@ -741,7 +763,8 @@ module.exports.getPendingEnquiriesPage = function (req, res) {
             };
             res.render('user_enquiry_details', data);       
     }).catch(function (err) {
-        console.log(err.message);
+      //  console.log(err.message);
+      logger.error("Error in user enquiry details document")
         return res.redirect('/404')
     });
 }

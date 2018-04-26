@@ -1,4 +1,4 @@
-﻿var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 var Promise = require('promise');
 var logger = require('../utilities/logger.js');
 var gridFS = require('./gridFSController.js');
@@ -52,7 +52,7 @@ module.exports.addtreatmentDescription = function (req, res) {
                         var appIds = 0
                         getId("false", "true", function (id) {
                             appIds = id;
-                            console.log(appIds)
+                        //    console.log(appIds)
                             resolve("true|false|" + appIds);
                         })                               
                     } else {
@@ -228,7 +228,7 @@ module.exports.isTreatmentExists = function (procedureName, callback) {
     var dict = [];
 
     treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "displayName": procedureName } } }, {
-        "departmentId": 1, "treatmentList.procedureId": 1,"_id": 0
+        "departmentId": 1, "treatmentList.procedureId": 1,"treatmentList.procedureName":1,"_id": 0
     }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
         if (err) {
             logger.error("Error while reading procedure id,department id from treatments description schema : - " + err.message);
@@ -237,6 +237,7 @@ module.exports.isTreatmentExists = function (procedureName, callback) {
             logger.info("Procedure " + procedureName + " already exists in treatments offered collection");
             dict["procedureId"] = doc.treatmentList[0].procedureId; 
             dict["procedureparentDepartmentid"] = doc.departmentId;
+            dict["treatmentdisplayname"]=doc.treatmentList[0].procedureName;
             callback(dict);
         } else {
             callback(dict);
@@ -536,18 +537,29 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
 module.exports.getProcedureDetails = function getProcedureDetails(procedureName, callback) {
 
     var treatmentDescSchema = new treatmentDescModel();
-//   console.log("I'm here",procedureName)
+   //console.log("I'm here"+procedureName+"|")
+
+
+// "$project": {
+//     "_id": 0, "department": 1, "departmentDescription": 1, "departmentImagepath": 1, "treatmentList.procedureName": 1, "treatmentList.displayName": 1, "treatmentList.treatmentDescription": 1, "treatmentList.shortDescription": 1,
+//     "treatmentList.healingTimeInDays": 1, "treatmentList.minHospitalization": 1, "treatmentList.maxHospitalization": 1, "treatmentList.surgicalTime": 1, "treatmentList.postFollowupDuration": 1, "treatmentList.postFollowupFrequency": 1,
+//     "treatmentList.procedureImagepath": 1
+// }
     treatmentDescModel.aggregate([
         {
             "$match": {
-                "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.displayName": procedureName }, { "treatmentList.activeFlag": "Y" }]
+                "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.procedureName": procedureName }, { "treatmentList.activeFlag": "Y" }]
             }
         },
         {
             "$project": {
-                "_id": 0, "department": 1, "departmentDescription": 1, "departmentImagepath": 1, "treatmentList.procedureName": 1, "treatmentList.displayName": 1, "treatmentList.treatmentDescription": 1, "treatmentList.shortDescription": 1,
-                "treatmentList.healingTimeInDays": 1, "treatmentList.minHospitalization": 1, "treatmentList.maxHospitalization": 1, "treatmentList.surgicalTime": 1, "treatmentList.postFollowupDuration": 1, "treatmentList.postFollowupFrequency": 1,
-                "treatmentList.procedureImagepath": 1
+                "_id": 0, "department": 1, "departmentDescription": 1, "departmentImagepath": 1,
+                "treatmentList":
+                 {$filter:
+                    {input:
+                        '$treatmentList',
+                        as:'treatmentList',
+                        cond:{$eq:['$$treatmentList.procedureName',procedureName]}}}
             }
         }
 

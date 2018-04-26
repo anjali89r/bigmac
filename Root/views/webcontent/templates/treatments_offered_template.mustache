@@ -120,20 +120,20 @@
                                 <div class="right">
                                     <span class="cat-product-count">Total Procedures: {{procedureCount}}</span>
                                     <div class="filter-product-view">
-                                        <a href="#" class="btn btn-sm btn-gray" title="Category Grid"><i class="fa fa-th"></i></a>
+                                        {{! <a href="#" class="btn btn-sm btn-gray" title="Category Grid"><i class="fa fa-th"></i></a> }}
                                         <a href="#" class="btn btn-sm btn-custom" title="Category List"><i class="fa fa-th-list"></i></a>
                                     </div>
                                 </div><!-- end .right -->
                                 <div class="left">
-                                    <div class="filter-container filter-sort">
+                                    {{! <div class="filter-container filter-sort">
                                         <label>Sort by:</label>
                                         <select class="form-control input-sm">
                                             <option value="Date">Popularity</option>
                                             <option value="Color">Price</option>
                                             <option value="Size">Duration</option>
                                         </select>
-                                    </div><!-- End .filter-sort -->
-                                    <div class="filter-container filter-show">
+                                    </div><!-- End .filter-sort --> }}
+                                    {{! <div class="filter-container filter-show">
                                         <label>Show:</label>
                                         <select class="form-control input-sm">
                                             <option value="10">10</option>
@@ -141,7 +141,7 @@
                                             <option value="30">30</option>
                                             <option value="all">ALL</option>
                                         </select>
-                                    </div><!-- End .filter-show -->
+                                    </div><!-- End .filter-show --> }}
                                 </div><!-- End .left -->
                             </div><!-- End .category-filter-row -->
 						   {{#treatmentList}}
@@ -160,7 +160,7 @@
                                         </div><!-- End .product-top -->
                                     </div><!-- End .col-md-4 -->
                                     <div class="col-md-8 col-sm-7">
-                                        <h3 class="product-title comment"><a href="/procedure/{{procedureName}}">{{procedureName}}</a></h3>
+                                        <h3 class="product-title comment"><a href="/procedure/{{procedureName}}">{{displayName}}</a></h3>
                                         <div class="product-content">
                                             {{{treatmentActualDescription}}}
 										</div><!-- End .product-content -->
@@ -177,7 +177,7 @@
 												<div class="panel-body">
 													<ul class="fa-ul">
 													    {{#hospitalList}}
-														   <li><a href="/hospitals/{{hospitalName}}"><i class="fa-li fa fa-chain"></i>{{hospitalName}},{{city}},{{country}}</a></li>
+														   <li><a href="/hospitals/{{hospitaldisplayname}}"><i class="fa-li fa fa-chain"></i>{{hospitalName}},{{city}},{{country}}</a></li>
                                                         {{/hospitalList}}
 													</ul>
 												</div><!-- End .panel-body -->
