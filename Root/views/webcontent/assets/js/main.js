@@ -1,7 +1,7 @@
 var basicKey = 'bGliaW46bGliaW4=';
 var xAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVG9rZW5Ub0F1dGhlbnRpY2F0ZU1lZGlub3ZpdGFVc2VyIiwiaWF0IjoxNTA4MDQ0OTMwfQ.cZ3pCte1guE8KQkjd1KfY_bLJ-gOatJm2xlwyiLGAl4';
 
-var serverName = 'https://www.medinovita.in/';
+var serverName = 'https://www.medinovita.com/';
 //var serverName = 'http://localhost:3000/';
 
 var GLOBAL_VARIABLES = {
@@ -406,7 +406,7 @@ var whyIndia = '';
 		});
 
 
-		if (window.location.href.indexOf('index') > -1 || window.location.href == 'https://www.medinovita.in/') {
+		if (window.location.href.indexOf('index') > -1 || window.location.href == 'https://www.medinovita.com/') {
 			homepageCallback();
 		}
 		if (window.location.href.indexOf('treatmentsOffered') > -1) {
