@@ -765,7 +765,7 @@ function getTopDoctors(procedure, next) {
             logger.error("getTopDoctors - There is no treatment records available for the treatment " + procedure);
             next(null)
         } else {
-            //console.log("topdoctors - " + result)
+            //console.log("topdoctors - " + JSON.stringify(result))
             next(result)
         }
     })

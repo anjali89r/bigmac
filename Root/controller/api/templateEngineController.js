@@ -159,13 +159,14 @@ module.exports.getProcedureDescription = function (req, res) {
                 }
             })
         }).then(function (content) {         
-            /* get treatment cost */
-            var costComparePromise = new Promise(function (resolve, reject) {
+            /* get treatment cost */ 
+            /*commented out by Libin on 26-April -18 due to issue with space in procedure name*/
+           /* var costComparePromise = new Promise(function (resolve, reject) {
                 costCompare.getGlobalTreatmentCost(procedureName, function (costComaprisonData) {
                  //   console.log("read cost")
                     resolve(costComaprisonData)
                 })
-            })
+            })*/
 
             var topHospialPromise = new Promise(function (resolve, reject) {
                 hospitalData.getTopHospitals(procedureName, function (topHospitals) {
@@ -182,12 +183,14 @@ module.exports.getProcedureDescription = function (req, res) {
             })
            // console.log("waiting")
             //console.log(costComparePromise)
-            Promise.all([costComparePromise, topHospialPromise, topDocPromise])
-                .then(([costComaprisonData, topHospitals, topDoctors]) => {
-                    var costComparison = costComaprisonData.countryWise
+            /*Promise.all([costComparePromise, topHospialPromise, topDocPromise])
+                .then(([costComaprisonData, topHospitals, topDoctors]) => { */
+            Promise.all([topHospialPromise, topDocPromise])
+                .then(([topHospitals, topDoctors]) => { 
+                   // var costComparison = costComaprisonData.countryWise
                     var tophospitaldata = topHospitals
                     var topdocdata = topDoctors
-                 //   console.log("all promise")
+                  // console.log("all promise")
                   //  console.log(costComparePromise)
                    // console.log(topHospialPromise)
                     //console.log(topDocPromise)
@@ -195,9 +198,9 @@ module.exports.getProcedureDescription = function (req, res) {
                         "procedure_name": procedureName,
                         "title": procedureName + ' treatments in India| Afforable & best ' + procedureName + ' treatments',
                         "procedure_gridFS_data": content,
-                        "tophospitals": tophospitaldata,
-                        "costdisprows": costComparison,                       
-                        "topdoctors": topdocdata
+                        "tophospitals": tophospitaldata.slice(0,5),
+                        //"costdisprows": costComparison,                       
+                        "topdoctors": topdocdata.slice(0,3)
                     };                    
                     res.render('procedure_template',data);
                 })
@@ -224,7 +227,7 @@ module.exports.gettreatmentEstimate = function (req, res) {
 
     new Promise(function (resolve, reject) {
         //get the path of flat file with description
-        treatmentDesc.getProcedureDetails(procedureName, function (result) {
+        treatmentDesc.getcostProcedureDetails(procedureName, function (result) {
             var relFilePath = result[0].treatmentList[0].shortDescription // Procedure/Orthopedic/Hip Resurfacing.txt           
             resolve(relFilePath)            
         })
@@ -670,9 +673,9 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                   // console.log("i'm here ",treatmentname);
             new Promise(function (resolve, reject) {
                 //get the path of flat file with description
-               // console.log(treatmentname)
+              //  console.log(treatmentdisplayname)
                 treatmentDesc.getProcedureDetails(treatmentdisplayname, function (procedureresult) {
-                 //   console.log(procedureresult)
+                  //  console.log(relFilePath)
                     var relFilePath = procedureresult[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
                    // console.log(relFilePath)
                     //console.log(procedureresult[0])

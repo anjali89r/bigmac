@@ -540,11 +540,7 @@ module.exports.getProcedureDetails = function getProcedureDetails(procedureName,
    //console.log("I'm here"+procedureName+"|")
 
 
-// "$project": {
-//     "_id": 0, "department": 1, "departmentDescription": 1, "departmentImagepath": 1, "treatmentList.procedureName": 1, "treatmentList.displayName": 1, "treatmentList.treatmentDescription": 1, "treatmentList.shortDescription": 1,
-//     "treatmentList.healingTimeInDays": 1, "treatmentList.minHospitalization": 1, "treatmentList.maxHospitalization": 1, "treatmentList.surgicalTime": 1, "treatmentList.postFollowupDuration": 1, "treatmentList.postFollowupFrequency": 1,
-//     "treatmentList.procedureImagepath": 1
-// }
+
     treatmentDescModel.aggregate([
         {
             "$match": {
@@ -560,6 +556,45 @@ module.exports.getProcedureDetails = function getProcedureDetails(procedureName,
                         '$treatmentList',
                         as:'treatmentList',
                         cond:{$eq:['$$treatmentList.procedureName',procedureName]}}}
+            }
+        }
+
+    ], function (err, result) {        
+        if (err) {
+            logger.error("Error while reading treatment description from DB");
+            callback(null);
+        } else if (result == null) {
+            logger.info("There is no treatment description available for the treatment");
+            callback(null);
+        }
+        else {
+            callback(result);
+        }
+    })
+}
+
+module.exports.getcostProcedureDetails = function getcostProcedureDetails(procedureName, callback) {
+
+    var treatmentDescSchema = new treatmentDescModel();
+   //console.log("I'm here"+procedureName+"|")
+
+
+
+    treatmentDescModel.aggregate([
+        {
+            "$match": {
+                "$and": [{ "serviceActiveFlag": "Y" }, { "treatmentList.displayName": procedureName }, { "treatmentList.activeFlag": "Y" }]
+            }
+        },
+        {
+            "$project": {
+                "_id": 0, "department": 1, "departmentDescription": 1, "departmentImagepath": 1,
+                "treatmentList":
+                 {$filter:
+                    {input:
+                        '$treatmentList',
+                        as:'treatmentList',
+                        cond:{$eq:['$$treatmentList.displayName',procedureName]}}}
             }
         }
 

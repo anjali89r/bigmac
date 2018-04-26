@@ -109,29 +109,28 @@
         <!-- End .page-header -->
         <!-- Template added by Libin -->
         <div class="container">
-          <div class="row">
-            <div class="col-md-7">
+          <div class="row" style="margin-left: 5px;">
+            <div class="col-md-7" style="margin-top: 20px;">
               {{{procedure_gridFS_data}}}
             </div>
             <div class="col-md-3">
               <p class="h5-responsive"></p>
               <div class="row">
-                <div class="col-md-10">
-                  <a href="#modal-container-SubmitEnquiry"  data-toggle="modal" title="Click to submit enquiry">
-                    <img src="/assets/images/medinovita/contactus.jpg" class="img-fluid img-thumbnail" alt="Responsive image">
-                  </a>
+                
+                <div class="contact-doc" style="margin-top: 20px;margin-bottom:20px">
+                  <a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-lg">Contact Us</button></a>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-7">
                   <!-- Table to display the treatment cost -->
-                  <table class="table table-responsive">
+             <!--     <table class="table table-responsive">
                     <caption>
                       <h4 class="display-4">
                         Cost of {{procedure_name}}
                       </h4>
                     </caption>
-                    <!--Table head-->
+                    
                     <thead class="blue-grey lighten-4">
                       <tr>
                         <th>#</th>
@@ -139,20 +138,19 @@
                         <th>Cost</th>
                       </tr>
                     </thead>
-                    <!--Table head-->
-                    <!--Table body-->
+                  
                     <tbody>
                       {{#costdisprows}}
-                      <!--array name hold the cell values-->
+                     
                       <tr>
                         <th scope="row">{{rowindex}}</th>
                         <td>{{country}}</td>
                         <td>{{currency}}{{cost}}</td>
                       </tr>
                       {{/costdisprows}}
-                      <!--array ends here-->
+                      
                     </tbody>
-                  </table>
+                  </table> -->
                   <!-- End .table table-responsive-->
                   <!-- Table to display the treatment cost -->
                 </div>
@@ -169,7 +167,7 @@
                   <!--array name hold the cell values-->
                   <div class="col-md-12">
                     <div class="col-md-4">
-                      <img src="{{{hospitalimage}}}" class="img-thumbnail transperentboarder" alt="Responsive image">
+                      <img src="{{{hospitalimage}}}" width="72" height="72"  alt="Hospital image">
                     </div>
                     <a href="#" title="Click View Details">
                       <div class="col-md-8">
@@ -192,7 +190,7 @@
                       <!--array name hold the cell values-->
                       <div class="col-md-12">
                         <div class="col-md-4">
-                          <img src="{{{docpicdir}}}" class="img-thumbnail transperentboarder" alt="Responsive image">
+                          <img src="{{{docpicdir}}}" width="72" height="72"  alt="Responsive image">
                         </div>
                         <a href="#" title="Click View Details">
                           <div class="col-md-8">
