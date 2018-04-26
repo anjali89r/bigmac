@@ -14,8 +14,8 @@ var holidayPackageSchema = new Schema({
     tourOperator: { type: String, required: false },
     website: { type: String, required: false }, 
     packageCost: { type: Number, required: false },
-    currency: { type: String, required: true, enum: ['INR', '$'] }, //new field added on 26/11/17
-    activeStatus: { type: String, required: false, enum: ['Y', 'N']}
+    currency: { type: String, required: true, enum: ['INR', '$'],default:'INR' }, //new field added on 26/11/17
+    activeStatus: { type: String, required: true, enum: ['Y', 'N'],default:'INR'}
 });
 
 //create collection.

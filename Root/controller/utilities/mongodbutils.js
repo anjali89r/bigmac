@@ -63,7 +63,7 @@ function getmongouri() {
     var dbhost = process.env.DBHOST
     var dbport = process.env.DBPORT
     var ispaswdencrypted = process.env.DPASWDENCRYPTED
-
+   // console.log(uid)
     if (ispaswdencrypted.toUpperCase() == 'Y') {       
         paswd = crypto.decrypt(paswd);        
     }

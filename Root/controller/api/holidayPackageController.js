@@ -41,8 +41,8 @@ module.exports.createHolidayPackage = function (req, res) {
         holidaySchema.packageDuration=req.body["packageDuration"],
         holidaySchema.tourOperator = req.body["tourOperator"],
         holidaySchema.website = req.body["operatorWebsite"],
-        holidaySchema.packageCost = parseInt(req.body["packageCost"]),
-        holidaySchema.currency = parseInt(req.body["currency"]),
+        holidaySchema.packageCost = req.body["packageCost"],
+        holidaySchema.currency =req.body["currency"],
         holidaySchema.activeStatus = req.body["activeStatus"]
         
     }).then(function () {

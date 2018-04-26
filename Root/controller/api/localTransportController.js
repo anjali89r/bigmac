@@ -40,28 +40,30 @@ module.exports.addLocalTransportVendorDtls = function (req, res) {
          transportSchema.contact.addressLine1 = req.body['addressLine1'],
          transportSchema.contact.addressLine2=  req.body['addressLine2'],
          transportSchema.contact.city= req.body['city'],
-         transportSchema.contact.postalCode = parseInt(req.body['postalCode']),
+         transportSchema.contact.postalCode = req.body['postalCode'],
          transportSchema.contact.residingcountry = req.body['country'],
          transportSchema.contact.landmark = req.body['landmark'],
          transportSchema.contact.contactPerson = req.body['contactPerson'],
          transportSchema.contact.contactEmailId = req.body['contactEmailId'],
-         transportSchema.contact.primaryContactNumber = parseInt(req.body['primaryContactNumber'])
+         transportSchema.contact.primaryContactNumber = req.body['primaryContactNumber']
          if (req.body['secondaryContactNumber'].toString().trim().length == 10) {
-            transportSchema.contact.secondaryContactNumber = parseInt(req.body['secondaryContactNumber'])
+            transportSchema.contact.secondaryContactNumber = req.body['secondaryContactNumber']
          } 
          transportSchema.serviceActiveFlag = req.body['serviceActiveFlag'],
   
          transportSchema.vehicle= [{
             vehicleType: req.body['vehicleType'],
-            chargePerKiloMeter: req.body['chargePerKM'],
-            selfDriven: req.body['isSelfDriven'],
-            noAdditionalChargesUpToKM: parseInt( req.body['noAdditionalChargesUpToKM']),
-            additionalChargesPerKiloMeter: parseInt(req.body['additionalCharges']),
-            noDriverBataUpToKM: parseInt(req.body['noDriverBataUpToKM']),
-            driverBataPerKiloMeter: parseInt(req.body['driverBata']),
+            minimumChargeforDayUse: req.body['minimumChargeforDayUse'],
+            noAdditionalChargesUpToKM: req.body['noAdditionalChargesUpToKM'],
+            chargePerKiloMeter: req.body['chargePerKiloMeter'],
+            selfDriven: req.body['selfDriven'],
+            additionalChargesPerKiloMeter: req.body['additionalChargesPerKiloMeter'],
+            minimumDriverBata: req.body['minimumDriverBata'],
+            driverBataPerKiloMeter: req.body['driverBataPerKiloMeter'],
+            activeFlag: req.body['activeFlag'],
             currency: req.body['currency'],
-            activeFlag: req.body['vehicleActiveFlag']
             }]
+
 
     }).then(function () {
 
@@ -168,24 +170,25 @@ var updateJustVehicleDetailsOnly = function (req, res) {
                     "contact.addressLine1": req.body['addressLine1'],
                     "contact.addressLine2": req.body['addressLine2'],
                     "contact.city": req.body['city'],
-                    "contact.postalCode": parseInt(req.body['postalCode']),
+                    "contact.postalCode": req.body['postalCode'],
                     "contact.residingcountry": req.body['country'],
                     "contact.landmark": req.body['landmark'],
                     "contact.contactPerson": req.body['contactPerson'],
                     "contact.contactEmailId": req.body['contactEmailId'],
-                    "contact.primaryContactNumber": parseInt(req.body['primaryContactNumber']),
+                    "contact.primaryContactNumber": req.body['primaryContactNumber'],
                     "contact.secondaryContactNumber": req.body['secondaryContactNumber'],
                     "serviceActiveFlag": req.body['serviceActiveFlag'],
                     //update array
                     "vehicle.$.vehicleType": req.body['vehicleType'],
-                    "vehicle.$.chargePerKiloMeter": req.body['chargePerKM'],
-                    "vehicle.$.selfDriven": req.body['isSelfDriven'],
-                    "vehicle.$.noAdditionalChargesUpToKM": parseInt(req.body['noAdditionalChargesUpToKM']),
-                    "vehicle.$.additionalChargesPerKiloMeter": parseInt(req.body['additionalCharges']),
-                    "vehicle.$.noDriverBataUpToKM": parseInt(req.body['noDriverBataUpToKM']),
-                    "vehicle.$.driverBataPerKiloMeter": parseInt(req.body['driverBata']),
-                    "vehicle.$.currency": req.body['currency'],
-                    "vehicle.$.activeFlag": req.body['vehicleActiveFlag']
+                    "vehicle.$.minimumChargeforDayUse": req.body['minimumChargeforDayUse'],
+                    "vehicle.$.noAdditionalChargesUpToKM": req.body['noAdditionalChargesUpToKM'],
+                    "vehicle.$.chargePerKiloMeter": req.body['chargePerKiloMeter'],
+                    "vehicle.$.selfDriven": req.body['selfDriven'],
+                    "vehicle.$.additionalChargesPerKiloMeter": req.body['additionalChargesPerKiloMeter'],
+                    "vehicle.$.minimumDriverBata": req.body['minimumDriverBata'],
+                    "vehicle.$.driverBataPerKiloMeter": req.body['driverBataPerKiloMeter'],
+                    "vehicle.$.activeFlag": req.body['activeFlag'],
+                    "vehicle.$.currency": req.body['currency']
 
                 }
             }, { new: true },
@@ -245,15 +248,16 @@ var addJustNewVehicleDetailsOnly = function (req, res) {
                      doc.contact.secondaryContactNumber = req.body['secondaryContactNumber']
                      doc.serviceActiveFlag = req.body['serviceActiveFlag']
                      doc.vehicle.push({
-                         "vehicleType": req.body['vehicleType'],
-                         "chargePerKiloMeter": req.body['chargePerKM'],
-                         "selfDriven": req.body['isSelfDriven'],
-                         "noAdditionalChargesUpToKM": parseInt(req.body['noAdditionalChargesUpToKM']),
-                         "additionalChargesPerKiloMeter": parseInt(req.body['additionalCharges']),
-                         "noDriverBataUpToKM": parseInt(req.body['noDriverBataUpToKM']),
-                         "driverBataPerKiloMeter": parseInt(req.body['driverBata']),
-                         "currency": req.body['currency'],
-                         "activeFlag": req.body['vehicleActiveFlag']
+                        "vehicleType": req.body['vehicleType'],
+                        "minimumChargeforDayUse": req.body['minimumChargeforDayUse'],
+                        "noAdditionalChargesUpToKM": req.body['noAdditionalChargesUpToKM'],
+                        "chargePerKiloMeter": req.body['chargePerKiloMeter'],
+                        "selfDriven": req.body['selfDriven'],
+                        "additionalChargesPerKiloMeter": req.body['additionalChargesPerKiloMeter'],
+                        "minimumDriverBata": req.body['minimumDriverBata'],
+                        "driverBataPerKiloMeter": req.body['driverBataPerKiloMeter'],
+                        "activeFlag": req.body['activeFlag'],
+                        "currency": req.body['currency']
                      })
                      //save document
                      doc.save()
@@ -287,12 +291,12 @@ var updateJustServiceDetailsOnly = function (req, res) {
                     doc.contact.addressLine1= req.body['addressLine1']
                     doc.contact.addressLine2= req.body['addressLine2']
                     doc.contact.city= req.body['city']
-                    doc.contact.postalCode= parseInt(req.body['postalCode'])
+                    doc.contact.postalCode= req.body['postalCode']
                     doc.contact.residingcountry = req.body['country']
                     doc.contact.landmark= req.body['landmark']
                     doc.contact.contactPerson=req.body['contactPerson']
                     doc.contact.contactEmailId= req.body['contactEmailId']
-                    doc.contact.primaryContactNumber= parseInt(req.body['primaryContactNumber'])
+                    doc.contact.primaryContactNumber= req.body['primaryContactNumber']
                     doc.contact.secondaryContactNumber= req.body['secondaryContactNumber']
                     doc.serviceActiveFlag = req.body['serviceActiveFlag']                      
                     //save document
@@ -347,12 +351,15 @@ module.exports.getActiveTransportVendorDtls = function (req, res) {
                                     {       
                                         "vehicleType": "$$vehicle.vehicleType",
                                         "chargePerKiloMeter": "$$vehicle.chargePerKiloMeter",
-                                        "selfDriven": "$$vehicle.selfDriven",
-                                        "noAdditionalChargesUpToKM": "$$vehicle.noAdditionalChargesUpToKM",
-                                        "additionalChargesPerKiloMeter": "$$vehicle.additionalChargesPerKiloMeter",
-                                        "noDriverBataUpToKM": "$$vehicle.noDriverBataUpToKM",
-                                        "currency": "$$vehicle.currency",
-                                        "driverBataPerKiloMeter": "$$vehicle.driverBataPerKiloMeter",                                       
+                                        "minimumChargeforDayUse": "$$vehicle.minimumChargeforDayUse",
+                                        "noAdditionalChargesUpToKM": "$$vehicle.noAdditionalChargesUpToKM",  
+                                        "chargePerKiloMeter": "$$vehicle.chargePerKiloMeter",
+                                        "selfDriven": "$$vehicle.selfDriven", 
+                                        "additionalChargesPerKiloMeter": "$$vehicle.additionalChargesPerKiloMeter",  
+                                        "minimumDriverBata": "$$vehicle.minimumDriverBata",
+                                        "driverBataPerKiloMeter": "$$vehicle.driverBataPerKiloMeter", 
+                                        "activeFlag": "$$vehicle.activeFlag", 
+                                        "currency": "$$vehicle.currency",                                
                                     },
                                     false
                                 ]

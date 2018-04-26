@@ -59,6 +59,7 @@ module.exports.addAccomodationVendorDtls = function (req, res) {
             hotelSchema.cost.extraGuestCost = parseInt(req.body['extraGuestCost']),
             hotelSchema.cost.buffetLunchCost = parseInt(req.body['buffetLunchCost']),
             hotelSchema.cost.buffetDinnerCost = parseInt(req.body['buffetDinnerCost']),
+            hotelSchema.cost.currency = req.body['currency'],
 
             hotelSchema.freebee.complimentaryBreakfast = req.body['complimentaryBreakfast'],
             hotelSchema.freebee.freeAirportPickup = req.body['freeAirportPickup'],
@@ -119,6 +120,7 @@ module.exports.updateAccomodationVendorDtls = function (req, res) {
                 "cost.extraGuestCost" : parseInt(req.body['extraGuestCost']),
                 "cost.buffetLunchCost" : parseInt(req.body['buffetLunchCost']),
                 "cost.buffetDinnerCost" : parseInt(req.body['buffetDinnerCost']),
+                "cost.currency" : req.body['currency'],
 
                 "freebee.complimentaryBreakfast" : req.body['complimentaryBreakfast'],
                 "freebee.freeAirportPickup" : req.body['freeAirportPickup'],
@@ -177,6 +179,7 @@ module.exports.getActiveHotelDtls = function (req, res) {
             "cost.extraGuestCost": 1,
             "cost.buffetLunchCost": 1,
             "cost.buffetDinnerCost": 1,
+            "cost.currency" : 1,
 
             "freebee.complimentaryBreakfast": 1,
             "freebee.freeAirportPickup": 1,

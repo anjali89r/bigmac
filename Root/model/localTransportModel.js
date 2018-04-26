@@ -9,7 +9,7 @@ var localTransportSchema = new Schema({
 
     providerID: { type: Number, required: false},
     name: { type: String, required: false, trim: true },
-    serviceActiveFlag: { type: String, required: false, enum: ['Y', 'N'] },
+    serviceActiveFlag: { type: String, required: true, enum: ['Y', 'N'] ,default:'Y'},
     contact: {
         addressLine1: { type: String, required: false },
         addressLine2: { type: String, required: false },
@@ -36,13 +36,14 @@ var localTransportSchema = new Schema({
     }, 
     vehicle: [{
         vehicleType:{ type: String, required: false, enum: ['sedan', 'hatchback', 'suv', 'mpv', 'luxury'] },
-        chargePerKiloMeter: { type: Number, required: false },
-        selfDriven: { type: String, required: false, enum: ['Y', 'N'] },
+        minimumChargeforDayUse: { type: Number, required: true },
         noAdditionalChargesUpToKM: { type: Number, required: false},
+        chargePerKiloMeter: { type: Number, required: true },
+        selfDriven: { type: String, required: false, enum: ['Y', 'N'] },
         additionalChargesPerKiloMeter: { type: Number, required: false },
-        noDriverBataUpToKM: { type: Number, required: false },
+        minimumDriverBata: { type: Number, required: false },
         driverBataPerKiloMeter: { type: Number, required: false },
-        activeFlag: { type: String, required: false, enum: ['Y', 'N'] },
+        activeFlag: { type: String, required: true, enum: ['Y', 'N'] },
         currency: { type: String, required: true, enum: ['INR', '$'] }, //new field added on 26/11/17
     }]
 });
