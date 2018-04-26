@@ -1,3 +1,3 @@
 User-agent: *
 Disallow: /templates
-Sitemap: http://www.medinovita.in/sitemap.xml
+Sitemap: http://www.medinovita.com/sitemap.xml
