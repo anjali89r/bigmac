@@ -766,6 +766,12 @@ function getTopDoctors(procedure, next) {
             next(null)
         } else {
             //console.log("topdoctors - " + JSON.stringify(result))
+            var result_new = result.reduceRight(function (r, a) {
+                r.some(function (b) { return a.docregistrationnumber === b.docregistrationnumber; }) || r.push(a);
+                return r;
+            }, []);
+            //result=result_new
+            console.log("im here" +JSON.stringify(result_new))
             next(result)
         }
     })
