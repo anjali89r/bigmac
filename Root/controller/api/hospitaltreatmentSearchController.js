@@ -180,7 +180,7 @@ function getDepartmentAndProcedureList(hospitalName, next) {
         {
             $group: {
                 _id: "$Treatment.departmentName", "procedureList": {
-                    $push: { "procedureName": "$Treatment.name", "cost": "$Treatment.costLowerBound" }
+                    $push: { "procedureName": "$Treatment.name", "cost": "$Treatment.costLowerBound","procedureDispName": "$Treatment.treatmentdisplayname" }
                 }
             }
         },
