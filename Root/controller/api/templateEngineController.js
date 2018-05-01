@@ -23,8 +23,13 @@ module.exports.getProcedureDescription_demo = function (req, res) {
     new Promise(function (resolve, reject) {
         //get the path of flat file with description
         treatmentDesc.getProcedureDetails(procedureName, function (result) {
-            var relFilePath = result[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
-            resolve(relFilePath)
+            if (!result.length) {               
+                logger.error("Exiting getProcedureDescription function due to invalid procedure name")
+                return res.redirect('/404');                
+            }else{  
+                var relFilePath = result[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
+                resolve(relFilePath)
+            }
         })
 
     }).then(function (relFilePath) {
@@ -134,12 +139,18 @@ module.exports.getProcedureDescription = function (req, res) {
 
     new Promise(function (resolve, reject) {
         //get the path of flat file with description
-        treatmentDesc.getProcedureDetails(procedureName, function (result) {
-            var relFilePath = result[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
-            procedureName=result[0].treatmentList[0].displayName 
-         //   console.log(relFilePath)
-           // console.log(procedureName)
-            resolve(relFilePath)
+        treatmentDesc.getProcedureDetails(procedureName, function (result) {           
+            if (!result.length) {               
+                logger.error("Exiting getProcedureDescription function due to invalid procedure name")
+                return res.redirect('/404');                
+            }else{                
+                var relFilePath = result[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
+                procedureName=result[0].treatmentList[0].displayName 
+                //console.log(relFilePath)
+                //console.log(procedureName)
+                resolve(relFilePath)
+            }
+           
         })
 
     }).then(function (relFilePath) {
@@ -150,6 +161,7 @@ module.exports.getProcedureDescription = function (req, res) {
        // console.log("#########################################",filePath)
         new Promise(function (resolve, reject) {
             gridFS.getFlatFileContent(filePath, function (content) {
+               // console.log(content)
                // content = fs.readFileSync(filePath, "utf8");
                 if (content.indexOf("Error") > -1) {
                     return res.redirect('/404');
@@ -675,11 +687,15 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                 //get the path of flat file with description
               //  console.log(treatmentdisplayname)
                 treatmentDesc.getProcedureDetails(treatmentdisplayname, function (procedureresult) {
-                  //  console.log(relFilePath)
-                    var relFilePath = procedureresult[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
-                   // console.log(relFilePath)
-                    //console.log(procedureresult[0])
-                    resolve(relFilePath)
+                    if (!procedureresult.length) {               
+                        logger.error("Exiting getProcedureDescription function due to invalid procedure name")
+                        return res.redirect('/404');                
+                    }else{  
+                        var relFilePath = procedureresult[0].treatmentList[0].shortDescription //   Orthopedic/Hip Resurfacing.txt
+                    // console.log(relFilePath)
+                        //console.log(procedureresult[0])
+                        resolve(relFilePath)
+                    }
                 })
                
             }).then(function (relFilePath) {

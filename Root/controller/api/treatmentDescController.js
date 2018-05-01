@@ -538,9 +538,6 @@ module.exports.getProcedureDetails = function getProcedureDetails(procedureName,
 
     var treatmentDescSchema = new treatmentDescModel();
    //console.log("I'm here"+procedureName+"|")
-
-
-
     treatmentDescModel.aggregate([
         {
             "$match": {
@@ -559,15 +556,17 @@ module.exports.getProcedureDetails = function getProcedureDetails(procedureName,
             }
         }
 
-    ], function (err, result) {        
-        if (err) {
-            logger.error("Error while reading treatment description from DB");
-            callback(null);
-        } else if (result == null) {
-            logger.info("There is no treatment description available for the treatment");
-            callback(null);
-        }
-        else {
+    ], function (err, result) {             
+        if (err) {            
+            logger.error("Error while reading treatment description from DB for " + procedureName);
+            callback(result);
+        } else if (result == null) {            
+            logger.info("There is no treatment description available for the treatment - " + procedureName );
+            callback(result);
+        } else if (!result.length) {
+            logger.error("There is no treatment description available for the treatment - " + procedureName );
+            callback(result);
+        }else {           
             callback(result);
         }
     })
