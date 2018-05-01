@@ -373,13 +373,14 @@ module.exports.getHospitalDescription = function (req, res) {
         }).then(function (content) {  
             /* get list of procedures organized by departments */
             var treatmentsPromise = new Promise(function (resolve, reject) {               
-                treatmentSearch.getDepartmentAndProcedureList(hospitalName, function (treatmentList) {                    
+                treatmentSearch.getDepartmentAndProcedureList(hospitalName, function (treatmentList) {                                     
                     resolve(treatmentList)                   
                 })
             })
 
             var doctorPromise = new Promise(function (resolve, reject) {
-                treatmentSearch.getTopDoctorsinHospital(hospitalName, function (doctorList) {                   
+                treatmentSearch.getTopDoctorsinHospital(hospitalName, function (doctorList) { 
+                   // console.log(JSON.stringify(doctorList)  )                
                     resolve(doctorList)
                 })
             })

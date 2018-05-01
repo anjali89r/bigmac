@@ -7,9 +7,8 @@ require('../../model/hospitalDoctorDetailsModel.js');
 var config = require('../utilities/confutils.js');
 var hospitalModel = mongoose.model('hospital_doctor_details');
 var counterSchema = require('../../model/identityCounterModel.js');
-
+var doctorData = require('./doctorDataController.js');
 var collection = 'hospital_doctor_details';
-
 
 /****************************/
 module.exports.getTreatmentlist = function (req, res) {
@@ -217,21 +216,21 @@ function getTopDoctorsinHospital(hospitalName, next) {
         //decompile array
         { $unwind: "$Treatment" },
         { $unwind: "$Treatment.doctor" },
-        { $unwind: "$Treatment.doctor.speciality" },
+          /* { $unwind: "$Treatment.doctor.speciality" },
 
         {
             $sort: {
                 'Treatment.doctor.medinovitadoctorRating': -1 //descending order
             }
-        },
+        },*/
         {
             $project: {
                 "_id": 0,
-                "docname": "$Treatment.doctor.doctorName",
+                /*"docname": "$Treatment.doctor.doctorName",
                 "doctorShortName" : "$Treatment.doctor.doctorShortName",
                 "docdescription": "$Treatment.doctor.doctorDescription",
                 "docspeciality": "$Treatment.doctor.speciality.specialityName",
-                "docpicdir": "$Treatment.doctor.profilepicdir",
+                "docpicdir": "$Treatment.doctor.profilepicdir",*/
                 "docregistrationnumber":"$Treatment.doctor.registrationNumber",
                 "docregistrationauthority": "$Treatment.doctor.registrationAuthority",                
             }
@@ -246,19 +245,33 @@ function getTopDoctorsinHospital(hospitalName, next) {
             logger.error("There is no hospital records available for " + hospitalName);
             next(null)
         } else {
+            /* Get unique values from array*/            
             var temp=[];
             arr=result.filter((x, i)=> {
-              if (temp.indexOf(x.image) < 0) {
-                temp.push(x.image);
+              if (temp.indexOf(x.docregistrationnumber) < 0) {
+                temp.push(x.docregistrationnumber);
                 return true;
               }
               return false;
-            })           
-            //console.log("Result "+JSON.stringify(arr));        
-            next(result)
+            }) 
+            /* Synchronous for loop using async await*/           
+            //getSynchronousDoctorData(arr).then( data => console.log(data) );  
+         getSynchronousDoctorData(arr).then( data => next(data));                                                       
         }
     })
 }
+/* Asynchronous function to make the script wait until promise is returned */
+async function getSynchronousDoctorData(arr) {
+    var arra=[];
+    for (i = 0; i < arr.length; i++) {
+      var docregistrationnumber = arr[i].docregistrationnumber
+      var registrationAuthority = arr[i].docregistrationauthority
+      var data = await doctorData.getDoctorByRegNumber(docregistrationnumber, registrationAuthority);      
+      arra.push(data[0]);        
+    }
+    return arra;
+  }  
+
 
 module.exports.getcitylist = function (req, res) {
     
