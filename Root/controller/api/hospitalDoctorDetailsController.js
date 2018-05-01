@@ -700,7 +700,8 @@ function getTopHospitals(procedure, next) {
         {
             $project: {
                 "_id": 0,
-                "hospitalName": 1,                
+                "hospitalName": 1,   
+                "hospitaldisplayname":1,           
                 "hospitalcity": "$hospitalContact.City",              
                 "hospitalcountry": "$hospitalContact.country",  
                 "hospitalimage": 1,                
@@ -745,6 +746,7 @@ function getTopDoctors(procedure, next) {
             $project: {
                 "_id": 0,
                 "docname": "$Treatment.doctor.doctorName",
+                "doctorShortName" : "$Treatment.doctor.doctorShortName",
                 "docregistrationnumber":"$Treatment.doctor.registrationNumber",
                 "docregistrationauthority": "$Treatment.doctor.registrationAuthority",
                 "docdescription": "$Treatment.doctor.doctorDescription",
@@ -771,7 +773,7 @@ function getTopDoctors(procedure, next) {
                 return r;
             }, []);
             //result=result_new
-            console.log("im here" +JSON.stringify(result_new))
+           // console.log("im here" +JSON.stringify(result_new))
             next(result)
         }
     })

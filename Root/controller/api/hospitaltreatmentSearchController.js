@@ -228,9 +228,12 @@ function getTopDoctorsinHospital(hospitalName, next) {
             $project: {
                 "_id": 0,
                 "docname": "$Treatment.doctor.doctorName",
+                "doctorShortName" : "$Treatment.doctor.doctorShortName",
                 "docdescription": "$Treatment.doctor.doctorDescription",
                 "docspeciality": "$Treatment.doctor.speciality.specialityName",
                 "docpicdir": "$Treatment.doctor.profilepicdir",
+                "docregistrationnumber":"$Treatment.doctor.registrationNumber",
+                "docregistrationauthority": "$Treatment.doctor.registrationAuthority",                
             }
         }
 
@@ -243,6 +246,15 @@ function getTopDoctorsinHospital(hospitalName, next) {
             logger.error("There is no hospital records available for " + hospitalName);
             next(null)
         } else {
+            var temp=[];
+            arr=result.filter((x, i)=> {
+              if (temp.indexOf(x.image) < 0) {
+                temp.push(x.image);
+                return true;
+              }
+              return false;
+            })           
+            //console.log("Result "+JSON.stringify(arr));        
             next(result)
         }
     })
@@ -501,3 +513,12 @@ function gethospitalrecordsfortreatmentname(treatmentdisplayname,city,accreditat
         next(err.message);
     })
 }
+function removeDuplicatesBy(keyFn, array) {
+    var mySet = new Set();
+    return array.filter(function(x) {
+      var key = keyFn(x), isNew = !mySet.has(key);
+      if (isNew) mySet.add(key);
+      return isNew;
+    });
+  }
+    
