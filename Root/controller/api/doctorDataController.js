@@ -42,9 +42,7 @@ module.exports.addDoctorData = function (req, res) {
                 userId: req.body["userEmailId"],
             }],
             //DoctorUserRating: [], This needs to be uncommented if doctor user rating to be added as blank
-            doctorSchema.speciality = [{
-                specialityName: req.body["specialityName"]
-            }]
+            doctorSchema.speciality = req.body["specialityName"]               
 
     }).then(function () {
         doctorSchema.save(function (error, data) {
@@ -76,3 +74,47 @@ module.exports.isDoctorExists = function (docRegistrationNumber,docRegAuthority,
         }
     });
 }
+
+module.exports.getDoctorByRegNumber = function (docRegistrationNumber,docRegAuthority) {
+    
+    return new Promise((resolve, reject) => { 
+        doctorDataModel.aggregate([       
+            {
+            // "$match": { "$and": [{ "registrationNumber": docRegistrationNumber }, { "registrationAuthority": docRegAuthority },{ "activeFlag": "Y" }] }
+            "$match": { 
+                "$and": [
+                    { "registrationNumber": docRegistrationNumber },{ "activeFlag": "Y" }, { "registrationAuthority": docRegAuthority }               
+                    ]
+                }             
+            },               
+            {
+                $project: {
+                    "_id": 0,
+                    "doctorName": 1,
+                    "doctorShortName" : 1,
+                    //"doctorDescription": 1,
+                    "speciality": 1,
+                    "profilepicdir": 1,
+                    "medinovitadoctorRating"  :1,
+                    "registrationNumber":1,
+                    "registrationAuthority":1
+
+                }
+            }
+
+        ], function (err, result) {
+
+            if (err) {
+                logger.error("Error while fetching doctor details from doctor details schema");
+                resolve(result)
+            } else if (!result.length) {
+                logger.error("There is no doctor records available for registration number " + docRegistrationNumber);
+                resolve(result)
+            } else {
+                resolve(result)            
+            }
+        })
+    })
+}
+
+

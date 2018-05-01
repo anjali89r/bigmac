@@ -69,33 +69,9 @@ var hospitalDoctorSchema = new Schema({
         medinovitaDiscountStatus: { type: String, required: true, enum: ['Y', 'N'] },*/
                 
         doctor: [{
-
-            doctorId: { type: Number },
-            registrationNumber: { type: String, required: true, trim: true, unique: true },
-            registrationAuthority: { type: String, required: true, trim: true },
-            doctorShortName: { type: String, required: false, trim: true },
-            doctorName: { type: String, required: true, trim: true },            
-            doctorDescription: { type: String, required: true, trim: true },
-            activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },
-            speciality: [{
-                specialityName: { type:String, required: true, trim: true }
-            }],
-            profilepicdir: { type: String, required: false, trim: true, default: 'medinovita/blankDoctor.png' },
-            medinovitadoctorRating: {
-                type: Number, required: true,
-                min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
-                max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
-                default: 4
-                        
-            },
-            DoctorUserRating:[ {  
-                            userRating:{type: Number, required: true, //To get default rating for cost api
-                                min: [1, 'The value of path `{PATH}` ({VALUE}) is beneath the limit ({MIN}).'],
-                                max: [5, 'The value of path `{PATH}` ({VALUE}) exceeds the limit ({MAX}).'],
-                                default: 4
-                            }, 
-                            userId: { type: String, required: false, trim: true, default: 'medinovita@gmail.com'},
-            }],
+            registrationNumber: { type: String, required: true, trim: true },
+            registrationAuthority: { type: String, required: true, trim: true }, 
+            activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' }          
         }],
     }],
     updated_at: { type: Date, required: true, default: Date.now }
@@ -104,23 +80,7 @@ var hospitalDoctorSchema = new Schema({
    
 hospitalDoctorSchema.pre('save', function(next) {
      var hospdisplayname = this.hospitalName;
-  // console.log(hospdisplayname)
     this.hospitaldisplayname = hospdisplayname.replace(/\s+/g, '-').toLowerCase();
-  // console.log(this.hospitaldisplayname)
-
-    this.Treatment.forEach(function(el)
-        {
-            var treatmentdisplayname=el.name;
-            el.treatmentdisplayname = treatmentdisplayname.replace(/\s+/g, '-').toLowerCase();
-
-            el.doctor.forEach(function (el) {
-                var doctorShortName = el.doctorName;
-                doctorShortName = doctorShortName.replace(/\s+/g, '-').toLowerCase();
-                el.doctorShortName = doctorShortName.replace(/\./g, '-').toLowerCase();
-            })
-            
-        }
-    )   
     next();
   });
 

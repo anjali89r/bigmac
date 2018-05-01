@@ -6,7 +6,7 @@ var treatmentController = require('./treatmentDescController.js');
 var docDataController = require('./doctorDataController.js');
 var hospitalModel = mongoose.model('hospital_doctor_details');
 var counterSchema = require('../../model/identityCounterModel.js');
-
+var doctorData = require('./doctorDataController.js');
 var collection = 'hospital_doctor_details';
 
 /***************Add hospital, procedure and doctors details of a partucular hospital in hospital record ***************** */
@@ -53,11 +53,11 @@ module.exports.createHospitalRecord = function (req, res) {
     })
         
     //create doctor promise
-    const doctorPromise = new Promise((resolve, reject) =>
+   /* const doctorPromise = new Promise((resolve, reject) =>
         counterSchema.getNext('Treatment.$.doctor.$.doctorId', collection, function (id) {
             doctorID = id;
             resolve(doctorID);
-        }));
+        })); */
 
     //create department promise
     const departmentPromise = new Promise((resolve, reject) =>{
@@ -91,9 +91,14 @@ module.exports.createHospitalRecord = function (req, res) {
     });
 
     //wrap all promises togeter
-    Promise.all([hospitalPromise,doctorPromise, departmentPromise, procedurePromise])
+   /* Promise.all([hospitalPromise,doctorPromise, departmentPromise, procedurePromise])
         .then(([hospitalID,doctorID, departmentID, procedureID]) => {
             setData(hospitalID,doctorID, departmentID, procedureID);
+        }) */
+
+        Promise.all([hospitalPromise,doctorPromise, departmentPromise, procedurePromise])
+        .then(([hospitalID, departmentID, procedureID]) => {
+            setData(hospitalID, departmentID, procedureID);
         })
         .then(function () {
             hospitalSchema.save(function (error, data) {
@@ -147,10 +152,10 @@ module.exports.createHospitalRecord = function (req, res) {
             procedureid: procedureID,
             departmentName: req.body["departmentName"],
             doctor: [{
-                doctorId: doctorID,
+                //doctorId: doctorID,
                 registrationNumber:req.body["registrationNumber"],
                 registrationAuthority: req.body["registrationAuthority"],
-                doctorShortName: req.body["doctorShortName"],
+                /*doctorShortName: req.body["doctorShortName"],
                 doctorName: req.body["doctorName"],
                 doctorDescription: req.body["doctorDescription"],
                 activeFlag: req.body["isDoctorActive"],//new
@@ -164,7 +169,7 @@ module.exports.createHospitalRecord = function (req, res) {
                 //DoctorUserRating: [], This needs to be uncommented if doctor user rating to be added as blank
                 speciality: [{
                     specialityName: req.body["specialityName"]
-                }]
+                }]*/
             }]
 
         }];
@@ -256,11 +261,11 @@ module.exports.addProcedureDetails = function (req, res) {
     }
     
     //create doctor promise
-    const doctorPromise = new Promise((resolve, reject) =>
+    /*const doctorPromise = new Promise((resolve, reject) =>
         counterSchema.getNext('Treatment.$.doctor.$.doctorId', collection, function (id) {
             doctorID = id;
             resolve(doctorID);
-        }));
+        }));*/
 
     //create department promise
     const departmentPromise = new Promise((resolve, reject) => {
@@ -367,8 +372,11 @@ module.exports.addProcedureDetails = function (req, res) {
             })
     );
 
-    Promise.all([dbHospitalCheckPromise, dbTreatmentCheckPromise, departmentPromise, procedurePromise, doctorPromise,procedureNamePromise])
-        .then(([, searchResult , departmentID, procedureID, doctorID,treatmentdisplayname ]) => {
+   /* Promise.all([dbHospitalCheckPromise, dbTreatmentCheckPromise, departmentPromise, procedurePromise, doctorPromise,procedureNamePromise])
+        .then(([, searchResult , departmentID, procedureID, doctorID,treatmentdisplayname ]) => { */
+
+    Promise.all([dbHospitalCheckPromise, dbTreatmentCheckPromise, departmentPromise, procedurePromise,procedureNamePromise])
+        .then(([, searchResult , departmentID, procedureID,treatmentdisplayname ]) => {
            
             var procedureFound = searchResult.split('|')[0];  
             procedureFound = procedureFound == "true";//convert to boolean
@@ -393,7 +401,7 @@ module.exports.addProcedureDetails = function (req, res) {
                                 "departmentName": req.body["departmentName"],
 
                                 "doctor": {
-                                    "doctorId": doctorID,
+                                   /* "doctorId": doctorID,
                                     "doctorDescription": req.body["doctorDescription"],
                                     "activeFlag": req.body["isDoctorActive"],//new
                                     "doctorName": req.body["doctorName"],
@@ -406,7 +414,9 @@ module.exports.addProcedureDetails = function (req, res) {
                                     "DoctorUserRating": { //At least one default rating is required for cost api.new
                                         "userRating": parseFloat(req.body["doctorUserRating"]),
                                         "userId": req.body["userEmailId"],
-                                    },
+                                    },*/
+                                    registrationNumber:req.body["registrationNumber"],
+                                    registrationAuthority: req.body["registrationAuthority"]                                    
                                 }
 
                             }
@@ -432,10 +442,10 @@ module.exports.addProcedureDetails = function (req, res) {
                     {
                         "$push": {                            
                             "Treatment.$.doctor": {
-                                "doctorId": doctorID,
+                                /*"doctorId": doctorID,*/
                                 "registrationNumber": req.body["registrationNumber"],
                                 "registrationAuthority": req.body["registrationAuthority"],
-                                "doctorShortName": req.body["doctorShortName"],
+                               /* "doctorShortName": req.body["doctorShortName"],
                                 "doctorDescription": req.body["doctorDescription"],
                                 "activeFlag": req.body["isDoctorActive"],//new
                                 "doctorName": req.body["doctorName"],
@@ -448,7 +458,7 @@ module.exports.addProcedureDetails = function (req, res) {
                                 "DoctorUserRating": { //At least one default rating is required for cost api
                                     "userRating": parseFloat(req.body["doctorUserRating"]),
                                     "userId": req.body["userEmailId"],
-                                },
+                                },*/
                             }     
                         }
                     },
@@ -478,7 +488,7 @@ module.exports.addProcedureDetails = function (req, res) {
                                 "costLowerBound": parseInt(req.body["costLowerBound"]),
                                 "departmentName": req.body["departmentName"],                                                                
                                 "doctor": {
-                                    "DoctorUserRating": []
+                                   /* "DoctorUserRating": []*/
                                 }
                             }
                         }
@@ -529,11 +539,11 @@ module.exports.addDoctorDetails = function (req, res) {
     }
 
     //create doctor promise
-    const doctorPromise = new Promise((resolve, reject) =>
+    /*const doctorPromise = new Promise((resolve, reject) =>
         counterSchema.getNext('Treatment.doctor.doctorId', collection, function (id) {
             doctorID = id;
             resolve(doctorID);
-        }));
+        }));*/
 
     //Create hospital check promise
     const dbHospitalCheckPromise = new Promise((resolve, reject) =>
@@ -585,8 +595,10 @@ module.exports.addDoctorDetails = function (req, res) {
             resolve();
         })
     );
-    Promise.all([dbHospitalCheckPromise, dbTreatmentCheckPromise, dbDoctorCheckPromise, doctorPromise])
-        .then(([,,,doctorID]) => {
+  /*  Promise.all([dbHospitalCheckPromise, dbTreatmentCheckPromise, dbDoctorCheckPromise, doctorPromise])
+        .then(([,,,doctorID]) => { */
+    Promise.all([dbHospitalCheckPromise, dbTreatmentCheckPromise, dbDoctorCheckPromise])
+        .then(([,,,]) => { 
   
             //add new record
             hospitalModel.findOneAndUpdate({
@@ -597,10 +609,10 @@ module.exports.addDoctorDetails = function (req, res) {
                 {
                     "$push": {
                         "Treatment.$.doctor": {
-                            "doctorId": doctorID,
+                           /* "doctorId": doctorID,*/
                             "registrationNumber": req.body["registrationNumber"],
                             "registrationAuthority": req.body["registrationAuthority"],
-                            "doctorShortName": req.body["doctorShortName"],
+                           /* "doctorShortName": req.body["doctorShortName"],
                             "doctorName": req.body["doctorName"],
                             "doctorDescription": req.body["doctorDescription"],
                             "activeFlag": req.body["isDoctorActive"],//new
@@ -613,7 +625,7 @@ module.exports.addDoctorDetails = function (req, res) {
                             "DoctorUserRating": { //At least one default rating is required for cost api
                                 "userRating": parseFloat(req.body["doctorUserRating"]),
                                 "userId": req.body["userEmailId"],
-                            }
+                            }*/
                         }     
                     }
                 },
@@ -735,23 +747,23 @@ function getTopDoctors(procedure, next) {
         //decompile array
         { $unwind: "$Treatment" },
         { $unwind: "$Treatment.doctor" },
-        { $unwind: "$Treatment.doctor.speciality" },
+       /* { $unwind: "$Treatment.doctor.speciality" },*/
 
-        {
+      /*  {
             $sort: {
                 'Treatment.doctor.medinovitadoctorRating': -1 //descending order
             }
-        },
+        },*/
         {
             $project: {
                 "_id": 0,
-                "docname": "$Treatment.doctor.doctorName",
-                "doctorShortName" : "$Treatment.doctor.doctorShortName",
+                /*"docname": "$Treatment.doctor.doctorName",
+                "doctorShortName" : "$Treatment.doctor.doctorShortName",*/
                 "docregistrationnumber":"$Treatment.doctor.registrationNumber",
                 "docregistrationauthority": "$Treatment.doctor.registrationAuthority",
-                "docdescription": "$Treatment.doctor.doctorDescription",
+                /*"docdescription": "$Treatment.doctor.doctorDescription",
                 "docspeciality": "$Treatment.doctor.speciality.specialityName",
-                "docpicdir": "$Treatment.doctor.profilepicdir",
+                "docpicdir": "$Treatment.doctor.profilepicdir",*/
                 "hospitalName": 1,
                 "hospitalcity": "$hospitalContact.City",
                 "hospitalcountry": "$hospitalContact.country",
@@ -762,22 +774,37 @@ function getTopDoctors(procedure, next) {
 
         if (err) {
             logger.error("getTopDoctors - Error while fetching top hospitals from hospital and doctors table");
-            next(null)
+            next(result)
         } else if (!result.length) {
             logger.error("getTopDoctors - There is no treatment records available for the treatment " + procedure);
-            next(null)
-        } else {
-            //console.log("topdoctors - " + JSON.stringify(result))
-            var result_new = result.reduceRight(function (r, a) {
-                r.some(function (b) { return a.docregistrationnumber === b.docregistrationnumber; }) || r.push(a);
-                return r;
-            }, []);
-            //result=result_new
-           // console.log("im here" +JSON.stringify(result_new))
             next(result)
+        } else {  
+             /* Get unique values from array*/            
+             var temp=[];
+             arr=result.filter((x, i)=> {
+               if (temp.indexOf(x.docregistrationnumber) < 0) {
+                 temp.push(x.docregistrationnumber);
+                 return true;
+               }
+               return false;
+             }) 
+             /* Synchronous for loop using async await*/           
+           // getData(arr).then( data => console.log("im " +JSON.stringify(data)) );  
+           getSynchronousDoctorData(arr).then( data => next(data));
         }
     })
 }
+/* Asynchronous function to make the script wait until promise is returned */
+async function getSynchronousDoctorData(arr) {
+    var arra=[];
+    for (i = 0; i < arr.length; i++) {
+      var docregistrationnumber = arr[i].docregistrationnumber
+      var registrationAuthority = arr[i].docregistrationauthority
+      var data = await doctorData.getDoctorByRegNumber(docregistrationnumber, registrationAuthority);      
+      arra.push(data[0]);        
+    }
+    return arra;
+  }  
 /*get Basic hospital details */
 module.exports.getHospitalBasicDetails = function (hospitalName,next) {
 

@@ -12,10 +12,8 @@ var doctorSchema = new Schema({
     doctorName: { type: String, required: true, trim: true },
     doctorShortName: { type: String, required: false, trim: true },
     doctorDescription: { type: String, required: true, trim: true },
-    activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },
-    speciality: [{
-        specialityName: { type: String, required: true, trim: true }
-    }],
+    activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },    
+    speciality: { type: String, required: true, trim: true },
     profilepicdir: { type: String, required: false, trim: true, default: 'medinovita/blankDoctor.png' },
     medinovitadoctorRating: {
         type: Number, required: true,
