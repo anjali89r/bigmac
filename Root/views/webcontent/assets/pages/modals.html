@@ -19,7 +19,7 @@
 					<label for="inputSubmitEnquiryFirstName">
 						Full Name <span style="color:#f44336">*</span>
 					</label>
-					<input type="text" class="form-control" id="inputSubmitEnquiryFirstName" name="FullName" required/>
+					<input type="text" class="form-control" id="inputSubmitEnquiryFirstName" name="FullName" pattern=".{3,}" required title="3 characters minimum"/>
 				</div>
                 	<div class="form-group">
 
@@ -49,7 +49,7 @@
 					<label for="selectSubmitEnquiryProcedure" >
 						Select Procedure 
 					</label>
-					<select class="form-control" id="selectSubmitEnquiryProcedure" name="EnquiryProcedure" required>
+					<select class="form-control" id="selectSubmitEnquiryProcedure" name="EnquiryProcedure">
 						<option value="">Select a Procedure</option>
 					</select>
 				</div>

@@ -424,7 +424,7 @@ module.exports.getHolidayHomePage = function (req, res) {
     }).then(function (result) {
         var data = {
             "holidayList": result,
-            "title": 'low cost medical treatment abroad',              
+            "title": 'Holiday packages in India|Ayurvedic treatment in India',               
         };       
         res.render('holiday_home_template',data);
     }).catch(function (err) {
