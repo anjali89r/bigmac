@@ -96,7 +96,7 @@ module.exports.createHospitalRecord = function (req, res) {
             setData(hospitalID,doctorID, departmentID, procedureID);
         }) */
 
-        Promise.all([hospitalPromise,doctorPromise, departmentPromise, procedurePromise])
+        Promise.all([hospitalPromise, departmentPromise, procedurePromise])
         .then(([hospitalID, departmentID, procedureID]) => {
             setData(hospitalID, departmentID, procedureID);
         })
