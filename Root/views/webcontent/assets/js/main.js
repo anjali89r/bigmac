@@ -406,7 +406,7 @@ var whyIndia = '';
 		});
 
 
-		if (window.location.href.indexOf('index') > -1 || window.location.href == 'https://www.medinovita.com/') {
+		if (window.location.href.indexOf('index') > -1 || window.location.href == 'https://www.medinovita.com/' || window.location.href == 'http://medinovita.com/') {
 			homepageCallback();
 		}
 		if (window.location.href.indexOf('treatmentsOffered') > -1) {

@@ -1,4 +1,4 @@
-﻿var express = require('express');
+var express = require('express');
 var bodyParser = require('body-parser')
 var cors = require('cors')
 var helmet = require('helmet')
@@ -72,7 +72,13 @@ app.use(serveStatic(__dirname + '/views/webcontent/', {
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views', './views/webcontent/templates');
-
+app.use(function(req, res, next) {
+  if(!req.secure) {
+    logger.info("Non secure site redirecting to secure")
+    return res.redirect(['https://www.', req.get('Host'), req.url].join(''));
+  }
+  next();
+});
 
 // added for 404 html ,should be called only after all routes
 app.use(function(req, res, next){
