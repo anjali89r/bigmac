@@ -15,7 +15,7 @@ aws.config.update({
 });
 
 var s3 = new aws.S3();
-var S3_BUCKET = process.env.customerfilebucket;
+var S3_BUCKET = process.env.CUSTOMERFILEBUCKET;
 
 var upload = multer({
     storage: multerS3({
