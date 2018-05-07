@@ -324,6 +324,7 @@ module.exports.getTreatmentDetailsDepartmentwiseWithCost = getTreatmentDetailsDe
 function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
 
     var treatmentDescSchema = new treatmentDescModel();
+    
 
     new Promise(function (resolve, reject) {
 
@@ -334,9 +335,12 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
                 }
             }, {
                 "$project": {
-                    "_id": 0, "department": 1, "departmentDescription": 1, "departmentImagepath": 1, "treatmentList.procedureName": 1, "treatmentList.displayName": 1, "treatmentList.treatmentDescription": 1, "treatmentList.shortDescription": 1,
-                    "treatmentList.healingTimeInDays": 1, "treatmentList.minHospitalization": 1, "treatmentList.maxHospitalization": 1, "treatmentList.surgicalTime": 1, "treatmentList.postFollowupDuration": 1, "treatmentList.postFollowupFrequency": 1,
-                    "treatmentList.procedureImagepath": 1, "tretmentCostColl": 1
+                    "_id": 0, "department": 1, "departmentDescription": 1, "departmentImagepath": 1,  "treatmentList":
+                    {$filter:
+                       {input:
+                           '$treatmentList',
+                           as:'treatmentList',
+                           cond:{$eq:['$$treatmentList.activeFlag','Y']}}}
                 }
             }
 
@@ -364,6 +368,7 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
             var department = obj.department
             var procedureList = obj.treatmentList
             //loop through procedures in department
+           // console.log(procedureList)
             for (var j = 0; j < procedureList.length; j++) {
                 var procedure = procedureList[j];
                 var procedureDisp = procedure.displayName
@@ -410,7 +415,7 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
                     var hosJson = doc[hospitalCounter]
                     var descJson = doc[descCounter]
                     //add new key
-                    procedure["procedureAvarageCost"] = json[0].avarageTreatmentCost + "$"
+                    procedure["procedureAvarageCost"] =  "₹" + json[0].avarageTreatmentCost 
                     procedure["procedureNameAttr"] = procedureDisp.split(' ').join('_')
                     procedure["hospitalList"] = hosJson[0].hospitalList
                     procedure["treatmentActualDescription"] = descJson[0].procedureActualDescription
