@@ -3,7 +3,7 @@ load = function(procedurecount) {
 		window.tp = new Pagination('#tablePaging', {
 		itemsCount: procedurecount,
 		onPageSizeChange: function (ps) {
-			console.log('changed to ' + ps);
+			//console.log('changed to ' + ps);
 		},
 		onPageChange: function (paging) {
 			//custom paging logic here			

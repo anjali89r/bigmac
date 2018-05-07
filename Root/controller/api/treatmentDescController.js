@@ -368,7 +368,7 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
             var department = obj.department
             var procedureList = obj.treatmentList
             //loop through procedures in department
-            console.log(procedureList)
+           // console.log(procedureList)
             for (var j = 0; j < procedureList.length; j++) {
                 var procedure = procedureList[j];
                 var procedureDisp = procedure.displayName
