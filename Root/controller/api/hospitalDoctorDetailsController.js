@@ -248,8 +248,9 @@ module.exports.addProcedureDetails = function (req, res) {
     var hospitalName = req.params.hospitalname;
     var hospitalCity = req.params.hospitalcity;
     var hospitalCountry = req.params.hospitalcountry;
-    var procedureName = req.body["procedureName"];
-    var doctorName = req.body["doctorName"];
+    var procedureName = req.body["procedureName"]; //without hifen
+    var displayName = req.body["procedureDisplayName"];//with hifen
+    var registrationNumber = req.body["registrationNumber"];
 
     var treatmentFound = false;
     var doctorFound = false;
@@ -348,16 +349,16 @@ module.exports.addProcedureDetails = function (req, res) {
                     "hospitalName": hospitalName, "hospitalContact.City": hospitalCity, "hospitalContact.country": hospitalCountry, "Treatment": {
                         $elemMatch: {
                             "name": procedureName, "doctor": {
-                                $elemMatch: { "doctorName": doctorName }
+                                $elemMatch: { "registrationNumber": registrationNumber }
                             }
                         }
                     }
                 }, function (err, doc) {
                     if (doc !== null) {
                         doctorFound = true
-                        logger.info("Doctor " + doctorName + " offering " + procedureName + " already exists in " + hospitalName + " database");
+                        logger.info("Doctor " + registrationNumber + " offering " + procedureName + " already exists in " + hospitalName + " database");
                         return reject(res.status(400).json({
-                            "Message": "Doctor " + doctorName + " offering " + procedureName + " already exists in " + hospitalName + " database" 
+                            "Message": "Doctor " + registrationNumber + " offering " + procedureName + " already exists in " + hospitalName + " database" 
                         }));                        
                     }
                 })
@@ -384,14 +385,14 @@ module.exports.addProcedureDetails = function (req, res) {
             docFound = docFound == "true";//convert to boolean
 
              /* Update hospital and doctor details */
-            if (procedureFound === false && docFound == false && doctorName != null) {
-
+            if (procedureFound === false && docFound == false && req.body["registrationNumber"] != null) { 
+                logger.info("Both procedure & doctor details needs to be added")               
                 hospitalModel.findOneAndUpdate({ "hospitalName": hospitalName, "hospitalContact.City": hospitalCity, "hospitalContact.country": hospitalCountry },
                     {
                         "$push": {
                             "Treatment": {
                                 "treatmentdisplayname": treatmentdisplayname,
-                                "name": req.body["procedureName"],
+                                "name": procedureName,
                                 "activeFlag": req.body["isProcedureActive"],//new
                                 "currency": req.body["currency"],
                                 "costUpperBound": parseInt(req.body["costUpperBound"]),
@@ -433,8 +434,8 @@ module.exports.addProcedureDetails = function (req, res) {
                     });
 
             /* Update only doctor incase procedure is already added */
-            } else if (procedureFound == true && docFound == false && doctorName != null) {
-                
+            } else if (procedureFound == true && docFound == false && req.body["registrationNumber"] != null) {
+               logger.info("Only doctor details needs to be added.Procedure already exists")
                 hospitalModel.findOneAndUpdate({
                     "hospitalName": hospitalName, "hospitalContact.City": hospitalCity, "hospitalContact.country": hospitalCountry, "Treatment": {
                         $elemMatch: { "name": procedureName }
@@ -472,8 +473,8 @@ module.exports.addProcedureDetails = function (req, res) {
                     });
 
             /* Update only procedure information */
-            } else if (procedureFound == false && doctorName == null) {
-               
+            } else if (procedureFound == false && req.body["registrationNumber"] == null) {
+                logger.info("Only procedure details needs to be added.Doctor details to be kept blank")
                 hospitalModel.findOneAndUpdate({ "hospitalName": hospitalName, "hospitalContact.City": hospitalCity, "hospitalContact.country": hospitalCountry },
                     {
                         "$push": {
