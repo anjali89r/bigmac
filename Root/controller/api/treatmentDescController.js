@@ -227,14 +227,16 @@ module.exports.isTreatmentExists = function (procedureName, callback) {
     
     var dict = [];
 
-    treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "displayName": procedureName } } }, {
+  /* treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "displayName": procedureName } } }, {'treatmentList.$': 1}, {    
         "departmentId": 1, "treatmentList.procedureId": 1,"treatmentList.procedureName":1,"_id": 0
-    }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }
+    }, function (err, doc) {//{ $set: { <field1>: <value1>, ... } } */
+     treatmentDescModel.findOne({ "treatmentList": { $elemMatch: { "displayName": procedureName } } }, {'treatmentList.$': 1}, function (err, doc) {//{ $set: { <field1>: <value1>, ... } }   
         if (err) {
             logger.error("Error while reading procedure id,department id from treatments description schema : - " + err.message);
             callback(dict);
         } else if (doc!= null) {
             logger.info("Procedure " + procedureName + " already exists in treatments offered collection");
+            logger.info("Procedure name " + doc.treatmentList[0].procedureName + " already exists in treatments offered collection");
             dict["procedureId"] = doc.treatmentList[0].procedureId; 
             dict["procedureparentDepartmentid"] = doc.departmentId;
             dict["treatmentdisplayname"]=doc.treatmentList[0].procedureName;
