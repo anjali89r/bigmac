@@ -8,7 +8,6 @@ var serveStatic = require('serve-static');
 var apicache = require('apicache');
 var minifyHTML = require('express-minify-html');
 var minify = require('express-minify');
-var httpsRedirect = require('express-https-redirect');
 
 var app = express();
 
@@ -56,7 +55,23 @@ app.use((req, res, next) => {
     })
     .catch(next);
 });
+//####################################Comment this section if you are running localhost
+app.get('/*', function(req, res, next) {
+  console.log(req.headers.host)
+  if (req.headers.host.match(/^www/) == null ) res.redirect(301,'https://www.' + req.headers.host + req.url);
+  else next();
+});
 
+app.use (function (req, res, next) {
+  if (req.secure) {
+          // request was via https, so do no special handling
+          next();
+  } else {
+          // request was via http, so redirect to https
+          res.redirect('https://' + req.headers.host + req.url);
+  }
+});
+//#######################################################
 
 /*   Route for API end point */
 require('./routes/route.js')(app);//define express router for api calls
@@ -74,7 +89,7 @@ app.use(serveStatic(__dirname + '/views/webcontent/', {
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views', './views/webcontent/templates');
-app.use('/', httpsRedirect());
+
 
 // added for 404 html ,should be called only after all routes
 app.use(function(req, res, next){
