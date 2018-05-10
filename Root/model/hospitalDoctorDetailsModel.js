@@ -54,7 +54,7 @@ var hospitalDoctorSchema = new Schema({
         activeFlag: { type: String, required: true, enum: ['Y', 'N'], default: 'Y' },//new
         departmentId: { type: Number},
         name: { type: String, required: true, trim: true },
-        treatmentdisplayname: { type: String, required: true, trim: true },//for storing values with _
+        treatmentdisplayname: { type: String, required: false, trim: true },//for storing values with _
         costUpperBound: { type: Number, required: true },
         costLowerBound: { type: Number, required: true },  
         currency: { type: String, required: true, enum: ['INR'] }, //new field added on 26/11/17
@@ -81,6 +81,13 @@ var hospitalDoctorSchema = new Schema({
 hospitalDoctorSchema.pre('save', function(next) {
      var hospdisplayname = this.hospitalName;
     this.hospitaldisplayname = hospdisplayname.replace(/\s+/g, '-').toLowerCase();
+    console.log("i'm here")
+    this.Treatment.forEach(function(key)
+        {
+        var proceduredisplayname = key.name.replace(/\s+/g, '-').toLowerCase();
+        console.log(proceduredisplayname)
+        key.treatmentdisplayname = proceduredisplayname
+        });
     next();
   });
 

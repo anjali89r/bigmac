@@ -151,6 +151,7 @@ module.exports.createHospitalRecord = function (req, res) {
             departmentId: departmentID,
             procedureid: procedureID,
             departmentName: req.body["departmentName"],
+          
             doctor: [{
                 //doctorId: doctorID,
                 registrationNumber:req.body["registrationNumber"],
