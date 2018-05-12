@@ -534,4 +534,57 @@ function removeDuplicatesBy(keyFn, array) {
       return isNew;
     });
   }
+
+  module.exports.getDepttreatmentlist = function (req, res) {
+
+    if (res.headersSent) {//check if header is already returned
+        logger.warn("Response already sent.Hence skipping the function call getTreatmentlist")
+        return;
+    }  
+
+    try
+    {
+        hospitalModel.aggregate([
+            {
+                //"$match": { "serviceActiveFlag": "Y" } 
+                "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.activeFlag": "Y" }] }
+            },
+            //decompile array
+            { $unwind: "$Treatment" },
+            {
+                $group: {
+                    _id: "$Treatment.departmentName", "treatmentNames": 
+                        {$addToSet:  "$Treatment.name" }
+                    
+                }
+            },
+        
+            {
+                "$project": {
+                    "_id": 0, "department": '$_id', "treatmentNames": 1
+                }
+            }
+           
     
+        ], function (err, result) {
+    
+            if (err) {
+                logger.error("getDepttreatmentlist - Error while fetching treatment and department details from the table");
+                next(result)
+            } else if (!result.length) {
+                logger.error("getDepttreatmentlist - There is no treatment records available for the treatment " );
+                next(result)
+            } else {  
+                //console.log(result)
+                 return res.status(200).json(result)
+            }
+        })
+    }
+    catch (err) {
+
+        return res.status(500).json(err.message);
+    
+    }
+}
+
+
