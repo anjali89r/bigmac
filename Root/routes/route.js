@@ -37,7 +37,8 @@ module.exports = function (app) {
     /* Header should contain basic authentication with credentials from config json and x-access-token = 'webtaoken gnerated using api call */
     app.post('/api/v1/add/userInfo/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.createUserInfo); //api to insert a new user record in to db
     app.put('/api/v1/update/userInfo/:emailId/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, userInfo.updateUserInfo);
-    app.get('/api/v1/getTreamentlist/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.getTreatmentlist);
+    app.get('/api/v1/getTreamentlist/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.getTreatmentlist );//getTreatmentlist
+    app.get('/api/v1/getdepttreatmentlist/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.getDepttreatmentlist );//getTreatmentlist
     app.get('/api/v1/searchHospitaldetails/:treatmentName/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.gethospitalDetailbytreatment);
     app.get('/api/v1/getcitylist/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, hospitaltreatmentInfo.getcitylist);
     /***************************************************************************************************************************************************/
@@ -165,7 +166,7 @@ module.exports = function (app) {
     /************************API to render html pages using template engine****************************************************************************************************/
     /*  API for procedure_template.html */   
     app.get('/procedure/:procedure', templateEngine.getProcedureDescription);
-    //sample call http://localhost:1337/api/v1/get/treatmentcost/meditrip?procedurename=Bone Grafting&bystandercount=3&holidaypackage=short name 1&hotelrate=3 star&vehicletype=sedan&countryName='Angola'
+
     /*  API for hospital_template.html */
     app.get('/hospitals/:hospital', templateEngine.getHospitalDescription);
     /*  API for cost_template.html */
