@@ -323,42 +323,50 @@ var whyIndia = '';
 		});
 
 
-		//Fetch search Treatments list
-		// $.ajax({
-		// 	url: serverName + 'api/v1/getTreamentlist/all/meditrip',
-		// 	type: 'GET',
-		// 	headers: {
-		// 		'Content-Type': 'application/json',
-		// 		Authorization: 'Basic ' + basicKey,
-		// 		'x-access-token': xAccessToken
+		//for #getQuoteTreatment
+		$.ajax({
+			url: serverName + 'api/v1/getdepttreatmentlist/meditrip',
+			type: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Basic ' + basicKey,
+				'x-access-token': xAccessToken
 
-		// 	},
-		// 	beforeSend: function (xhr) {
-		// 		xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
-		// 	},
-		// 	success: function (response) {
-		// 		console.log('list: ', response)
-		// 		var treatmentList = response;
-		// 		//Populate Treatment Dropdown
-		// 		$('#getQuoteTreatment').autocomplete({
-		// 			source: treatmentList
-		// 		});
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+			},
+			success: function (response) {
+				//console.log('list: ', response)
+				var treatmentList = response;
 
-		// 		var selectBox = document.getElementById('selectSubmitEnquiryProcedure');
-		// 		treatmentList.forEach(function (item, index) {
-		// 			var option = document.createElement('option')
-		// 			option.text = item;
-		// 			option.value = item.replace(/\s+/g, '-').toLowerCase();
-		// 			selectBox.add(option);
-		// 			//console.log(option);
-		// 		});
 
-		// 	},
-		// 	error: function (exception) {
-		// 		console.log(exception);
-		// 	}
-		// });
-		//alter//
+				treatmentList.forEach(function(item, index){
+					$('#getQuoteTreatment').append('<optgroup id="'+ item.department +'"' + ' label="' + item.department + '"></optgroup>')
+				 })
+
+				 treatmentList.forEach(function(treatment, index){
+					var department = treatment.department;
+					treatment.treatmentNames.forEach(function(name, i){
+					  $('#' + department ).append('<option class="' + name + '"' + 'data-tokens="' + name + '">' + name + '</option>')
+					})
+				 })
+			var elementExists = document.getElementById("getQuoteTreatment");
+			if (elementExists){
+				$('#getQuoteTreatment').selectpicker('render');
+				$('#getQuoteTreatment').selectpicker('refresh');
+         }
+			// end of newly commented
+
+				//Populate Treatment Dropdown
+
+
+			},
+			error: function (exception) {
+				console.log(exception);
+			}
+		});
+		//end for #getQuoteTreatment
 		$.ajax({
 			url: serverName + 'api/v1/getTreamentlist/all/meditrip',
 			type: 'GET',
@@ -382,19 +390,20 @@ var whyIndia = '';
 					selectBox.add(option);
 					//console.log(option);
 				});
-				var otherOption = document.createElement('option');
-				otherOption.text = 'Other';
-				otherOption.value = 'Other';
-				selectBox.add(otherOption);
-				treatmentList.forEach(function (item, index) {
-					$('#getQuoteTreatment').append('<option class="' + item + '"' + 'data-tokens="' + item + '">' + item + '</option>')
-				})
-			var elementExists = document.getElementById("getQuoteTreatment");
-			if (elementExists){
-				$('#getQuoteTreatment').selectpicker('render');
-				$('#getQuoteTreatment').selectpicker('refresh');
-         }
-
+				// newly commented
+			// 	var otherOption = document.createElement('option');
+			// 	otherOption.text = 'Other';
+			// 	otherOption.value = 'Other';
+			// 	selectBox.add(otherOption);
+			// 	treatmentList.forEach(function (item, index) {
+			// 		$('#getQuoteTreatment').append('<option class="' + item + '"' + 'data-tokens="' + item + '">' + item + '</option>')
+			// 	})
+			// var elementExists = document.getElementById("getQuoteTreatment");
+			// if (elementExists){
+			// 	$('#getQuoteTreatment').selectpicker('render');
+			// 	$('#getQuoteTreatment').selectpicker('refresh');
+         // }
+			// end of newly commented
 
 				//Populate Treatment Dropdown
 
@@ -1841,6 +1850,8 @@ var whyIndia = '';
 		// Init our app
 		Simple.init();
 		//	$('.selectpicker').selectpicker();
+		$(window).scroll(sticky_relocate);
+		sticky_relocate();
 	});
 
 	// Load Event
@@ -1916,7 +1927,24 @@ var whyIndia = '';
 
 })(jQuery);
 
+//1840->jquery ready
+function sticky_relocate() {
+	var window_top = $(window).scrollTop();
+	var footer_top = $(".medinovitaFooter").offset().top;
+	var div_top = $('#sticky-anchor').offset().top;
+	var div_height = $("#sticky").height();
 
+	var padding = 20;  // tweak here or get from margins etc
+
+	if (window_top + div_height > footer_top - padding)
+		 $('#sticky').css({top: (window_top + div_height - footer_top + padding) * -1})
+	else if (window_top > div_top) {
+		 $('#sticky').addClass('stick');
+		 $('#sticky').css({top: 0})
+	} else {
+		 $('#sticky').removeClass('stick');
+	}
+}
 // (function (i, s, o, g, r, a, m) {
 // 	i['GoogleAnalyticsObject'] = r;
 // 	i[r] = i[r] || function () {

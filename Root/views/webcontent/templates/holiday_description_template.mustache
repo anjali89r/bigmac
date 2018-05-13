@@ -119,13 +119,13 @@
       <!-- Template added by Libin -->
       <div class="container">
          <div class="row holiday-description">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <img src="{{{packageImageDir}}}" class="img-responsive" alt="Responsive image">
        </div>
-       <div class="col-md-4 description-name">
-       <h3  class="h3-responsive">{{packageShortName}}</h3>
-       <p  style="font-size:16px;"> <strong>Trip-duration:</strong> {{packageDuration}} </p>
-           <p  style="font-size:16px;"> <strong>Cost:</strong> {{packageCost}}&nbsp;{{currency}}&nbsp;per person</p>
+       <div class="col-md-3 description-name">
+       <h3  class="h3-responsive title custom">{{packageShortName}}</h3>
+       <p  style="font-size:16px;"> <strong>Trip-duration- </strong> {{packageDuration}} </p>
+           <p  style="font-size:16px;"> <strong>Cost- </strong> {{packageCost}}&nbsp;{{currency}}&nbsp;per person</p>
 
 
 
@@ -136,7 +136,7 @@
 
          <!-- End .row -->
 
-         <div class="row">
+         <div class="row holiday-description-details">
             <div class="col-md-12 description-details">
                <!-- start Holiday description -->
                {{{gridFS_holidayDescription}}}

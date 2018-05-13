@@ -109,120 +109,65 @@
         <!-- End .page-header -->
         <!-- Template added by Libin -->
         <div class="container">
-          <div class="row" style="margin-left: 5px;">
-            <div class="col-md-7" style="margin-top: 20px;">
+          <div class="row">
+            <div id="procedure-details" class="col-md-9 col-sm-9" style="margin-top: 20px;">
               {{{procedure_gridFS_data}}}
             </div>
-            <div class="col-md-3">
-              <p class="h5-responsive"></p>
-              <div class="row">
-                
-                <div class="contact-doc" style="margin-top: 20px;margin-bottom:20px">
-                  <a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-lg">Contact Us</button></a>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-7">
-                  <!-- Table to display the treatment cost -->
-             <!--     <table class="table table-responsive">
-                    <caption>
-                      <h4 class="display-4">
-                        Cost of {{procedure_name}}
-                      </h4>
-                    </caption>
-                    
-                    <thead class="blue-grey lighten-4">
-                      <tr>
-                        <th>#</th>
-                        <th>Country</th>
-                        <th>Cost</th>
-                      </tr>
-                    </thead>
-                  
-                    <tbody>
-                      {{#costdisprows}}
-                     
-                      <tr>
-                        <th scope="row">{{rowindex}}</th>
-                        <td>{{country}}</td>
-                        <td>{{currency}}{{cost}}</td>
-                      </tr>
-                      {{/costdisprows}}
-                      
-                    </tbody>
-                  </table> -->
-                  <!-- End .table table-responsive-->
-                  <!-- Table to display the treatment cost -->
-                </div>
-              </div>
-              <!-- End .col-md-7 -->
+            <div class="col-md-3 col-sm-3">
+              <!-- my code -->
+              <section id="sidebar-procedure" style="width: 262px;position:relative;">
+                 <aside id="edit-search-procedure" style="margin-bottom:50px;">
+                   <div class="contact-doc-procedure" style="margin-top: 20px;margin-bottom:20px">
+                     <a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-lg">Contact Clinic</button></a>
+                   </div>
+                   <div class="info-procedure">
+                     <div class="doc-info-procedure">
+                       <h4>Top Hospitals for {{procedure_name}}</h4>
+                       <ul class="thumbs">
+                         {{#tophospitals}}
+                         <li>
+                           <a href="#">
+                             <img src="{{{hospitalimage}}}" width="170" height="150" alt="hosp"><span>{{hospitalName}} {{hospitalcity}},{{hospitalcountry}}</span>
+                           </a>
+                         </li>
+                          {{/tophospitals}}
+                       </ul>
+                     </div>
 
-              <!-- Top Hospitals -->
-              <div class="row">
-                <div class="col-md-12">
-                  <caption>
-                    <h4 class="display-4">Top Hospitals for {{procedure_name}}</h4>
-                  </caption>
-                  {{#tophospitals}}
-                  <!--array name hold the cell values-->
-                  <div class="col-md-12">
-                    <div class="col-md-4">
-                      <img src="{{{hospitalimage}}}" width="72" height="72"  alt="Hospital image">
-                    </div>
-                    <a href="/hospitals/{{hospitaldisplayname}}" title="Click View Details">
-                      <div class="col-md-8">
-                        <h5 class="text-primary">
-                          {{hospitalName}} {{hospitalcity}},{{hospitalcountry}}
-                        </h5>
+                      <div class="top-doc-procedure">
+                       <h4>Top Doctors for {{procedure_name}}</h4>
+                        <ul class="thumbs">
+                         {{#topdoctors}}
+                         <li>
+                           <a href="#">
+                             <img src="{{{profilepicdir}}}" width="170" height="150" alt="hosp"><span>{{doctorName}} - {{speciality}}</span>
+                           </a>
+                         </li>
+                           {{/topdoctors}}
+                       </ul>
                       </div>
-                    </a>
-                  </div>
-                  {{/tophospitals}}
-                  <!--array ends here-->
-                  <!-- Top hospitals -->
-                  <!-- Top Doctors -->
-                  <div class="row">
-                    <div class="col-md-12">
-                      <caption>
-                        <h4 class="display-4">Top Doctors for {{procedure_name}}</h4>
-                      </caption>
-                      {{#topdoctors}}
-                      <!--array name hold the cell values-->
-                      <div class="col-md-12">
-                        <div class="col-md-4">
-                          <img src="{{{profilepicdir}}}" width="72" height="72"  alt="Responsive image">
-                        </div>
-                        <a href="#" title="Click View Details">
-                          <div class="col-md-8">
-                            <h5 class="text-primary">
-                              {{doctorName}}
-                              <p>{{speciality}}</p>
-                            </h5>
-                          </div>
-                        </a>
-                      </div>
-                      {{/topdoctors}}
-                      <!--array ends here-->
-                    </div>
-                  </div>
-                  <!-- Top Doctors -->
-                  <!-- End .row -->
-                  <!-- End .col-md-8 -->
-                  <div class="row">
-                    <!-- End .row -->
-                  </div>
+                   </div>
+                 </aside>
+              </section>
+
+              <!--end of my code -->
+
                   <!-- End .container -->
                   <!-- Template added by Libin -->
                   <div class="mb60"></div>
                   <!-- margin -->
                 </div>
                 <!-- End .main -->
+
               </div>
               <!-- End #wrapper -->
+
             </div>
+
+
             </div>
           </div>
-        </div>
+
             <!-- End #wrapper -->
             <div class="medinovitaFooter"></div>
             <div class="medinovitaModals"></div>
