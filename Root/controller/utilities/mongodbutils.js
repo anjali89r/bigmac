@@ -69,7 +69,7 @@ function getmongouri() {
     }
 
     var mongouri = 'mongodb://' + uid + ':' + paswd + '@' + dbhost + ':' + dbport + '/' + dbname;
-   console.log(mongouri)
+   //console.log(mongouri)
     return mongouri;
 }
 
