@@ -5,12 +5,12 @@
       <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107905104-3"></script>
       <script>
          window.dataLayer = window.dataLayer || [];
-         
+
          function gtag() {
              dataLayer.push(arguments);
          }
          gtag('js', new Date());
-         
+
          gtag('config', 'UA-107905104-3');
       </script>
       <!-- Google Tag Manager added by libin-->
@@ -33,7 +33,7 @@
       <!-- End Google Tag Manager -->
       <meta charset="utf-8">
       <!-- <meta name="description" content="Medinovita"> -->
-      <!--[if IE]> 
+      <!--[if IE]>
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <![endif]-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +64,7 @@
       <!-- Modernizr -->
       <script src="/assets/js/modernizr.js"></script>
        <!-- <script async src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js'></script>
-      
+
       <script src='https://www.google.com/recaptcha/api.js'></script> -->
       <script src="/assets/js/plugins.min.js"></script>
       <!-- REVOLUTION JS FILES -->
@@ -122,27 +122,40 @@
                <!-- End .page-header -->
                <!-- Template added by Libin -->
                <div class="container">
+
                   <div class="row">
-				     {{#holidayList}} <!--array name hold the cell values-->
-                     <div class="col-sm-3 text-center">
-                        <img src="{{{packageImageDir}}}" alt="Responsive image" class="img-responsive">
-                        <p class="h5"></p>
-                        <div class="caption">
-                           <p class="h5">{{packageShortName}}</p>
-                        </div>
-                        <div class="caption">
-                           <p>{{packageDuration}}</p>
-                        </div>
-                        <div class="caption">
-						   <p>Starts from {{packageCost}}&nbsp;{{currency}}</p>
-						   <p><a href="/holiday/{{packageShortName}}" class="btn btn-primary" role="button">&nbsp;&nbsp;View Details&nbsp;&nbsp;</a></p>                          
-                        </div>
-						 <p class="h5"></p>
-						 <p class="h5"></p>
-                     </div>
-					 {{/holidayList}} <!--array ends here--> 
+                    <div class="row about-package">
+                      <div class="col-md-12 text-center">
+                        <h1>About Package</h1>
+                        <hr>
+                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+                      </div>
+                    </div>
+                    <div class="row package-pics">
+             {{#holidayList}} <!--array name hold the cell values-->
+                     <div class="col-md-4 text-center img-padding">
+                      <figure>
+                        <img src="{{{packageImageDir}}}" alt="Responsive image"  width="360" height="360">
+                        <figcaption>
+                          <h5>{{packageShortName}}</h5>
+                          <div>
+                            {{packageDuration}}
+                          </div>
+                          <div>
+                            Starts from {{packageCost}}&nbsp;{{currency}}
+                          </div>
+
+
+                          <div class="package-btn"><a href="/holiday/{{packageShortName}}" class="btn btn-primary" role="button">&nbsp;&nbsp;View Details&nbsp;&nbsp;</a></div>
+                        </figcaption>
+                      </figure>
+
+                    </div>
+           {{/holidayList}} <!--array ends here-->
                   </div>
-               </div>
+                </div>
+
+</div>
                <!-- End .container -->
                <!-- Template added by Libin -->
                <div class="mb60"></div>
