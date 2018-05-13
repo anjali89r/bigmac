@@ -2797,7 +2797,7 @@ label.error {
   text-align: center;
   transition: all 0.4s;
    width:25%;
-  height:200px; 
+  height:200px;
 }
 
 .service.service-box.service-icon-top {
@@ -14743,7 +14743,7 @@ ul.thumbs {
 	margin:0 auto;
 	padding:0;
 	list-style:none;
-	width:500px;
+	width:295px;
 }
 ul.thumbs li { margin:0 0 20px; }
 ul.thumbs li a, ul.thumbs li a:visited {
@@ -14755,10 +14755,73 @@ ul.thumbs li img, ul.thumbs li span {
 	display:inline-block;
 	vertical-align:middle;
 }
-ul.thumbs li img { border:2px solid #000; }
+/* ul.thumbs li img { border:2px solid #000; } */
 ul.thumbs li span {
-	width:280px;
-	margin:0 0 0 8px
+	width:100px;
+  margin:0 0 0 8px;
+  font-size: 14px;
 }
 
+
+#sticky {
+  padding: 0.6ex;
+  width: 200px;
+  /* height:100px; */
+  background-color: white;
+  /* color: #fff; */
+  font-size: 2em;
+  border-radius: 0.5ex;
+}
+#sticky.stick {
+  position: fixed;
+  top: 40;
+  z-index: 10;
+  /* border-radius: 0.5em 0.5em 0.5em 0.5em; */
+}
 /* end hospital_tempalte.mustache */
+
+/* holiday_home_template.mustache */
+.about-package {
+  margin-top: 30px;
+}
+.about-package p{
+  font-size: 14px;
+  line-height: 1.75;
+  padding: 20px;
+}
+.package-pics {
+  margin-top: 20px;
+}
+.package-pics figcaption {
+  padding: 20px;
+}
+img {
+  max-width: 100%;
+}
+.img-padding {
+  padding: 20px;
+}
+.package-btn {
+  margin-top: 10px;
+}
+/* end of holiday_home_template.mustache */
+/* holiday_descripotion_template */
+.holiday-description {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.description-name {
+  /* text-align: center;
+  margin-top: 10px; */
+}
+/* @media screen and (min-width: 992px){
+  .description-name {
+    margin-top: 100px;
+  }
+} */
+.description-details {
+  font-size: 14px;
+}
+.h3-responsive{
+  font-size: 170%
+}

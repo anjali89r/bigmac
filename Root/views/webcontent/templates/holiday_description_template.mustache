@@ -7,7 +7,7 @@
          window.dataLayer = window.dataLayer || [];
          function gtag(){dataLayer.push(arguments);}
          gtag('js', new Date());
-         
+
          gtag('config', 'UA-107905104-3');
       </script>
       <!-- Google Tag Manager added by libin-->
@@ -20,7 +20,7 @@
       <!-- End Google Tag Manager -->
       <meta charset="utf-8">
       <!-- <meta name="description" content="Medinovita"> -->
-      <!--[if IE]> 
+      <!--[if IE]>
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <![endif]-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,7 +36,7 @@
       <!-- Added for glyphicons -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>	 
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
       <!-- Added for glyphicons -->
       <link rel="stylesheet" href="/assets/css/plugins.min.css">
       <link rel="stylesheet" href="/assets/css/settings.css">
@@ -52,7 +52,7 @@
       <!-- Modernizr -->
       <script src="/assets/js/modernizr.js"></script>
       <!-- <script async src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js'></script>
-      
+
       <script src='https://www.google.com/recaptcha/api.js'></script> -->
       <script src="/assets/js/plugins.min.js"></script>
       <!-- REVOLUTION JS FILES -->
@@ -65,15 +65,15 @@
       <!-- SLIDER REVOLUTION 5.0 EXTENSIONS
          (Load Extensions only on Local File Systems !
          The following part can be removed on Server for On Demand Loading) -->
-      
-      <!-- script for expand and collapse-->   
+
+      <!-- script for expand and collapse-->
       <script>
          $(document).ready(function(){
              // Add minus icon for collapse element which is open by default
              $(".collapse.in").each(function(){
              	$(this).siblings(".panel-heading").find(".glyphicon").addClass("glyphicon-minus").removeClass("glyphicon-plus");
              });
-             
+
              // Toggle plus minus icon on show hide of collapse element
              $(".collapse").on('show.bs.collapse', function(){
              	$(this).parent().find(".glyphicon").removeClass("glyphicon-plus").addClass("glyphicon-minus");
@@ -98,10 +98,10 @@
       <!-- Google Tag Manager (noscript) added by libin-->
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KVPCCNV"
          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-      <!-- End Google Tag Manager (noscript) -->     
+      <!-- End Google Tag Manager (noscript) -->
       <div class="medinovitaHeader"> </div>
        <div id="wrapper">
-       <div class="contact"> 
+       <div class="contact">
          <div class="page-header larger larger-top  custom" style="background-image:url(//res.cloudinary.com/ddglp4e0g/image/upload/v1510441826/novita/header_oucn1m.jpg)">
             <div class="container" style="padding-left:40px">
                <h1>Holiday Packages</h1>
@@ -111,35 +111,38 @@
                   <li class="active">{{packageShortName}} </li>
                </ol>
             </div>
-            <!-- End .container -->                  
+            <!-- End .container -->
          </div>
          <!-- End .page-header larger -->
-      </div> 
+      </div>
       <!-- End .contact -->
-      <!-- Template added by Libin -->	 
+      <!-- Template added by Libin -->
       <div class="container">
-         <div class="row">
-		    <div class="col-md-7">	
-				<h2  class="text-primary">{{packageShortName}}</h2>
-				   <p></p>
-				   <h4  class="text-primary" style="font-size:14px;"> {{packageDuration}} </h4>
-				   <h4  class="text-primary" style="font-size:14px;"> {{packageCost}}&nbsp;{{currency}}&nbsp;per person</h4>			   
-			 </div>
-		</div>
+         <div class="row holiday-description">
+        <div class="col-md-8">
+            <img src="{{{packageImageDir}}}" class="img-responsive" alt="Responsive image">
+       </div>
+       <div class="col-md-4 description-name">
+       <h3  class="h3-responsive">{{packageShortName}}</h3>
+       <p  style="font-size:16px;"> <strong>Trip-duration:</strong> {{packageDuration}} </p>
+           <p  style="font-size:16px;"> <strong>Cost:</strong> {{packageCost}}&nbsp;{{currency}}&nbsp;per person</p>
+
+
+
+
+       </div>
+    </div>
          <!-- End .row -->
-         <div class="row">
-            <div class="col-md-10">              
-               <img src="{{{packageImageDir}}}" class="img-responsive" alt="Responsive image">              
-            </div>
-         </div>
+
          <!-- End .row -->
-         <p class="h5-responsive"></p>
+
          <div class="row">
-            <div class="col-md-7">			   
+            <div class="col-md-12 description-details">
                <!-- start Holiday description -->
-               {{{gridFS_holidayDescription}}}			   
+               {{{gridFS_holidayDescription}}}
             </div>
             <!-- End .row -->
+         </div>
          </div>
          <!-- End .continer -->
          <div class="row"></div>
