@@ -14809,16 +14809,25 @@ img {
 .holiday-description {
   margin-top: 20px;
   margin-bottom: 20px;
+  box-shadow: 1px 1px 1px 3px #ccc;
+  border-radius: 5px;
+  padding: 30px;
 }
+
 .description-name {
-  /* text-align: center;
-  margin-top: 10px; */
+  /* text-align: center;*/
+  margin-top: 10px;
 }
-/* @media screen and (min-width: 992px){
+@media screen and (min-width: 992px){
   .description-name {
     margin-top: 100px;
   }
-} */
+}
+.holiday-description-details{
+  box-shadow: 1px 1px 1px 3px #ccc;
+  border-radius: 5px;
+  padding: 30px;
+}
 .description-details {
   font-size: 14px;
 }

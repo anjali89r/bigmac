@@ -5,12 +5,12 @@ mongoose.Promise = global.Promise;
 
 /* Connect to Mongo db */
 module.exports.getMogoDbCon = function () {
-       
+
     var options = {
         native_parser: true,
         poolSize: 1,
     }
-   
+
     return new Promise((resolve, reject) => {
 
         if (mongoose.connection.readyState === 0) {
@@ -24,19 +24,19 @@ module.exports.getMogoDbCon = function () {
                 reject(null)
             });
         }
-    resolve(db); 
-       
+    resolve(db);
+
     });
-}; 
+};
 
 module.exports.closeMongoDBConnection1 = function () {
-    
+
     return new Promise((resolve, reject) => {
         mongoose.disconnect();
         resolve(true);
 
     });
-}; 
+};
 
 
 module.exports.closeMongoDBConnection = function (dbConnect) {
@@ -46,7 +46,7 @@ module.exports.closeMongoDBConnection = function (dbConnect) {
         resolve(true);
 
     });
-}; 
+};
 /*  Get the connection string for Mongo db */
 function getmongouri() {
 
@@ -64,12 +64,12 @@ function getmongouri() {
     var dbport = process.env.DBPORT
     var ispaswdencrypted = process.env.DPASWDENCRYPTED
    // console.log(uid)
-    if (ispaswdencrypted.toUpperCase() == 'Y') {       
-        paswd = crypto.decrypt(paswd);        
+    if (ispaswdencrypted.toUpperCase() == 'Y') {
+        paswd = crypto.decrypt(paswd);
     }
 
-    var mongouri = 'mongodb://' + uid + ':' + paswd + '@' + dbhost + ':' + dbport + '/' + dbname;   
-   // console.log(mongouri) 
+    var mongouri = 'mongodb://' + uid + ':' + paswd + '@' + dbhost + ':' + dbport + '/' + dbname;
+   console.log(mongouri)
     return mongouri;
 }
 
