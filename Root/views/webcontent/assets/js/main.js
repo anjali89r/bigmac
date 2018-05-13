@@ -1,8 +1,8 @@
 var basicKey = 'bGliaW46bGliaW4=';
 var xAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVG9rZW5Ub0F1dGhlbnRpY2F0ZU1lZGlub3ZpdGFVc2VyIiwiaWF0IjoxNTA4MDQ0OTMwfQ.cZ3pCte1guE8KQkjd1KfY_bLJ-gOatJm2xlwyiLGAl4';
 
-var serverName = 'https://www.medinovita.com/';
-//var serverName = 'http://localhost:3000/';
+//var serverName = 'https://www.medinovita.com/';
+var serverName = 'http://localhost:3000/';
 
 var GLOBAL_VARIABLES = {
 	Language: 'en',
@@ -323,42 +323,50 @@ var whyIndia = '';
 		});
 
 
-		//Fetch search Treatments list
-		// $.ajax({
-		// 	url: serverName + 'api/v1/getTreamentlist/all/meditrip',
-		// 	type: 'GET',
-		// 	headers: {
-		// 		'Content-Type': 'application/json',
-		// 		Authorization: 'Basic ' + basicKey,
-		// 		'x-access-token': xAccessToken
+		//for #getQuoteTreatment
+		$.ajax({
+			url: serverName + 'api/v1/getdepttreatmentlist/meditrip',
+			type: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Basic ' + basicKey,
+				'x-access-token': xAccessToken
 
-		// 	},
-		// 	beforeSend: function (xhr) {
-		// 		xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
-		// 	},
-		// 	success: function (response) {
-		// 		console.log('list: ', response)
-		// 		var treatmentList = response;
-		// 		//Populate Treatment Dropdown
-		// 		$('#getQuoteTreatment').autocomplete({
-		// 			source: treatmentList
-		// 		});
+			},
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+			},
+			success: function (response) {
+				//console.log('list: ', response)
+				var treatmentList = response;
 
-		// 		var selectBox = document.getElementById('selectSubmitEnquiryProcedure');
-		// 		treatmentList.forEach(function (item, index) {
-		// 			var option = document.createElement('option')
-		// 			option.text = item;
-		// 			option.value = item.replace(/\s+/g, '-').toLowerCase();
-		// 			selectBox.add(option);
-		// 			//console.log(option);
-		// 		});
 
-		// 	},
-		// 	error: function (exception) {
-		// 		console.log(exception);
-		// 	}
-		// });
-		//alter//
+				treatmentList.forEach(function(item, index){
+					$('#getQuoteTreatment').append('<optgroup id="'+ item.department +'"' + ' label="' + item.department + '"></optgroup>')
+				 })
+
+				 treatmentList.forEach(function(treatment, index){
+					var department = treatment.department;
+					treatment.treatmentNames.forEach(function(name, i){
+					  $('#' + department ).append('<option class="' + name + '"' + 'data-tokens="' + name + '">' + name + '</option>')
+					})
+				 })
+			var elementExists = document.getElementById("getQuoteTreatment");
+			if (elementExists){
+				$('#getQuoteTreatment').selectpicker('render');
+				$('#getQuoteTreatment').selectpicker('refresh');
+         }
+			// end of newly commented
+
+				//Populate Treatment Dropdown
+
+
+			},
+			error: function (exception) {
+				console.log(exception);
+			}
+		});
+		//end for #getQuoteTreatment
 		$.ajax({
 			url: serverName + 'api/v1/getTreamentlist/all/meditrip',
 			type: 'GET',
@@ -382,19 +390,20 @@ var whyIndia = '';
 					selectBox.add(option);
 					//console.log(option);
 				});
-				var otherOption = document.createElement('option');
-				otherOption.text = 'Other';
-				otherOption.value = 'Other';
-				selectBox.add(otherOption);
-				treatmentList.forEach(function (item, index) {
-					$('#getQuoteTreatment').append('<option class="' + item + '"' + 'data-tokens="' + item + '">' + item + '</option>')
-				})
-			var elementExists = document.getElementById("getQuoteTreatment");
-			if (elementExists){
-				$('#getQuoteTreatment').selectpicker('render');
-				$('#getQuoteTreatment').selectpicker('refresh');
-         }
-
+				// newly commented
+			// 	var otherOption = document.createElement('option');
+			// 	otherOption.text = 'Other';
+			// 	otherOption.value = 'Other';
+			// 	selectBox.add(otherOption);
+			// 	treatmentList.forEach(function (item, index) {
+			// 		$('#getQuoteTreatment').append('<option class="' + item + '"' + 'data-tokens="' + item + '">' + item + '</option>')
+			// 	})
+			// var elementExists = document.getElementById("getQuoteTreatment");
+			// if (elementExists){
+			// 	$('#getQuoteTreatment').selectpicker('render');
+			// 	$('#getQuoteTreatment').selectpicker('refresh');
+         // }
+			// end of newly commented
 
 				//Populate Treatment Dropdown
 
