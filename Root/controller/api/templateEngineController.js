@@ -462,7 +462,7 @@ module.exports.getHolidayDescriptionPage = function (req, res) {
             })
         }).then(function (content) {
             /* get list of procedures organized by departments */
-            console.log(content)
+            //console.log(content)
                var data = {
                         "holidayList": result,
                         "title": result[0].packageShortName + ' | Holiday Packages',
