@@ -392,13 +392,14 @@ module.exports.getHospitalDescription = function (req, res) {
                         "hospital_name": basicHospData[0].hospitalName,
                         "hospitalcity": basicHospData[0].hospitalcity,
                         "hospitalcountry": basicHospData[0].hospitalcountry,
-                        "title": basicHospData[0].hospitalName + '-' + basicHospData[0].hospitalcity + 'Hospital details,treatment cost & appointment',
+                        "title": basicHospData[0].hospitalName + ' - ' + basicHospData[0].hospitalcity + '- Hospital details,treatment cost & appointments',
                         "hospital_gridFS_data": content,
                         "hospitalimage": basicHospData[0].hospitalimage,
                         "department": treatmentList,
                         "topdoctors": doctorList.slice(0,5),
                         "Accreditation": basicHospData[0].Accreditation
                     };
+                    //console.log(data)
                     res.render('hospital_template',data);
                 })
 
@@ -726,7 +727,7 @@ module.exports.searchhospitalsbytreatment = function(req,res)
                   //console.log(procedurecontent)
                   // set treatment name without hypen
                    data.treatmentname=treatmentname;
-                   data.title=treatmentname + "|Best hospitals & doctors in India|Medinovita";
+                   data.title=treatmentname + " - Hospitals and doctors details, treatment cost and book appointment through Medinovita";
 
                    res.render('searchtreatment_template', data);
                 }).catch(function (err) {
