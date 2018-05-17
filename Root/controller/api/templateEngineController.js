@@ -392,7 +392,7 @@ module.exports.getHospitalDescription = function (req, res) {
                         "hospital_name": basicHospData[0].hospitalName,
                         "hospitalcity": basicHospData[0].hospitalcity,
                         "hospitalcountry": basicHospData[0].hospitalcountry,
-                        "title": basicHospData[0].hospitalName + '|Medical treatment in India|Best & Afforable hospitals for medical treatment',
+                        "title": basicHospData[0].hospitalName + '-' + basicHospData[0].hospitalcity + 'Hospital details,treatment cost & appointment',
                         "hospital_gridFS_data": content,
                         "hospitalimage": basicHospData[0].hospitalimage,
                         "department": treatmentList,
@@ -602,7 +602,7 @@ module.exports.searchhospitalsbytreatment = function(req,res)
     //console.log(treatmentdisplayname);
     var data = {
         "treatmentname": treatmentdisplayname,
-        "title": treatmentdisplayname + ' | Medical treatments in India | Medinovita',
+        "title": treatmentdisplayname + ' treatments in India:Hospitals,Cost & Reviews-Medinovita',
         "treatmenturlname":treatmentdisplayname,
         "hospitaldetails": [],
         "treatmentDescription": "",
