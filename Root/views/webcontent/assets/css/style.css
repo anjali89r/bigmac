@@ -14703,6 +14703,9 @@ table{
 .test:hover{
   box-shadow: 5px 5px 6px 6px #aaaaaa;
 }
+ .product-list{
+  border-bottom: 1px solid #ccc;
+}
 /*modals.html*/
 .modal-enquiry{
   text-align: center;
@@ -14833,4 +14836,8 @@ img {
 }
 .h3-responsive{
   font-size: 170%
+}
+/* simplePagination.css */
+.dark-theme a{
+  background: white;
 }
