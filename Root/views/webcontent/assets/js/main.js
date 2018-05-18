@@ -1,8 +1,8 @@
 var basicKey = 'bGliaW46bGliaW4=';
 var xAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVG9rZW5Ub0F1dGhlbnRpY2F0ZU1lZGlub3ZpdGFVc2VyIiwiaWF0IjoxNTA4MDQ0OTMwfQ.cZ3pCte1guE8KQkjd1KfY_bLJ-gOatJm2xlwyiLGAl4';
 
-var serverName = 'https://www.medinovita.com/';
-//var serverName = 'http://localhost:3000/';
+//var serverName = 'https://www.medinovita.com/';
+var serverName = 'http://localhost:3000/';
 
 var GLOBAL_VARIABLES = {
 	Language: 'en',
@@ -159,8 +159,8 @@ var whyIndia = '';
 				socialMedia[2].setAttribute('href', response[0].linkedlinurlLink);
 				//socialMedia[3].setAttribute('href', response[0].instagramurlLink);
 				document.querySelector('p.medinovitaDecs').innerHTML = response[0].whymedinovitaDesc;
-				document.querySelector('p.customerCareNumber').innerHTML = response[0].whatsappCustomercareno;
-				document.querySelector('p.whatsappContactNumber').innerHTML = response[0].customerCareno
+				document.querySelector('p.customerCareNumber').innerHTML = response[0].customerCareno;
+				document.querySelector('p.whatsappContactNumber').innerHTML = response[0].whatsappCustomercareno;
 			},
 			error: function (exception) {
 				console.log(exception);
@@ -323,50 +323,7 @@ var whyIndia = '';
 		});
 
 
-		//for #getQuoteTreatment
-		$.ajax({
-			url: serverName + 'api/v1/getdepttreatmentlist/meditrip',
-			type: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: 'Basic ' + basicKey,
-				'x-access-token': xAccessToken
 
-			},
-			beforeSend: function (xhr) {
-				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
-			},
-			success: function (response) {
-				//console.log('list: ', response)
-				var treatmentList = response;
-
-
-				treatmentList.forEach(function(item, index){
-					$('#getQuoteTreatment').append('<optgroup id="'+ item.department +'"' + ' label="' + item.department + '"></optgroup>')
-				 })
-
-				 treatmentList.forEach(function(treatment, index){
-					var department = treatment.department;
-					treatment.treatmentNames.forEach(function(name, i){
-					  $('#' + department ).append('<option class="' + name + '"' + 'data-tokens="' + name + '">' + name + '</option>')
-					})
-				 })
-			var elementExists = document.getElementById("getQuoteTreatment");
-			if (elementExists){
-				$('#getQuoteTreatment').selectpicker('render');
-				$('#getQuoteTreatment').selectpicker('refresh');
-         }
-			// end of newly commented
-
-				//Populate Treatment Dropdown
-
-
-			},
-			error: function (exception) {
-				console.log(exception);
-			}
-		});
-		//end for #getQuoteTreatment
 		$.ajax({
 			url: serverName + 'api/v1/getTreamentlist/all/meditrip',
 			type: 'GET',
@@ -1850,8 +1807,11 @@ var whyIndia = '';
 		// Init our app
 		Simple.init();
 		//	$('.selectpicker').selectpicker();
-		$(window).scroll(sticky_relocate);
+		if(document.querySelector('#clinic-details')){
+			$(window).scroll(sticky_relocate);
 		sticky_relocate();
+		}
+
 	});
 
 	// Load Event
@@ -2108,8 +2068,50 @@ function homepageCallback() {
 			content: 'Lorem ipsum dolor sit amet, consectetur adipi sunt nisi id magni dignissimos rem.'
 		}
 	]
+//start of #getQuoteTreatment
+	$.ajax({
+		url: serverName + 'api/v1/getdepttreatmentlist/meditrip',
+		type: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: 'Basic ' + basicKey,
+			'x-access-token': xAccessToken
+
+		},
+		beforeSend: function (xhr) {
+			xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+		},
+		success: function (response) {
+			//console.log('list: ', response)
+			var treatmentList = response;
 
 
+			treatmentList.forEach(function(item, index){
+				$('#getQuoteTreatment').append('<optgroup id="'+ item.department +'"' + ' label="' + item.department + '"></optgroup>')
+			 })
+
+			 treatmentList.forEach(function(treatment, index){
+				var department = treatment.department;
+				treatment.treatmentNames.forEach(function(name, i){
+				  $('#' + department ).append('<option class="' + name + '"' + 'data-tokens="' + name + '">' + name + '</option>')
+				})
+			 })
+		var elementExists = document.getElementById("getQuoteTreatment");
+		if (elementExists){
+			$('#getQuoteTreatment').selectpicker('render');
+			$('#getQuoteTreatment').selectpicker('refresh');
+		}
+		// end of newly commented
+
+			//Populate Treatment Dropdown
+
+
+		},
+		error: function (exception) {
+			console.log(exception);
+		}
+	});
+	//end of #getQuoteTreatment
 	$.ajax({
 		url: serverName + 'api/v1/gethighlighttreatments/meditrip?limit=8',
 		type: 'GET',
@@ -2813,57 +2815,18 @@ function hospitalPageCallback(treatmentName, city) {
 		},
 
 		success: function (response) {
-			console.log(" response IN HERE: " + response);
+
 			//$('.tobehidden').hide();
-			console.log("hello");
+
 			var mainDiv = $('.hosp-main');
 			if (response == '') {
 				//console.log("no response");
 				mainDiv.html('<div style="text-align:center;font-weight:bold;font-size:1.4em;">No hospital records in the selected city</div>');
 				//$('.pagination').hide();
 			} else {
-				$('.pagination').show();
-				mainDiv.html('');
-				// $.each(response, function (index, hospital) {
+				 $('.pagination').show();
+				// mainDiv.html('');
 
-				// 	var myHtml = '';
-
-				// 	var rowDiv = $('.hosp-row');
-
-				// 	if (hospital.Treatment.length > 3) {
-				// 		var treatmentArr = hospital.Treatment.slice(0, 3);
-				// 		$.each(treatmentArr, function (index, item) {
-				// 			if (index !== treatmentArr.length - 1) {
-				// 				myHtml += item.name + ', ';
-				// 			} else {
-				// 				myHtml += item.name;
-				// 			}
-				// 		})
-				// 	} else {
-				// 		$.each(hospital.Treatment, function (index, treatment) {
-
-
-				// 			if (index !== hospital.Treatment.length - 1) {
-				// 				myHtml += treatment.name + ', ';
-				// 			} else {
-				// 				myHtml += treatment.name;
-				// 			}
-
-				// 		})
-
-				// 	}
-				// 	var modifiedhosname = hospital.hospitalName.replace(/\s+/g, '-').toLowerCase();
-				// 	if (index % 2 === 0) {
-				// 		var htmlStr = $('<div class="row is-flex hosp-row" style="margin-bottom:30px"><div class="col-md-5 test even hosp-' + index + '"' + 'style="background-color:#f9f9f9; padding:28px"><p class="test1"><img src=' + hospital.hospitalimage + '><a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right">Contact</button></a><a href="/hospitals/' + modifiedhosname + '"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a><br><i class="fa fa-map-marker"  aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '<br><span>Specialities: ' + myHtml + '</span></p><div class="margin20"> <a href="/hospitals/' + hospital.hospitalName + '"style="float:right;font-weight:bold">Learn More...</a></div></div></div>')
-
-				// 		mainDiv.append(htmlStr);
-				// 	} else {
-				// 		var htmlStrr = $('<div class="col-md-5 col-md-offset-1 test odd hosp-' + index + '"' + 'style="background-color:#f9f9f9; padding:28px"><p class="test1"><img src=' + hospital.hospitalimage + '><a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right">Contact</button></a><a href="/hospitals/' + modifiedhosname + '"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a><br><i class="fa fa-map-marker color=blue" aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '<br><span>Specialities: ' + myHtml + '</span></p><div class="margin20"> <a href="/hospitals/' + hospital.hospitalName + '" style="float:right;font-weight:bold">Learn More...</a></div></div>')
-
-				// 		rowDiv.last().append(htmlStrr);
-				// 	}
-
-				// })
 				// simple form
 
 				$.each(response, function (index, hospital) {
@@ -2895,13 +2858,15 @@ function hospitalPageCallback(treatmentName, city) {
 
 					}
 					var modifiedhosname = hospital.hospitalName.replace(/\s+/g, '-').toLowerCase();
-					// var htmlStr = $('<div class="product product-list hosp-'+index+'"><div class="row"><div class="col-md-4 col-sm-5"><div class="product-top"><figure><img src='+ hospital.hospitalimage +'></figure></div></div><div class="col-md-8 col-sm-7"><a href="/hospitals/'+ modifiedhosname +'"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a><br><i class="fa fa-map-marker"  aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '<br><span>Specialities: ' + myHtml + '</span></p><div class="margin20"> <a href="/hospitals/' + hospital.hospitalName + '"style="float:right;font-weight:bold">Learn More...</a></div></div></div></div></div></div>')
+
 
 					var htmlStr = $('<div class="product product-list hosp-'+index+'"><div class="row"><div class="col-md-4 col-sm-5"><div class="product-top"><figure><img src='+ hospital.hospitalimage +'></figure></div></div><div class="col-md-8 col-sm-7"><h3><a href="/hospitals/'+ modifiedhosname +'"><strong style="font-size:18px;line-height:1.6em;">' + hospital.hospitalName + '</strong></a></h3><div class="location-sp" style="font-size:16px;"><div><i class="fa fa-map-marker"  aria-hidden="true"></i>' + ' ' + hospital.hospitalContact.City + ', ' + hospital.hospitalContact.country + '</div><div>Specialities: ' + myHtml + '</div><a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right">Contact</button></a></div><div style="font-size:14px;"> <a href="/hospitals/' + modifiedhosname + '"style="font-weight:bold">Learn More...</a></div></div></div></div></div></div>')
-					  mainDiv.append(htmlStr);
+					  //mainDiv.append(htmlStr);
+					  htmlStr.insertBefore(".pagination-container")
 
 
 				 })
+				 $('.pagination').show();
 				// *****************pagination***********************
 				//var items = $('.hosp-main .row');
 				var items = $('.hosp-main .product');
@@ -2911,6 +2876,7 @@ function hospitalPageCallback(treatmentName, city) {
 				//console.log("numItems, perPage: "+numItems +" " +perPage)
 				items.slice(perPage).hide();
 				if (numItems != 0) {
+
 					$('.pagination').pagination({
 						items: numItems,
 						itemsOnPage: perPage,
