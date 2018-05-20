@@ -117,54 +117,54 @@ var whyIndia = '';
 
 	});
 	$('.medinovitaFooter').load('/assets/pages/footer.html', function () {
-		$.ajax({
-			url: serverName + 'api/v1/get/officelocations/meditrip',
-			type: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: 'Basic ' + basicKey,
-				'x-access-token': xAccessToken
+		// $.ajax({
+		// 	url: serverName + 'api/v1/get/officelocations/meditrip',
+		// 	type: 'GET',
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 		Authorization: 'Basic ' + basicKey,
+		// 		'x-access-token': xAccessToken
 
-			},
-			beforeSend: function (xhr) {
-				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
-			},
-			success: function (response) {
-				officeAddress = response[0].country + '<br>' + response[0].officeCity[0].city + '<br>' + response[0].officeCity[0].officeLocation[0].addressLine1 + '<br>' + response[0].officeCity[0].officeLocation[0].addressLine2 + '<br>' + response[0].officeCity[0].officeLocation[0].landMark + '<br>' + response[0].officeCity[0].officeLocation[0].officeEmailId + '<br>' + response[0].officeCity[0].officeLocation[0].contactPerson;
-				document.querySelector('p.office-address').innerHTML = officeAddress;
-			},
-			error: function (exception) {
-				console.log(exception);
-			}
-		});
+		// 	},
+		// 	beforeSend: function (xhr) {
+		// 		xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+		// 	},
+		// 	success: function (response) {
+		// 		officeAddress = response[0].country + '<br>' + response[0].officeCity[0].city + '<br>' + response[0].officeCity[0].officeLocation[0].addressLine1 + '<br>' + response[0].officeCity[0].officeLocation[0].addressLine2 + '<br>' + response[0].officeCity[0].officeLocation[0].landMark + '<br>' + response[0].officeCity[0].officeLocation[0].officeEmailId + '<br>' + response[0].officeCity[0].officeLocation[0].contactPerson;
+		// 		document.querySelector('p.office-address').innerHTML = officeAddress;
+		// 	},
+		// 	error: function (exception) {
+		// 		console.log(exception);
+		// 	}
+		// });
 
-		$.ajax({
-			url: serverName + 'api/v1/get/homepagedetails/meditrip',
-			type: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: 'Basic ' + basicKey,
-				'x-access-token': xAccessToken
-			},
-			beforeSend: function (xhr) {
-				xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
-			},
-			success: function (response) {
+		// $.ajax({
+		// 	url: serverName + 'api/v1/get/homepagedetails/meditrip',
+		// 	type: 'GET',
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 		Authorization: 'Basic ' + basicKey,
+		// 		'x-access-token': xAccessToken
+		// 	},
+		// 	beforeSend: function (xhr) {
+		// 		xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+		// 	},
+		// 	success: function (response) {
 
-				document.querySelector('p.why-india').innerHTML = response[0].whyIndiaDesc;
-				var socialMedia = document.querySelectorAll('a.social-icon');
-				socialMedia[0].setAttribute('href', response[0].fburlLink);
-				socialMedia[1].setAttribute('href', response[0].twitterurlLink);
-				socialMedia[2].setAttribute('href', response[0].linkedlinurlLink);
-				//socialMedia[3].setAttribute('href', response[0].instagramurlLink);
-				document.querySelector('p.medinovitaDecs').innerHTML = response[0].whymedinovitaDesc;
-				document.querySelector('p.customerCareNumber').innerHTML = response[0].customerCareno;
-				document.querySelector('p.whatsappContactNumber').innerHTML = response[0].whatsappCustomercareno;
-			},
-			error: function (exception) {
-				console.log(exception);
-			}
-		});
+		// 		// document.querySelector('p.why-india').innerHTML = response[0].whyIndiaDesc;
+		// 		var socialMedia = document.querySelectorAll('a.social-icon');
+		// 		socialMedia[0].setAttribute('href', response[0].fburlLink);
+		// 		socialMedia[1].setAttribute('href', response[0].twitterurlLink);
+		// 		socialMedia[2].setAttribute('href', response[0].linkedlinurlLink);
+		// 		//socialMedia[3].setAttribute('href', response[0].instagramurlLink);
+		// 		// document.querySelector('p.medinovitaDecs').innerHTML = response[0].whymedinovitaDesc;
+		// 		document.querySelector('p.customerCareNumber').innerHTML = response[0].customerCareno;
+		// 		document.querySelector('p.whatsappContactNumber').innerHTML = response[0].whatsappCustomercareno;
+		// 	},
+		// 	error: function (exception) {
+		// 		console.log(exception);
+		// 	}
+		// });
 	});
 	$('.medinovitaModals').load('/assets/pages/modals.html', function () {
 
@@ -371,7 +371,7 @@ var whyIndia = '';
 		});
 
 
-		if (window.location.href.indexOf('index') > -1 || window.location.href == 'https://www.medinovita.com/' || window.location.href == 'http://medinovita.com/') {
+		if (window.location.href.indexOf('index') > -1 || window.location.href == 'https://www.medinovita.com/' || window.location.href == 'http://medinovita.com/'|| window.location.href == 'https://medinovita.com/') {
 			homepageCallback();
 		}
 		if (window.location.href.indexOf('treatmentsOffered') > -1) {
@@ -2111,32 +2111,32 @@ function homepageCallback() {
 		}
 	});
 	//end of #getQuoteTreatment
-	$.ajax({
-		url: serverName + 'api/v1/gethighlighttreatments/meditrip?limit=8',
-		type: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-			Authorization: 'Basic ' + basicKey,
-			'x-access-token': xAccessToken
+	// $.ajax({
+	// 	url: serverName + 'api/v1/gethighlighttreatments/meditrip?limit=8',
+	// 	type: 'GET',
+	// 	headers: {
+	// 		'Content-Type': 'application/json',
+	// 		Authorization: 'Basic ' + basicKey,
+	// 		'x-access-token': xAccessToken
 
-		},
-		beforeSend: function (xhr) {
-			xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
-		},
-		success: function (response) {
-			var homePageHighLightsItems = response;
-			var a = document.getElementsByClassName('service-box')
-			$.each(a, function (index, element) {
-				$(element).find('h3').html(homePageHighLightsItems[index].title);
-				$(element).find('p').html(homePageHighLightsItems[index].content);
-				$(element).find('img').attr('src', homePageHighLightsItems[index].imgSrc);
-			});
+	// 	},
+	// 	beforeSend: function (xhr) {
+	// 		xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+	// 	},
+	// 	success: function (response) {
+	// 		var homePageHighLightsItems = response;
+	// 		var a = document.getElementsByClassName('service-box')
+	// 		$.each(a, function (index, element) {
+	// 			$(element).find('h3').html(homePageHighLightsItems[index].title);
+	// 			$(element).find('p').html(homePageHighLightsItems[index].content);
+	// 			$(element).find('img').attr('src', homePageHighLightsItems[index].imgSrc);
+	// 		});
 
-		},
-		error: function (exception) {
-			console.log(exception);
-		}
-	});
+	// 	},
+	// 	error: function (exception) {
+	// 		console.log(exception);
+	// 	}
+	// });
 
 	$.ajax({
 		url: serverName + 'api/v1/get/newssection/meditrip',
