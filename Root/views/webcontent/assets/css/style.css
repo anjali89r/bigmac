@@ -10343,8 +10343,10 @@ display: none !important;
 
 .product .product-top img {
   display: block;
-  width: 250px;
-  height: 200px;
+  /*width: 250px;
+  height: 200px;*/
+  max-width: 100%;
+
 }
 
 .product .image-hover {
