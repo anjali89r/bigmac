@@ -21,11 +21,11 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <!-- Below lines added by libin -->
-      <link rel="canonical" href="https://www.medinovita.com/search/{{{treatmentname}}}" />
-      <link rel="shortlink" href="https://www.medinovita.com/search/{{{treatmentname}}}" />
+      <link rel="canonical" href="https://www.medinovita.com/" />
+      <link rel="shortlink" href="https://www.medinovita.com/" />
       <title>{{title}}</title>
-      <meta NAME="description" content= "{{{treatmentname}}} treatment details,hospitals,doctors and price estimate.Book appointment through medinovita for {{{treatmentname}}} treatments in India">
-      <META NAME="keywords" CONTENT="{{{treatmentname}}} treatment in India, Cost for {{{treatmentname}}},hospitals for {{{treatmentname}}} treatments" >
+      <meta NAME="description" content= "Best {{{deptname}}} hospitals - Hospital treatment,doctor details and price estimate.Contact Medinovita for cost estimate from best {{{deptname}}} in India">
+      <META NAME="keywords" CONTENT="best {{{deptname}}} hospitals in india, best {{{deptname}}} hospitals in kerala,{{{deptname}}} treatments in india" >
       <!-- Google Fonts -->
       <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7COpen+Sans:300,300i,400,400i,600,600i,700,800" rel="stylesheet">
       <link rel="stylesheet" href="/assets/css/plugins.min.css">
@@ -59,8 +59,8 @@
               <h1 >{{treatmentname}}</h1>
             <ol class="breadcrumb">
                <li><a href="/index.html">Home</a></li>
-               <li class="active">Treatments</li>
-               <li class="active">{{treatmentname}}</li>
+              
+               <li class="active">Best {{deptname}} Hospitals in India</li>
             </ol>
          </div>
          <!-- End .container -->
@@ -129,13 +129,14 @@
                                                     {{/nablimage}}
                                                  </figure>
                                              </div><!-- End .product-content -->
+                                             {{#treatments}}
                                              <div class="product-price-container">
                                                 <p></p>
-                                                <span class="old-price"><strong>{{treatmentname}}</strong></span>
-                                                <p><span class="old-price">COST FROM</span> <span class="product-price"> Please Contact Us</span></p>
-                                               <!-- <span class="product-price"> &#x20b9;{{costLowerBound}}</span> -->
+                                                <span class="old-price"><strong>{{treatmentdisplayname}}</strong></span>
+                                               
 
                                             </div><!-- End .product-price-container -->
+                                            {{/treatments}}
                                     </div><!-- End .col-md-8 -->
                                 </div><!-- end .Row -->
                                 {{/hospitaldetails}}
