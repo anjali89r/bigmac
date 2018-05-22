@@ -14843,3 +14843,18 @@ img {
 .dark-theme a{
   background: white;
 }
+/*procedure_template*/
+.procedure-template {
+  margin-bottom:20px
+}
+#procedure-details {
+  font-size: 14px;
+}
+.aligned-list {
+  list-style: circle;
+  padding: 10px;
+  margin-left: 20px;
+}
+.footer-left .copyright {
+  text-align: center;
+}
