@@ -14,11 +14,6 @@ var app = express();
 
 var http = require('http');
 var server = http.createServer(app);
-// app.all("*",((req,res,next) => {
-//   //console.log(req.url)
-//   res.redirect(301,'https://www.medinovita.com'+ req.url);
-//   //next();
-// }))
 
 app.use(function(req, res, next) {
   //console.log("Req Headers ",req.headers.host)
@@ -27,7 +22,7 @@ app.use(function(req, res, next) {
   }
   else if ((req.secure) && (req.headers.host == "medinovita.com") && (req.get('X-Forwarded-Proto') == 'https'))
   {
-    //console.log("Req Headers ",req.headers.host)
+    console.log("Req Headers ",req.headers.host)
     res.redirect(301,'https://www.medinovita.com' + req.url);
   }
   else
