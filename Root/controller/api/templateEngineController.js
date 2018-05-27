@@ -390,6 +390,7 @@ module.exports.getHospitalDescription = function (req, res) {
                     var idx = 0;
                     var data = {
                         "hospital_name": basicHospData[0].hospitalName,
+                        "hospitalurlname": basicHospData[0].hospitalName.replace(/\s+/g, '-').toLowerCase(),
                         "hospitalcity": basicHospData[0].hospitalcity,
                         "hospitalcountry": basicHospData[0].hospitalcountry,
                         "title": basicHospData[0].hospitalName + ' - ' + basicHospData[0].hospitalcity + '- Hospital details,treatment cost & appointments',
