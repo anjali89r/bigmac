@@ -557,8 +557,8 @@ module.exports.getDepartmentwiseTreatmentDescription = function (req, res) {
         }).then(function (content) {
             /* get list of procedures organized by departments */
             var data = {
-                "department": department,
-                "title": department + ' treatments in India|Medical hospitals in India',
+                "department": result[0].department,
+                "title": result[0].department + ' treatments in India|Medical hospitals in India',
                 "departmentDescription": content,
                 "treatmentList": result[0].treatmentList,
                 "procedureCount": result[0].treatmentList.length,
