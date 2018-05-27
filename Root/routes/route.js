@@ -83,7 +83,7 @@ module.exports = function (app) {
     /*  API to upload the status of enquiry */
     app.post('/api/update/enqstatus/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, enquiryInfo.updateEnquiryStatus)
     /*********************************************************************************************************************************************************/
-    
+
     /************************API to operate on office address schema********************************************************************************************/
     /*  APi to get list of office locations  */
     app.get('/api/v1/get/officelocations/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, officeLocationInfo.getOfficeLocations);
@@ -126,7 +126,7 @@ module.exports = function (app) {
     /********************************************************************************************************************************************************/
 
     /************************API to work on doctor data details schema****************************************************************************************************/
-    app.post('/api/v1/post/docdata/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, doctorcontroller.addDoctorData);    
+    app.post('/api/v1/post/docdata/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, doctorcontroller.addDoctorData);
      /********************************************************************************************************************************************************/
 
     /************************ API to work on currency schema ****************************************************************************************************/
@@ -147,7 +147,7 @@ module.exports = function (app) {
     // app.get('/api/v1/get/newssection/:newsId/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, newsSection.getnewsSectionbyid);
 
     /************************API to operate on Treatment Description****************************************************************************************************/
-    /*  APi to post treatmentdescription   */    
+    /*  APi to post treatmentdescription   */
     app.post('/api/v1/post/treatmentdescription/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.addtreatmentDescription);
     /*  APi to get treatment description with cost  */
     app.get('/api/v1/get/treatmentdescription/cost/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, treatmentDescription.getTreatmentSectionWithCost);
@@ -164,7 +164,7 @@ module.exports = function (app) {
     /*******************************************************************************************************************************************************************/
 
     /************************API to render html pages using template engine****************************************************************************************************/
-    /*  API for procedure_template.html */   
+    /*  API for procedure_template.html */
     app.get('/procedure/:procedure', templateEngine.getProcedureDescription);
 
     /*  API for hospital_template.html */
@@ -193,9 +193,9 @@ module.exports = function (app) {
     app.post('/cloud/zip/upload/:enqid', cloudcontroller.ZipAndUploadToS3WithMulter)
     /*download files uploaded to aws s3*/
     app.post('/api/cloud/download/medicaldocs/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, cloudcontroller.downloadcloudFiles)
-	
+
 	/*...................................................................................................................................................................*/
-	
+
     /*  APi to post our services section  */
     app.post('/api/v1/post/ourservices/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, ourServicesInfo.addServicedetails);
     /*  APi to get our services details  */
@@ -215,16 +215,21 @@ module.exports = function (app) {
 
     /* API to get web site traffic to DB */
     app.post('/api/v1/post/contactus/:apiTokenName', security.verifyBasicAuth, security.verifyJWTToken, contactusInfo.submitContact);
-    
+
     /************************API to operate on trip schema******************************************/
     app.get('/api/v1/insertTripinfo', tripInfo.inserttripDetails);
     /***********************************************************************************************/
-  
+
     //encrypt and decrypt api
     app.get('/api/v1/getsecureencryptedText/:txt', security.secureEncryptedText);//sample call http://localhost:1337/api/v1/getsecureencryptedText/libin
     app.get('/api/v1/getsecuredecryptedText/:txt', security.secureDecryptedText);//this is more secure as the encryption mechanism chnages on every server restart
     app.get('/api/v1/getnonsecureencryptedText/:txt', security.nonsecureEncryptedText);
-    app.get('/api/v1/getnonsecuredecryptedText/:txt', security.nonsecuredecryptedText);      
-	
+    app.get('/api/v1/getnonsecuredecryptedText/:txt', security.nonsecuredecryptedText);
+
+
+    //custom routes
+    app.get('/best-:deptname-hospitals-in-india', templateEngine.searchdepartmentsbytreatment);
+    //app.get('/best-:deptname-hospitals-in-:state', templateEngine.searchdepartmentsbytreatment);
+
   };
 

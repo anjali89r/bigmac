@@ -4505,15 +4505,15 @@ display: none !important;
 } */
 }
 
-@media (max-width: 754px) {
+/* @media (max-width: 754px) {
   .header-info-boxes {
-    /*display: none;*/
+
     margin-bottom: 20px;
     margin-top: 8px
 
   }
 
-}
+} */
 
 .header-info-boxes .header-info-box {
   /* display: inline-block; */
@@ -4566,9 +4566,12 @@ display: none !important;
    font-size: 13px;
 }
 
-.header-info-boxes .header-info-box + .header-info-box {
-  margin-left: 49px;
+@media (min-width: 400px) {
+  .header-info-boxes .header-info-box + .header-info-box {
+    margin-left: 49px;
+  }
 }
+
 
 .header-info-boxes .header-info-box + .header-info-box:before {
   content: '';
@@ -9547,7 +9550,7 @@ display: none !important;
 }
 
 .sidebar .widget .posts-list li {
-  margin-bottom: 12px;
+  /* margin-bottom: 12px; */
   padding: 6px;
   background-color: #f6f6fa;
   transition: all 0.4s;
@@ -9568,16 +9571,14 @@ display: none !important;
   height: auto;
 }
 
-.sidebar .widget .posts-list li h5, .sidebar .widget .posts-list li span {
-  display: block;
-  margin-left: 62px;
-}
+
 
 .sidebar .widget .posts-list li h5 {
   font-size: 13px;
   font-weight: 600;
   margin-top: 6px;
   margin-bottom: 4px;
+
 }
 
 .sidebar .widget .posts-list li span {
@@ -11927,16 +11928,17 @@ display: none !important;
   height: auto;
 }
 
-.footer .widget .posts-list li h5, .footer .widget .posts-list li span {
+/* .footer .widget .posts-list li h5, .footer .widget .posts-list li span {
   display: block;
   margin-left: 62px;
-}
+} */
 
 .footer .widget .posts-list li h5 {
   font-size: 13px;
   font-weight: 600;
-  margin-top: 6px;
+  /* margin-top: 6px; */
   margin-bottom: 4px;
+  text-decoration: underline;
 }
 
 .footer .widget .posts-list li span {
@@ -13387,12 +13389,12 @@ width: 300px;
     width: 100%;
 }
 
-.fixedCarousel .item img {
+/* .fixedCarousel .item img {
     position: absolute;
     top: 0;
     left: 0;
     min-height: 300px!important;
-}
+} */
 }
 
 
@@ -13406,7 +13408,9 @@ width: 300px;
     position: absolute;
     top: 0;
     left: 0;
-    min-height: 600px;
+    /* min-height: 600px; */
+    height: 100%;
+    /* object-fit: cover; */
 }
 
 
@@ -14858,3 +14862,108 @@ img {
 .footer-left .copyright {
   text-align: center;
 }
+/* besthospitals_template */
+.best-hospdetails {
+  /* padding: 30px; */
+  /* //padding-bottom: 0px; */
+  border:0px;
+  box-shadow: 0px 4px 6px 0px hsla(0,0%,0%,0.2);
+  background-color: #fafafa;
+  margin-bottom: 40px;
+}
+.besthosp-name {
+  margin-top: 15px;
+}
+.besthosp-list {
+  margin-left :0px;
+  margin-right: 0px;
+  margin-bottom: 20px;
+  margin-top: 30px;
+}
+.besthosp-list .row {
+  margin-left :0px;
+  margin-right: 0px;
+}
+.besthosp-treatments {
+  padding-left: 40px;
+  padding-top: 20px;
+  background-color: #eceff1;
+  margin-top:-15px
+}
+.accred {
+  padding-bottom: 20px;
+}
+.besthosp-loc {
+  letter-spacing: 1px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.treatment-list-name{
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.treatment-offered-name{
+  font-weight: 550;
+
+  margin-left:40px;
+  margin-top:30px
+}
+.nameBestHosp {
+  color: #44627b;
+}
+.tokenMsg {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+/*hospital_template */
+@media (min-width: 992px){
+  .card-img-top {
+    max-width: 100%;
+    height: 15vw;
+    object-fit: cover;
+  }
+
+}
+@media (max-width: 991px){
+  .card-img-top {
+    width: 150px;
+    height: 150px;
+
+  }
+
+}
+/* index.html*/
+.acc-text {
+  padding-bottom: 30px;
+  text-align: center;
+  font-size: 18px;
+  color: #7e99b4;
+  line-height: 1.4em;
+}
+#first-acc,#third-acc,#sec-acc {
+  width: 19%;
+}
+.accreditation-row {
+  margin-bottom: 30px;
+}
+.accreditation-row ul li {
+  width: 20px;
+  padding-right: 20px;
+  padding-bottom: 0px;
+  float: left;
+  line-height: 14px;
+  display: block;
+}
+.accreditation-row ul li img {
+  max-width: 56px;
+  /* max-height: 36px; */
+  margin-right: 10px;
+  display: block;
+  float: left;
+}
+.accreditation-row ul li span {
+  margin-top: 3px;
+  display: block;
+}
+

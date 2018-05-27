@@ -601,6 +601,11 @@ module.exports.searchhospitalsbytreatment = function(req,res)
     var city =req.query.city;
     var accreditation=req.query.accreditation;
     //console.log(treatmentdisplayname);
+    if (!treatmentdisplayname)
+    {
+        logger.error("searchhospitalsbytreatment: invalid treatmentdisplayname passed to funtion,redirecting to 404")
+        return res.redirect('/404');
+    }
     var data = {
         "treatmentname": treatmentdisplayname,
         "title": treatmentdisplayname + ' treatments in India:Hospitals,Cost & Reviews-Medinovita',
@@ -789,5 +794,147 @@ module.exports.getPendingEnquiriesPage = function (req, res) {
       logger.error("Error in user enquiry details document")
         return res.redirect('/404')
     });
+}
+
+module.exports.searchdepartmentsbytreatment = function(req,res)
+{
+    var departmentname = req.params.deptname;
+    if (!departmentname)
+    {
+        logger.error("searchdepartmentsbytreatment : invalid departmentname")
+        return res.redirect('/404')
+    }
+
+    var treatmentname = ""; // to be hold the actual treatment name like Bone Grafting . This value to be populated from db
+    // var city =req.query.city;
+    var state=req.params.state
+    var city =req.query.city;
+    var accreditation=req.query.accreditation;
+
+    if (state)
+    {
+    state=state.charAt(0).toUpperCase() + state.slice(1);
+    }
+    if (accreditation == "")
+    {
+        logger.error("searchdepartmentsbytreatment : accreditaion is null in search ")
+        return res.redirect('/404')
+    }
+    if (city == "")
+    {
+        logger.error("searchdepartmentsbytreatment :  city is null in search ")
+        return res.redirect('/404')
+    }
+
+    // if ((city="") || (accreditation=""))
+    // {
+    //     logger.error("searchdepartmentsbytreatment : empty values for city or accreditation")
+    //     return res.redirect('/404')
+    // }
+   // console.log(state)
+    var deptoriginalname=departmentname.charAt(0).toUpperCase() + departmentname.slice(1);
+    var data = {
+        "title": "Best " + deptoriginalname + " Hospitals in " + state,
+        "deptoriginalname": deptoriginalname,
+        "deptlowercasename":departmentname,
+        "hospitaldetails": [],
+        "city": [],
+        "accreditationdetails":[],
+
+         };
+
+    new Promise(function (resolve, reject) {
+        //get the path of flat file with description
+        treatmentSearch.gethospitaldetailsbydepartment(deptoriginalname,state,city,accreditation,function(result) {
+            resolve(result)
+            //console.log(result)
+        })
+
+        }).then(function(result)
+         {
+            /* Department Description */
+
+                    result.forEach(function(key)
+                    {
+                        var jciimage=false;
+                        var nabhimage=false;
+                        var nablimage=false;
+                        key.Accreditation.forEach(function(agencylist)
+                        {
+
+                            switch (agencylist.agency)
+                            {
+                                case "JCI":
+                                     jciimage=true;
+                                    break;
+                                case "NABH":
+                                   nabhimage = true;
+
+                                    break;
+                                case "ISO9001":
+
+                                      nablimage= true;
+
+                                    break;
+                            }
+                        });
+
+                        data.hospitaldetails.push(
+                            {"hospitalName":key.hospitalName,"hospitaldisplayname":key.hospitaldisplayname,"hospitalimage": key.hospitalimage,
+                            "hospitaldescription": key.hospitalDescription,"hospitalCity": key.hospitalContact.City,
+                            "hospitalState": key.hospitalContact.State,
+                            "hospitalcountry": key.hospitalContact.country,
+                            "jciimage":jciimage,"nabhimage":nabhimage,"nablimage":nablimage,"treatments":key.Treatment });
+                        // treatmentname=key.Treatment[key.Treatment.findIndex(x => x.treatmentdisplayname === treatmentdisplayname)].name;
+                    });
+
+                    result.forEach(function(contactkey)
+
+                    {
+
+                            if (data.city.findIndex(y => y.cityname===contactkey.hospitalContact.City) === -1)
+                            {
+                                data.city.push({"cityname": contactkey.hospitalContact.City,"citycount": 1});
+                            }
+                            else
+                            {
+                                data.city[data.city.findIndex(y => y.cityname===contactkey.hospitalContact.City)].citycount+=1;
+
+                            }
+                    });
+                    result.forEach(function(acckey)
+                    {
+                        acckey.Accreditation.forEach(function(accreditationkey)
+                        {
+
+                            if (data.accreditationdetails.findIndex(y => y.accreditationagency===accreditationkey.agency) === -1)
+                            {
+                                data.accreditationdetails.push({"accreditationagency":accreditationkey.agency,"accreditationagencycount": 1});
+                            }
+                            else
+                            {
+
+                                data.accreditationdetails[data.accreditationdetails.findIndex(y => y.accreditationagency===accreditationkey.agency)].accreditationagencycount+=1;
+
+                            }
+
+                        });
+
+                    });
+
+                    //data.treatmentDescription=procedurecontent;
+                  //console.log(procedurecontent)
+                  // set treatment name without hypen
+                  // data.treatmentname=treatmentname;
+                  // data.title=treatmentname + " - Hospitals and doctors details, treatment cost and book appointment through Medinovita";
+                   //console.log(data.hospitaldetails[0]);
+                   res.render('besthospitals_template.mustache', data);
+
+
+        }).catch(function(err)
+        {
+            logger.error("Error retrieving treatment details from DB : - " + err.message)
+            return res.redirect('/404');
+        });
 }
 
