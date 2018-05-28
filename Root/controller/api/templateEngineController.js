@@ -602,6 +602,11 @@ module.exports.searchhospitalsbytreatment = function(req,res)
     var city =req.query.city;
     var accreditation=req.query.accreditation;
     //console.log(treatmentdisplayname);
+    if (!treatmentdisplayname)
+    {
+        logger.error("searchhospitalsbytreatment: invalid treatmentdisplayname passed to funtion,redirecting to 404")
+        return res.redirect('/404');
+    }
     var data = {
         "treatmentname": treatmentdisplayname,
         "title": treatmentdisplayname + ' treatments in India:Hospitals,Cost & Reviews-Medinovita',
@@ -795,14 +800,33 @@ module.exports.getPendingEnquiriesPage = function (req, res) {
 module.exports.searchdepartmentsbytreatment = function(req,res)
 {
     var departmentname = req.params.deptname;
-   
+    if (!departmentname)
+    {
+        logger.error("searchdepartmentsbytreatment : invalid departmentname")
+        return res.redirect('/404')
+    }
+
     var treatmentname = ""; // to be hold the actual treatment name like Bone Grafting . This value to be populated from db
     // var city =req.query.city;
     var state=req.params.state
+    var city =req.query.city;
+    var accreditation=req.query.accreditation;
+
     if (state)
     {
     state=state.charAt(0).toUpperCase() + state.slice(1);
     }
+    if (accreditation == "")
+    {
+        logger.error("searchdepartmentsbytreatment : accreditaion is null in search ")
+        return res.redirect('/404')
+    }
+    if (city == "")
+    {
+        logger.error("searchdepartmentsbytreatment :  city is null in search ")
+        return res.redirect('/404')
+    }
+
    // console.log(state)
     var deptoriginalname=departmentname.charAt(0).toUpperCase() + departmentname.slice(1);
     var data = {
@@ -817,7 +841,8 @@ module.exports.searchdepartmentsbytreatment = function(req,res)
 
     new Promise(function (resolve, reject) {
         //get the path of flat file with description
-        treatmentSearch.gethospitaldetailsbydepartment(deptoriginalname,state, function(result) {
+        treatmentSearch.gethospitaldetailsbydepartment(deptoriginalname,state,city,accreditation,function(result) {
+
             resolve(result)
             //console.log(result)
         })
@@ -901,7 +926,6 @@ module.exports.searchdepartmentsbytreatment = function(req,res)
                   // data.title=treatmentname + " - Hospitals and doctors details, treatment cost and book appointment through Medinovita";
                    //console.log(data.hospitaldetails[0]);
                    res.render('besthospitals_template.mustache', data);
-                
 
         }).catch(function(err)
         {

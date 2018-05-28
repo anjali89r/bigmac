@@ -113,7 +113,6 @@ module.exports.gethospitalDetailbytreatment = function (req, res) {
 
             });
         }
-        // added to filter based on city 
         else {
             //'_id:0 hospitalName hospitalContact Accreditation hospitalRating Treatment'
             hospitalModel.find({ 'Treatment.name': treatmentName, 'hospitalContact.City': cityname }, { _id: 0, hospitalName: 1, hospitalimage: 1, hospitalContact: 1, Accreditation: 1, hospitalRating: 1, Treatment: 1 }, function (err, result) {
@@ -244,7 +243,6 @@ function getTopDoctorsinHospital(hospitalName, next) {
                 return false;
             })
             /* Synchronous for loop using async await*/
-            //getSynchronousDoctorData(arr).then( data => console.log(data) );  
             getSynchronousDoctorData(arr).then(data => next(data));
         }
     })
@@ -391,6 +389,7 @@ function gethospitalrecordsfortreatmentname(treatmentdisplayname, city, accredit
         //console.log("treament name is ",treatmentdisplayname)
 
         if ((city == null || undefined) && (accreditation == null || undefined)) {
+
             hospitalModel.aggregate([
                 {
                     "$match": {
@@ -529,7 +528,7 @@ module.exports.getDepttreatmentlist = function (req, res) {
     try {
         hospitalModel.aggregate([
             {
-                //"$match": { "serviceActiveFlag": "Y" } 
+                //"$match": { "serviceActiveFlag": "Y" }
                 "$match": { "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.activeFlag": "Y" }] }
             },
             //decompile array
@@ -570,7 +569,9 @@ module.exports.getDepttreatmentlist = function (req, res) {
     }
 }
 
-module.exports.gethospitaldetailsbydepartment = function (deptname, state, next) {
+
+module.exports.gethospitaldetailsbydepartment = function (deptname, state,city,accreditation, next) {
+
 
   //  console.log(state)
 
@@ -593,14 +594,6 @@ module.exports.gethospitaldetailsbydepartment = function (deptname, state, next)
                             "cond":{"$eq":["$$item.departmentName",deptname]}}}
                     }
                 }
-               
-                // //"Treatment.name": 1, "Treatment.treatmentdisplayname": 1,"Treatment.departmentName":1
-                // "treatmentList":
-                //     {$filter:
-                //        {input:
-                //            '$treatmentList',
-                //            as:'treatmentList',
-                //            cond:{$eq:['$$treatmentList.activeFlag','Y']}}}
 
             ], function (err, result) {
                 if (err) {
@@ -621,37 +614,112 @@ module.exports.gethospitaldetailsbydepartment = function (deptname, state, next)
         }
 
         else {
-            hospitalModel.aggregate([
-                {
-                    "$match": {
-                        "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.departmentName": deptname }, { "Treatment.activeFlag": "Y" }]
+            if ((city == null || undefined) && (accreditation == null || undefined))
+            {
+                hospitalModel.aggregate([
+                    {
+                        "$match": {
+                            "$and": [{ "serviceActiveFlag": "Y" }, { "Treatment.departmentName": deptname }, { "Treatment.activeFlag": "Y" }]
+                        }
+                    }, {
+                        "$project": {
+                            "_id": 0, "hospitalName": 1, "hospitaldisplayname": 1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1,
+                            "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,"Treatment":
+                        {"$filter":
+                            {"input":"$Treatment",
+                                "as":"item",
+                                "cond":{"$eq":["$$item.departmentName",deptname]}}}
+                        }
                     }
-                }, {
-                    "$project": {
-                        "_id": 0, "hospitalName": 1, "hospitaldisplayname": 1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1,
-                         "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,"Treatment":
-                       {"$filter":
-                        {"input":"$Treatment",
-                            "as":"item",
-                            "cond":{"$eq":["$$item.departmentName",deptname]}}}
-                    }
-                }
-                
 
-            ], function (err, result) {
-                if (err) {
-                    logger.error("gethospitaldetailsbydepartment Error while reading hospital details from DB");
-                    next("Error while reading treatment description from DB");
-                } else if (result == null) {
-                    logger.error(" gethospitaldetailsbydepartment There is no hospital available for department used");
-                    next(" There is no hospital available for department used");
-                } else if (!result.length) {
-                    logger.error("gethospitaldetailsbydepartment There is no hospital available for department used");
-                    next(" There is no hospital available for department used");
-                } else {
-                    resolve(result)
-                }
-            })
+
+                ], function (err, result) {
+                    if (err) {
+                        logger.error("gethospitaldetailsbydepartment Error while reading hospital details from DB");
+                        next("Error while reading treatment description from DB");
+                    } else if (result == null) {
+                        logger.error(" gethospitaldetailsbydepartment There is no hospital available for department used");
+                        next(" There is no hospital available for department used");
+                    } else if (!result.length) {
+                        logger.error("gethospitaldetailsbydepartment There is no hospital available for department used");
+                        next(" There is no hospital available for department used");
+                    } else {
+                        resolve(result)
+                    }
+                })
+            }
+            else if (city)
+            {
+                hospitalModel.aggregate([
+                    {
+                        "$match": {
+                            "$and": [{ "serviceActiveFlag": "Y" },{"hospitalContact.City":city}, { "Treatment.departmentName": deptname }, { "Treatment.activeFlag": "Y" }]
+                        }
+                    }, {
+                        "$project": {
+                            "_id": 0, "hospitalName": 1, "hospitaldisplayname": 1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1,
+                            "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,"Treatment":
+                        {"$filter":
+                            {"input":"$Treatment",
+                                "as":"item",
+                                "cond":{"$eq":["$$item.departmentName",deptname]}}}
+                        }
+                    }
+
+
+                ], function (err, result) {
+                    if (err) {
+                        logger.error("gethospitaldetailsbydepartment Error while reading hospital details from DB with city value");
+                        next("Error while reading treatment description from DB");
+                    } else if (result == null) {
+                        logger.error(" gethospitaldetailsbydepartment There is no hospital available for department used with city value");
+                        next(" There is no hospital available for department used");
+                    } else if (!result.length) {
+                        logger.error("gethospitaldetailsbydepartment There is no hospital available for department used with city value");
+                        next(" There is no hospital available for department used");
+                    } else {
+                        resolve(result)
+                    }
+                })
+
+            }
+            else if (accreditation)
+            {
+                hospitalModel.aggregate([
+                    {
+                        "$match": {
+                            "$and": [{ "serviceActiveFlag": "Y" },{"Accreditation.agency":accreditation}, { "Treatment.departmentName": deptname }, { "Treatment.activeFlag": "Y" }]
+                        }
+                    }, {
+                        "$project": {
+                            "_id": 0, "hospitalName": 1, "hospitaldisplayname": 1, "hospitalimage": 1, "hospitalDescription": 1, "hospitalContact.City": 1,
+                            "hospitalContact.State": 1, "hospitalContact.country": 1, "Accreditation.agency": 1,"Treatment":
+                        {"$filter":
+                            {"input":"$Treatment",
+                                "as":"item",
+                                "cond":{"$eq":["$$item.departmentName",deptname]}}}
+                        }
+                    }
+
+
+                ], function (err, result) {
+                    if (err) {
+                        logger.error("gethospitaldetailsbydepartment Error while reading hospital details from DB with accreditation value");
+                        next("Error while reading treatment description from DB");
+                    } else if (result == null) {
+                        logger.error(" gethospitaldetailsbydepartment There is no hospital available for department used with accreditation value");
+                        next(" There is no hospital available for department used");
+                    } else if (!result.length) {
+                        logger.error("gethospitaldetailsbydepartment There is no hospital available for department used with accreditation value");
+                        next(" There is no hospital available for department used");
+                    } else {
+                        resolve(result)
+                    }
+                })
+
+            }
+
+
         }
     }).then(function (result) {
 

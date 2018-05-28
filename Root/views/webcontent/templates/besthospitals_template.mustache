@@ -24,8 +24,9 @@
       <link rel="canonical" href="https://www.medinovita.com/" />
       <link rel="shortlink" href="https://www.medinovita.com/" />
       <title>{{title}}</title>
-      <meta NAME="description" content= "Best {{{deptname}}} hospitals - Hospital treatment,doctor details and price estimate.Contact Medinovita for cost estimate from best {{{deptname}}} in India">
-      <META NAME="keywords" CONTENT="best {{{deptname}}} hospitals in india, best {{{deptname}}} hospitals in kerala,{{{deptname}}} treatments in india" >
+      <meta NAME="description" content= "Best {{{deptoriginalname}}} hospitals in India - Treatments,doctor details and price estimate.Contact Medinovita for cost estimate from best {{{deptoriginalname}}} in India">
+      <META NAME="keywords" CONTENT="best {{{deptoriginalname}}} hospitals in india, best {{{deptoriginalname}}} hospitals in kerala,{{{deptoriginalname}}} treatments in india" >
+
       <!-- Google Fonts -->
       <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7COpen+Sans:300,300i,400,400i,600,600i,700,800" rel="stylesheet">
       <link rel="stylesheet" href="/assets/css/plugins.min.css">
@@ -56,11 +57,12 @@
       <div class="contact">
       <div class="page-header larger larger-top  custom "style="background-image:url(//res.cloudinary.com/ddglp4e0g/image/upload/v1510441826/novita/header_oucn1m.jpg)">
          <div class="container" style="padding-left:30px">
-              <h1 >{{treatmentname}}</h1>
+
             <ol class="breadcrumb">
                <li><a href="/index.html">Home</a></li>
-              
-               <li class="active">Best {{deptname}} Hospitals in India</li>
+
+               <li class="active">Best {{deptoriginalname}} Hospitals in India</li>
+
             </ol>
          </div>
          <!-- End .container -->
@@ -71,26 +73,17 @@
       <div class="container" style="padding-left:30px">
                     <div class="row" >
                         <div class="col-md-9">
-                        <div class="product-content">
-
-                                   <p>{{{treatmentDescription}}}</p>
-
-                              <br></br>
-                        </div>
-                        <script language="javascript">
-                                        $(document).ready(function() {
-                                            $(".product-content").shorten({
-	                                            showChars: 390,
-                                            });
-                                            // $(".treatmentname-small").shorten({showChars: 500});
-                                        });
-                                    </script>
-                            <div class="product product-list">
+                              <div class="besthosp-list">
+                            <h1>Best {{deptoriginalname}} Hospitals in India</h1>
+                            <hr>
 
                                     {{#hospitaldetails}}
-                                <div class="row treatment-hospdetails">
+                                <div class="row best-hospdetails">
+                                 <!--  added -->
+                                  <div class="row besthosp-name">
                                     <div class="col-md-4 col-sm-5">
-                                        <div class="product-top">
+                                      <div class="product-top">
+
 
                                             <figure>
                                                 <a href="/hospitals/{{hospitaldisplayname}}" title={{hospitalName}}>
@@ -100,62 +93,92 @@
                                             </figure>
 
                                         </div><!-- End .product-top -->
-                                    </div><!-- End .col-md-4 -->
+                                    </div>
                                     <div class="col-md-8 col-sm-7">
-                                            <h1 class="product-title"><a href="/hospitals/{{hospitaldisplayname}}">{{hospitalName}}</a></h1>
-                                            <a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-lg" style="float:right">Contact Hospital</button></a>
-                                            <div class="product-content">
-                                                <p>{{hospitalCity}},{{hospitalState}}</p>
-                                            </div><!-- End .product-content -->
+                                      <div class="row">
+                                        <div class="col-md-5 col-md-offset-1">
+                                           <h2><a href="/hospitals/{{hospitaldisplayname}}">{{hospitalName}}</a>
+                                           <br>
+                                           <span class="besthosp-loc">
+                                               {{hospitalCity}},{{hospitalState}}
+                                          </span>
+                                           </h2><!-- End .product-content -->
+                                        </div>
+                                        <div class="col-md-3 col-md-offset-2">
+                                           <a href="#modal-container-SubmitEnquiry" data-toggle="modal"><button type="button" class="btn btn-success btn-rounded btn-sm" style="float:right;font-size:13px;">Contact Hospital</button></a>
+                                        </div>
+                                      </div>
+                                    </div>
 
-                                            <div class="product-content">
+                                  </div>
+                                  <!-- 2nd row -->
+                                  {{! <div class="row accred">
+                                    <div class="col-md-4 col-md-offset-1">
+                                      <h4>Accreditations</h4>
+                                    </div>
+                                    <div class="col-md-5" style="border: 1px solid #ccc; padding: 10px">
 
-                                                 <figure>
-                                                     {{#jciimage}}
-                                                        <img src="//res.cloudinary.com/ddglp4e0g/image/upload/c_fit,h_72,w_72/v1515981178/hospital-accreditation/jci.jpg" alt="Hospital is accredited by Joint Commission International" title="Hospital is accredited by Joint Commission International" class="product-image">
-                                                    {{/jciimage}}
-                                                    {{^jciimage}}
+                                    </div>
+                                  </div> }}
+                                 <!--  3rd row -->
+                                  <div class="treatment-offered-name">
+                                    <h3 class="nameBestHosp">{{deptoriginalname}} Treatments Offered</h3>
+                                 </div>
+                                  <div class="row besthosp-treatments">
 
-                                                    {{/jciimage}}
-                                                     {{#nabhimage}}
-                                                         <img src="//res.cloudinary.com/ddglp4e0g/image/upload/c_fit,h_72,w_72/v1515981178/hospital-accreditation/nabh.jpg" title="Hospital is accredited by National Accreditation Board for Hospitals & Healthcare Providers" alt="Hospital is accredited with National Accreditation Board for Hospitals & Healthcare Providers" class="product-image">
-                                                    {{/nabhimage}}
-                                                    {{^nabhimage}}
-                                                    {{/nabhimage}}
-                                                    {{#nablimage}}
-                                                         <img src="//res.cloudinary.com/ddglp4e0g/image/upload/c_fit,h_72,q_auto:best,w_72/v1526517471/hospital-accreditation/iso9001.jpg" title="Hospital is accredited by ISO 9001 Accreditation" alt="Hospital is accredited by ISO 9001 Accreditation" class="product-image">
-                                                    {{/nablimage}}
-                                                    {{^nablimage}}
-                                                    {{/nablimage}}
-                                                 </figure>
-                                             </div><!-- End .product-content -->
-                                             {{#treatments}}
-                                             <div class="product-price-container">
-                                                <p></p>
-                                                <span class="old-price"><strong>{{treatmentdisplayname}}</strong></span>
-                                               
+                                     {{#treatments}}
+                                    <div class="col-md-6">
+                                       <p class="treatment-list-name">
+                                          <span><i class="fa fa-medkit" aria-hidden="true"></i></span><a href="/procedure/{{treatmentdisplayname}}"> {{name}}</a>
+                                      </p>
+                                      </div>
+                                      {{/treatments}}
 
-                                            </div><!-- End .product-price-container -->
-                                            {{/treatments}}
-                                    </div><!-- End .col-md-8 -->
-                                </div><!-- end .Row -->
-                                {{/hospitaldetails}}
-                            </div><!-- End .product -->
+                                    </div>
+                                  </div>
+                                  {{/hospitaldetails}}
+                                    <!--  end added -->
+                    <div class="quick-form-container bestHosp-toHide bg-custom pt40 pb30 pb40-sm">
+                        <div class="gotoHide">
+                        <h2 class="title text-white text-center">Get a Call Back</h2>
+                       <form  method="post" id="bestHosp-submitEnquiryForm" >
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <label for="besthosp-contactname">Full name</label>
+                                        <input type="text" class="form-control" id="besthosp-contactname" name="besthosp-contactname" placeholder="Name" pattern=".{3,}" required title="3 characters minimum">
+                                    </div><!-- End .col-md-4 -->
+                                    <div class="col-sm-3">
+                                        <label for="besthosp-contactemail">Email</label>
+                                        <input type="email" class="form-control" id="besthosp-contactemail" name="besthosp-contactemail" placeholder="Email" required>
+                                    </div><!-- End .col-md-4 -->
+                                    <div class="col-sm-3">
+                                       <label for="inputSubmitEnquiryISDCode">ISD Code </label>
+                                            <select class="form-control" id="inputSubmitEnquiryISDCode" name="CountryCode" required>
 
-                            <!-- <nav class="pagination-container">
-                                <label>Showing: 1-4 of 16</label>
-                                <ul class="pagination">
-                                    <li class="active"><a href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li>
-                                        <a href="#" aria-label="Next">
-                                            <span aria-hidden="true"><i class="fa fa-angle-right"></i></span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav> -->
+                                      </select>
+                                    </div><!-- End .col-md-4 -->
+                                    <div class="col-sm-3">
+                                        <label for="besthosp-contactNumber">Phone Number</label>
+                                          <input type="tel" class="form-control" id="besthosp-contactNumber" name="besthosp-contactNumber" placeholder="Contact Phone Number" required/>
+                                    </div><!-- End .col-md-4 -->
+                                </div><!-- End .row -->
+                            </div><!-- End .col-md-12 -->
+
+                            <div class="clearfix mb10 visible-sm visible-xs"></div><!-- margin -->
+
+                            <div class="col-md-2 col-md-offset-5">
+                                <input type="submit" id="bestHosp-submit" class="btn btn-custom2 btn-block" value="Submit">
+                            </div><!-- End .col-md-2 -->
+                            </div>
+                        </form>
+                        </div><!--end of gotoHide div -->
+                    </div>
+                                  </div>
+                                  {{! <p class="bestHosp-message" ></p> }}
+
+
                         </div><!-- End .col-md-9 -->
 
                         <aside class="col-md-3 sidebar shop-sidebar">
@@ -176,7 +199,9 @@
                                                 <div class="panel-body">
                                                     <ul class="filter-brand-list">
                                                             {{#city}}
-                                                        <li><a href="/search/{{& treatmenturlname}}?city={{& cityname}}"><i class="fa fa-angle-right"></i>{{cityname}} <span>({{citycount}})</span></a></li>
+
+                                                        <li><a href="/best-{{& deptlowercasename}}-hospitals-in-india?city={{& cityname}}"><i class="fa fa-angle-right"></i>{{cityname}} <span>({{citycount}})</span></a></li>
+
                                                         {{/city}}
                                                     </ul>
                                                 </div><!-- End .panel-body -->
@@ -195,14 +220,18 @@
                                                 <div class="panel-body">
                                                     <ul class="filter-brand-list">
                                                             {{#accreditationdetails}}
-                                                        <li><a href="/search/{{& treatmenturlname}}?accreditation={{& accreditationagency}}"><i class="fa fa-angle-right"></i>{{accreditationagency}} <span>({{accreditationagencycount}})</span></a></li>
+
+                                                        <li><a href="/best-{{& deptlowercasename}}-hospitals-in-india?accreditation={{& accreditationagency}}"><i class="fa fa-angle-right"></i>{{accreditationagency}} <span>({{accreditationagencycount}})</span></a></li>
+
                                                         {{/accreditationdetails}}
                                                     </ul>
                                                 </div><!-- End .panel-body -->
                                             </div><!-- End .panel-collapse -->
                                             <div class="filter-price-action">
                                                             <!-- <a href="#" class="btn btn-custom btn-sm">Filter</a>-->
-                                                            <a href="/search/{{& treatmenturlname}}" class="btn btn-black btn-sm">Clear All Filters</a>
+
+                                                            <a href="/best-{{& deptlowercasename}}-hospitals-in-india" class="btn btn-black btn-sm">Clear All Filters</a>
+
                                             </div>
                                         </div><!-- End .panel -->
                                     </div><!-- End .panel-group -->
@@ -218,5 +247,7 @@
         <a id="scroll-top" href="#top" title="Scroll top"><i class="fa fa-angle-up"></i></a>
    </body>
    <script src="/assets/customjs/chat.js"></script>
-   <script src="/assets/js/main.js"></script>
+
+   <script  src="/assets/js/main.js"></script>
+
 </html>

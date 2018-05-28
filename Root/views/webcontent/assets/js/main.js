@@ -1,7 +1,7 @@
 var basicKey = 'bGliaW46bGliaW4=';
 var xAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiVG9rZW5Ub0F1dGhlbnRpY2F0ZU1lZGlub3ZpdGFVc2VyIiwiaWF0IjoxNTA4MDQ0OTMwfQ.cZ3pCte1guE8KQkjd1KfY_bLJ-gOatJm2xlwyiLGAl4';
-var serverName = 'https://www.medinovita.com/';
-//var serverName = 'http://localhost:3000/';
+//var serverName = 'https://www.medinovita.com/';
+var serverName = 'http://localhost:3000/';
 
 var GLOBAL_VARIABLES = {
 	Language: 'en',
@@ -93,7 +93,8 @@ var whyIndia = '';
 			document.getElementById('submitEnquiryForm').reset();
 		});
 
-	});
+	}); //end of medinovita header load
+
 	$('.medinovitaFooter').load('/assets/pages/footer.html', function () {
 		// $.ajax({
 		// 	url: serverName + 'api/v1/get/officelocations/meditrip',
@@ -372,7 +373,7 @@ var whyIndia = '';
 			hospitalPageCallback('all', '');
 		}
 		// end of hospitaldoctors******************
-	});
+	});//end of modals.load
 	//Hospitals and Doctors selected
 	$('#hospitalsPageMenu').on('click', function () {
 		$('.main').html('');
@@ -1803,11 +1804,65 @@ var whyIndia = '';
 
 
 
-	//Login Page
+	//best-hospitals-Page
+	$('#bestHosp-submitEnquiryForm').submit(function (event) {
+		console.log("hello")
+		event.preventDefault();
+		var uniqueNumber=getUniqueNumber();
+		var bestContactname = $('#besthosp-contactname').val();
+		var bestContactemail = $('#besthosp-contactemail').val();
+		var bestContactISDcode = $('#inputSubmitEnquiryISDCode').val();
 
+		var bestContactnumber = $('#besthosp-contactNumber').val();
+
+
+		$.ajax({
+		  url: serverName + 'api/v1/submit/enquiry/' + uniqueNumber + '/meditrip',
+		  type: 'POST',
+		  headers: {
+			 'Content-type': 'application/json',
+			 Authorization: 'Basic ' + basicKey,
+			 'x-access-token': xAccessToken
+		  },
+		  beforeSend: function (xhr) {
+
+			 xhr.setRequestHeader('Authorization', 'Basic ' + basicKey);
+		  },
+		  data: JSON.stringify({
+			 emailID: bestContactemail,
+			 userFullName: bestContactname,
+			 isdCode: bestContactISDcode,
+			 primaryPhonenumber:  bestContactnumber,
+			 procedureName: 'ayur',
+			 commuMedium: 'English',
+			 caseDescription: 'Best hospitals page info',
+			 attachment: 'N',
+			 attachmentName: uniqueNumber + ".zip"
+		  }),
+		  success: function (response) {
+
+			 document.getElementById('bestHosp-submitEnquiryForm').reset();
+			 var elApp = document.createElement('p');
+			 elApp.classList.add('tokenMsg');
+			 //console.log('elApp: ', elApp);
+				$('.gotoHide').slideUp(400, function () {
+
+					elApp.textContent = 'Thank you for contacting us, our customer care team will get back to you as soon as possible!';
+
+					$('.bestHosp-toHide').append(elApp);
+				});
+		  },
+		  error: function (exception) {
+			 console.log('exception', exception);
+
+
+		  }
+		});
+	 })
 	//contact page
 
 	$('#contact-form').submit(function (event) {
+		console.log("contact submit")
 		event.preventDefault();
 		var contactname = $('#contactname').val();
 		var contactemail = $('#contactemail').val();
