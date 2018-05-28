@@ -14771,7 +14771,13 @@ ul.thumbs li span {
   font-size: 14px;
 }
 
-
+.portfolio-item .hosp-temp {
+  text-align: center;
+}
+.doc-spec {
+  font-weight: 600;
+  color: #9e9e9e;
+}
 #sticky {
   padding: 0.6ex;
   width: 200px;
