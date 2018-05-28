@@ -333,7 +333,7 @@ function getTreatmentDetailsDepartmentwiseWithCost(department, reqbody, next) {
         treatmentDescModel.aggregate([
             {
                 "$match": {
-                    "$and": [{ "serviceActiveFlag": "Y" }, { "department": department }, { "treatmentList.activeFlag": "Y" }]
+                    "$and": [{ "serviceActiveFlag": "Y" }, { "shortname": department }, { "treatmentList.activeFlag": "Y" }]
                 }
             }, {
                 "$project": {
@@ -669,7 +669,7 @@ function getUniqueDepartments(callback) {
         },    
         {
             "$project": {
-                "_id": 0, "department": 1 //"treatmentNames":1 will return everything from the table
+                "_id": 0, "department": 1,"shortname":1 //"treatmentNames":1 will return everything from the table
             }
         }
 

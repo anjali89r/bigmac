@@ -10,29 +10,6 @@ var GLOBAL_VARIABLES = {
 var countryCodes = [];
 var officeAddress = '';
 var whyIndia = '';
-//Global Methods
-// Function replace Native Alert
-// window.alert = function (msg) {
-// 	var h, html, source, template;
-// 	source = $('#tpl-alert').html();
-// 	template = Handlebars.compile(source);
-// 	html = $(template({
-// 		message: new Handlebars.SafeString(msg)
-// 	}));
-// 	$('body').append(html);
-// 	html.addClass('is-visible');
-// 	h = html.find('.window-message-container').height();
-// 	html.find('.window-message-container').hide().fadeIn('fast');
-// 	return html.find('a').on('click', (function (_this) {
-// 		return function (e) {
-// 			e.stopPropagation();
-// 			html.remove();
-// 			return false;
-// 		};
-// 	}(this)));
-// };
-// END Function replace Native Alert
-
 (function ($) {
 	'use strict';
 
@@ -53,7 +30,8 @@ var whyIndia = '';
 				var display = JSON.parse(JSON.stringify(response));
 				$.each(display, function (i) {
 					var value = display[i].department
-					var li = $('<li class="dropdown"><a onclick=window.location=' + "'/treatmentsoffered/" + value + "'" + '  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">' + value + '</a></li>')
+					const shortname = display[i].shortname
+					var li = $('<li class="dropdown"><a onclick=window.location=' + "'/treatmentsoffered/" + shortname + "'" + '  class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">' + value + '</a></li>')
 					$('#treatmentsOfferedUL').append(li);
 				});
 			},

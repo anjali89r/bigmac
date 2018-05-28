@@ -113,7 +113,6 @@ module.exports.gethospitalDetailbytreatment = function (req, res) {
 
             });
         }
-        // added to filter based on city
         else {
             //'_id:0 hospitalName hospitalContact Accreditation hospitalRating Treatment'
             hospitalModel.find({ 'Treatment.name': treatmentName, 'hospitalContact.City': cityname }, { _id: 0, hospitalName: 1, hospitalimage: 1, hospitalContact: 1, Accreditation: 1, hospitalRating: 1, Treatment: 1 }, function (err, result) {
@@ -244,7 +243,6 @@ function getTopDoctorsinHospital(hospitalName, next) {
                 return false;
             })
             /* Synchronous for loop using async await*/
-            //getSynchronousDoctorData(arr).then( data => console.log(data) );
             getSynchronousDoctorData(arr).then(data => next(data));
         }
     })
@@ -391,7 +389,6 @@ function gethospitalrecordsfortreatmentname(treatmentdisplayname, city, accredit
         //console.log("treament name is ",treatmentdisplayname)
 
         if ((city == null || undefined) && (accreditation == null || undefined)) {
-
 
             hospitalModel.aggregate([
                 {
@@ -572,7 +569,9 @@ module.exports.getDepttreatmentlist = function (req, res) {
     }
 }
 
+
 module.exports.gethospitaldetailsbydepartment = function (deptname, state,city,accreditation, next) {
+
 
   //  console.log(state)
 
@@ -595,6 +594,7 @@ module.exports.gethospitaldetailsbydepartment = function (deptname, state,city,a
                             "cond":{"$eq":["$$item.departmentName",deptname]}}}
                     }
                 }
+
             ], function (err, result) {
                 if (err) {
                     logger.error(" gethospitaldetailsbydepartment Error while reading hospital list with the state value");
@@ -718,6 +718,7 @@ module.exports.gethospitaldetailsbydepartment = function (deptname, state,city,a
                 })
 
             }
+
 
         }
     }).then(function (result) {
