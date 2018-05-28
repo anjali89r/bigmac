@@ -143,26 +143,31 @@
                  <!-- END OF SECTION clinic-procedures-->
               </section> <!--end of property-detail section-->
               <!-- start of doctors list section -->
-
-              <section id="clinic-procedures" style="margin-bottom:20px">
+            <div class="mb40 mb20-sm"></div>
+              <section id="clinic-docs" style="margin-bottom:20px;">
                    <header>
                      <h2 style="border-bottom: 1px solid rgba(7,56,85,0.2) !important; padding-bottom:10px;">Doctors in {{hospital_name}}</h2>
                    </header>
-                   <div class="row">
+                   <!--added -->
+                   <div class="portfolio-related-carousel popup-gallery owl-carousel">
                      {{#topdoctors}}
-                     <div class="col-md-3">
-                        <div class="card">
-                              <img class="card-img-top" src="{{{profilepicdir}}}" alt="Card image cap" >
-                              <div class="card-body">
-                                <h5 class="card-title">{{doctorName}}</h5>
-                                <p class="card-text">{{speciality}}</p>
+                      <div class="portfolio-item ">
+                            <figure>
+                                <img src="{{{profilepicdir}}}" alt="doctor-image">
 
-                              </div>
+                            </figure>
+                            <div class="portfolio-meta hosp-temp">
+                                <h3 class="portfolio-title doc-title"><span>{{doctorName}}</span></h3>
+                                <div class="portfolio-tags doc-spec">
+                                    <span>{{speciality}}</span>
 
-                        </div>
-                     </div>
-                      {{/topdoctors}}
+                                </div><!-- End .portfolio-tags -->
+                            </div><!-- End .portfolio-meta -->
+                        </div><!-- End .portfolio-item -->
+                        {{/topdoctors}}
                    </div>
+                   <!--end of added -->
+
 
               </section><!-- end of doctors list section -->
            </div><!--end of clinical details div col-md-9 -->
