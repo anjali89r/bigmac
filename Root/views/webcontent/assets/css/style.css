@@ -9236,7 +9236,7 @@ display: none !important;
 }
 
 .entry.entry-grid .entry-title {
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 15px;
 }
 
@@ -14934,6 +14934,7 @@ img {
 
 }
 /* index.html*/
+
 .acc-text {
   padding-bottom: 30px;
   text-align: center;
@@ -14941,29 +14942,39 @@ img {
   color: #7e99b4;
   line-height: 1.4em;
 }
-#first-acc,#third-acc,#sec-acc {
-  width: 19%;
-}
-.accreditation-row {
-  margin-bottom: 30px;
-}
-.accreditation-row ul li {
-  width: 20px;
-  padding-right: 20px;
-  padding-bottom: 0px;
-  float: left;
-  line-height: 14px;
-  display: block;
-}
-.accreditation-row ul li img {
-  max-width: 56px;
-  /* max-height: 36px; */
-  margin-right: 10px;
-  display: block;
-  float: left;
-}
-.accreditation-row ul li span {
-  margin-top: 3px;
-  display: block;
-}
 
+.accred-img {
+  text-align: center;
+  margin: 0 auto;
+}
+.accred-text {
+  font-size: 12px;
+  text-align: center;
+  margin: 15px 0;
+}
+.how {
+  margin-bottom: 50px;
+  text-align: center;
+}
+/*index.html - how we work section */
+.welcome-sec {
+  text-align: center;
+}
+.welcome-text {
+  font-size: 12px;
+  text-align: center;
+  margin: 15px 0;
+}
+.welcome-symbol i{
+  color:#01D4D3
+}
+.bg-color {
+  background-color: #f0f0f0;
+  padding: 40px;
+}
+.entry-content {
+  font-size: 12px;
+}
+#aboutContent {
+  font-size: 14px;
+}
