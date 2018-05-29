@@ -830,7 +830,7 @@ module.exports.searchdepartmentsbytreatment = function(req,res)
    // console.log(state)
     var deptoriginalname=departmentname.charAt(0).toUpperCase() + departmentname.slice(1);
     var data = {
-        "title": "Best " + deptoriginalname + " Hospitals in " + state,
+        "title": "Best " + deptoriginalname + " Hospitals in India",
         "deptoriginalname": deptoriginalname,
         "deptlowercasename":departmentname,
         "hospitaldetails": [],
