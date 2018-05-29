@@ -8,7 +8,7 @@ var serveStatic = require('serve-static');
 var apicache = require('apicache');
 var minifyHTML = require('express-minify-html');
 var minify = require('express-minify');
-var httpsRedirect = require('express-https-redirect');
+
 
 var app = express();
 
@@ -30,7 +30,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(compression());
-app.use(minify());
+//app.use(minify());
 app.use(minifyHTML({
   override:      true,
   exception_url: false,
@@ -89,7 +89,7 @@ app.use(serveStatic(__dirname + '/views/webcontent/', {
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views', './views/webcontent/templates');
-app.use('/', httpsRedirect());
+
 
 // added for 404 html ,should be called only after all routes
 app.use(function(req, res, next){
